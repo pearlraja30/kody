@@ -221,7 +221,7 @@ jobs:
   # ===========================================================================
   build-mac-app:
     name: 🍎 Mac Application
-    runs-on: macos-13
+    runs-on: ubuntu-latest
     if: ${{ github.event.inputs.build_mac != 'false' }}
 
     steps:

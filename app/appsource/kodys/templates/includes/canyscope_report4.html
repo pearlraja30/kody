@@ -1,0 +1,101 @@
+<link href="{{MEDIA_URL}}css/rickshaw.min.css" rel="stylesheet">
+<style type="text/css">
+ .ecg_chart
+ {  background-image: url('{{MEDIA_URL}}img/ecg.png'); 
+}
+</style>
+<div class="ml26 mr26 ft_tm" style="margin-bottom: 8px;">
+   <h6 style="padding: 0;font-size: 12px;color:#750e96;margin: 2px;" class="ft_tm">1. RESTING (1 MINUTE)</h6>
+   <div style="height:150px;border: 1px solid;opacity: 0.99;" class="ecg_chart">
+      <div style="height:10px;left: -7px;"  id="resting_peak_list1" >
+      </div>
+      <div style="height:40px;"  id="resting1">
+      </div>
+      <div style="height:10px;left: -7px;"  id="resting_peak_list2" >
+      </div>
+      <div style="height:40px;"  id="resting2">
+      </div>
+      <div style="height:10px;left: -7px;"  id="resting_peak_list3" >
+      </div>
+      <div style="height:40px;" id="resting3">
+      </div>
+   </div>
+   <h6 style="padding: 0;font-size: 12px;color:#750e96;margin: 2px 2px 0px 2px;height: 12px;" class="ft_tm">2.DEEP BREATHING</h6>
+   <div>
+      <div style="color: #3d22d4;font-size: 10px;width: 47mm;text-align: center;display: inline-block;">Inhale (5 Sec)</div>
+      <div style="color: #3d22d4;font-size: 10px;width: 47mm;text-align: center;display: inline-block;">Exhale (5 Sec)</div>
+      <div style="color: #3d22d4;font-size: 10px;width: 47mm;text-align: center;display: inline-block;">Inhale (5 Sec)</div>
+      <!-- <div style="color: #3d22d4;font-size: 10px;width: 40mm;text-align: center;display: inline-block;">Exhale (5 Sec)</div> -->
+   </div>
+   <div style="height: 150px;border: 1px solid;opacity: 0.99;position: relative;" class="ecg_chart">
+      <div style="height:10px;left: -7px;"  id="deep_peak_list1" >
+      </div>
+      <div style="height:40px;"  id="deep_breathing1">
+      </div>
+      <div style="height:10px;left: -7px;"  id="deep_peak_list2" >
+      </div>
+      <div style="height:40px;"  id="deep_breathing2">
+      </div>
+      <div style="height:10px;left: -7px;"  id="deep_peak_list3" >
+      </div>
+      <div style="height:40px;" id="deep_breathing3">
+      </div>
+      <div style="position: absolute;top: 2px;left: 47mm;border:1.2px dashed #3d22d4;height: 40px;"></div>
+      <div style="position: absolute;top: 2px;left: 94mm;border:1.2px dashed #3d22d4;height: 40px;"></div>
+      <div style="position: absolute;top: 2px;left: 140.8mm;border:1.2px dashed #3d22d4;height: 40px;"></div>
+   </div>
+   <h6 style="padding: 0;font-size: 12px;color:#750e96;margin: 2px;height: 12px;" class="ft_tm">3.RESPONSE TO STANDING</h6>
+   <span style="color: #3d22d4;font-size: 10px;">Supine</span>
+   <div style="height: 150px;border: 1px solid;opacity: 0.99;" class="ecg_chart">
+    <div style="height:10px;left: -7px;"  id="supine_peak_list1" >
+      </div>
+      <div style="height:40px;"  id="supine1">
+      </div>
+      <div style="height:10px;left: -7px;"  id="supine_peak_list2" >
+      </div>
+      <div style="height:40px;"  id="supine2">
+      </div>
+      <div style="height:10px;left: -7px;"  id="supine_peak_list3" >
+      </div>
+      <div style="height:40px;" id="supine3">
+      </div>
+   </div>
+   <span style="color: #3d22d4;font-size: 10px;margin-top: 8px;">Immediate Standing</span>
+   <div style="height: 150px;border: 1px solid;opacity: 0.99;" class="ecg_chart">
+      <div style="height:10px;left: -7px;"  id="standing_peak_list1" >
+      </div>
+      <div style="height:40px;"  id="standing1">
+      </div>
+      <div style="height:10px;left: -7px;"  id="standing_peak_list2" >
+      </div>
+      <div style="height:40px;"  id="standing2">
+      </div>
+      <div style="height:10px;left: -7px;"  id="standing_peak_list3" >
+      </div>
+      <div style="height:40px;" id="standing3">
+      </div>
+   </div>
+   <h6 style="padding: 0;font-size: 12px;color:#750e96;margin: 2px;height: 12px;" class="ft_tm">4.RESPONSE TO VALSALVA MANEUVER</h6>
+   <div>
+      <div style="display: inline-block;width: 50mm;color: #3d22d4;text-align: center;font-size: 10px;">Begin</div>
+      <div style="display: inline-block;width: 100mm;text-align: center;color: #3d22d4;font-size: 10px;">15 Sec</div>
+      <div style="display: inline-block;width: 40mm;text-align: center;color: #3d22d4;font-size: 10px;">End</div>
+   </div>
+   <div style="height: 150px;border: 1px solid;opacity: 0.99;position: relative;" class="ecg_chart">
+
+      <div style="height:10px;left: -7px;"  id="valsalva_peak_list1" >
+      </div>
+      <div style="height:40px;"  id="valsalva1">
+      </div>
+      <div style="height:10px;left: -7px;"  id="valsalva_peak_list2" >
+      </div>
+      <div style="height:40px;"  id="valsalva2">
+      </div>
+      <div style="height:10px;left: -7px;"  id="valsalva_peak_list3" >
+      </div>
+      <div style="height:40px;" id="valsalva3">
+      </div>
+      <div style="position: absolute;top: 2px;left: 46.7mm;border:1.2px dashed #3d22d4;height: 40px;"></div>
+      <div style="position: absolute;top: 2px;left: 187mm;border:1.2px dashed #3d22d4;height: 40px;"></div>
+   </div>
+</div>

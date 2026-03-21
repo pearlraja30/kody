@@ -1,0 +1,749 @@
+<script src="{{MEDIA_URL}}js/d3.js"></script>
+<script src="{{MEDIA_URL}}js/rickshaw.js"></script>
+<script type="text/javascript">
+    //resting and resting peaklist
+       var ecg_data = [];
+       var ecg_string = '{{report.TM15_processed_data}}';
+       ecg_string = ecg_string.replace(/ /g,"");
+       var ecg_list = ecg_string.split(",");
+       var chumk_size = parseInt(ecg_list.length/3);
+       var resting1 = ecg_list.slice(0,chumk_size);
+       var resting2 = ecg_list.slice(chumk_size,chumk_size+chumk_size);
+       var resting3 = ecg_list.slice(chumk_size+chumk_size,);
+       var resting_peaklist_string = '{{report.report_result.resting.peaklist}}';
+       resting_peaklist_string = resting_peaklist_string.replace(/ /g,"").replace("[","").replace("]","");
+       var resting_peaklist = resting_peaklist_string.split(",");
+       var resting_peak_data = [];
+    
+    //1st graph and 1st peaklist
+       for(i=0;i < resting1.length;i++)
+       {
+          if (resting1[i] != "")
+          {
+             ecg_data.push({x:i,y:parseInt(resting1[i])});
+             resting_peak_data.push({x:i,y:null});
+             if(resting_peaklist.includes(i.toString()))
+             {
+                resting_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+       function finder(cmp, arr, attr) {
+          var val = arr[0][attr];
+          for(var i=1;i<arr.length;i++) {
+              val = cmp(val, arr[i][attr])
+          }
+          return val;
+      }
+       var graph1 = new Rickshaw.Graph({
+            element: document.querySelector("#resting1"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, ecg_data, "y") - 5,
+            max: finder(Math.max, ecg_data, "y"),
+            series: [{
+                    data: ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph1.render();
+       var graph4 = new Rickshaw.Graph({
+            element: document.querySelector("#resting_peak_list1"),
+            renderer: 'scatterplot',
+            width:'754',
+            height:'10',
+            min: "0",
+            max: "2",
+            series: [{
+                    data: resting_peak_data,
+                    color: 'red',
+                    strokeWidth: 0.5,
+            }]
+    });
+    graph4.renderer.dotSize = 2;
+    graph4.render();
+    
+    //2nd graph and 2nd peaklist
+    ecg_data = [];
+    resting_peak_data = [];
+    for(i=0;i < resting2.length;i++)
+       {
+          if (resting2[i] != "")
+          {
+             ecg_data.push({x:i,y:parseInt(resting2[i])})
+             resting_peak_data.push({x:i,y:null})
+             if(resting_peaklist.includes((i+chumk_size).toString()))
+             {
+                resting_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+       var graph5 = new Rickshaw.Graph({
+            element: document.querySelector("#resting_peak_list2"),
+            renderer: 'scatterplot',
+            width:'754',
+            height:'10',
+            min: "0",
+            max: "2",
+            series: [{
+                    data: resting_peak_data,
+                    color: 'red',
+            }]
+    });
+    graph5.renderer.dotSize = 2;
+    graph5.render();
+    var graph2 = new Rickshaw.Graph({
+            element: document.querySelector("#resting2"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, ecg_data, "y") - 5,
+            max: finder(Math.max, ecg_data, "y"),
+            series: [{
+                    data: ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph2.render();
+    
+    //3rd graph and 3rd peaklist
+    ecg_data = [];
+    resting_peak_data = [];
+    for(i=0;i < resting3.length;i++)
+       {
+          if (resting3[i] != "")
+          {
+             ecg_data.push({x:i,y:parseInt(resting3[i])})
+             resting_peak_data.push({x:i,y:null})
+             if(resting_peaklist.includes((i+chumk_size+chumk_size).toString()))
+             {
+                resting_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+    var graph3 = new Rickshaw.Graph({
+            element: document.querySelector("#resting3"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, ecg_data, "y") - 5,
+            max: finder(Math.max, ecg_data, "y"),
+            series: [{
+                    data: ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph3.render();
+    var graph6 = new Rickshaw.Graph({
+        element: document.querySelector("#resting_peak_list3"),
+        renderer: 'scatterplot',
+        width:'754',
+        height:'10',
+        min: "0",
+        max: "2",
+        series: [{
+                data: resting_peak_data,
+                color: 'red',
+                strokeWidth: 0.5,
+        }]
+    });
+    graph6.renderer.dotSize = 2;
+    graph6.render();
+    
+    
+    //deep breathing and deep breathing peaklist
+       var deep_ecg_data = [];
+       var deep_ecg_string = '{{report.TM20_processed_data}}';
+       deep_ecg_string = deep_ecg_string.replace(/ /g,"");
+       var deep_ecg_list = deep_ecg_string.split(",");
+       var deep_chumk_size = parseInt(deep_ecg_list.length/3);
+       var deep1 = deep_ecg_list.slice(0,deep_chumk_size);
+       var deep2 = deep_ecg_list.slice(deep_chumk_size,deep_chumk_size+deep_chumk_size);
+       var deep3 = deep_ecg_list.slice(deep_chumk_size+deep_chumk_size,);
+       var deep_peaklist_string = '{{report.report_result.deep_breathing_time.peaklist}}';
+       deep_peaklist_string = deep_peaklist_string.replace(/ /g,"").replace("[","").replace("]","");
+       var deep_peaklist = deep_peaklist_string.split(",");
+       var deep_peak_data = [];
+    
+    //1st graph and 1st peaklist
+       for(i=0;i < deep1.length;i++)
+       {
+          if (deep1[i] != "")
+          {
+             deep_ecg_data.push({x:i,y:parseInt(deep1[i])})
+             deep_peak_data.push({x:i,y:null})
+             if(deep_peaklist.includes(i.toString()))
+             {
+                deep_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+       var graph7 = new Rickshaw.Graph({
+            element: document.querySelector("#deep_breathing1"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, deep_ecg_data, "y") - 5,
+            max: finder(Math.max, deep_ecg_data, "y"),
+            series: [{
+                    data: deep_ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph7.render();
+       var graph8 = new Rickshaw.Graph({
+            element: document.querySelector("#deep_peak_list1"),
+            renderer: 'scatterplot',
+            width:'754',
+            height:'10',
+            min: "0",
+            max: "2",
+            series: [{
+                    data: deep_peak_data,
+                    color: 'red',
+                    strokeWidth: 0.5,
+            }]
+    });
+    graph8.renderer.dotSize = 2;
+    graph8.render();
+    
+    //2nd graph and 2nd peaklist
+    deep_ecg_data = [];
+    deep_peak_data = [];
+    for(i=0;i < deep2.length;i++)
+       {
+          if (deep2[i] != "")
+          {
+             deep_ecg_data.push({x:i,y:parseInt(deep2[i])})
+             deep_peak_data.push({x:i,y:null})
+             if(deep_peaklist.includes((i+deep_chumk_size).toString()))
+             {
+                deep_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+       var graph9 = new Rickshaw.Graph({
+            element: document.querySelector("#deep_peak_list2"),
+            renderer: 'scatterplot',
+            width:'754',
+            height:'10',
+            min: "0",
+            max: "2",
+            series: [{
+                    data: deep_peak_data,
+                    color: 'red',
+            }]
+    });
+    graph9.renderer.dotSize = 2;
+    graph9.render();
+    var graph10 = new Rickshaw.Graph({
+            element: document.querySelector("#deep_breathing2"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, deep_ecg_data, "y") - 5,
+            max: finder(Math.max, deep_ecg_data, "y"),
+            series: [{
+                    data: deep_ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph10.render();
+    
+    //3rd graph and 3rd peaklist
+    deep_ecg_data = [];
+    deep_peak_data = [];
+    for(i=0;i < deep3.length;i++)
+       {
+          if (deep3[i] != "")
+          {
+             deep_ecg_data.push({x:i,y:parseInt(deep3[i])})
+             deep_peak_data.push({x:i,y:null})
+             if(deep_peaklist.includes((i+deep_chumk_size+deep_chumk_size).toString()))
+             {
+                deep_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+    var graph11 = new Rickshaw.Graph({
+            element: document.querySelector("#deep_breathing3"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, deep_ecg_data, "y") - 5,
+            max: finder(Math.max, deep_ecg_data, "y"),
+            series: [{
+                    data: deep_ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph11.render();
+    var graph12 = new Rickshaw.Graph({
+        element: document.querySelector("#deep_peak_list3"),
+        renderer: 'scatterplot',
+        width:'754',
+        height:'10',
+        min: "0",
+        max: "2",
+        series: [{
+                data: deep_peak_data,
+                color: 'red',
+                strokeWidth: 0.5,
+        }]
+    });
+    graph12.renderer.dotSize = 2;
+    graph12.render();
+    
+    
+    //standing and standing peaklist
+    
+    //supine
+       var supine_ecg_data = [];
+       var supine_ecg_string = '{{report.TM21_processed_data}}';
+       supine_ecg_string = supine_ecg_string.replace(/ /g,"");
+       var supine_ecg_list = supine_ecg_string.split(",");
+       var supine_chumk_size = parseInt(supine_ecg_list.length/3);
+       var supine1 = supine_ecg_list.slice(0,supine_chumk_size);
+       var supine2 = supine_ecg_list.slice(supine_chumk_size,supine_chumk_size+supine_chumk_size);
+       var supine3 = supine_ecg_list.slice(supine_chumk_size+supine_chumk_size,);
+       var supine_peaklist_string = '{{report.report_result.ecg_standing_time.supine_peaklist}}';
+       supine_peaklist_string = supine_peaklist_string.replace(/ /g,"").replace("[","").replace("]","");
+       var supine_peaklist = supine_peaklist_string.split(",");
+       var supine_peak_data = [];
+    
+    //1st graph and 1st peaklist
+       for(i=0;i < supine1.length;i++)
+       {
+          if (supine1[i] != "")
+          {
+             supine_ecg_data.push({x:i,y:parseInt(supine1[i])})
+             supine_peak_data.push({x:i,y:null})
+             if(supine_peaklist.includes(i.toString()))
+             {
+                supine_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+       var graph13 = new Rickshaw.Graph({
+            element: document.querySelector("#supine1"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, supine_ecg_data, "y")-5,
+            max: finder(Math.max, supine_ecg_data, "y") ,
+            series: [{
+                    data: supine_ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph13.render();
+       var graph14 = new Rickshaw.Graph({
+            element: document.querySelector("#supine_peak_list1"),
+            renderer: 'scatterplot',
+            width:'754',
+            height:'10',
+            min: "0",
+            max: "2",
+            series: [{
+                    data: supine_peak_data,
+                    color: 'red',
+                    strokeWidth: 0.5,
+            }]
+    });
+    graph14.renderer.dotSize = 2;
+    graph14.render();
+    
+    //2nd graph and 2nd peaklist
+    supine_ecg_data = [];
+    supine_peak_data = [];
+    for(i=0;i < supine2.length;i++)
+       {
+          if (supine2[i] != "")
+          {
+             supine_ecg_data.push({x:i,y:parseInt(supine2[i])})
+             supine_peak_data.push({x:i,y:null})
+             if(supine_peaklist.includes((i+supine_chumk_size).toString()))
+             {
+                supine_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+       var graph15 = new Rickshaw.Graph({
+            element: document.querySelector("#supine_peak_list2"),
+            renderer: 'scatterplot',
+            width:'754',
+            height:'10',
+            min: "0",
+            max: "2",
+            series: [{
+                    data: supine_peak_data,
+                    color: 'red',
+            }]
+    });
+    graph15.renderer.dotSize = 2;
+    graph15.render();
+    var graph16 = new Rickshaw.Graph({
+            element: document.querySelector("#supine2"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, supine_ecg_data, "y") - 5,
+            max: finder(Math.max, supine_ecg_data, "y") ,
+            series: [{
+                    data: supine_ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph16.render();
+    
+    //3rd graph and 3rd peaklist
+    supine_ecg_data = [];
+    supine_peak_data = [];
+    for(i=0;i < supine3.length;i++)
+       {
+          if (supine3[i] != "")
+          {
+             supine_ecg_data.push({x:i,y:parseInt(supine3[i])})
+             supine_peak_data.push({x:i,y:null})
+             if(supine_peaklist.includes((i+supine_chumk_size+supine_chumk_size).toString()))
+             {
+                supine_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+    var graph17 = new Rickshaw.Graph({
+            element: document.querySelector("#supine3"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, supine_ecg_data, "y") - 5,
+            max: finder(Math.max, supine_ecg_data, "y"),
+            series: [{
+                    data: supine_ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph17.render();
+    var graph18 = new Rickshaw.Graph({
+        element: document.querySelector("#supine_peak_list3"),
+        renderer: 'scatterplot',
+        width:'754',
+        height:'10',
+        min: "0",
+        max: "2",
+        series: [{
+                data: supine_peak_data,
+                color: 'red',
+                strokeWidth: 0.5,
+        }]
+    });
+    graph18.renderer.dotSize = 2;
+    graph18.render();
+    
+    
+    //standing
+       var standing_ecg_data = [];
+       var standing_ecg_string = '{{report.TM21_standing_processed_data}}';
+       standing_ecg_string = standing_ecg_string.replace(/ /g,"");
+       var standing_ecg_list = standing_ecg_string.split(",");
+       var standing_chumk_size = parseInt(standing_ecg_list.length/3);
+       var standing1 = standing_ecg_list.slice(0,standing_chumk_size);
+       var standing2 = standing_ecg_list.slice(standing_chumk_size,standing_chumk_size+standing_chumk_size);
+       var standing3 = standing_ecg_list.slice(standing_chumk_size+standing_chumk_size,);
+       var standing_peaklist_string = '{{report.report_result.ecg_standing_time.peaklist}}';
+       standing_peaklist_string = standing_peaklist_string.replace(/ /g,"").replace("[","").replace("]","");
+       var standing_peaklist = standing_peaklist_string.split(",");
+       var standing_peak_data = [];
+    
+    //1st graph and 1st peaklist
+       for(i=0;i < standing1.length;i++)
+       {
+          if (standing1[i] != "")
+          {
+             standing_ecg_data.push({x:i,y:parseInt(standing1[i])})
+             standing_peak_data.push({x:i,y:null})
+             if(standing_peaklist.includes(i.toString()))
+             {
+                standing_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+       var graph19 = new Rickshaw.Graph({
+            element: document.querySelector("#standing1"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, standing_ecg_data, "y") - 5,
+            max: finder(Math.max, standing_ecg_data, "y"),
+            series: [{
+                    data: standing_ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph19.render();
+       var graph20 = new Rickshaw.Graph({
+            element: document.querySelector("#standing_peak_list1"),
+            renderer: 'scatterplot',
+            width:'754',
+            height:'10',
+            min: "0",
+            max: "2",
+            series: [{
+                    data: standing_peak_data,
+                    color: 'red',
+                    strokeWidth: 0.5,
+            }]
+    });
+    graph20.renderer.dotSize = 2;
+    graph20.render();
+    
+    //2nd graph and 2nd peaklist
+    standing_ecg_data = [];
+    standing_peak_data = [];
+    for(i=0;i < standing2.length;i++)
+       {
+          if (standing2[i] != "")
+          {
+             standing_ecg_data.push({x:i,y:parseInt(standing2[i])})
+             standing_peak_data.push({x:i,y:null})
+             if(standing_peaklist.includes((i+standing_chumk_size).toString()))
+             {
+                standing_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+       var graph21 = new Rickshaw.Graph({
+            element: document.querySelector("#standing_peak_list2"),
+            renderer: 'scatterplot',
+            width:'754',
+            height:'10',
+            min: "0",
+            max: "2",
+            series: [{
+                    data: standing_peak_data,
+                    color: 'red',
+            }]
+    });
+    graph21.renderer.dotSize = 2;
+    graph21.render();
+    var graph22 = new Rickshaw.Graph({
+            element: document.querySelector("#standing2"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, standing_ecg_data, "y") - 5,
+            max: finder(Math.max, standing_ecg_data, "y"),
+            series: [{
+                    data: standing_ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph22.render();
+    
+    //3rd graph and 3rd peaklist
+    standing_ecg_data = [];
+    standing_peak_data = [];
+    for(i=0;i < standing3.length;i++)
+       {
+          if (standing3[i] != "")
+          {
+             standing_ecg_data.push({x:i,y:parseInt(standing3[i])})
+             standing_peak_data.push({x:i,y:null})
+             if(standing_peaklist.includes((i+standing_chumk_size+standing_chumk_size).toString()))
+             {
+                standing_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+    var graph23 = new Rickshaw.Graph({
+            element: document.querySelector("#standing3"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, standing_ecg_data, "y") - 5,
+            max: finder(Math.max, standing_ecg_data, "y"),
+            series: [{
+                    data: standing_ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph23.render();
+    var graph24 = new Rickshaw.Graph({
+        element: document.querySelector("#standing_peak_list3"),
+        renderer: 'scatterplot',
+        width:'754',
+        height:'10',
+        min: "0",
+        max: "2",
+        series: [{
+                data: standing_peak_data,
+                color: 'red',
+                strokeWidth: 0.5,
+        }]
+    });
+    graph24.renderer.dotSize = 2;
+    graph24.render();
+    
+    
+    
+    //valsalva
+       var valsalva_ecg_data = [];
+       var valsalva_ecg_string = '{{report.TM22_processed_data}}';
+       valsalva_ecg_string = valsalva_ecg_string.replace(/ /g,"");
+       var valsalva_ecg_list = valsalva_ecg_string.split(",");
+       var valsalva_chumk_size = parseInt(valsalva_ecg_list.length/3);
+       var valsalva1 = valsalva_ecg_list.slice(0,valsalva_chumk_size);
+       var valsalva2 = valsalva_ecg_list.slice(valsalva_chumk_size,valsalva_chumk_size+valsalva_chumk_size);
+       var valsalva3 = valsalva_ecg_list.slice(valsalva_chumk_size+valsalva_chumk_size,);
+       var valsalva_peaklist_string = '{{report.report_result.ecg_valsalva_time.peaklist}}';
+       valsalva_peaklist_string = valsalva_peaklist_string.replace(/ /g,"").replace("[","").replace("]","");
+       var valsalva_peaklist = valsalva_peaklist_string.split(",");
+       var valsalva_peak_data = [];
+    
+    //1st graph and 1st peaklist
+       for(i=0;i < valsalva1.length;i++)
+       {
+          if (valsalva1[i] != "")
+          {
+             valsalva_ecg_data.push({x:i,y:parseInt(valsalva1[i])})
+             valsalva_peak_data.push({x:i,y:null})
+             if(valsalva_peaklist.includes(i.toString()))
+             {
+                valsalva_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+       var graph25 = new Rickshaw.Graph({
+            element: document.querySelector("#valsalva1"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, valsalva_ecg_data, "y") - 5,
+            max: finder(Math.max, valsalva_ecg_data, "y"),
+            series: [{
+                    data: valsalva_ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph25.render();
+       var graph26 = new Rickshaw.Graph({
+            element: document.querySelector("#valsalva_peak_list1"),
+            renderer: 'scatterplot',
+            width:'754',
+            height:'10',
+            min: "0",
+            max: "2",
+            series: [{
+                    data: valsalva_peak_data,
+                    color: 'red',
+                    strokeWidth: 0.5,
+            }]
+    });
+    graph26.renderer.dotSize = 2;
+    graph26.render();
+    
+    //2nd graph and 2nd peaklist
+    valsalva_ecg_data = [];
+    valsalva_peak_data = [];
+    for(i=0;i < valsalva2.length;i++)
+       {
+          if (valsalva2[i] != "")
+          {
+             valsalva_ecg_data.push({x:i,y:parseInt(valsalva2[i])})
+             valsalva_peak_data.push({x:i,y:null})
+             if(valsalva_peaklist.includes((i+valsalva_chumk_size).toString()))
+             {
+                valsalva_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+       var graph27 = new Rickshaw.Graph({
+            element: document.querySelector("#valsalva_peak_list2"),
+            renderer: 'scatterplot',
+            width:'754',
+            height:'10',
+            min: "0",
+            max: "2",
+            series: [{
+                    data: valsalva_peak_data,
+                    color: 'red',
+            }]
+    });
+    graph27.renderer.dotSize = 2;
+    graph27.render();
+    var graph28 = new Rickshaw.Graph({
+            element: document.querySelector("#valsalva2"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, valsalva_ecg_data, "y") - 5,
+            max: finder(Math.max, valsalva_ecg_data, "y"),
+            series: [{
+                    data: valsalva_ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph28.render();
+    
+    //3rd graph and 3rd peaklist
+    valsalva_ecg_data = [];
+    valsalva_peak_data = [];
+    for(i=0;i < valsalva3.length;i++)
+       {
+          if (valsalva3[i] != "")
+          {
+             valsalva_ecg_data.push({x:i,y:parseInt(valsalva3[i])})
+             valsalva_peak_data.push({x:i,y:null})
+             if(valsalva_peaklist.includes((i+valsalva_chumk_size+valsalva_chumk_size).toString()))
+             {
+                valsalva_peak_data.push({x:i,y:1})
+             }
+          }
+       }
+    var graph29 = new Rickshaw.Graph({
+            element: document.querySelector("#valsalva3"),
+            renderer: 'line',
+            height:'40',
+            width:'740',
+            min: finder(Math.min, valsalva_ecg_data, "y") - 5,
+            max: finder(Math.max, valsalva_ecg_data, "y"),
+            series: [{
+                    data: valsalva_ecg_data,
+                    color: 'black',
+                    strokeWidth: 0.7,
+            }]
+    });
+    graph29.render();
+    var graph30 = new Rickshaw.Graph({
+        element: document.querySelector("#valsalva_peak_list3"),
+        renderer: 'scatterplot',
+        width:'754',
+        height:'10',
+        min: "0",
+        max: "2",
+        series: [{
+                data: valsalva_peak_data,
+                color: 'red',
+                strokeWidth: 0.5,
+        }]
+    });
+    graph30.renderer.dotSize = 2;
+    graph30.render();
+    
+    
+    </script>

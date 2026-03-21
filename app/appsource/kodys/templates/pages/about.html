@@ -1,0 +1,32 @@
+{% extends "page_layout.html" %}
+	{% block header %}
+		{% if request.user.is_authenticated %}
+			{% include 'includes/header.html' %}
+		{% else %}
+			{% include 'includes/header1.html' %}
+		{% endif %}
+	{% endblock %}
+{% block content_body %}
+<div class="w3-container w3-display-container  w60p ml20p mt59">
+	<div class="w3-display-topleft">
+
+		<img src="{{MEDIA_URL}}img/png/LOGO_ISO.png" class="w27p" alt="brand_image" >
+		{{about_content.ABOUT|safe}}
+
+		<!-- <p class="fclr1 f-14 ff-r ">Version 2.0 | Official Build | Windows</p>
+		<p class="ff-r w3-justify mt24 f-12 tgrclr">
+			Kodys Foot Clinik is a comprehensive software solution for Diabetes and Endocrine practice. It enables both individual practitioners and a network of clinics build longer relationships with their patients resulting in vast improvement in the quality of care offered. It assists care providers easily track and monitor in one sight.</p>
+			<p class="ff-r mt24 f-12 w3-justify tgrclr">
+			 Developed collaboratively with clinicians, specialists, information technologists and our existing key customers, the solution has been developed from the ground up with a key focus of meeting the unmet needs of healthcare professionals while minimizing the costs and resources required performing the tests.
+			 </p>
+			 <p class="ff-r f-12 mt24 w3-justify tgrclr">
+			  By integrating and streamlining your hospital workflow, it allows you to increase patient volume without increasing staff. Integration of all application tasks reduces errors and increases productivity at all levels. With more accurate capture and reporting of patient data, diagnosed tests can be analysed to avoid duplications, reduce cycle times and maximize the throughput of the clinic or hospital. All this leads to improvement in the patient care.
+		    </p> -->
+		    <div >
+		    	<p class="mt24 fclr1 ff-r f-12 "><span>{{about_content.NAME|safe}}</span><br>
+		    	<span> Copyright 2019 | Kody Medical Electronics Pvt Ltd. | All Rights Reserved</span> </p>
+		    	<a href="https://{{about_content.WEBSITE}}" class="tdecor f-12 ff-r fclr5" target="_blank">www.kodymedical.com</a>
+		    </div>
+	</div>
+</div>
+{% endblock %}

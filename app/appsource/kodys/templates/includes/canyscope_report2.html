@@ -1,0 +1,94 @@
+{% block header_script %}
+{% load kodystags %}
+  <style>
+  text{
+     font-style:normal;
+  }
+  .stroke_color{
+    stroke: none !important
+  }
+  g path{
+    stroke: red !important
+  }
+  </style>
+{% endblock %}
+<div class="ml26 mr26 ft_tm">
+  <h6 style="padding: 0;color:blue;margin:8px;text-align: center;" class="ft_tm f-16">SYMPATHETIC FUNCTION</h6>
+  <div style="width: 100%;">
+    <h6 style="padding: 0;color:purple;font-size: 15px;font-weight: bold;margin:8px">1.POSTURAL HYPOTENSION</h6>
+    <div style="width: 48%;display: inline-block;height: 130px;margin-bottom: 7px;" >
+      <ul style="list-style-type: none;padding: 0px 0px 8px 3px;margin:16px 8px 8px 8px;font-size: 14px;position: absolute;" class="list_lin_height_1">
+        <li><span>BP Supine :&nbsp;</span>{{report.TM23.0.KEY_VALUE}} / {{report.TM23.1.KEY_VALUE}}&nbsp;mmHg</li>
+        <li><span>BP Standing Immediate :&nbsp;</span>{{report.TM23.3.KEY_VALUE}} / {{report.TM23.4.KEY_VALUE}}&nbsp;mmHg</li>
+        <li><span>BP After 60 seconds :&nbsp;</span>{{report.TM23.6.KEY_VALUE}} / {{report.TM23.7.KEY_VALUE}}&nbsp;mmHg</li>
+        <li><span>Fall in systolic :&nbsp;</span>{{report.report_result.ecg_postural.fall_in_systolic}}&nbsp;mmHg</li>
+        <!-- <li style="font-size: 10px;color:red;">Note: SysBP (Supine)- Sys BP (after 60sec)= Fall in systolic</li> -->
+      </ul>
+    </div>
+    <div style="width: 25.5%;display: inline-block;margin-bottom: 8px;" id="chart_1">
+    </div>
+    <div style="width: 25.5%;display: inline-block;margin-bottom: 8px;" id="chart_2">
+    </div>
+  </div>
+  <div style="width: 100%;height: 65px;margin-bottom: 15px;">
+        <div style="width: 22%;display: inline-block;margin-left: 8px;position: relative;font-size: 12px;font-weight: normal;margin-top: 16px;float: right;margin-right: 105px;">
+      <!-- <span style="position: absolute;left: 20px;top: -17px;">&#62;30<span style="margin-left: 25px;margin-right: 26px;">11-29</span><span>&#60;10</span></span> -->
+      <!-- <span style="position: absolute;top: 32px;">Abnormal<span style="margin-left: 14px;margin-right: 14px;">Border</span><span>Normal</span></span> -->
+      <div style="position: absolute;width: 22px;height: 22px;border: 1px solid black;border-radius: 4px;display: inline-block;" class="{% if report.report_result.ecg_postural.final_postural_result == 'Normal'%} color_interpretation_green {% elif report.report_result.ecg_postural.final_postural_result == 'Border' %} color_interpretation_blue {% else %} color_interpretation_red {% endif %}">
+               <!--  <div style="display: inline;background-color: red;border-top:1.3px solid black;border-bottom:1.3px solid black;border-left:1.3px solid black;width: 50.51px;height: 97%;float: left;border-top-left-radius: 5px;border-bottom-left-radius: 5px;">
+               </div>
+               <div style="display: inline;background-color: #000066;border-top:1.3px solid black;border-bottom:1.3px solid black;width: 57px;height: 96%;float: left;">
+               </div>
+               <div style="display: inline;background-color: #ace600;border-top:1.3px solid black;border-bottom:1.3px solid black;border-right:1.3px solid black;width: 50.51px;height: 97%;float: left;border-top-right-radius: 5px;border-bottom-right-radius: 5px;">
+               </div> -->
+      </div><span style="font-size: 14px;position: absolute;top: 2px;left:36px;">- &nbsp;&nbsp; {{report.report_result.ecg_postural.final_postural_result}}</span>
+    </div>
+  </div>
+  <div style="width: 100%;">
+    <h6 style="padding: 0;color:purple;font-size: 15px;font-weight: bold;margin: 0px 8px 8px 8px;">2.SUSTAINED HANDGRIP</h6>
+    <div style="width: 48%;display: inline-block;height: 130px;margin-bottom: 7px;">
+      <ul style="list-style-type: none;padding: 0px 0px 8px 3px;margin:16px 8px 8px 8px;font-size: 14px;position: absolute;" class="list_lin_height_1">
+        <li><span>BP Before Handgrip :&nbsp;</span>{{report.TM24.0.KEY_VALUE}} / {{report.TM24.1.KEY_VALUE}}&nbsp;mmHg</li>
+        <li><span>BP After Handgrip: :&nbsp;</span>{{report.TM24.3.KEY_VALUE}} / {{report.TM24.4.KEY_VALUE}}&nbsp;mmHg</li>
+        <li><span>Increase in Diastolic :&nbsp;</span>{{report.report_result.ecg_sustained.increase_in_diasystolic}}&nbsp;mmHg</li>
+        <!-- <li style="font-size: 10px;color:red;">Note: DiaBP (After Handgrip)- Dia BP (Before Handgrip)= Increase in Diatolic</li> -->
+      </ul>
+    </div>
+    <div style="width: 25.5%;display: inline-block;margin-bottom: 8px;" id="chart_3">
+    </div>
+    <div style="width: 25.5%;display: inline-block;margin-bottom: 8px;" id="chart_4">
+    </div>
+  </div>
+   <div style="width: 100%;height: 65px;margin-bottom: 15px;">
+        <div style="width: 22%;display: inline-block;margin-left: 8px;position: relative;font-size: 12px;font-weight: normal;margin-top: 16px;float: right;margin-right: 105px;">
+      <!-- <span style="position: absolute;left: 20px;top: -17px;">&#62;10<span style="margin-left: 25px;margin-right: 26px;">11-15</span><span>&#60;16</span></span> -->
+      <!-- <span style="position: absolute;top: 32px;">Abnormal<span style="margin-left: 14px;margin-right: 14px;">Border</span><span>Normal</span></span> -->
+      <!-- <div style="width:100%;text-align: center;position: absolute;top: 35px;">Normal</div> -->
+      <div style="position: absolute;width: 22px;height: 22px;border: 1px solid black;border-radius: 4px;display: inline-block;" class="{% if report.report_result.ecg_sustained.final_sustained_result == 'Normal'%} color_interpretation_green {% elif report.report_result.ecg_sustained.final_sustained_result == 'Border' %} color_interpretation_blue {% else %} color_interpretation_red {% endif %}">
+               <!-- <div style="display: inline;background-color: red;border-top:1.3px solid black;border-bottom:1.3px solid black;border-left:1.3px solid black;width: 50.51px;height: 97%;float: left;border-top-left-radius: 5px;border-bottom-left-radius: 5px;">
+               </div>
+               <div style="display: inline;background-color: #000066;border-top:1.3px solid black;border-bottom:1.3px solid black;width: 57px;height: 96%;float: left;">
+               </div>
+               <div style="display: inline;background-color: #ace600;border-top:1.3px solid black;border-bottom:1.3px solid black;border-right:1.3px solid black;width: 50.51px;height: 97%;float: left;border-top-right-radius: 5px;border-bottom-right-radius: 5px;">
+               </div> -->
+      </div><span style="font-size: 14px;position: absolute;top: 2px;left:36px;">- &nbsp;&nbsp; {{report.report_result.ecg_sustained.final_sustained_result}}</span>
+    </div>
+  </div>
+  <h6 style="padding: 0;color:#13136b;margin:4px;text-align: center;text-decoration: underline;" class="ft_tm f-16">INTERPRETATION</h6>
+  <div style="margin-bottom: 16px;height: 130px;margin-top: 15px;">
+    <div style="height: 130px;border:1px solid;float: left;font-size: 14px;" class="w100p">
+      <ul style="list-style-type: none">
+      <li style="padding-top: 20px;"><span id="para_interpretation">{{report.report_result.para_sympathetic}}</span> Parasympathetic  {% if report.report_result.para_sympathetic == 'Normal' %}Function{% else %}dysfunction{% endif %}</li>
+      <li><span id="sym_interpretation">{{report.report_result.sympathetic}}</span> Sympathetic  {% if report.report_result.sympathetic == 'Normal' %}Function{% else %}dysfunction{% endif %}</li>
+      {% if report.report_result.cardiac_autonomy %}
+      <li><span id="cardiac_interpretation">{{report.report_result.cardiac_autonomy}}</span> Cardiac Autonomic {% if report.report_result.cardiac_autonomy == 'Normal' %}function{% else %}dysfunction{% endif %}</li>
+      {% endif %}
+      <li>Note:This may be clinically correlated</li>
+    </ul>
+    </div>
+    <!-- {% if report.reports.TEST_TYPE == "All_test" %}
+    <div style="width: 35%;height: 130px;float: right;" id="chart_5">
+    </div>
+    {% endif %} -->
+  </div>
+</div>

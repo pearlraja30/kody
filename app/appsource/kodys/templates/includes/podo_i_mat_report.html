@@ -1,0 +1,69 @@
+<div class="brclr_row_black mr26 ml26" style="width: 95%;margin:auto ;text-align: center;height: 685px;">
+  <div class="">  
+  <div style="width: 272px;display: inline-block;height: 610px;vertical-align: middle;margin-top: 53px;">
+    <div style="font-size: 13px;color: #ff299c;text-align: center;margin-bottom: 35px;margin-top: 8px;">LEFT
+    </div>
+    <div style="position: relative;height: 464px;width: 271px;border:1px solid #80ff80;">
+         <img src="{{report.report_result.Right_Foot}}" alt="" {% if 'BrowserImage' in report.report_result.Right_Foot %}style="width: 99%;height:99%;"{% else %}style="width: auto;height:auto;left:0;right:0;top:0px;bottom:0px;margin:auto;position:absolute;"{% endif %}>
+     </div>
+  </div>
+  <div style="display: inline-block;vertical-align: middle;border:1px solid black;width: 21%;padding-top: 8px;margin-right: 6px;padding-right: 8px;padding-left: 8px;text-align: left;margin-left: 6px;">
+    <div class="pb8">
+        <div class="w35pi h30" style="background-color:  {{report.Very_High_Pressure.1.items.0.1}};display: inline-block;border: 1px solid #778899;">
+        </div>
+        <div class="fclr f-11 pl16" style="display: inline-block;margin-top: -1px;position: absolute;">
+            <span>{{report.Very_High_Pressure.0}}</span></br><span>({{report.Very_High_Pressure.1.items.1.1}})</span>
+        </div>
+     </div>
+     <div class="pb8">
+        <div class="w35pi h30" style="background-color: {{report.High_Pressure.1.items.0.1}};display: inline-block;border: 1px solid #778899;">
+        </div>
+        <div class="fclr f-11 pl16" style="display: inline-block;margin-top: -1px;position: absolute;">
+            <span>{{report.High_Pressure.0}}</span></br><span>({{report.High_Pressure.1.items.1.1}})</span>
+        </div>
+     </div>
+     <div class="pb8">
+        <div class="w35pi h30" style="background-color: {{report.Mild_Pressure.1.items.0.1}};display: inline-block;border: 1px solid #778899;">
+        </div>
+        <div class="fclr f-11 pl16" style="display: inline-block;margin-top: -1px;position: absolute;">
+            <span>{{report.Mild_Pressure.0}}</span></br><span>({{report.Mild_Pressure.1.items.1.1}})</span>
+        </div>
+     </div>
+     <div class="pb8">
+        <div class="w35pi h30" style="background-color: {{report.Normal_Pressure.1.items.0.1}};display: inline-block;border: 1px solid #778899;">
+        </div>
+        <div class="fclr f-11 pl16" style="display: inline-block;margin-top: -1px;position: absolute;">
+            <span>{{report.Normal_Pressure.0}}</span></br><span>({{report.Normal_Pressure.1.items.1.1}})</span>
+        </div>
+     </div>
+     <div class="pb8">
+        <div class="w35pi h30" style="background-color: {{report.Slight_Contact.1.items.0.1}};display: inline-block;border: 1px solid #778899;">
+        </div>
+        <div class="fclr f-11 pl16" style="display: inline-block;margin-top: -1px;position: absolute;">
+            <span>{{report.Slight_Contact.0}}</span></br><span>({{report.Slight_Contact.1.items.1.1}})</span>
+        </div>
+     </div>
+     <div class="pb8">
+        <div class="w35pi h30" style="background-color: {{report.Null_Contact.1.items.0.1}};display: inline-block;border: 1px solid #778899;">
+        </div>
+        <div class="fclr f-11 pl16" style="display: inline-block;margin-top: 6px;position: absolute;">
+            <span>{{report.Null_Contact.0}}</span></br></br>
+            <span></span>
+        </div>
+    </div>
+  </div>
+   <div style="width: 272px;display: inline-block;height: 610px;vertical-align: middle;margin-top: 53px;">
+     <div style="font-size: 13px;color: #ff299c;text-align: center;margin-bottom: 35px;margin-top: 8px;">RIGHT
+     </div>
+      <div style="position: relative;height: 464px;width: 271px;border:1px solid #80ff80;">
+          <img src="{{report.report_result.Left_Foot}}" alt="" {% if 'BrowserImage' in report.report_result.Left_Foot %}style="width: 99%;height:99%;"{% else %}style="width: auto;height:auto;left:0;right:0;top:0px;bottom:0px;margin:auto;position:absolute"{% endif %}>
+      </div>
+  </div>
+  <!-- <div style="width:100%;text-align:center;font-size: 12px;margin-top: -35px;">
+    * Result based on Foot imprinter - Harris Mat
+  </div> -->
+</div>
+<div style="width:100%;text-align:center;font-size: 12px;">
+    * Result based on Foot imprinter - Harris Mat
+  </div>
+</div>

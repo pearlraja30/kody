@@ -1,0 +1,148 @@
+{% extends "page_layout.html" %}
+{% block content_body %}
+ <div class="w3-display-container bgclr3 brclr1">
+      <div class="w3-center f-16 ff-r ft-b fclr1 pt8 pb1 ">
+        Settings
+      </div>
+    </div>
+
+    <div class="w3-row">
+      <div class="w3-col w174">
+        <div class="w3-sidebar  w3-bar-block w174 gclr bgclr7">
+        <a href="{% url 'hospital_profile' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 fclr1 f-14 ff-r ft-b ">Hospital Profile</a>
+        <a href="{% url 'doctors' %}" class="w3-bar-item w3-button ft-b pt16  brclr1 f-14 ff-r fclr1 ">HCP</a>
+        <a href="{% url 'patients' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r bakclr sbrclr fclr1">Patients</a>
+        <a href="{% url 'app_configuration' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r fclr1 ">App Configuration</a>
+      </div>
+      </div>
+           <div class="w3-col w1106 ml174 bgclr3">
+               <div class="w3-display-container h645 bgclr3">
+           <div class="w3-display-container">
+            <div class="f-18 ft-b fclr1 ff-r w3-container pt16">Patients
+            </div>
+         <table id="myTable"><thead>
+  <tr class="ff-r-b">
+    <th>Patient ID</th>
+    <th>Patient Name</th>
+    <th>Contact Number</th>
+    <th>Alternate Number</th>
+    <th>Gender</th>
+    <th class="sort_remove">Actions</th>
+  </tr></thead><tbody>
+  {% for patient in patients %}
+  <tr>
+    <td class="ft-b">{{patient.FRIENDLY_UID}}</td>
+    <td>{{patient.PREFIX}} {{patient.NAME}}</td>
+    <td>{{patient.PATIENT_MOBILE_NUMBER}}</td>
+    <td>{{patient.POC_MOBILE_NUMBER}}</td>
+    <td>{{patient.GENDER}}</td>
+    <td>
+      <a href="{% url 'patients_edit' patient.UID %}" class="tdecor tclr f-14 ff-r">Edit</a>
+       <a onclick="delete_popup(this)"  class="tdecor tclr f-14 ff-r pl8 cp" data-attr="{{patient.UID}}">Delete</a>
+    </td>
+  </tr>
+  {% endfor %}
+  <!-- <tr>
+    <td class="ft-b">ID00010101</td>
+    <td>Rajesh</td>
+    <td>+91 97901 23232</td>
+    <td>+91 97901 23232</td>
+    <td>Male</td>
+    <td>
+      <a href="#" class="tdecor tclr f-14 ff-r">Edit</a>
+       <a href="#" class="tdecor tclr f-14 ff-r">Delete</a>
+    </td>
+  </tr>
+  <tr>
+    <td class="ft-b">ID00010101</td>
+    <td>Rajesh</td>
+    <td>+91 97901 23232</td>
+    <td>+91 97901 23232</td>
+    <td>Male</td>
+    <td>
+      <a href="#" class="tdecor tclr f-14 ff-r">Edit</a>
+       <a href="#" class="tdecor tclr f-14 ff-r">Delete</a>
+    </td>
+  </tr>
+  <tr>
+    <td class="ft-b">ID00010101</td>
+    <td>Rajesh</td>
+    <td>+91 97901 23232</td>
+    <td>+91 97901 23232</td>
+    <td>Male</td>
+    <td>
+      <a href="#" class="tdecor tclr f-14 ff-r">Edit</a>
+       <a href="#" class="tdecor tclr f-14 ff-r">Delete</a>
+    </td>
+  </tr>
+  <tr>
+    <td class="ft-b">ID00010101</td>
+    <td>Rajesh</td>
+    <td>+91 97901 23232</td>
+    <td>+91 97901 23232</td>
+    <td>Male</td>
+    <td>
+      <a href="#" class="tdecor tclr f-14 ff-r">Edit</a>
+       <a href="#" class="tdecor tclr f-14 ff-r">Delete</a>
+    </td>
+  </tr>
+  <tr>
+    <td class="ft-b">ID00010101</td>
+    <td>Rajesh</td>
+    <td>+91 97901 23232</td>
+    <td>+91 97901 23232</td>
+    <td>Male</td>
+    <td>
+      <a href="#" class="tdecor tclr f-14 ff-r">Edit</a>
+       <a href="#" class="tdecor tclr f-14 ff-r">Delete</a>
+    </td>
+  </tr> -->
+</tbody>
+</table>
+         </div>
+      </div>
+      </div>
+      <div class="w3-modal bgclr18" id="delete_popup1">
+        <div class="w3-modal-content w3-round mt15p" style="width: 300px;height: 150px;">
+          <div class="bgclr11 w3-center">
+            <i class="fa fa-exclamation delete_popup mt5p" aria-hidden="true"></i><br>
+            <p class="f-14 fclr1">Are you sure want to delete?</p>
+            <button class="h30 w80 bgclr15 brclr11 w3-text-white w3-round f-14" onclick="document.getElementById('delete_popup1').style.display='none';"> No</button>
+           <a href="" class="delete_yes"><button class="h30 w80 bgclr8 brclr3 w3-text-white w3-round ml16 f-14">Yes</button></a>
+          </div>
+        </div>
+      </div>
+{% endblock %}
+{% block js_script %}
+<script>
+         $(document).ready(function () {
+    $('#myTable').DataTable( {dom: 'Bfrtip',
+    lengthMenu: [
+        [ 10, 25, 50, -1 ],
+        [ '10 rows', '25 rows', '50 rows', 'Show all' ]
+    ],
+     scrollY: '40vh',
+        scrollCollapse: true,
+    buttons: [
+        'pageLength'
+    ], responsive: true,"dom": '<"top"f>rt<"bottom"<"row"<"w3-col l1 "l><"w3-col l9",i><"w3-col l2 ",p>>><"clear">',
+      language: {"sLengthMenu": "_MENU_ ","sSearch": "",searchPlaceholder: "Search by Patient Name/ID" },pagingType: 'simple_numbers',
+   "iDisplayLength": 10 });
+   
+    $('<div class="buttondoc">' +
+       '<a href="/patient/add/"><button class="h30 w118 bgclr8 brclr3 w3-text-white f-14 ft-b ff-r  cp"><span class="pl16 xz vamidddle"><img src="{{MEDIA_URL}}img/png/add.png" class="add_icons"> Add patient</span></button>' +
+       '</div>').appendTo("#myTable_wrapper .dataTables_filter");
+    $(".dataTables_filter label").addClass("filterleft");
+     $(".dataTables_length select").addClass("position");
+    
+        $("#myTable_wrapper .bottom .row .l2").css("cssText","position:absolute!important;width:100%!important;");
+    $("#myTable_wrapper .bottom .row .l1").css("cssText","position:relative!important;z-index:9999!important;");  
+} );
+          function delete_popup(current){
+console.log($(current).attr("data-attr"));
+var uid =$(current).attr("data-attr");
+      document.getElementById('delete_popup1').style.display='block';
+      $(".delete_yes").attr("href","/patient/delete/"+uid);
+     }
+</script>
+{% endblock %}

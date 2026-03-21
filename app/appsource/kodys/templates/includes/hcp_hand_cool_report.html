@@ -1,0 +1,347 @@
+  {% load kodystags %}
+  {% block header_script %}
+<style type="text/css">
+  tbody tr:nth-child(even) {
+      background-color: white!important;
+  }
+  tbody tr:nth-child(odd) {
+      background-color: white!important;
+  }
+  thead tr {
+    background-color: white!important;
+}
+</style>
+<script type="text/javascript" src="{{MEDIA_URL}}gstatic/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawVisualization);
+
+      function drawVisualization() {
+        // Some raw data (not necessarily accurate)
+        var data = google.visualization.arrayToDataTable([
+          ['Hand', 'R'],
+          ['DPLittlefinger',  
+          38-parseInt('{{report.TM12.3.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.3.KEY_VALUE|slice:"3:"}}')-1.0],
+          ['5th MCH',  
+          38-parseInt('{{report.TM12.4.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.4.KEY_VALUE|slice:"3:"}}')-1.0],
+          ['Hypothenar',
+          38-parseInt('{{report.TM12.5.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.5.KEY_VALUE|slice:"3:"}}')-1.0],
+          ['DP-Index finger',
+          38-parseInt('{{report.TM12.1.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.1.KEY_VALUE|slice:"3:"}}')-1.0],
+          ['2nd MCH',  
+          38-parseInt('{{report.TM12.2.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.2.KEY_VALUE|slice:"3:"}}')-1.0],
+          ['DP-Thumb',  
+          38-parseInt('{{report.TM12.0.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.0.KEY_VALUE|slice:"3:"}}')-1.0],
+          ['Dorsum Thumb',  
+          38-parseInt('{{report.TM12.6.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.6.KEY_VALUE|slice:"3:"}}')-1.0] 
+          ]);
+
+        var options = {
+          title : 'Right Hand',
+           titleTextStyle: {
+            fontSize: 14,
+            fontName: 'sans-serif'
+          },
+          legend: { position: 'none',},
+          chartArea: {'width': '70%', 'height': '68%', backgroundColor: {
+        stroke: 'black',
+        strokeWidth: 2
+         }},
+          vAxis: {title: '',direction: '1',ticks: [
+        // use object notation to provide y-axis labels
+        {v: 28, f: '10'},
+        {v: 26, f: '12'},
+        {v: 24, f: '14'},
+        {v: 22, f: '16'},
+        {v: 20, f: '18'},
+        {v: 18, f: '20'},
+        {v: 16, f: '22'},
+        {v: 14, f: '24'},
+        {v: 12, f: '26'},
+        {v: 10, f: '28'},
+        {v: 8, f: '30'},
+        {v: 6, f: '32'},
+        {v: 4, f: '34'},
+
+      ],textStyle: {
+          fontSize : 8,
+           fontName: 'sans-serif',
+          bold:true
+        },viewWindow: {
+              max:4,
+              min:28
+            },gridlines: {
+          color: 'transparent',
+          count: 15,
+        }},
+          hAxis: {title: '',showTextEvery:1, slantedText:true,textStyle: {
+          fontSize : 8,
+          fontName: 'sans-serif',
+          bold:true
+        }},
+          lineWidth: 1,
+          lineDashStyle: [5, 1, 3],
+          seriesType: 'bars',
+          series: {1: {type: 'line'}},
+          height:320,
+          enableInteractivity: false,
+
+        };
+        var data1 = google.visualization.arrayToDataTable([
+          ['Hand', 'L'],
+          ['DPLittlefinger',  
+          38-parseInt('{{report.TM12.10.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.10.KEY_VALUE|slice:"3:"}}')-1.0],
+          ['5th MCH',  
+          38-parseInt('{{report.TM12.11.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.11.KEY_VALUE|slice:"3:"}}')-1.0],
+          ['Hypothenar',  
+          38-parseInt('{{report.TM12.12.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.12.KEY_VALUE|slice:"3:"}}')-1.0],
+          ['DP-Index finger',  
+          38-parseInt('{{report.TM12.8.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.8.KEY_VALUE|slice:"3:"}}')-1.0],
+          ['2nd MCH',  
+          38-parseInt('{{report.TM12.9.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.9.KEY_VALUE|slice:"3:"}}')-1.0],
+          ['DP-Thumb',  
+          38-parseInt('{{report.TM12.7.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.7.KEY_VALUE|slice:"3:"}}')-1.0],
+           ['Dorsum Thumb',  
+          38-parseInt('{{report.TM12.13.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM12.13.KEY_VALUE|slice:"3:"}}')-1.0]
+        ]);
+
+        var options1 = {
+          title : 'Left Hand',
+           titleTextStyle: {
+            fontSize: 14,
+            fontName: 'sans-serif'
+          },
+          legend: { position: 'none',},
+          chartArea: {'width': '70%', 'height': '68%', backgroundColor: {
+        stroke: 'black',
+        strokeWidth: 2
+         }},
+          vAxis: {title: '',direction: '1',ticks: [
+        // use object notation to provide y-axis labels
+        {v: 28, f: '10'},
+        {v: 26, f: '12'},
+        {v: 24, f: '14'},
+        {v: 22, f: '16'},
+        {v: 20, f: '18'},
+        {v: 18, f: '20'},
+        {v: 16, f: '22'},
+        {v: 14, f: '24'},
+        {v: 12, f: '26'},
+        {v: 10, f: '28'},
+        {v: 8, f: '30'},
+        {v: 6, f: '32'},
+        {v: 4, f: '34'},
+
+      ],textStyle: {
+          fontSize : 8,
+          fontName: 'sans-serif',
+          bold:true
+        },viewWindow: {
+              max:4,
+              min:28
+            },gridlines: {
+          color: 'transparent',
+          count: 15,
+        }},
+          hAxis: {title: '',showTextEvery:1, slantedText:true,textStyle: {
+          fontSize : 8,
+          fontName: 'sans-serif',
+          bold:true
+        }},
+          lineWidth: 1, 
+          lineDashStyle: [5, 1, 3],
+          colors: ['#77b300','yellow'],
+          seriesType: 'bars',
+          series: {1: {type: 'line'}},
+          height:320,
+          enableInteractivity: false,
+        };
+
+      {% for key,value in report.report_result.items %}
+      {% if key == "TM-12" %}
+          {% for k, v in value.items %}
+              {% if k == "right_hand_result" %}
+                 var right_cool_hand_result = 38-parseInt('{{v.0}}')+1.0-parseFloat('0.{{v.0|slice:"3:"}}')-1.0;
+                 $("#right_cool_avg").html('{{v.0}}');
+                 // {% if v.1 == "Normal" %}
+                 //    $("#right_cool_status").html('<span class="color_green">{{v.1}}</span>');
+                 // {% else %}
+                 //    $("#right_cool_status").html('<span class="color_red">{{v.1}}</span>');
+                 // {% endif %}
+              {% endif %}
+              {% if k == "left_hand_result" %}
+                 var left_cool_hand_result = 38-parseInt('{{v.0}}')+1.0-parseFloat('0.{{v.0|slice:"3:"}}')-1.0;
+                 $("#left_cool_avg").html('{{v.0}}');
+                 // {% if v.1 == "Normal" %}
+                 //    $("#left_cool_status").html('<span class="color_green">{{v.1}}</span>');
+                 // {% else %}
+                 //    $("#left_cool_status").html('<span class="color_red">{{v.1}}</span>');
+                 // {% endif %}
+              {% endif %}
+           {% endfor %}
+      {% endif %}
+    {% endfor %}
+        var data2 = google.visualization.arrayToDataTable([
+          ['Right Hand','Left Hand',{ role: 'style' }],
+           ['Right Hand',  right_cool_hand_result , "#3366cc"],
+          ['Left Hand',  left_cool_hand_result, "#77b300"]
+        ]);
+
+        var options2 = {
+          title : 'Result Average',
+           titleTextStyle: {
+            fontSize: 14,
+            fontName: 'sans-serif'
+          },  
+          legend: { position: 'none',},
+          chartArea: {'width': '76%', 'height': '68%', backgroundColor: {
+        stroke: 'black',
+        strokeWidth: 2
+         }},
+          vAxis: {title: '',direction: '1',ticks: [
+        // use object notation to provide y-axis labels
+        {v: 28, f: '10'},
+        {v: 26, f: '12'},
+        {v: 24, f: '14'},
+        {v: 22, f: '16'},
+        {v: 20, f: '18'},
+        {v: 18, f: '20'},
+        {v: 16, f: '22'},
+        {v: 14, f: '24'},
+        {v: 12, f: '26'},
+        {v: 10, f: '28'},
+        {v: 8, f: '30'},
+        {v: 6, f: '32'},
+        {v: 4, f: '34'},
+
+      ],textStyle: {
+          fontSize : 8,
+          fontName: 'sans-serif',
+          bold:true
+        },viewWindow: {
+              max:4,
+              min:28
+            },gridlines: {
+          color: 'transparent',
+          count: 15,
+        }},
+          hAxis: {title: '',showTextEvery:1, slantedText:true,textStyle: {
+          fontSize : 8,
+          fontName: 'sans-serif',
+          bold:true
+        }},
+        bar: { groupWidth: '20%' },
+          seriesType: 'bars',
+          series: {2: {type: 'line'}},
+          height:320,
+          enableInteractivity: false,
+        };
+
+        var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+        var chart1 = new google.visualization.ComboChart(document.getElementById('chart_div1'));
+        chart1.draw(data1, options1);
+        var chart2 = new google.visualization.ComboChart(document.getElementById('chart_div2'));
+        chart2.draw(data2, options2);    
+      }
+    </script>
+{% endblock %}
+<div class="brclr_row_black   mr26 ml26">
+        {% if mode == "cool" %}
+        <div class="w98p m_auto mt8">
+          <div class="w49p d-inline_block">
+             <div  class="text_center f-15 color_brown ft_tm mb16" style="margin: 0 auto;margin-bottom: 17px;text-decoration: underline;line-height: 1.2;">RIGHT HAND</div>
+            <div class="clear">
+              <div class="text_center f-15 ft_tm palmar">Palmar View</div>
+              <div class="text_center f-15 ft_tm dorsal">Dorsal View</div>
+            </div>
+            <div class="mt16 pr"><img id="cool-right-hand" src="{{MEDIA_URL}}img/png/cool_hcp_right_hand_report.png" class="w100p">
+              <span class="pa  {{report.TM12.3.KEY_VALUE|font_size}} " style="left:12px;top: 92px;text-align: center;width: 22px;">{{report.TM12.3.KEY_VALUE}}</span>
+            <span class="pa  {{report.TM12.4.KEY_VALUE|font_size}} " style="left: 30px; top: 139px;text-align: center;width: 22px;">{{report.TM12.4.KEY_VALUE}}</span>
+            <span class="pa  {{report.TM12.5.KEY_VALUE|font_size}} " style="left: 54px; top: 199px;text-align: center;width: 22px;">{{report.TM12.5.KEY_VALUE}}</span>
+            <span class="pa  {{report.TM12.1.KEY_VALUE|font_size}}" style="left: 105px; top: 56px;text-align: center;width: 22px;">{{report.TM12.1.KEY_VALUE}}</span>
+            <span class="pa  {{report.TM12.2.KEY_VALUE|font_size}}" style="left: 96px; top: 127px;text-align: center;width: 22px;">{{report.TM12.2.KEY_VALUE}}</span>
+            <span class="pa  {{report.TM12.0.KEY_VALUE|font_size}}" style="left: 140px; top: 122px;text-align: center;width: 22px;">{{report.TM12.0.KEY_VALUE}}</span>
+            <span class="pa  {{report.TM12.6.KEY_VALUE|font_size}}" style="left: 194px; top: 137px;text-align: center;width: 22px;">{{report.TM12.6.KEY_VALUE}}</span>
+          </div>
+          </div>
+          <div class="w49p d-inline_block f-r bb2 pl8">
+             <div  class="text_center f-15 color_dark_blue ft_tm mb16" style="margin: 0 auto;margin-bottom: 17px;text-decoration: underline;line-height: 1.2;">LEFT HAND</div>
+            <div class="clear">
+              <div class="text_center f-15 ft_tm palmar">Palmar View</div>
+              <div class="text_center f-15 ft_tm dorsal">Dorsal View</div>
+            </div>
+            <div class="mt16 pr"><img id="cool-left-hand" src="{{MEDIA_URL}}img/png/cool_hcp_left_hand_report.png" class="w100p">
+              <span class="pa  {{report.TM12.10.KEY_VALUE|font_size}}" style="top: 89px;right: 188px;text-align: center;width: 22px;">{{report.TM12.10.KEY_VALUE}}</span>
+            <span class="pa  {{report.TM12.11.KEY_VALUE|font_size}}" style="right: 206px; top: 135px;text-align: center;width: 22px;">{{report.TM12.11.KEY_VALUE}}</span>
+            <span class="pa  {{report.TM12.12.KEY_VALUE|font_size}}" style="right: 228px; top: 194px;text-align: center;width: 22px;">{{report.TM12.12.KEY_VALUE}}</span>
+            <span class="pa  {{report.TM12.8.KEY_VALUE|font_size}}" style="left: 45px; top: 54px;text-align: center;width: 22px;">{{report.TM12.8.KEY_VALUE}}</span>
+            <span class="pa  {{report.TM12.9.KEY_VALUE|font_size}}" style="left: 55px; top: 124px;text-align: center;width: 22px;">{{report.TM12.9.KEY_VALUE}}</span>
+            <span class="pa {{report.TM12.7.KEY_VALUE|font_size}}" style="left: 13px; top: 119px;text-align: center;width: 22px;">{{report.TM12.7.KEY_VALUE}}</span>
+             <span class="pa  {{report.TM12.13.KEY_VALUE|font_size}}" style="right: 25px; top: 134px;text-align: center;width: 22px;">{{report.TM12.13.KEY_VALUE}}</span>
+          </div>
+          </div>
+        </div>
+        {% endif %}
+          {% if report.report_result %}
+        <div class="m_auto " style="width: 95%">
+          <div class="chartWithOverlay w32p d-inline_block">
+          <div id="chart_div" class=""></div>
+                <div class="overlay_warm hand_warm_overlay">
+                      <div>
+                        <div class="d-inline_block label" style="background-color: #3366cc;"></div>
+                        <div class="d-inline_block f-10  ml4 ft_tm">Right Hand</div>
+                      </div>
+                 </div>
+             </div>
+             <div class="chartWithOverlay1 w32p d-inline_block">
+          <div id="chart_div1" class=""></div>
+          <div class="overlay_warm1 hand_warm_overlay">
+                      <div>
+                        <div class="d-inline_block label" style="background-color: #77b300;"></div>
+                        <div class="d-inline_block f-10  ml4 ft_tm">Left Hand</div>
+                      </div>
+                 </div>
+        </div>
+        <div class="chartWithOverlay2  w32p d-inline_block">
+          <div id="chart_div2" class=""></div>
+          <div class="overlay_warm2 hand_warm_overlay">
+                      <div>
+                        <div class="d-inline_block label" style="background-color: #3366cc;"></div>
+                        <div class="d-inline_block f-10  ml4 ft_tm">Right Hand</div>
+                      </div>
+                      <div>
+                        <div class="d-inline_block  label" style="background-color: #77b300;"></div>
+                        <div class="d-inline_block f-10 ml4 ft_tm">Left Hand</div>
+                      </div>
+                 </div>
+        </div>
+        </div>
+        {% endif %}
+         <div class="f-9 text_center ft_tm f-10">
+       <span>**AMP-Amputated OVR-Over Range WND-Wound TNR-Test Not Required RSC-Reason Specified in Comments</span> <span class="ml4">**All Values are in Deg C</span><br><span class="">**DP-Distal phalanx  MCH-Metacarpal Head </span>
+      </div>
+      </div>
+      <div style="margin-left: 3.5%;margin-top: 10px;"><span style="font-size:15px;font-weight: bold;font-family: 'Times_New_Roman' !important;">Test Results</span></div>
+       <div class="w85p margin_auto mt8">
+    <div class=" d-inline_block w32p lh13 f-14">
+      <div>
+        Right Hand Cool PT Average<span></span>
+      </div>
+    </div>
+    <div class="d-inline_block w17_5p lh13 f-14">
+          <div>
+        :&nbsp;<span id="right_cool_avg"></span>
+      </div>
+    </div>
+    <div class="d-inline_block w17_5p lh13 f-r f-14">
+      <div>
+        :&nbsp;<span id="left_cool_avg"></span>
+      </div>
+    </div>
+    <div class=" d-inline_block w32p lh13 f-14">
+      <div>
+        Left Hand Cool  PT Average<span></span>
+      </div>
+    </div>
+    </div>

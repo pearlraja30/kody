@@ -1,0 +1,147 @@
+{% block header_script %}
+{% load kodystags %}
+<style type="text/css">
+  tbody tr:nth-child(even) {
+      background-color: white!important;
+  }
+  tbody tr:nth-child(odd) {
+      background-color: white!important;
+  }
+  thead tr {
+    background-color: white!important;
+}
+</style>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".bmi_se").hide();
+   {% for key,value in report.report_result.items %}
+   console.log('{{report.report_result.items}}')
+                  {% if key == "other_result" %}
+                     var left_result = parseFloat('{{value.0}}');
+                     $("#other_vpt_avg").html('{{value.0}}');
+                    {% if value.0 == "No Data" %}
+                   $("#other_vpt_avg").next().hide();
+                   {% endif %}
+                   {% if value.1 == "Normal" %}
+                    $("#other_vpt_status").html('<span class="color_green">{{value.1}}</span>');
+                    {% elif value.1 == "Severe" %}
+                    $("#other_vpt_status").html('<span class="severe">{{value.1}}</span>');
+                     {% elif value.1 == "Mild" %}
+                    $("#other_vpt_status").html('<span class="Mild">{{value.1}}</span>');
+                     {% elif value.1 == "Moderate" %}
+                    $("#other_vpt_status").html('<span class="Moderate">{{value.1}}</span>');
+                 {% else %}
+                    $("#other_vpt_status").html('<span class="Risk">{{value.1}}</span>');
+                 {% endif %}
+                  {% endif %}
+                  {% if key == "bmi_result" %}
+                  $(".bmi_se").show();
+                  console.log('{{value.0}}')
+                     var bmi_result = parseFloat('{{value.0}}');
+                     $("#bmi_vpt_avg").html('{{value.0}}');
+                      {% if value.0 == "No Data" %}
+                     $("#bmi_vpt_avg").next().hide();
+                     {% endif %}
+                      {% if value.1 == "Normal" %}
+                    $("#bmi_vpt_status").html('<span class="color_green">{{value.1}}</span>');
+                    {% elif value.1 == "Over Weight" %}
+                    $("#bmi_vpt_status").html('<span class="Overweight">{{value.1}}</span>');
+                    {% elif value.1 == "Obese" %}
+                    $("#bmi_vpt_status").html('<span class="Obese">{{value.1}}</span>');
+                    {% elif value.1 == "Under Weight" %}
+                    $("#bmi_vpt_status").html('<span class="Underweight">{{value.1}}</span>');
+                 {% else %}
+                    $("#bmi_vpt_status").html('<span class="color_red">{{value.1}}</span>');
+                 {% endif %}
+                  {% endif %}
+                   
+
+    {% endfor %}
+  });
+</script>
+{% endblock %}
+<div class="brclr_row_black   mr26 ml26">
+        <div class="w95p m_auto pt12 pb12 pr" style="height: 15.3cm;">
+          <div  class="mt50" style="display: inline-block;width: 33%;">
+            <div style="display: inline-block;width: 64%;"> <p class="f-16" style="margin: 0px;">TEST SITE</p> 
+              <div>
+                <p class="ta f-14 ft_tm vpt_other_text  vpt_w_147 bd_bottom">{% if report.TM19.0.KEY_NAME %}{{report.TM19.0.KEY_NAME}}{% else %}-{% endif %}</p>
+                 <p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{% if report.TM19.1.KEY_NAME %}{{report.TM19.1.KEY_NAME}}{% else %}-{% endif %}</p>
+                 {% if report.TM19.2.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM19.2.KEY_NAME}}</p>{% endif %}
+                 {% if report.TM19.3.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM19.3.KEY_NAME}}</p>{% endif %}
+                 {% if report.TM19.4.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM19.4.KEY_NAME}}</p>{% endif %}
+                 {% if report.TM19.5.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM19.5.KEY_NAME}}</p>{% endif %}
+              </div>
+            </div>
+             <div style="display: inline-block;width: 25%;"> <p class="f-16 ta" style="margin: 0px;">VPT</p>
+              <div>
+                  <p  class=" ta f-14 ft_tm pr vpt_other_text bd_bottom"> {% if report.TM19.0.KEY_VALUE %}{{report.TM19.0.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM19.12.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM19.12.KEY_VALUE|color}};">{{report.TM19.12.KEY_VALUE}}</span> {% endif %}</p>
+
+                  <p class=" ta f-14 ft_tm pr vpt_other_text  bd_bottom">{% if report.TM19.1.KEY_VALUE %}{{report.TM19.1.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM19.13.KEY_VALUE %} <span class="other_yn f-12" style="color: {{report.TM19.13.KEY_VALUE|color}};">{{report.TM19.13.KEY_VALUE}}</span> {% endif %}</p>
+                 {% if report.TM19.2.KEY_VALUE or report.TM19.2.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom"  >
+                  {% if report.TM19.2.KEY_VALUE %}{{report.TM19.2.KEY_VALUE}}{% else %}-{% endif %}{% if report.TM19.14.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM19.14.KEY_VALUE|color}};">{{report.TM19.14.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+                  {% if report.TM19.3.KEY_VALUE or report.TM19.3.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text  bd_bottom">{% if report.TM19.3.KEY_VALUE %}{{report.TM19.3.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM19.15.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM19.15.KEY_VALUE|color}};">{{report.TM19.15.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+                 {% if report.TM19.4.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom">{% if report.TM19.4.KEY_VALUE %}{{report.TM19.4.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM19.16.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM19.16.KEY_VALUE|color}};">{{report.TM19.16.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+                 {% if report.TM19.5.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom"  >{% if report.TM19.5.KEY_VALUE %}{{report.TM19.5.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM19.17.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM19.17.KEY_VALUE|color}};">{{report.TM19.17.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+              </div>
+               </div>
+          </div>
+          <div style="width: 33%;display: inline-block;">
+          <img src="{{MEDIA_URL}}img/png/other.png" width="250px" style="position: absolute;
+    top: 30px;;">
+        </div>               
+        <div class="mt50" style=" display: inline-block; width: 33%;">
+            <div style=" display: inline-block;width: 64%;"> <p class="f-16" style="margin: 0px;">TEST SITE</p> 
+              <div>
+                 <p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom"> {% if report.TM19.6.KEY_NAME %}{{report.TM19.6.KEY_NAME}}{% else %}-{% endif %}</p>
+                 <p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom" >{% if report.TM19.7.KEY_NAME %}{{report.TM19.7.KEY_NAME}}{% else %}-{% endif %}</p>
+                 {% if report.TM19.8.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom"> {{report.TM19.8.KEY_NAME}}</p>{% endif %}
+                 {% if report.TM19.9.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM19.9.KEY_NAME}}</p>{% endif %}
+                 {% if report.TM19.10.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom"> {{report.TM19.10.KEY_NAME}}</p>{% endif %}
+                 {% if report.TM19.11.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM19.11.KEY_NAME}}</p>{% endif %}
+              </div>
+            </div>
+             <div style="display: inline-block;width: 25%;"> <p class="f-16 ta " style="margin: 0px;">VPT</p>
+                 <div>
+                  <p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom"> {% if report.TM19.6.KEY_VALUE %}{{report.TM19.6.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM19.18.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM19.18.KEY_VALUE|color}};">{{report.TM19.18.KEY_VALUE}}</span>{% endif %}</p>
+                  <p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom">{% if report.TM19.7.KEY_VALUE %}{{report.TM19.7.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM19.19.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM19.19.KEY_VALUE|color}};">{{report.TM19.19.KEY_VALUE}}</span>{% endif %}</p>
+                  {% if report.TM19.8.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom">{% if report.TM19.8.KEY_VALUE %}{{report.TM19.8.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM19.20.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM19.20.KEY_VALUE|color}};">{{report.TM19.20.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+                  {% if report.TM19.9.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom">{% if report.TM19.9.KEY_VALUE %}{{report.TM19.9.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM19.21.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM19.21.KEY_VALUE|color}};">{{report.TM19.21.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+                  {% if report.TM19.10.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom">{% if report.TM19.10.KEY_VALUE %}{{report.TM19.10.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM19.22.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM19.22.KEY_VALUE|color}};">{{report.TM19.22.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+                  {% if report.TM19.11.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom"  >{% if report.TM19.11.KEY_VALUE %}{{report.TM19.11.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM19.23.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM19.23.KEY_VALUE|color}};">{{report.TM19.23.KEY_VALUE}}</span>{% endif %}</p>{% endif %} 
+              </div> 
+            </div>
+          </div>
+        </div>
+            <div class="f-9 text_center ft_tm f-10">
+         <span>**AMP - Amputated OVR - Over Range WND - Wound TNR - Test Not Required RSC - Reason Specified in Comments</span> <span class="ml4">**All Values are in Volts</span><span class="ml4">*Monofilament Response <span style="color: green;">Y</span>-Yes <span style="color: red;">N</span>-No</span>
+      </div>
+      </div>
+       <div style="margin-left: 3.5%;margin-top:16px;"><span style="font-size:15px;font-weight: bold;font-family: 'Times_New_Roman' !important;">Test Results</span></div>
+       <div class="w91p margin_auto mt8 pb16">
+    <div class="d-inline_block  lh15 ft_tm f-14">
+      <div>
+       VPT Average<span></span>
+      </div>
+    </div>
+    <div class="d-inline_block w27p lh15 ft_tm f-14">
+      <div>
+        :&nbsp;<span id="other_vpt_avg"></span>
+        <span>-</span>
+        <span id="other_vpt_status"></span>
+      </div>
+    </div>
+    <div class="d-inline_block w27p f-r lh15 ft_tm f-14">
+      <div class="bmi_se">
+        :&nbsp;<span id="bmi_vpt_avg"></span>
+        <span>-</span>
+        <span id="bmi_vpt_status"></span>
+      </div>
+    </div>
+    <div class="d-inline_block f-r lh15 ft_tm f-14">
+      <div class="bmi_se">
+        BMI&nbsp;<span></span>
+      </div>
+
+    </div>
+    </div>

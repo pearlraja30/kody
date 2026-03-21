@@ -1,0 +1,817 @@
+{% extends "page_layout.html" %}
+{% block content_body %}
+<div class="w3-display-container bgclr3 brclr1">
+      <div class="w3-center f-16 ff-r ft-b fclr1 pt8 pb1 ">Settings
+      </div>  
+    </div>
+    <div class="w3-row">
+      <div class="w3-col w174  bgclr3">
+        <div class="w3-sidebar  w3-bar-block w174 gclr bgclr7">
+        <a href="{% url 'hospital_profile' %}" class="w3-bar-item  w3-button  ft-b pt16  brclr1 fclr1 f-14 ff-r ft-b">Hospital Profile</a>
+        <a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'doctors' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r fclr1">HCP</a>
+        <a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'patients' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r fclr1">Patients</a>
+        <a href="{% url 'app_configuration' %}" class="w3-bar-item w3-button  ft-b pt16 bakclr sbrclr  brclr1 f-14 ff-r fclr1">App Configuration</a>
+      </div>
+      </div>
+      <div class="w3-col w1106 ml174 scroll bgclr3 h645" style="height: 545px !important">
+        <div>
+        
+          <div class="w3-row w3-padding-16 w3-container brclr1">
+              <form method="POST" enctype="multipart/form-data" id="license_data_id">
+                 {% csrf_token %}
+            <div class="w3-row  pb16 f-18 ff-r fclr1 ft-b">
+              License
+            </div>
+            <div class="w3-row">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr9">Product Key <span class="mandatory">*</span></span>
+              </div>
+              <div class="w3-col l5 passkey" id="account_user_role">
+                <input type="text" class="h30 w415 f-12 ff-r mr4 fclr1 bgclr7 brclr8 p8" name="license" value="{{app_config_dict.license.ACCOUNT_LICENSE_KEY }}" id="key1">
+              </div>
+              <div class="w3-col l2 " id="error_key">
+              </div>
+            </div>
+             <div class="w3-row mt10">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr9">License File</span>
+              </div>
+              <div class="w3-col l4 passkey" id="license_file">
+                 <div class="file-upload pr">
+                    <label for="upload-1" class="license_file_btn">Upload</label>
+                    <input type="file" id="upload-1" accept=".kod" style="display: none;" name="license_file">
+                    <p class="file-name file-licence-name">
+                    Please select a file.
+                    </p>
+                  </div>
+                </div>
+                  <input type="hidden" name="license_file" id="kod_file">
+                 </form>
+               {% if COMMON_INFO.ACCOUNTUSERROLE != "MEMBER" %}
+              <div class="w3-col l2" style="margin-left: -5px;">
+                            <button class="w3-text-white f-12 ff-r bgclr8 brclr3 w62 h30 cp" id="edit_account_user_role">Edit</button>
+              </div>
+                      {% endif %}
+            </div>
+          </div>
+       
+          <div class="w3-row w3-padding-16 w3-container brclr1" id="mailconfig_edit" >
+            <div class="w3-row  pb16 f-18 ff-r fclr1 ft-b">
+              Mail Configuration
+            </div>
+            <div class="w3-row" id="row1">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr9">From E-mail ID <span class="mandatory">*</span></span>
+              </div>
+              <div class="w3-col l3">
+                <input type="email" class="h30  f-12 w250 ff-r mr8 fclr1 bgclr7 brclr8 p8" name="From" value="{{app_config_dict.from.0|safe}}" id="from">
+              </div>
+            </div>
+             <div class="w3-row" id="message_email1">
+             </div>
+            <div class="w3-row" id="row2">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr9">Password <span class="mandatory">*</span></span>
+              </div>
+              <div class="w3-col l3">
+                <input type="Password" class="h30  f-12 w250 ff-r mr8 fclr1 bgclr7 brclr8 p8" name="Password" value="{{app_config_dict.password.0}}" id="password">
+              </div>
+              
+            </div>
+            <div class="w3-row" id="message_password">
+            </div>
+            <div class="w3-row" id="row3">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr9">Server <span class="mandatory">*</span></span>
+              </div>
+              <div class="w3-col l8">
+                <input type="email" class="h30  f-12 w250 ff-r mr8 fclr1 bgclr7 brclr8 p8" name="Server" value="{{app_config_dict.server.0}}" id="server">
+              </div>
+            </div>
+            <div class="w3-row" id="message_server">
+            </div>
+            <div class="w3-row" id="row4">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr9">Port <span class="mandatory">*</span></span>
+              </div>
+              <div class="w3-col l8">
+                <input type="email" class="h30  f-12 w250 ff-r mr8 fclr1 bgclr7 brclr8 p8" name="Port" value="{{app_config_dict.port.0}}" id="port_key">
+              </div>
+            </div>
+            <div class="w3-row" id="message_port">
+             </div>
+            <div class="w3-row">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr9">To E-mail ID <span class="mandatory">*</span></span>
+              </div>
+              <div class="w3-col l8">
+                <input type="email" class="h30  f-12 w250 ff-r mr8 fclr1 bgclr7 brclr8 p8" name="to_email" value="{{app_config_dict.to.0}}" id="to_key">
+               {% if COMMON_INFO.ACCOUNTUSERROLE != "MEMBER" %}
+                <button class="w3-text-white f-12 ff-r bgclr8 brclr3 w62 h30 cp" id="mailconfig_edit_click">Edit</button>
+                {% endif %}
+              </div>
+            </div>
+             <div class="w3-row" id="message_email2">
+             </div>
+          </div>
+          <div class="w3-row w3-padding-16 w3-container brclr1">
+            <div class="w3-row f-18 ff-r fclr1 ft-b">
+              Database Backup
+            </div>
+            <div class="w3-row pb15 pt5">
+              <span class="f-12 ff-r fclr9">Last Back Up done: <span class="fclr1">{{app_config_dict.backup}}</span></span>
+            </div>
+            <div class="w3-row">
+      			{% if COMMON_INFO.ACCOUNTUSERROLE != "MEMBER" %}
+
+              <button class="f-12 ff-r w3-text-white bgclr8 brclr3 w174 h30 cp" onclick="backup();">Backup Database</button>
+             <button class="f-12 ff-r w3-text-white bgclr6 brclr9 w174 h30 ml16 cp" onclick="restore()">Restore Database</button>
+              {% else %}
+             <button class="f-12 ff-r w3-text-white bgclr8 brclr3 w174 h30">Backup Database</button>
+              <button class="f-12 ff-r w3-text-white bgclr6 brclr9 w174 h30 ml16" >Restore Database</button>
+                {% endif %}
+            </div>
+          </div>
+          <div class="w3-row w3-padding-16 w3-container brclr1" id="app_settings_edit">
+            <div class="w3-row  pb16 f-18 ff-r fclr1 ft-b">
+              Application Settings
+            </div>
+            <div class="w3-row">
+              <div class="w3-col l2 f-12 ff-r fclr9 pt6">
+                Patient Prefix 
+              </div>
+              <div class="w3-col l8">
+                <input type="text" class="h30 w62 f-12 ff-r mr8 fclr1 bgclr7 brclr8 p8" name="Prefix" value="{{app_config_dict.prefix.0}}" id="prefix" maxlength="5">
+              </div>
+            </div>
+            <div class="w3-row pt16">
+              <div class="w3-col l2 f-12 ff-r fclr9 pt6">
+                Patient Numbering Digits 
+              </div>
+              <div class="w3-col l8">
+                <input type="tel" maxlength="2" class="h30 w62 f-12 ff-r mr8 fclr1 bgclr7 brclr8 p8" name="Digits" value="{{app_config_dict.digits.0}}" id="pat_num_digit">
+      			{% if COMMON_INFO.ACCOUNTUSERROLE != "MEMBER" %}
+                <button class="w3-text-white f-12 ff-r bgclr8 brclr3 w62 h30 cp" id="app_settings_edit_click">Edit</button>
+                {% endif %}
+              </div>
+            </div>
+               <div class="w3-row pt16">
+              <span class='note_prefix' style='color: rgb(36, 51, 72); font-weight: bold;font-family: "Roboto-Bold" !important;'>Note : Patient Prefix Must be 3 to 5 </span>
+              </div>
+              <div class="w3-row ">
+                <span class="note_down ft-b">Note : Patient Numbering Digit Must be 3 to 20 </span>
+              </div>
+          </div>
+          <div class="w3-row w3-padding-16 w3-container bgclr3 brclr1" id="font_settings_edit">
+            <div class="w3-row  pb16 f-18 ff-r fclr1 ft-b">
+              Font Settings
+            </div>
+            <div class="w3-row">
+              <div class="w3-col l2 f-12 ff-r fclr9 pt6">
+                Hospital Name
+              </div>
+              <div class="w3-col l5 w375 display-inline" id="font_settings_edit">
+<!--                 <input id="font" type="text" value="{{app_config_dict.hospital_name.0.style}}"/ > -->
+                 <label class="select-cf display-inline ml16 select_label_wth">
+                 <select class="select-3f select_label_wth" id="font_fam_1" value="{{app_config_dict.hospital_name.0.style}}">
+                  <option value='roboto'>Roboto</option>
+                  <option value='Times_New_Roman'>Times New Roman</option>
+                  <option value='arial'>Arial</option>
+                  <option value='sans-serif'>Sans Serif</option>
+                  <option value='calibri'>Calibri</option>
+                  <option value='comic'>Comic Sans</option>
+                </select>
+               </label>
+                <label class="select-cf display-inline ml16">
+                 <select class="select-3f " id="select_size_1" value="{{app_config_dict.hospital_name.0.size}}">
+                  <option value='19'>19</option>
+                  <option value='21'>21</option>
+                  <option value='23'>23</option>
+                </select>
+               </label>
+                <div id="bcPicker" class="color-picker display-inline ml16 mr16"></div>
+              </div>
+            </div>
+            <div class="w3-row pt16">
+              <div class="w3-col l2 f-12 ff-r fclr9 pt6">
+               Hospital Address
+              </div>
+              <div class="w3-col l5 w375 display-inline">
+                <label class="select-cf display-inline ml16 select_label_wth">
+                 <select class="select-3f select_label_wth" id="font_fam_2" value="{{app_config_dict.hospital_address.0.style}}">
+                  <option value='roboto'>Roboto</option>
+                  <option value='Times_New_Roman'>Times New Roman</option>
+                  <option value='arial'>Arial</option>
+                  <option value='sans-serif'>Sans Serif</option>
+                  <option value='calibri'>Calibri</option>
+                  <option value='comic'>Comic Sans</option>
+                </select>
+               </label>
+                <label class="select-cf display-inline ml16">
+                 <select class="select-3f" id="select_size_2" value="{{app_config_dict.hospital_address.0.size}}">
+                  <option value='10'>10</option>
+                  <option value='12'>12</option>
+                  <option value='14'>14</option>
+                  
+                </select>
+               </label>
+                <div id="bcPicker1" class="color-picker display-inline ml16 mr16"></div>
+              </div>
+            </div>
+             <div class="w3-row pt16">
+              <div class="w3-col l2 f-12 ff-r fclr9 pt6">
+               Hospital Phone Number
+              </div>
+              <div class="w3-col l5 w375 display-inline">
+                      <label class="select-cf display-inline ml16 select_label_wth">
+                 <select class="select-3f select_label_wth" id="font_fam_3" value="{{app_config_dict.hospital_phone_number.0.style}}">
+                  <option value='roboto'>Roboto</option>
+                  <option value='Times_New_Roman'>Times New Roman</option>
+                  <option value='arial'>Arial</option>
+                  <option value='sans-serif'>Sans Serif</option>
+                  <option value='calibri'>Calibri</option>
+                  <option value='comic'>Comic Sans</option>
+                </select>
+               </label>
+                <label class="select-cf display-inline ml16">
+                 <select class="select-3f" id="select_size_3" value="{{app_config_dict.hospital_phone_number.0.size}}"> 
+                  <option value='10'>10</option>
+                  <option value='12'>12</option>
+                  <option value='14'>14</option>
+                 
+                </select>
+               </label>
+                <div id="bcPicker2" class="color-picker display-inline ml16 mr16" ></div>
+              </div>
+              <div class="w3-col l1">
+                <button class="w3-text-white f-12 ff-r bgclr8 brclr3 w62 h30 cp" id="font_settings_edit_click">Edit</button>
+              </div>
+            </div>
+          </div>
+          <div class="w3-row w3-padding-16 w3-container">
+            <div class="w3-row f-18 ff-r fclr1 ft-b">
+              Do you want Header in report page 
+            </div>
+            <div class="w3-row pb15 pt15" id="header_yes">
+              <label class="f-12 ff-r fclr9 " style="margin: 15px;" for="True"><input type="radio" name="gender" id="True" value="True" {% if COMMON_INFO.IS_REPORT_HEADER == True %}checked{% endif %}> <span style="position: relative;top: -3px;left: 3px;">Yes</span></span></label><label class="fclr1"  style="margin: 15px;" for="False"><input type="radio" name="gender" id="False" value="False" {% if COMMON_INFO.IS_REPORT_HEADER == False %}checked{% endif %}> <span style="position: relative;top: -3px;left: 3px;">No</span></label>
+            </div>
+            <div class="w3-row">
+               <button class="w3-text-white f-12 ff-r bgclr8 brclr3 w62 h30 cp" id="header_edit">Edit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block js_script %}
+<script>
+  function  licensekey(){
+             $(".overflow-hidden").append(`<div id="licensekey_alert" class="w3-modal  bgclr18" "><div class="w3-modal-content  mt11p" style="width:445px;"><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please upload license key file in app configuration .</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="licensekey_alert_close();">OK</button>
+                         </div></div></div></div>`);
+                 $("#licensekey_alert").show();  
+          }
+  function licensekey_alert_close(){
+               $("#licensekey_alert").hide(); 
+          }
+	$(document).ready(function(){
+      $('input[type="file"]').change(function() {
+        var data_file = this.files[0];
+        $("#kod_file").val(data_file);
+        console.log(data_file)
+      if ($(this).val()) {
+      error = false;
+      
+      var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+      $(this).closest('.file-upload').find('.file-name').html(filename);
+
+      if (error) {
+        parent.addClass('error').prepend.after('<div class="alert alert-error">' + error + '</div>');
+      }
+    }
+  });
+    $("#key1,#key2,#key3,#key4,#key5").css("cursor","not-allowed");
+    $(".note_down").css({"color":"rgba(36, 51, 72, 1)","font-weight":"bold"});
+    $("#select_size_1").val("{{app_config_dict.hospital_name.0.size}}");
+    $("#select_size_2").val("{{app_config_dict.hospital_address.0.size}}");
+    $("#select_size_3").val("{{app_config_dict.hospital_phone_number.0.size}}");
+    $("#font_fam_1").val("{{app_config_dict.hospital_name.0.style}}");
+    $("#font_fam_2").val("{{app_config_dict.hospital_address.0.style}}");
+    $("#font_fam_3").val("{{app_config_dict.hospital_phone_number.0.style}}");
+    $("#license_file").find('input').attr("disabled",true);
+   $("div").find("b").remove();
+   $("a").find("div").addClass("image");
+   $("#header_yes input").attr("disabled",true);
+   // $("#fontSelect-undefined a").addClass("image");
+		$("#account_user_role").find('input').attr("disabled",true);
+    var flag = false;
+    // $("#edit_account_user_role_save").css("display","none")
+    // $("#license_file_id").click(function(){
+    //   $(this).text("Save")
+
+    // });
+		$("#edit_account_user_role").click(function(){
+      event.preventDefault();
+			$("#account_user_role").find('input').removeAttr("disabled",true);
+           $("#license_file").find('input').attr("disabled",false);
+      $("#account_user_role").find('input').removeAttr("style");
+      // $("#edit_account_user_role").css("display","none")
+      // $("#key5").after($('<button class="w3-text-white f-12 ff-r bgclr8 brclr3 w62 h30 cp" id="edit_account_user_role_save">save</button>'))
+      if(($("#edit_account_user_role").text()) == 'Save'){
+       $("#edit_account_user_role").text("Edit");
+       var key_1 = $("#key1").val();
+       if($("#key1").val() != ""){
+       savedata();
+       }
+       else{
+             $("#edit_account_user_role").text("Save");
+        $("#error_key").html("Please enter Product Key");
+        $("#error_key").css({"color":"red","padding-top":"6px"});
+       }
+     }
+     else{
+       $("#edit_account_user_role").text("Save");
+     }
+		});
+	});
+	function savedata(){
+    $("#license_data_id").submit();
+	}
+ function validatemail(from_mail) {
+var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+return re.test(from_mail);
+}
+function validatemail(to_mail) {
+var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+return re.test(to_mail);
+}
+$('#port_key').on("keypress keyup keydown",function (event) {
+     var keycode = event.which;
+     var keys = [96,97,98,99,100,101,102,103,104,105];
+     if((keys.indexOf(keycode) == -1)){
+       // event.preventDefault();
+         if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 9 || keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+             event.preventDefault();
+         }
+      }
+   });
+$("#row1").css({"padding-top":"16px","padding-bottom":"16px"});
+$("#row2").css({"padding-bottom":"16px"});
+$("#row3").css({"padding-bottom":"16px"});
+$("#row4").css({"padding-bottom":"16px"});
+$("#mailconfig_edit").find('input').attr("disabled",true);
+$("#mailconfig_edit").find('input').css("cursor","not-allowed");
+$("#mailconfig_edit_click").click(function(){
+  $("#mailconfig_edit").find('input').removeAttr("disabled",true);
+  $("#mailconfig_edit").find('input').removeAttr("style");
+  if(($("#mailconfig_edit_click").text()) == 'Save'){
+    $("#mailconfig_edit_click").text("Edit");
+    var from_mail = $("#from").val();
+    var to_mail = $("#to_key").val();
+    var pass_word = $("#password").val();
+    var server = $("#server").val();
+    var port = $("#port_key").val();
+    var flag=0;
+    if(from_mail==""){
+      $("#message_email1").html("Please enter From E-mail ID");
+      $("#row1").css({"padding-top":"16px","padding-bottom":"4px"});
+      $("#message_email1").css({"color":"red","padding-bottom":"4px","margin-left":"16.66666%"});
+      $("#mailconfig_edit_click").text("Save");
+    }
+    else if(!validatemail(from_mail)){
+      $("#message_email1").html("Please enter valid E-mail ID");
+      $("#row1").css({"padding-top":"16px","padding-bottom":"4px"});
+      $("#message_email1").css({"color":"red","padding-bottom":"4px","margin-left":"16.66666%"});
+      $("#mailconfig_edit_click").text("Save");
+    }
+    else{
+      $("#message_email1").html("");
+      $("#row1").css({"padding-top":"16px","padding-bottom":"16px"});
+      flag++;
+    }
+    if(to_mail==""){
+      $("#message_email2").html("Please enter To E-mail ID");
+      $("#row4").css({"padding-bottom":"4px"});
+      $("#message_email2").css({"color":"red","padding-top":"4px","margin-left":"16.66666%"});
+      $("#mailconfig_edit_click").text("Save");
+    }
+    else if(!validatemail(to_mail)){
+      $("#message_email2").html("Please enter valid E-mail ID");
+      $("#row5").css({"padding-bottom":"4px"});
+      $("#message_email2").css({"color":"red","padding-top":"4px","margin-left":"16.66666%"});
+      $("#mailconfig_edit_click").text("Save");
+    }
+    else{
+      $("#message_email2").html("");
+      flag++;
+    }
+    if(pass_word==""){
+      $("#message_password").html("Please enter Password");
+      $("#row2").css({"padding-bottom":"4px"});
+      $("#message_password").css({"color":"red","padding-bottom":"4px","margin-left":"16.66666%"});
+      $("#mailconfig_edit_click").text("Save");
+    }
+    else{
+      $("#message_password").html("");
+      $("#row2").css({"padding-bottom":"16px"});
+      flag++;
+    }
+    if(server==""){
+      $("#message_server").html("Please enter server");
+      $("#row3").css({"padding-bottom":"4px"});
+      $("#message_server").css({"color":"red","padding-bottom":"4px","margin-left":"16.66666%"});
+      $("#mailconfig_edit_click").text("Save");
+    }
+    else{
+      $("#message_server").html("");
+      $("#row3").css({"padding-bottom":"16px"});
+      flag++;
+    }
+    if(port==""){
+      $("#message_port").html("Please enter Port");
+      $("#row4").css({"padding-bottom":"4px"});
+      $("#message_port").css({"color":"red","padding-bottom":"4px","margin-left":"16.66666%"});
+      $("#mailconfig_edit_click").text("Save");
+    }
+    else{
+      $("#message_port").html("");
+      $("#row4").css({"padding-bottom":"16px"});
+      flag++;
+    }
+    if(flag == 5){
+      savedata1();  
+    }
+    // else{
+    // savedata1();  
+    // }
+  }
+  else{
+    $("#mailconfig_edit_click").text("Save");
+  }
+});
+function backup(){
+  $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait Back up on process</h3></div></div></div>`);
+   $("#wait_process").show(); 
+  $.ajax({
+          data: "",
+         type : 'GET',                            
+         url :"/database/backup/",
+         dataType : "application/json; charset=utf-8",
+         complete : function(xhr, flag) 
+           {
+            console.log(xhr.responseText);
+              if(xhr.responseText == "True"){
+                $("#wait_process").hide();
+                $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Database Backup Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+                $("#close_process").show();
+              }
+              else if(xhr.responseText == "Error"){
+                $("#wait_process").hide();
+                $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Database Backup Saved successfully and sending Database Backup as Mail is Failed</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+                $("#close_process").show();
+              }    
+              else{
+                 $("#wait_process").hide();
+                $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Database Backup Operation Failed</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+                $("#close_process").show();
+              }     
+           } 
+  });
+}
+function cancel_restore(){
+  $("#restore_process").hide(); 
+}
+
+function restore(){
+  $(".overflow-hidden").append(`<form method="POST" action="/restore/database/" enctype="multipart/form-data" id="restore_data_form">{% csrf_token %}<div id="restore_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Do you want to restore ?</h3><h6 class="f-12">Backup your files immediately to prevent information loss .</h6><div class="ta" ><label for="restore_data" class="f-15 w3-text-white pr w80 bgclr8 brclr3 h30" style="padding: 5px 28px !important;text-decoration: none;">OK</label><input type="file" id="restore_data" accept=".json" style="display: none;position:absolute;margin-left:102px;margin-top:-27px;" name="backup_db_file"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3  ml16"  style="padding: 3px 15px !important;height:31px;" onclick="javascript:window.location.reload();" type="button">Cancel</button></div></div></div></div><input type="hidden" id="json_file" name="backup_db_file"</form>`);
+   $("#restore_process").show(); 
+    $('input[type="file"]').change(function() {
+        var datarestore_file = this.files[0];
+        var file_1 = (datarestore_file.name);
+        console.log(file_1)
+        // console.log(datarestore_file)
+        $("#json_file").val(file_1);
+        var data_restore = $("#json_file").val();
+        console.log(data_restore)
+        $("#restore_process").hide(); 
+        $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+        $("#wait_process").show(); 
+        if($("#json_file").val() != ""){
+          $("#restore_data_form").submit();
+        }
+   }); 
+}
+function close_process(){
+  $("#close_process").hide();
+}
+function savedata1(){
+  var data1 = $("#from").val();
+  // var data2 = $("#user_name").val();
+  var data3 = $("#password").val();
+  var data4 = $("#server").val();
+  var data5 = $("#port_key").val();
+  var data6 = $("#to_key").val();
+  $.ajax({
+    data: {
+             'From'      :data1,
+             // 'Username' :data2,
+             'Password'  :data3,
+             'Server'    :data4,
+             'Port'  :data5,
+             'To'    :data6,
+             'csrfmiddlewaretoken':'{{ csrf_token}}'
+          },
+         type : 'POST',                            
+         url :"/app/configuration/settings/",
+         dataType : "application/json; charset=utf-8",
+         complete : function(xhr, flag) 
+           {
+              if(xhr.responseText == "True"){
+            $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+              $("#close_process").show(); 
+              }         
+           } 
+  });
+  $("#mailconfig_edit_click").text("Edit");
+  $("#mailconfig_edit").find('input').attr("disabled",true);
+
+}
+$("#app_settings_edit").find('input').attr("disabled",true);
+$("#app_settings_edit").find('input').css("cursor","not-allowed");
+$("#app_settings_edit_click").click(function(){
+  $("#app_settings_edit").find('input').removeAttr("disabled",true);
+  $("#app_settings_edit").find('input').removeAttr("style");
+  if(($("#app_settings_edit_click").text()) == 'Save'){
+    console.log($("#prefix").val().length)
+    $("#app_settings_edit_click").text("Edit");
+      var app_id = $("#pat_num_digit").val();
+      var counter = 0
+    console.log();
+    if ((app_id >= 3 && app_id <= 20) || app_id == 0) 
+    {
+    counter++;     
+    }
+    else{
+      $("#app_settings_edit_click").text("Save");
+      $(".note_down").css("color","red");
+    }
+    if(($("#prefix").val().length >= 3 && $("#prefix").val().length <= 5) || $("#prefix").val().length == 0 ){
+       counter++;
+    }
+    else{
+      $(".note_down").after("");
+       $(".note_prefix").css("color","red");
+         $("#app_settings_edit_click").text("Save");
+    }
+    if(counter == 2){
+      savedata2();
+    }
+  }
+  else{
+    $("#app_settings_edit_click").text("Save");
+  }
+  // $("#app_settings_edit_click").text("Save");
+  // $("#app_settings_edit_click").attr("onclick","savedata2()");
+});
+    $('#prefix').on("keypress keyup keydown",function (event) {
+                 var keycode = event.which;
+        console.log(keycode);
+                 var keys = [96,97,98,99,100,101,102,103,104,105,46];
+                if((keys.indexOf(keycode) == -1)){
+       // event.preventDefault();
+                  if (!(event.shiftKey == false && ( keycode == 8 || keycode == 108  || keycode == 113 || keycode == 9 ||  keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 90)  || (keycode >= 96 && keycode <= 105) || (keycode >= 100 && keycode <= 123)))) {
+                 event.preventDefault();
+                }
+              }
+            });
+
+function savedata2(){
+  var data1_prefix = $("#prefix").val();
+  var data2_panumdig = $("#pat_num_digit").val();
+  $.ajax({
+    data: {
+             'Prefix'  :data1_prefix,
+             'Digits'  :data2_panumdig,
+             'csrfmiddlewaretoken':'{{ csrf_token}}'
+          },
+         type : 'POST',                            
+         url :"/app/configuration/settings/",
+         dataType : "application/json; charset=utf-8",
+         complete : function(xhr, flag) 
+           {
+              if(xhr.responseText == "True"){
+             $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+              $("#close_process").show();  
+              }          
+           } 
+  });
+  $("#app_settings_edit_click").text("Edit");
+  $("#app_settings_edit").find('input').attr("disabled",true);
+}
+// $("#font_settings_edit").find('select')
+// $("#font_settings_edit").click(function(){
+//   $("#font_settings_edit").find('#fontSelect-active').attr("disabled",true);
+// })
+// $("#font_settings_edit").find('select').attr("disabled",true);
+// $("#font_settings_edit_click").click(function(){
+//   $("#font_settings_edit").find('select').removeAttr("disabled",true);
+//   $("#font_settings_edit_click").text("save");
+// });
+{% if app_config_dict.hospital_name.0.color %}
+var color = '{{app_config_dict.hospital_name.0.color}}'.replace(/;/g, ' ');
+console.log('#00bdb6')
+var colorng = ""+color+""
+$('#bcPicker').bcPicker({defaultColor: '{{app_config_dict.hospital_name.0.color}}' });
+{% else %}
+$('#bcPicker').bcPicker({defaultColor: '#00bdb6'});
+{% endif %}
+// $('#bcPicker').addClass("w3-disabled")
+ $('#bcPicker').addClass("pointer_events");
+ // $('.bcPicker-picker').css("cursor","not-allowed");
+ $(".bcPicker-picker").addClass("pointer_events");
+$('.bcPicker-picker').css("pointer_events","none");
+{% if app_config_dict.hospital_address.0.color %}
+ $('#bcPicker1').bcPicker({defaultColor: '{{app_config_dict.hospital_address.0.color}}'}).addClass("pointer_events");
+ {% else %}
+ $('#bcPicker1').bcPicker({defaultColor: '#00bdb6'}).addClass("pointer_events");
+ {% endif %}
+ {% if app_config_dict.hospital_phone_number.0.color %}
+ $('#bcPicker2').bcPicker({defaultColor: '{{app_config_dict.hospital_phone_number.0.color}}'}).addClass("pointer_events");
+  {% else %}
+   $('#bcPicker2').bcPicker({defaultColor: '#00bdb6'}).addClass("pointer_events");
+    {% endif %}
+ $("#font").fontselect();
+ $("#font1").fontselect();
+ $("#font2").fontselect();
+ $(".font-select").addClass("pointer_events");
+ $("#font_settings_edit").find('select').css("cursor","not-allowed");
+ $("#font_settings_edit").find('select').attr("disabled",true);
+$("#font_settings_edit_click").click(function(){
+     
+        $("#font_settings_edit").find('select').removeAttr("style");
+        $("#font_settings_edit").find('select').removeAttr("disabled",true);
+        // $("#font_settings_edit_click").text("save");
+        
+          $('#bcPicker').removeClass("pointer_events");
+          $(".bcPicker-picker").removeClass("pointer_events")
+      // $('#bcPicker').removeClass("w3-disabled");
+      $('#bcPicker1').removeClass("pointer_events");
+      $('#bcPicker2').removeClass("pointer_events");
+      $('.bcPicker-palette').on('click', '.bcPicker-color', function(){
+        var color = $(this).css('background-color');
+        $(this).parent().parent().find(".bcPicker-picker").css("background-color",color);
+        $(".bcPicker-palette").css("display","none");
+      });
+      $(".font-select").removeClass("pointer_events");
+      if(($("#font_settings_edit_click").text()) == 'Save'){
+       $("#font_settings_edit_click").text("Edit");
+        savedata3();
+       }
+       else{
+          $("#font_settings_edit_click").text("Save");
+         }
+      // $("#font_settings_edit_click").text("Save");
+      // $("#font_settings_edit_click").attr("onclick","savedata3()");
+      // $("#fontSelect-undefined").removeClass("pointer_events");
+});
+function savedata3(){
+   font_array = [];
+  $(".font-select").each(function(i)
+  {
+    var font_name = $(this).find("span").html();
+    font_array.push(font_name);   
+  });
+    // console.log(font_array[0],font_array[1],font_array[2])
+  var data_font_hospname1 = $("#font_fam_1").val();
+  var data_font_hospaddr1 = $("#font_fam_2").val();
+  var data_font_hospphno1 = $("#font_fam_3").val();
+  var data_size_hospname = $("#select_size_1").val();
+  var data_size_hospaddr = $("#select_size_2").val();
+  var data_size_hospphno = $("#select_size_3").val();
+  var data_value1=$("#bcPicker").find('.bcPicker-picker').attr("style");
+  var data_color_hospname =(data_value1.split(":"))[1];
+  var color1 = data_color_hospname.replace(/;/g, ' ');
+  // console.log((data_value1.split(":"))[1])
+  var data_value2=$("#bcPicker1").find('.bcPicker-picker').attr("style");
+  var data_color_hospaddr = (data_value2.split(":"))[1];
+    var color2 = data_color_hospaddr.replace(/;/g, ' ');
+  var data_value3=$("#bcPicker2").find('.bcPicker-picker').attr("style");
+  var data_color_hospphno =(data_value3.split(":"))[1];
+    var color3 = data_color_hospphno.replace(/;/g, ' ');
+  $.ajax({
+    data: {
+             'font_hospname' :data_font_hospname1,
+             'font_hospaddr' :data_font_hospaddr1,
+             'font_hospphno' :data_font_hospphno1,
+             'size_hospname' :data_size_hospname,
+             'size_hospaddr' :data_size_hospaddr,
+             'size_hospphno' :data_size_hospphno,
+             'color_hospname':color1,
+             'color_hospaddr':color2,
+             'color_hospphno':color3,
+             'csrfmiddlewaretoken':'{{ csrf_token}}'
+          },
+         type : 'POST',                            
+         url :"/app/configuration/settings/",
+         dataType : "application/json; charset=utf-8",
+         complete : function(xhr, flag) 
+           {
+              if(xhr.responseText == "True"){
+            $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+              $("#close_process").show();
+              }        
+           } 
+  });
+  $("#font_settings_edit_click").text("Edit");
+  
+ $('#bcPicker').addClass("pointer_events");
+ $(".bcPicker-picker").addClass("pointer_events");
+$('.bcPicker-picker').css("pointer_events","none");
+ $('#bcPicker1').addClass("pointer_events");
+ $('#bcPicker2').addClass("pointer_events");
+ $(".font-select").addClass("pointer_events");
+ $("#font_settings_edit").find('select').attr("disabled",true);
+}
+function saved_Data(){
+  window.location.href="/app/configuration/";
+}
+$("#header_edit").click(function(){
+  $("#header_yes input").attr("disabled",false);
+  $("#header_edit").text("Save").attr("onclick","header_request()");
+});
+function header_request(){
+  var data = $("#header_yes input:checked").val();
+  $.ajax({
+    data: {
+             'is_report_header' :data,
+             'csrfmiddlewaretoken':'{{ csrf_token}}'
+          },
+         type : 'POST',                            
+         url :"/app/configuration/settings/",
+         dataType : "application/json; charset=utf-8",
+         complete : function(xhr, flag) 
+           {
+            console.log(xhr.responseText);
+              if(xhr.responseText == "True"){
+            $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+              $("#close_process").show();
+              }        
+           } 
+  });
+
+}
+// $(".bcPicker-picker").addClass("w3-disabled");
+// $(".bcPicker-picker").click(function(){
+//   alert(1)
+//   $(".bcPicker-palette").attr("disabled",true);
+// });
+// var nodes = document.getElementsByclass("font-select-active").getElementsByclass('fs-drop');
+// for(var i = 0; i < nodes.length; i++){
+//      nodes[i].disabled = true;
+// }
+// $(function(){
+
+//  $('#font').fontselect().change(function(){
+//     // replace + signs with spaces for css
+//     // var font = $(this).val().replace(/\+/g, ' ');
+//     // // split font into family and weight
+//     // font = font.split(':');
+//     // set family on paragraphs
+//     // var font_size=document.getElementById('font_hospitalsize');
+//      // font_size.style.setProperty( 'font-family', font[0], 'important' );
+//   });
+//  $('#font1').fontselect().change(function(){
+//     // replace + signs with spaces for css
+//     var font = $(this).val().replace(/\+/g, ' ');
+//     // split font into family and weight
+//     font = font.split(':');
+//     // set family on paragraphs
+//     var font_size=document.getElementById('font_hospitalsize');
+//      // font_size.style.setProperty( 'font-family', font[0], 'important' );
+//   });
+//  $('#font2').fontselect().change(function(){
+//     // replace + signs with spaces for css
+//     var font = $(this).val().replace(/\+/g, ' ');
+//     // split font into family and weight
+//     font = font.split(':');
+//     // set family on paragraphs
+//     var font_size=document.getElementById('font_hospitalsize');
+//      // font_size.style.setProperty( 'font-family', font[0], 'important' );
+//   });
+  
+//       // $('#bcPicker').bcPicker();
+//       // $('#bcPicker1').bcPicker({defaultColor: '33CCCC'});
+//       // $('#bcPicker2').bcPicker({defaultColor: '33CCCC'});
+
+//       // $('.bcPicker-palette').on('click', '.bcPicker-color', function(){
+//       //   var color = $(this).css('background-color');
+//       //   $(this).parent().parent().find(".bcPicker-picker").css({"background-color":color,"pointer-events":"none"}).addClass("w3-disabled");
+//       //   $(".bcPicker-palette").css("display","none");
+//       // })
+// });
+// function file_upload(){
+//   $(".overflow-hidden").append('<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Report has been Send successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
+//               $("#close_process").show();
+// }
+</script>
+{% endblock %}

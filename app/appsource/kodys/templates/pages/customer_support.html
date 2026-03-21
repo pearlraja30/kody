@@ -1,0 +1,387 @@
+{% extends "page_layout.html" %}
+{% block header %}
+    {% if request.user.is_authenticated %}
+      {% include 'includes/header.html' %}
+    {% else %}
+      {% include 'includes/header1.html' %}
+    {% endif %}
+  {% endblock %}
+{% block content_body %}
+     <div class="w3-display-container bgclr3">
+      <div class="w3-center ft-b ff-r fclr1 f-16  pt8 pb1 brclr1">
+        Customer Support
+      </div>
+    </div>
+
+    <div class="w3-row bgclr3" style="height: 549px !important;overflow-y: scroll;">
+      <div class="w3-col w729  bgclr3">
+      	<div class="w3-row pb16 brclr1">
+            <div class="w3-row ml-40">
+      			{% if customer_support_technical %}
+			    <p class="f-16 fclr5 ft-b ff-r">{{customer_support_technical.0.POSITION}}</p> 
+          		{% for customer_technical in customer_support_technical %}
+		          	<div class="w3-col l4 mt8n">
+			            <div class="w3-row">
+							<div class="w3-row fclr1 f-14 ft-b ff-r">{{customer_technical.NAME}}</div>
+							<div class="w3-row fclr1 f-12 ff-r"><i class="fa fa-phone mr8 pl1" aria-hidden="true"></i>{{customer_technical.MOBILE_NUMBER}}</div>
+							{% if customer_technical.EMAIL %}
+								<div class="w3-row fclr1 f-12 ff-r"><i class="fa fa-envelope mr8" aria-hidden="true"></i>{{customer_technical.EMAIL}}</div>
+							{% endif %}
+			            </div>
+		          	</div>
+		        {% endfor%}
+		        {% endif %}
+		    </div>
+		</div>
+        <div class="w3-row pb16 brclr1">
+            <div class="w3-row  ml-40">
+            	{% if customer_support_marketing %}
+			    <p class="f-16 fclr5 ft-b ff-r">{{customer_support_marketing.0.POSITION}}</p> 
+          		{% for customer_marketing in customer_support_marketing %}
+		          	<div class="w3-col l4 mt8n">
+			            <div class="w3-row">
+							<div class="w3-row fclr1 f-14 ft-b ff-r">{{customer_marketing.NAME}}</div>
+							<div class="w3-row fclr1 f-12 ff-r"><i class="fa fa-phone mr8 pl1" aria-hidden="true"></i>{{customer_marketing.MOBILE_NUMBER}}</div>
+							{% if customer_marketing.EMAIL %}
+								<div class="w3-row fclr1 f-12 ff-r"><i class="fa fa-envelope mr8" aria-hidden="true"></i>{{customer_marketing.EMAIL}}</div>
+							{% endif %}
+			            </div>
+		          	</div>
+		        {% endfor%}
+		        {% endif %}
+          </div>
+        </div>
+         <div class="w3-row pb16 brclr1">
+            <div class="w3-row  ml-40">
+            	{% if customer_support_product %}
+			    <p class="f-16 fclr5 ft-b ff-r">{{customer_support_product.0.POSITION}}</p> 
+          		{% for customer_product in customer_support_product %}
+		          	<div class="w3-col l4 mt8n">
+			            <div class="w3-row">
+							<div class="w3-row fclr1 f-14 ft-b ff-r">{{customer_product.NAME}}</div>
+							<div class="w3-row fclr1 f-12 ff-r"><i class="fa fa-phone mr8 pl1" aria-hidden="true"></i>{{customer_product.MOBILE_NUMBER}}</div>
+							{% if customer_product.EMAIL %}
+								<div class="w3-row fclr1 f-12 ff-r"><i class="fa fa-envelope mr8" aria-hidden="true"></i>{{customer_product.EMAIL}}</div>
+							{% endif %}
+			            </div>
+		          	</div>
+		        {% endfor%}
+		        {% endif %}
+          </div>
+        </div>
+         <div class="w3-row pb16">
+            <div class="w3-row  ml-40">
+            	{% if customer_support %}
+			    <p class="f-16 fclr5 ft-b ff-r">{{customer_support.0.POSITION}}</p> 
+          		{% for customer in customer_support %}
+		          	<div class="w3-col l4 mt8n">
+			            <div class="w3-row mb20">
+							<div class="w3-row fclr1 f-14 ft-b ff-r">{{customer.NAME}}</div>
+							<div class="w3-row fclr1 f-12 ff-r"><i class="fa fa-phone mr8 pl1" aria-hidden="true"></i>{{customer.MOBILE_NUMBER}}</div>
+							{% if customer.EMAIL %}
+								<div class="w3-row fclr1 f-12 ff-r"><i class="fa fa-envelope mr8" aria-hidden="true"></i>{{customer.EMAIL}}</div>
+							{% endif %}
+			            </div>
+		          	</div>
+		        {% endfor%}
+		        {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="w3-col w551 bgclr7" style="height: 642px !important;">
+        <div class="w3-container ml1p">
+          <div class=" mt4p mb2p">
+          <span class="f-18 ff-r ft-b fclr1">Request for a service</span><br>
+          <span class="f-12 ff-r fclr1 ft-b">Please submit the service request form below. Kodys team will get back to you shortly.</span>
+        </div>
+          <div>
+          <form method="POST" enctype="multipart/form-data" id="customr_support">
+		        {% csrf_token %}
+            <div class="w3-row-padding">
+              <div class="w3-row pt8 pb4">
+                <div class="w3-col m3">
+                  <label class="f-r pt6 pb8  f-12 ff-r fclr1 ft-b">Hospital/Clinic Name <span class="mandatory">*</span></label>
+                </div>
+                <div class="w3-col m8">
+                <input class="w3-input brbclr1 h30  ff-r fclr1 ml16" name="hospitalname" type="text" placeholder="" id="hosp_name" value="{{COMMON_INFO.HOSPITAL_NAME|safe}}"><span id="message_name"></span>
+                </div>
+              </div>
+              <div class="w3-row pt4 pb4">
+                <div class="w3-col m3">
+                  <label class="f-r pt6 pb8 f-12 ff-r  fclr1 ft-b">Name</label>
+                </div>
+                <div class="w3-col m8">
+                <input class="w3-input brbclr1 h30  ff-r fclr1 ml16" name="doctorname" type="text" placeholder="" {% if COMMON_INFO.USERNAME %} value="{{COMMON_INFO.USERNAME|safe}}" {% endif %}>
+                </div>
+              </div>
+              <div class="w3-row pt4 pb4">
+                <div class="w3-col m3">
+                  <label class="f-r pt6 pb8 f-12 ff-r fclr1 ft-b">Mobile Number <span class="mandatory">*</span></label>
+                </div>
+                <div class="w3-col m8">
+                <input class="w3-input brbclr1  h30 ff-r fclr1 ml16" name="mobileno" id="mobile_number"  maxlength="10" type="text" placeholder="" value="">
+                <span  id="message"></span>
+
+                </div>
+              </div>
+              <div class="w3-row pt4 pb4">
+                <div class="w3-col m3">
+                  <label class="f-r pt6 pb8 f-12 ff-r  fclr1 ft-b">E-mail ID <span class="mandatory">*</span></label>
+                </div>
+                <div class="w3-col m8">
+                <input class="w3-input brbclr1  h30 ff-r fclr1 ml16" name="email" id="email_text" placeholder=""  type="text">
+                <span  id="message1"></span>
+                
+                </div>
+              </div>
+              <div class="w3-row pt4 pb4">
+                <div class="w3-col m3">
+                  <label class="f-r pt6 pb8 f-12 ff-r  fclr1 ft-b">Product Name</label>
+                </div>
+                <div class="w3-col m8">
+                <input class="w3-input brbclr1 h30  ff-r fclr1 ml16" name="productname" type="text" placeholder="">
+                </div>
+              </div>
+              <div class="w3-row pt4 pb4">
+                <div class="w3-col m3">
+                  <label class="f-r pt6 pb8 f-12 ff-r ml16 fclr1 ft-b">Address</label>
+                </div>
+                <div class="w3-col m8">
+                <input class="w3-input brbclr1 h30  ff-r fclr1 ml16" name="address" type="text" id="address" placeholder="" value="{{COMMON_INFO.HOSPITAL_ADDRESS1|safe}}{% if COMMON_INFO.HOSPITAL_ADDRESS2 %} , {{COMMON_INFO.HOSPITAL_ADDRESS2|safe}} {% endif %}{% if COMMON_INFO.HOSPITAL_ADDRESS3 %}, {{COMMON_INFO.HOSPITAL_ADDRESS3|safe}} {% endif %}{% if COMMON_INFO.CITY %}, {{COMMON_INFO.CITY|safe}} {% endif %}{% if COMMON_INFO.STATE %}, {{COMMON_INFO.STATE|safe}} {% endif %}{% if COMMON_INFO.ZIPCODE %} - {{COMMON_INFO.ZIPCODE}} {% endif %}">
+                </div>
+              </div>
+              <div class="w3-row pt4 pb16">
+                <div class="w3-col l3">
+                  <label class="f-r pt6 pb8 f-12 ff-r  fclr1 w98 ft-b">Nature of Problem</label>
+                </div>
+                <div class="w3-col l8">
+                  <textarea class="w3-input brbclr1   ff-r fclr1 h113 ml16" name="prblmnature"></textarea>
+                </div>
+              </div>
+              <div class="w3-row mt9">
+                <div class="w3-col l3"><p></p>
+                </div>
+                <div class="w3-col l3">
+                  <div class="myLabel h30 w90 bgclr6 brclr9 ta ml16">
+                             <input type="file" id="file-upload" name="attachment" multiple>
+                             
+                              <i class="fa fa-paperclip  f-12  fa-rotate-90   w3-text-white"  aria-hidden="true"></i><span class="f-12 ff-r w3-text-white ml5">Attach Files</span>
+                </div>
+                </div>
+                <div class="w3-col l6" style="margin-top: 2px;">
+                   <button class="w80 h30 f-12 ff-r f-r bgclr8 brclr3 w3-text-white ta submit" type="button">Submit</button>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col l3"><p></p>
+                </div>
+                <div class="w3-col l8 ml16">
+                  <div id="file-upload-filename" class="f-12  pt8"></div>
+                </div>
+                </div>
+             <!--  <div class="w3-row  mr24">
+                <div class="w3-col m12 mb16 mt5p">
+                <button class="w80 h30 f-12 ff-r f-r bgclr8 brclr3 w3-text-white ta submit" type="button">Submit</button>
+                </div>
+              </div>   -->
+              
+          </div>
+          </form>
+        </div>
+          
+        </div>
+      </div>
+    </div>
+{% endblock %}
+{% block js_script %}
+<script>
+var input = document.getElementById( 'file-upload' );
+var infoArea = document.getElementById( 'file-upload-filename' );
+input.addEventListener( 'change', showFileName );
+function showFileName( event ) {
+  var input = event.srcElement;
+  var names = [];   
+  for (var i = 0; i < $(this).get(0).files.length; ++i) {
+    var ext = $(this).get(0).files[i].name.split('.').pop();
+    if(ext=="pdf" || ext=="docx" || ext=="doc" ||  ext=="csv"  ||  ext=="png" ||  ext=="jpg" ||  ext=="jpeg" || ext=="xls" ){
+        names.push($(this).get(0).files[i].name);
+        names1=names.join(" , ");
+        console.log(names)
+      $("#file-upload-filename").html(names1);
+      $("#file-upload-filename").css("cssText","color:rgba(112, 112, 112, 1)!important;")
+    }
+    else{
+      event.preventDefault();
+      $("#file-upload-filename").text("Please Select correct file type");
+      $("#file-upload-filename").css("color","red");
+    }
+ }
+}
+
+ function validMobile(MobileNumber) {
+ var re = /^[6789]\d{9}$/;
+ return re.test(MobileNumber);
+}
+function validEmail(Email) {
+ var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+ return re.test(Email);
+}
+// function validname(name){
+//   var re=/^[A-Za-z]+$/
+//  return re.test(name);
+// }
+$(document).ready(function(){
+  console.log('{{msg}}');
+  if('{{msg}}' == "Send" ){
+    $(".overflow-hidden").append(`<div id="finish_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Your Request have been Submitted</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+    $("#finish_process").show(); 
+
+  }
+  else if('{{result}}' == "False") {
+          $("#wait_process").hide();
+          $(".overflow-hidden").append(`<div id="finish_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><div class=" brclr1 ta pb32 pt20"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 " style='position: relative;top: 24px;'>{{msg}} <br><span style="color:red;">Your Request have been Failed</span></h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+          $("#finish_process").show(); 
+  }
+  $("#file-upload-filename").css("color","rgba(112, 112, 112, 1)");
+  if($("#hosp_name").val() != "" ){
+  $("#hosp_name").attr("readonly",true);
+  }
+  if($("#address").val() != "" ){
+  $("#address").attr("readonly",true);
+  }
+  $("#mobile_number").change(function()
+  {
+    $("#message").html("");
+  });
+  $("#email_text").change(function(){
+    $("#message1").html("");
+  });
+    $('#mobile_number').on("keypress keyup keydown",function (event) {
+     var keycode = event.which;
+     var keys = [96,97,98,99,100,101,102,103,104,105];
+     if((keys.indexOf(keycode) == -1)){
+       // event.preventDefault();
+         if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 9 || keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+             event.preventDefault();
+         }
+      }
+   });
+  $(".submit").click(function(){
+    var name=document.getElementById("hosp_name").value;
+     var a=document.getElementById("mobile_number").value;
+     var b=document.getElementById("email_text").value;
+     var flag=0;
+     if(name==""){  
+      $("#message_name").html("Please enter Hospital/Clinic Name")
+      $("#message_name").css({"margin-left":"16px","color":"red"});
+     }
+     else {
+      $("#message_name").html("");
+      // $("#message_name").remove();
+      flag++;
+     }
+      if(a=="")
+     {
+     $("#message").html("Please enter Mobile Number");
+     $("#message").css({"margin-left":"16px","color":"red"});
+     }
+     else if(!validMobile(a))
+       {
+         $("#message").html("Please enter valid Mobile Number");
+         $("#message").css({"margin-left":"16px","color":"red"});
+     }
+     else
+     {
+       $("#message").html("");
+       // $("#message").remove();
+       flag++;
+     }
+     if(b==""){
+      $("#message1").html("Please enter E-mail ID");
+      $("#message1").css({"margin-left":"16px","color":"red"});
+     }
+     else if(!validEmail(b))
+       {
+         $("#message1").html("Please enter valid E-mail ID");
+         $("#message1").css({"margin-left":"16px","color":"red"});
+     }
+     else
+     {
+       $("#message1").html("");
+       // $("#message1").remove();
+       flag++;
+     }
+     if(flag == 3){
+      if($("#file-upload-filename").text() != "Please Select correct file type"){
+      $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+      $("#wait_process").show(); 
+      $("#customr_support").submit();
+         // cus_data = $("#customr_support").serialize();
+         //  $.ajax({
+         //            data: cus_data,
+         //             type : 'POST',                            
+         //             url :"{% url 'customer_support' %}",
+         //             dataType : "application/json; charset=utf-8",
+         //             complete : function(data) 
+         //             {
+         //                 var jdata = data.responseText;
+         //            var jsonstr = jQuery.parseJSON(jdata);
+         //              console.log(jsonstr)
+         //              if(jsonstr.result == true){
+         //                $("#wait_process").hide();
+         //              $(".overflow-hidden").append(`<div id="finish_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Your Request have been Submitted</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+         //                $("#finish_process").show(); 
+         //              }
+         //              else{
+                        //  $("#wait_process").hide();
+                        // $(".overflow-hidden").append(`<div id="finish_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><div class=" brclr1 ta pb32 pt20"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 " style='position: relative;top: 24px;'>Your Request have been Failed</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+                        // $("#finish_process").show(); 
+         //              }
+
+         //            }
+         //            });
+      }
+      else{
+        $("#file-upload-filename").css('cssText','color:red!important;');
+      }
+     }
+  });
+})
+
+function saved_Data(){
+  window.location.href = "{% url 'customer_support' %}";
+}
+
+// $(".submit").click(function()
+// {
+//   alert(1)
+// var data = $("#mobile_number").val();
+// console.log("data",data);
+// });
+
+// // var data1=document.getElementById("email_value")
+// function validEmail(Email) {
+//  var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+//  return re.test(Email);
+// }
+// function validMobile(MobileNumber) {
+//  var re = /^[6789]\d{9}$/;
+//  return re.test(MobileNumber);
+// }
+// var flag=0;
+//      if(data.Email=="")
+//      {
+      
+//      $(".enq_email_field_alert").html("Please fill email field");
+//      }
+//      else if(!validEmail(data.Email))
+//        {
+//          $(".enq_email_field_alert").html("Please give valid email address");
+//      }
+//      else
+//      {
+//        $(".enq_email_field_alert").html("");
+//        flag++;
+//      }
+</script>
+{% endblock %}

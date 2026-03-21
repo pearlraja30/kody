@@ -1,0 +1,58 @@
+{% extends "page_layout.html" %}
+{% block header %}{% endblock %}
+{% block content_body %}
+
+<div class="background h100">	
+</div>
+<div class="w3-display-topleft ft-b ff-r lh14 w477 h96 mt97 ml130" style="margin-top: 58px !important">
+	<span class="w3-text-white ff-r f-25">Welcome to</span><br>
+	<span class="w3-text-white ff-r f-52">Kodys Foot Clinik</span>
+	{% if validation_error %}
+		<p class="error_sign" style="margin-left: 7px;color: red;">{{validation_error}}</p>
+		{% endif %}
+</div>
+
+<div class="w3-display-left l122 mtn34">
+	<form class="w3-container" method="POST">
+		{% csrf_token %}
+		<p>
+			<label class="w3-text-white ff-r f-18 ">Username</label>
+			<input class="w3-input w3-border w3-round-small w313 h50" name="username" placeholder="Enter Your Username" type="text" id="user_name">
+		</p>
+
+		<p>
+			<label class="w3-text-white ff-r f-18 ">Password</label>
+			<input class="w3-input w3-border w3-round-small w313 h50" name="password" placeholder="Enter Your Password" type="password" id="password">
+		</p>
+		
+		<p><button class="w3-button w3-round w313 h50 ff-r f-20  bgclr13 w3-text-center w3-text-white" id="sign_in">Sign in</button></p>
+	</form>
+</div>
+
+
+
+<div class="w3-display-bottommiddle w3-display-container w100 h107 bgclr10 mb97">
+<div class="w3-display-left l128">
+<span class="f-20 ff-r fclr10">{{COMMON_INFO.KODYS_NAME|safe}} Software Version {{COMMON_INFO.KODYS_VERSION|safe}}</span><br>
+<span>
+<a href="{% url 'about' %}" class="ff-r f-16 fclr10 tdecor pr4">About</a><span class="fclr10">|</span>
+<a href="{% url 'customer_support' %}" class="ff-r f-16 fclr10 tdecor pr4">Customer Support</a>
+
+</span>
+</div>
+<div class="w3-display-right">
+<img src="{{COMMON_INFO.KODYS_LOGO|safe}}" class="pr50 w250" alt="logo">
+</div>
+
+</div>
+{% endblock %}
+<!-- {% block js_script %}
+<script>
+	$("#sign_in").click(function(){
+      if($("#username").val()==""&& $("#password").val()==""){
+      	alert()
+      }
+	});
+
+</script>
+{% endblock %} -->

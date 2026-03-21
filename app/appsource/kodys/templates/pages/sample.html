@@ -1,0 +1,292 @@
+{% extends "page_layout.html" %}
+{% block content_body %}
+<div class="w3-display-container bgclr3 brclr1">
+        <div class="w3-center f-16 ff-r ft-b fclr pt6 pb3 ">Thermocool - HCP Elite 
+            <span class="w3-right mr16"><a href="kodysapplaunch.html" class="tdecor"><img src="{{MEDIA_URL}}img/png/cancel.png" class="pb4"></a></span>
+        </div>  
+    </div>
+    <div class="w3-display-container bgclr3">
+        <div class="w3-row">
+            <div class="w3-col l8 ">
+                <div class="w3-row pt24">
+                    <div class="w3-col l2">
+                    </div>
+                    <div class="w3-col l3 ml11p w28">
+                        <div class="w3-row">
+                            <div class="w3-col l11 ff-r f-16 ft-b">
+                                <span class="f-r pr16 mt4 fclr1">RIGHT</span>
+                            </div>
+                        </div>
+                        <div class="w263 h461 mt4 bgclr11">
+                            
+                        </div>
+                        <div class="w3-row mt20">
+                            <div class="w3-col l6">
+                                <span class="f-r mr16 pt4 f-12 ff-r fclr1">Right Ankle</span>
+                            </div>
+                            <div class="w3-col l5 pl6">
+                                <input type="text" name="right" class="pl8 h30 w100 brclr8">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-col l2">
+                    </div>
+                    <div class="w3-col l4 ml15p w28">
+                       <div class="w3-row">
+                            <div class="w3-col l8  ff-r f-16 ft-b">
+                                <span class="f-r pr16 mt4 fclr1">LEFT</span>
+                            </div>
+                        </div>
+                        <div class="w263 h461 mt4 bgclr11">
+                            
+                        </div>
+                        <div class="w3-row mt20">
+                            <div class="w3-col l6">
+                                <span class="f-r mr16 pt4 f-12 ff-r fclr1">Left Ankle</span>
+                            </div>
+                            <div class="w3-col l5">
+                                <input type="text" name="right" class="pl8 h30 w100 brclr8">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="w3-col l2">
+                    </div>
+                </div>
+                <div class="w3-row w3-container pt16  fclr1">
+            <span class="f-10 ff-r mr16"><span class="ft-b">**AMP</span>- Amputated</span>
+            <span class="f-10 ff-r mr16"><span class="ft-b">OVR</span> - Over Range</span>
+            <span class="f-10 ff-r mr16"><span class="ft-b">WND</span>-Wound</span>
+            <span class="f-10 ff-r mr16"><span class="ft-b">TNR</span> - Test Not Required</span>
+            <span class="f-10 ff-r "><span class="ft-b">RSC</span>- Reason specified in comments</span>
+        </div>
+            </div>
+            <div class="w3-col l4 bgclr16">
+                <div class="w3-row">
+                    <div class="w3-row brclr4">
+                        <div class="w3-container pt16 pb8">
+                            <div class="w3-row">
+                                <div class="w3-col l9 ft-b ff-r f-12 fclr1">
+                                    Patient Details
+                                </div>
+                                <div class="w3-col l3">
+                                    <button class="w42 f-r h30 w3-text-white bgclr8 brclr3 f-12">Edit</button>
+                                </div>
+                            </div>
+                            <div class="ff-r f-12 fclr1">
+                                <span>Mr. Manish Harichandran. (PID101012)</span><br>
+                                <span><label class="ft-b">Age:</label> 26 Years,<label class="ft-b"> Sex:</label> Male</span><br>
+                                <span><label class="ft-b">Doctor:</label> Dr. Rajesh</span><br>
+                                <span><label class="ft-b">Examiner:</label> Dr.Kailash</span><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-row brclr4 pt12 pb8">
+                        <div class="w3-container w3-padding-8">
+                            <div class="w3-row">
+                                <div class="w3-col l3">
+                                    <span class="f-12 fclr1 ff-r ft-b">Test For</span>
+                                </div>
+                                <div class="w3-col l2">
+                                  <label class="container f-12 ff-r fclr1">Foot
+                                    <input type="radio" checked="checked" name="radio">
+                                    <span class="checkmark"></span>
+                                  </label>
+                                </div>
+                                <div class="w3-col l2">
+                                  <label class="container f-12 ff-r fclr1">Hand
+                                    <input type="radio"  name="radio">
+                                    <span class="checkmark"></span>
+                                  </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="w3-row  pt12 mt2 brclr4">
+                        <div class="w3-container w3-padding-8">
+                            <div class="w3-row">
+                                <div class="w3-col l3">
+                                    <span class="f-12 fclr1 ff-r ft-b">Test</span>
+                                </div>
+                                <div class="w3-col l2">
+                                  <label class="container f-12 ff-r fclr1">All
+                                    <input type="radio" checked="checked" name="radio1">
+                                    <span class="checkmark"></span>
+                                  </label>
+                                </div>
+                                <div class="w3-col l7">
+                                  <label class="container f-12 ff-r fclr1">Warm & Cool Perception Test
+                                    <input type="radio"  name="radio">
+                                    <span class="checkmark"></span>
+                                  </label>
+                                </div>
+                            </div>
+                            <div class="w3-row brclr1 pt8">
+                                <div class="w3-col l8 f-12 ff-r fclr1 mt5 ">Warm Perception Test
+                                </div>
+                                <div class="w3-col l4">
+                                    <div class="f-r">
+                                        <a href="thermohcp_warm_save.html" class="tdecor"><button class="w70 f-r h30 w3-text-white bgclr8 brclr3 f-12 mb2 almi1">Save</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w3-row brclr1 mt2">
+                                <div class="w3-col l8 f-12 ff-r fclr1 mt5">Cool Perception Test
+                                </div>
+                                <div class="w3-col l4">
+                                    <div class="f-r">
+                                        <a href="kodysthermo-cool.html"><button class="w70 f-r h30 w3-text-white bgclr8 brclr3 f-12 mb2">Start Test</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w3-row brclr1 mt2">
+                                <div class="w3-col l8 f-12 ff-r fclr1 mt5">Hot Pain Perception Test
+                                </div>
+                                <div class="w3-col l4">
+                                    <div class="f-r">
+                                        <button class="w70 f-r h30 w3-text-white bgclr8 brclr3 f-12 mb2">Start Test</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w3-row  mt2">
+                                <div class="w3-col l8 f-12 ff-r fclr1 mt4">Cool Pain Perception Test
+                                </div>
+                                <div class="w3-col l4">
+                                    <div class="f-r">
+                                        <button class="w70 f-r h30 w3-text-white bgclr8 brclr3 f-12 mb2">Start Test</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="w3-row brclr4 pb12 mt4">
+                        <div class="w3-container">
+                            <span class="f-12 ff-r ft-b fclr1">Test Results</span>
+                            <div class="w3-row brclr8 lh12 bgclr17">
+                                <div class="w3-row pl8 pt8">
+                                    <span class="f-12 ff-r fclr1">RightFoot WarmPT Average:32.1-<span class="fclr5">Normal Study</span></span>
+                                </div>
+                                <div class="w3-row pl8 pb16">
+                                    <span class="f-12 ff-r fclr1">LeftFoot WarmPT Average:32.1-<span class="fclr4">AbNormal</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-row">
+                        <div class="w3-container ">
+                            <div class="ff-r f-12 fclr1 ft-b pb4 pt8">Impression / Notes
+                            </div>
+                            <div class="w3-row">
+                                <div class="w3-col l12">
+                                   <textarea rows="3" class="pl8 w99p  ml2  brclr8  "></textarea>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="w3-row  mb8 mt7">
+                        <div class="w3-container w3-row">
+                            <div class="w3-col l12">
+                                <div class="f-l">
+                                    <a href="" class="tdecor"><button class="w80 mr8  h30 w3-text-white bgclr8 brclr3 f-12 ff-r">Save</button></a>
+                                    <button class="w80  h30 w3-text-white bgclr9 brclr6 f-12">Clear</button>
+                                </div>
+                                <div class="f-r">
+                                    <button class="w133 h30 bgclr8 brclr3  ff-r ta w3-text-white"><i class="fa fa-file-text f-11" aria-hidden="true"></i>
+                                        <span class="f-12">Generate Report</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- fg -->
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="w3-display-bottom bgclr3 brclr5">
+        <div class="w3-container">
+            <div class="w3-left mt4">
+                <div class="mt2">
+                <span class="f-10 ff-r fclr1">Device Status</span>
+                <span><i class="f-10 fa fa-bluetooth-b bgclr4 w14 h14 w3-text-white ta pt1 br brclr2" aria-hidden="true"></i></span>
+                <span><i class="f-8 fa fa-usb fa-rotate-270 bgclr5 br w14 h14 ta  pt4 fclr1" aria-hidden="true"></i></span>
+                <span><i class="f-8 fa fa-plug bgclr5 br w14 h14 ta pt3 fclr1" aria-hidden="true"></i></span>
+                <span class="cp" onclick="document.getElementById('settingsdev').style.display='block'">
+                    <span class="ml8"><i class="f-10 fa fa-cog w14 h14 br ta bgclr6 fclr3 pt1" aria-hidden="true"></i></span>
+                   <span class="f-10 ff-r fclr1">Device Configuration</span>
+                </span>
+               </div>
+            </div>
+            <div class="w3-right f-10 ff-r fclr2 pt10 pb8">
+                Kodys Foot Clinik Software 2.0
+            </div>
+        </div>
+    </div>
+   <div id="settingsdev" class="w3-modal  bgclr18">
+        <div class="w3-modal-content w376 mt11p">
+            <div class="w3-container bgclr8 ">
+                <p class="ff-r f-18 ft-b w3-text-white">Device Config(Thermocool HCP Elite)</p>
+            </div>
+            <div class="bgclr3 brclr1">
+                <div class="w3-row pt16 ml24">
+                    <div class="w3-row mb16">
+                        <div class="w3-col l2 mt3">
+                           <label class="f-12 ff-r f-r fclr1">Key</label>
+                        </div>
+                        <div class="w3-col l3 ml16">
+                            <input type="text" class="h30 w80 brclr8 pl8" name="key">
+                        </div>
+                        <div class="w3-col l3">
+                            <input type="text" class="h30 w80 brclr8 pl8" name="key">
+                        </div>
+                        <div class="w3-col l3">
+                            <input type="text" class="h30 w80 brclr8 pl8" name="key">
+                        </div>
+
+                    </div>
+                    <div class="w3-row mb16">
+                        <div class="w3-col l2 mt3">
+                            <label class="f-12 ff-r f-r fclr1">Printer</label>
+                        </div>
+                        <div class="w3-col l8 ml16">
+                            <label class="select">
+                               <select name="email" id="email">
+                                   <option>aaaa1</option>
+                                   <option>aaaa2</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>  
+                </div>
+                
+            </div>
+            <div class="w3-row pt8  pb16 bgclr3">
+                <div class="ml48p">
+                    <a href="thermohcp_warm.html"><button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6">Close</button></a>
+                    <button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="skip" class="w3-modal bgclr10">
+        <div class="w3-modal-content bgclr7 w25p mt11p">
+            <div class="w3-container brclr1">
+                <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                <div class="w3-center mt13p ">
+                  <div><i class="fa fa-exclamation mb8 pt10 bgclr8 w3-text-white f30 br w48 h48" aria-hidden="true"></i>
+                  </div>
+                  <div class="ff-r f-16 mt4 mb16">
+                    Do you want to skip <br>Hot Pain Perception Test?
+
+                  </div>
+                </div>
+            </div>
+            <div class="mt16 pb16 ml45p">
+               <a href="kodysthermohottest.html"> <button class="ff-r f-12 bgclr8 brclr3 mr8 w3-text-white h30 w80">Yes</button></a>
+                <a href="kodysthermo-cool.html"><button class="ff-r f-12 w3-text-white brclr6 bgclr9 h30 w80">No</button></a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

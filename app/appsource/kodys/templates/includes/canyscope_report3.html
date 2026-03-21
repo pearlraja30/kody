@@ -1,0 +1,180 @@
+{% block header_script %}
+{% load kodystags %}
+  <style>
+  text{
+     font-style:normal;
+  }
+   .stroke_color{
+    stroke: none !important
+  }
+  .stroke_line_lf{
+    stroke: #f0cc97 !important;
+  }
+  .stroke_black{
+    stroke-dasharray: none !important;
+    stroke: black !important;
+  }
+  .stroke_black_dashed_line{
+     stroke-dasharray: 2 !important;
+     stroke: black !important;
+  }
+  .area_color1{
+    fill:rgb(87, 87, 87) !important;
+  }
+  .area_color2{
+    fill:rgb(148, 19, 19) !important;
+  }
+  .area_color3{
+    fill:rgb(6, 105, 6) !important;
+  }
+  .area_color_2{
+    stroke-width : 0 !important;
+    /* fill: #85adad !important; */
+    stroke: none !important;
+  }
+  .red{
+    stroke:red!important;
+  }
+  </style>
+{% endblock %}
+<div class="ml26 mr26 ft_tm">
+  <h6 style="padding: 0;color:blue;margin:0px 8px 4px 8px;text-align: center;" class="ft_tm f-16">AUTONOMIC BALANCE REPORT</h6>
+  <div style="width: 100%;">
+    <div style="padding: 0;color:green;margin:4px;text-align: center;border: 1px solid black;width:54%;display: inline-block;" class="ft_tm f-16">R-R INTERVAL TACHOGRAM</div>
+    <div style="padding: 0;color:green;margin:4px 3px 4px 0px;text-align: center;border: 1px solid black;width:43.5%;display: inline-block;" class="ft_tm f-16">DISTRIBUTIONS</div>
+  </div>
+  <div style="width: 100%;height: 145px;margin-top: 12px;">
+    <div class="" style="width: 54%;display: inline-block;" id="tachogram_chart">
+    </div>
+    <div style="width: 21.9%;display: inline-block;" id="Scatter_chart_hrv">
+    </div>
+    <div style="width: 23%;display: inline-block;" id="bar_chart_hrate">
+    </div>
+  </div>
+  <div style="width: 100%;height: 250px;margin:4px 0px 0px 4px">
+    <div style="width: 45%;display: inline-block;">
+      <h6 style="padding: 0;color:green;border:1px solid black;text-align: center;margin-top: 4px;margin-bottom: 10px;" class="ft_tm f-16">TIME DOMAIN ANALYSIS</h6>
+      <table style="width: 96%;margin: auto;margin-top: 16px;" class="ft_tm" id="report_table">
+          <tr>
+            <th>Variable</th>
+            <th>Value</th>
+            <th>Units</th>
+          </tr>
+          <tr>
+            <td>Mean R-R</td>
+            <td style="font-weight: normal !important;">{{report.report_result.hrv_time.rr_mean}}</td>
+            <td>(ms)</td>
+          </tr>
+          <tr>
+            <td style="width: 130px !important">STD RR (SDNN)</td>
+            <td>{{report.report_result.hrv_time.sdnn}}</td>
+            <td>(ms)</td>
+          </tr>
+          <tr>
+            <td>Mean HR</td>
+            <td>{{report.report_result.hrv_time.hr_mean}}</td>
+            <td>(1/min)</td>
+          </tr>
+          <tr>
+            <td>STD HR</td>
+            <td>{{report.report_result.hrv_time.sdsd}}</td>
+            <td>(1/min)</td>
+          </tr>
+          <tr>
+            <td>RMSSD</td>
+            <td>{{report.report_result.hrv_time.rmssd}}</td>
+            <td>(ms)</td>
+          </tr>
+          <tr>
+            <td>NN50</td>
+            <td>{{report.report_result.hrv_time.nn50}}</td>
+            <td>(count)</td>
+          </tr>
+          <tr>
+            <td>pNN50</td>
+            <td>{{report.report_result.hrv_time.pnn50}}</td>
+            <td>%</td>
+          </tr>
+      </table>
+    </div>
+    <div style="width: 45%;display: inline-block;margin-right: 8px;margin-left: 60px;">
+      <h6 style="padding: 0;color:green;margin-top:4px;text-align: center;border: 1px solid black;margin-bottom: 10px;" class="ft_tm f-16">FREQUENCY DOMAIN ANALYSIS</h6>
+        <table style="width: 96%;margin: auto;margin-top: 16px;" class="ft_tm" id="report_table">
+          <tr>
+            <th>Frequency</th>
+            <th>Value</th>
+            <th>Units</th>
+            <th>Ln</th>
+          </tr>
+          <tr>
+            <td>Total Power</td>
+            <td style="font-weight: normal !important;">{{report.report_result.hrv_frequency.total_power}}</td>
+            <td>(ms2/Hz)</td>
+            <td>{{report.report_result.hrv_frequency.log_total_power}}</td>
+          </tr>
+          <tr>
+            <td>VLF</td>
+            <td>{{report.report_result.hrv_frequency.vlf_power}}</td>
+            <td>(ms2/Hz)</td>
+            <td>{{report.report_result.hrv_frequency.log_vlf}}</td>
+          </tr>
+          <tr>
+            <td>LF</td>
+            <td>{{report.report_result.hrv_frequency.lf_power}}</td>
+            <td>(ms2/Hz)</td>
+            <td>{{report.report_result.hrv_frequency.log_lf}}</td>
+          </tr>
+          <tr>
+            <td>HF</td>
+            <td>{{report.report_result.hrv_frequency.hf_power}}</td>
+            <td>(ms2/Hz)</td>
+            <td>{{report.report_result.hrv_frequency.log_hf}}</td>
+          </tr>
+          <tr>
+            <td>LF norm</td>
+            <td>{{report.report_result.hrv_frequency.lf_nu}}</td>
+            <td>(n.u)</td>
+          </tr>
+          <tr>
+            <td>HF norm</td>
+            <td>{{report.report_result.hrv_frequency.hf_nu}}</td>
+            <td>(n.u)</td>
+          </tr>
+          <tr>
+            <td>LF / HF</td>
+            <td>{{report.report_result.hrv_frequency.ratio}}</td>
+            <td>%</td>
+            <td>{{report.report_result.hrv_frequency.log_ratio}}</td>
+          </tr>
+      </table>
+  </div>
+  </div>
+  <div style="width: 100%;height: 270px;margin-left: 4px;">
+    <div>
+        <div style="width: 55%;float: left;">
+           <h6 style="padding: 0;color:green;text-align: center;border: 1px solid black;margin-bottom: 2px;margin-top: 0px;" class="ft_tm f-16">FREQUENCY DOMAIN SUMMARY</h6>
+          <div style="width: 38%;display: inline-block;">
+            <h6 style="padding: 0;color:#000066;margin:4px 0px 0px 25px;text-align: center;" class="ft_tm f-14">FFT Spectrum</h6>
+            <div id="FFT_chart">
+            </div>
+          </div>
+          <div style="width: 38%;display: inline-block;">
+            <h6 style="padding: 0;color:#000066;margin:4px 0px 0px 25px;text-align: center;" class="ft_tm f-14">HRV Components</h6>
+            <div id="Hrv_chart">
+            </div>
+          </div>
+           <div style="width: 22%;display: inline-block;">
+            <h6 style="padding: 0;color:#000066;margin:4px 0px 0px 27px;text-align: center;" class="ft_tm f-14">LF/HF Ratio</h6>
+            <div id="LF_chart">
+            </div>
+           </div>
+        </div>
+         <div style="width: 42%;float: right;margin-right: 8px;">
+           <h6 style="padding: 0;color:green;border:1px solid black;text-align: center;margin-top: 0px;" class="charts_mr_bt_40 ft_tm f-16">AUTONOMIC BALANCE</h6> 
+           <div style="width: 46%;height: 170px;float:left;" id="chart_5">
+           </div>
+           <div style="width: 52%;height: 170px;float: right;display: inline-block;" id="lf_hf_balance_chart"></div>
+         </div>
+    </div>
+  </div>
+</div>

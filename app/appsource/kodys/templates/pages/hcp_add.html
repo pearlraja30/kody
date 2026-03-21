@@ -1,0 +1,377 @@
+{% extends "page_layout.html" %}
+{% block content_body %}
+<div class="w3-display-container bgclr3 brclr1">
+      <div class="w3-center f-16 ff-r ft-b fclr1 pt8 pb1 ">
+        Settings
+      </div>
+    </div>
+     <div class="w3-row ">
+      <div class="w3-col w174">
+        <div class="w3-sidebar  w3-bar-block w174 gclr bgclr7">
+        <a href="{% url 'hospital_profile' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 fclr1 f-14 ff-r ft-b">Hospital Profile</a>
+        <a href="{% url 'doctors' %}" class="w3-bar-item w3-button ft-b pt16  brclr1 f-14 ff-r bakclr sbrclr fclr1">HCP</a>
+        <a href="{% url 'patients' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r fclr1">Patients</a>
+        <a href="{% url 'app_configuration' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r fclr1">App Configuration</a>
+      </div>
+      </div>
+       <div class="w3-col w1106 ml174 bgclr3">
+               <div class="w3-display-container h645 bgclr3 scroll" style="height: 549px !important">
+           <div class="w3-display-container">
+        <div class="w3-padding-16">
+          <div class="pl16 pb16">
+             <span class="fclr1 ft-b f-18">Add HCP</span>
+           </div>
+       <form class="w3-container" method="POST" id="hcp">
+		        {% csrf_token %}
+         <div class="w3-row pt8 ">
+                <div class="w3-col l2 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Prefix <span class="mandatory">*</span></label>
+                </div>
+                <div class="w3-col l3 fclr1">
+                  <label class="select-add">
+                    <select name="prefix" class="select-1add fclr1 f-12 ff-r" id="prefix" style="padding-left: 8px;">
+                      <option class="f-12 ff-r" disabled selected>Please Select Prefix</option>
+                      <option class="f-12 ff-r" value="Dr.">Dr.</option>
+                      <option class="f-12 ff-r" value="Mr.">Mr.</option>
+                      <option class="f-12 ff-r" value="Mrs.">Mrs.</option>
+                      <option class="f-12 ff-r" value="Miss.">Miss.</option>
+                    </select>
+                  </label>
+                <span id="message_prefix"></span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l2 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Name <span class="mandatory">*</span></label>
+                </div>
+                <div class="w3-col l3">
+                <input class=" brbclr1  w100p h30  fclr1 pl8 h30" name="name" id="hcp_name" type="text">
+                <span id="message_name"></span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l2 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Contact Number</label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30"id="mobile_number" name="mobile_number" type="text" placeholder="" maxlength="15"><span id="message"></span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l2 pt6">
+                  <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">E-mail ID</label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="email" id="email_text" type="email" placeholder=""><span id="message1"></span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l2 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Gender <span class="mandatory">*</span></label>
+
+                </div>
+                <div class="w3-col l3 fclr1">
+                  <label class="select-add">
+                    <select name="gender" class="select-1add fclr1 f-12 ff-r" id="gender" style="padding-left: 8px;">
+                      <option class="f-12 ff-r" disabled selected>Please Select Gender</option>
+                      <option class="f-12 ff-r" value="FEMALE">Female</option>
+                      <option class="f-12 ff-r" value="MALE">Male</option>
+                      <option class="f-12 ff-r" value="TRANSGENDER">Transgender</option>
+                    </select>
+                  </label>
+                  <span id="message_gender"></span>
+                
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l2 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Role <span class="mandatory">*</span></label>
+                </div>
+                <div class="w3-col l3 fclr1">
+                <label class="select-add">
+                    <select name="role" class="select-1add fclr1 f-12 ff-r" id="role" style="padding-left: 8px;">
+                      <option class="f-12 ff-r" disabled selected>Please Select Role</option>
+                      <option class="f-12 ff-r" value="DOCTOR">Doctor</option>
+                      <option class="f-12 ff-r" value="EXAMINER">Examiner</option>
+                    </select>
+                  </label>
+                    <span id="message_role"></span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l2 pt10">
+                  <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Speciality <span class="mandatory">*</span></label>
+                </div>
+                <div class="w3-col l3 fclr1">
+                  <dl class="dropdowns" style="margin-top: 0px;margin-bottom: 0px;"> 
+                      <dt>
+                      <a href="#" style="padding-left: 6px;">
+                        <span class="hida fclr1">Please Select Speciality</span>    
+                        <p class="multiSel"></p>  
+                      </a>
+                      </dt>
+                    
+                      <dd>
+                          <div class="mutliSelect">
+                              <ul>
+                                    {% for data in specialization %}
+                                  <li>
+                                    <label for="{{data.NAME}}">
+                                      <input type="checkbox" value="{{data.NAME}}"  id="{{data.NAME}}" name="specialization_{{forloop.counter}}" />{{data.NAME}}
+                                    </label>
+                                    </li>
+                                        {% endfor %}
+
+                              </ul>
+                          </div>
+                      </dd>
+                  </dl>
+                    <span id="message_specialization"></span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l2 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Username <span id="user_mandatory"></span></label>
+                </div>
+                <div class="w3-col l3">
+                <input class=" brbclr1  w100p h30  fclr1 pl8 h30" name="hcp_username" id="hcp_username" type="text">
+                <span id="message_user"></span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l2 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Password <span id="password_mandatory"></span></label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" id="hcp_password" name="hcp_password" type="password" placeholder="" maxlength="10"><span id="message_pass"></span>
+                <span id="login_alert"></span>
+                </div>
+          </div>
+          <div class="w3-row pt16">
+                <div class="w3-col l2 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Enable Login</label>
+                </div>
+                <div class="w3-col l1">
+                  <label class="container-a">
+                    <input type="checkbox" checked="checked" id="is_login_allowed" name="is_login_allowed" >
+                    <span class="checkmark-a"></span>
+                  </label>   
+                </div>
+                <div class="w3-col l2">
+                  <button class=" tdecor h30 f-12 ff-r f-r bkgclr brclr3  w3-text-white w80 cp save" type="button">Save</button>
+                </div>
+          </div>
+             
+         <!--  <div class="w3-row mt5p" style="margin-top: 3% !important;">
+        	 <div class="w3-col l5">
+			        <button class=" tdecor h30 f-12 ff-r f-r bkgclr brclr3  w3-text-white w80 cp save" type="button">Save</button>
+           </div>
+      	</div> -->
+        <input type="hidden" name="specialization"  id="specialization">
+       </form>
+       
+     </div>
+  </div>
+  </div>
+{% endblock %}
+{% block js_script %}
+<script>
+function validMobile(MobileNumber) {
+ var re = /^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$/ ;
+ return re.test(MobileNumber);
+}
+function validEmail(Email) {
+ var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+ return re.test(Email);
+}
+function validname(name){
+  var re=/^(?!\.)[A-Za-z. ]+$/
+ return re.test(name);
+}
+$(document).ready(function(){
+
+   $('#mobile_number').on("keypress keyup keydown",function (event) {
+     var keycode = event.which;
+     var keys = [96,97,98,99,100,101,102,103,104,105,45,189,43,187];
+     if((keys.indexOf(keycode) == -1)){
+       // event.preventDefault();
+         if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 9 || keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+             event.preventDefault();
+         }
+      }
+   });
+   if($("#is_login_allowed").is(":checked") == true){
+         $("#user_mandatory").html("*").css("color","red");
+         $("#password_mandatory").html("*").css("color","red");
+      }
+   $("#is_login_allowed").click(function(){
+    $("#is_login_allowed").removeAttr("checked",false);
+       if($("#is_login_allowed").is(":checked") == false){
+          $("#user_mandatory").html("");
+          $("#password_mandatory").html("");
+       }
+       $("#is_login_allowed").click(function(){
+        $("#is_login_allowed").attr("checked",true);
+        if($("#is_login_allowed").is(":checked") == true){
+         $("#user_mandatory").html("*").css("color","red");
+         $("#password_mandatory").html("*").css("color","red");
+      }
+       }); 
+  });
+ 
+ 
+  $(".save").click(function(){
+      $("#specialization").val($(".multiSel span").text());
+      var hcpadd = $("#hcp").serialize();
+      console.log( $("#specialization").val());
+      var name=document.getElementById("hcp_name").value;
+     // var a=document.getElementById("mobile_number").value;
+     // var b=document.getElementById("email_text").value;
+     var hcp_username=document.getElementById("hcp_username").value;
+     var hcp_password=document.getElementById("hcp_password").value;
+     var gender = $("#gender").val();
+      var role = $("#role").val();
+      var prefix=$("#prefix").val();
+      var specialization = $("#specialization").val();
+     var flag=0;
+     if(gender==null){  
+      $("#message_gender").html("Please Select Gender")
+      $("#message_gender").css({"color":"red"});
+     }
+     else{
+       $("#message_gender").html("");
+       flag++;
+     }  
+     if(prefix==null){
+       $("#message_prefix").html("Please Select Prefix")
+      $("#message_prefix").css({"color":"red"});
+     }
+      else{
+       $("#message_prefix").html("");
+        flag++;
+     }  
+      if(role==null){  
+      $("#message_role").html("Please Select Role")
+      $("#message_role").css({"color":"red"});
+     }
+     else{
+       $("#message_role").html("");
+       flag++;
+     }
+      if(specialization == ""){  
+      $("#message_specialization").html("Please Select Speciality")
+      $("#message_specialization").css({"color":"red"});
+     }
+     else{
+       $("#message_specialization").html("");
+       flag++;
+     }
+
+     if($("#is_login_allowed").is(":checked") && hcp_username==""){  
+      
+      $("#message_user").html("Please enter Username")
+      $("#message_user").css({"color":"red"});
+     }
+     else{
+       $("#message_user").html("");
+     
+       flag++;
+     }
+      if($("#is_login_allowed").is(":checked") && hcp_password==""){  
+      
+      $("#message_pass").html("Please enter Password");
+      $("#message_pass").css({"color":"red"});
+     }
+     else{
+       $("#message_pass").html("");
+      
+       flag++;
+     }
+     if(name==""){  
+      $("#message_name").html("Please enter Name")
+      $("#message_name").css({"color":"red"});
+     }else {
+      $("#message_name").html("");
+      
+      flag++;
+     }
+    //  if($("input[name='is_login_allowed']:checked")== true){  
+    //   if($("#hcp_username").val() == "" && $("#hcp_password").val() == ""){
+    //     $("#login_alert").html("Please enter Username or Password");
+    //   }
+    // }
+    if(flag == 7){
+       $.ajax({
+            data: hcpadd,
+             type : 'POST',                            
+             url :"/hcp/add/",
+             dataType : "application/json; charset=utf-8",
+             complete : function(data) 
+             {
+                var jdata = data.responseText;
+                var jsonstr = jQuery.parseJSON(jdata);
+                if(jsonstr.hasOwnProperty("result")){
+                if(jsonstr.result == true){
+                  window.location.href = "/doctors/";
+                }
+              }
+             
+                if(jsonstr.hasOwnProperty("email")){
+                if(jsonstr.email[0] == "Email is already exists" ){
+                 if($("#message1").text().length == 0){
+                  $("#message1").append(jsonstr.email[0]).css({"margin-left": "8px","color": "red"});
+                 }
+                }
+                } 
+                else{
+                  $("#message1").text("").css({"margin-left": "0px"});
+                }
+                if( jsonstr.hasOwnProperty("hcp_username")){
+                if(jsonstr.hcp_username[0] == "Username is already exists."){
+                  $("#message_user").append(jsonstr.hcp_username[0]).css({"margin-left": "8px","color": "red"});
+                }
+              }
+            }
+            });
+
+     }
+   
+  });
+});
+$(".dropdowns dt a").on('click', function() {
+  $(".dropdowns dd ul").slideToggle('fast');
+});
+
+$(".dropdowns dd ul li a").on('click', function() {
+  $(".dropdowns dd ul").hide();
+});
+
+function getSelectedValue(id) {
+  return $("#" + id).find("dt a span.value").html();
+}
+
+$(document).bind('click', function(e) {
+  var $clicked = $(e.target);
+  if (!$clicked.parents().hasClass("dropdowns")) $(".dropdowns dd ul").hide();
+});
+
+$('.mutliSelect input[type="checkbox"]').on('click', function() {
+
+  var title = $(this).closest('.mutliSelect').find('input[type="checkbox"]').val(),
+    title = $(this).val()+",";
+
+  if ($(this).is(':checked')) {
+    var html = '<span title="' + title + '" name="specialization">' + title + '</span>';
+    $('.multiSel').append(html);
+    $(".data_mul").append(title+" , ")
+    $(".hida").hide();
+  } else {
+    $('span[title="' + title + '"]').remove();
+    var ret = $(".hida");
+    $('.dropdowns dt a').append(ret);
+
+  }
+});
+
+</script>
+{% endblock %}

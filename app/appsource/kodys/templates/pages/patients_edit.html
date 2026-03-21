@@ -1,0 +1,425 @@
+{% extends "page_layout.html" %}
+{% block content_body %}
+<script src="{{MEDIA_URL}}jQuery-Mask-Plugin-master/dist/jquery.mask.js" type="text/javascript"></script>
+<div class="w3-display-container bgclr3 brclr1">
+      <div class="w3-center f-16 ff-r ft-b fclr1 pt8 pb1 ">
+        Settings
+      </div>
+    </div>
+     <div class="w3-row ">
+      <div class="w3-col w174">
+        <div class="w3-sidebar  w3-bar-block w174 gclr bgclr7">
+        <a href="{% url 'hospital_profile' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 fclr1 f-14 ff-r ft-b">Hospital Profile</a>
+        <a href="{% url 'doctors' %}" class="w3-bar-item w3-button ft-b pt16  brclr1 f-14 ff-r  fclr1">HCP</a>
+        <a href="{% url 'patients' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r sbrclr bakclr fclr1">Patients</a>
+        <a href="{% url 'app_configuration' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r fclr1">App Configuration</a>
+      </div>
+      </div>
+       <div class="w3-col w1106 ml174 bgclr3">
+               <div class="w3-display-container h645 scroll bgclr3" style="height: 549px !important">
+           <div class="w3-display-container">
+        <div class="w3-padding-16">
+           <div class="pl16 pb16">
+             <span class="fclr1 ft-b f-18">Edit Patients</span>
+           </div>
+       <form class="w3-container" method="POST" id="patient_edit">
+		        {% csrf_token %}
+            <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient ID <span class="mandatory">*</span></label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30  fclr1 pl8 h30 w100p " name="patient_id" type="text" id="patient_id"  placeholder="" maxlength="25"  value="{{patients_details.FRIENDLY_UID}}">
+                <span id="patient_id_error"></span>
+                </div>
+          </div>
+             <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Prefix <span class="mandatory">*</span></label>
+                </div>
+                <div class="w3-col l3">
+                <label class="select-add">
+                    <select name="prefix" class="select-1add fclr1 f-12 ff-r" id="prefix" style="padding-left: 8px;">
+                      <option class="f-12 ff-r" disabled selected>Please Select Prefix</option>
+                      <option class="f-12 ff-r" {% if patients_details.PREFIX == "Mr." %} selected="selected" {% endif %} value="Mr.">Mr.</option>
+                      <option class="f-12 ff-r" {% if patients_details.PREFIX == "Mrs." %} selected="selected" {% endif %} value="Mrs.">Mrs.</option>
+                      <option class="f-12 ff-r" {% if patients_details.PREFIX == "Miss." %} selected="selected" {% endif %} value="Miss.">Miss.</option>
+                    </select>
+                  </label>
+                  <span id="message_prefix"></span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient Name <span class="mandatory">*</span></label>
+                </div>
+                <div class="w3-col l3">
+                <input class=" brbclr1  h30 w100p fclr1 pl8 h30" name="name" type="text" value="{{patients_details.NAME}}" id="patient_name"><span id="message_name"></span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Last Name</label>
+                </div>
+                <div class="w3-col l3">
+                <input class=" brbclr1  h30  fclr1 pl8 h30 w100p" name="last_name" type="text" id="last_name" value="{{patients_details.LAST_NAME}}"><span id="message_name"></span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Sur Name</label>
+                </div>
+                <div class="w3-col l3">
+                <input class=" brbclr1  h30  fclr1 pl8 h30 w100p" name="sur_name" type="text" id="sur_name" value="{{patients_details.SUR_NAME}}"><span id="message_name"></span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient Contact Number</label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="mobile_number" type="text" placeholder="" value="{{patients_details.PATIENT_MOBILE_NUMBER}}" maxlength="15" id="mobile_number">
+                <span id="message"></span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient E-mail ID </label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="email" type="email" placeholder="" value="{{patients_details.PATIENT_EMAIL}}" id="email_text">
+                <span id="email_invalid"></span>
+                </div>
+          </div>
+            
+          <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient Alternate Contact Number</label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="poc_mobile_number" type="text" placeholder="" value="{{patients_details.POC_MOBILE_NUMBER}}" id="mobile_number1" maxlength="15">
+                <span id="message_alt_contact_no"></span> 
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient Alternate E-mail ID</label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="poc_email" type="email" placeholder="" value="{{patients_details.POC_EMAIL}}" id="email_text_alternate">
+                <span id="email_alternate_invalid"></span>
+                </div>
+          </div>
+
+          <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Gender <span class="mandatory">*</span></label>
+
+                </div>
+               <div class="w3-col l3">
+                  <label class="select-add">
+                    <select name="gender" class="select-1add fclr1 f-12 ff-r" id="gender" style="padding-left: 8px;" value="{{patients_details.GENDER}}">
+                      <option class="f-12 ff-r" disabled selected>Please Select Gender</option>
+                      <option class="f-12 ff-r" {% if patients_details.GENDER == "FEMALE" %} selected="selected" {% endif %} value="FEMALE">Female</option>
+                      <option class="f-12 ff-r" {% if patients_details.GENDER == "MALE" %} selected="selected" {% endif %} value="MALE">Male</option>
+                      <option class="f-12 ff-r" {% if patients_details.GENDER == "TRANSGENDER" %} selected="selected" {% endif %} value="TRANSGENDER">Transgender</option>
+                    </select>
+                  </label>
+                <span id="message_gender"></span>
+                </div>
+          </div>
+           <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Age <span class="mandatory">*</span></label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="age" maxlength="3" type="text" placeholder="" value="{{patients_details.AGE}}" id="age_number"><span id="message5"></span>
+                </div>
+          </div>
+           <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Address</label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="address1" type="text" placeholder="" value="{{patients_details.ADDRESS_LINE_1}}" id="address">
+                <span id="message_address"></span>
+                </div>
+          </div>
+           <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Street</label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="address2" type="text" placeholder="" value="{{patients_details.ADDRESS_LINE_2}}">
+                </div>
+          </div>
+           <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Area</label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="address3" type="text" placeholder="" value="{{patients_details.ADDRESS_LINE_3}}">
+                </div>
+          </div>
+           <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">City</label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="city" type="text" placeholder="" value="{% if patients_details.CITY %}{{patients_details.CITY}}{% endif %}">
+                </div>
+          </div>
+           <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">State</label>
+                </div>
+                <div class="w3-col l3">
+                   <label class="select-add">
+                    <select name="state" class="select-1add fclr1 f-12 ff-r" style="padding-left: 8px;" value="{{patients_details.STATE}}" id="state">
+                      <option class="f-12 ff-r"  selected value="">Please Select State</option>
+                    {% for state in state_list%}
+                      <option class="f-12 ff-r" {% if patients_details.STATE|safe == state.NAME %} selected="selected" {% endif %} value="{{state.NAME}}">{{state.NAME}}</option>
+                    {% endfor %}
+                    </select>
+                  </label>
+                  <span id="message_state"></span>
+                <!-- <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="state" type="text" placeholder="" value="{{patients_details.STATE}}"> -->
+                </div>
+          </div>
+           <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Pincode</label>
+                </div>
+                <div class="w3-col l3">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="pincode" type="text" placeholder="" value="{% if patients_details.ZIPCODE %}{{patients_details.ZIPCODE}}{% endif %}" maxlength="15" id="pincode"><span id="message4"></span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Height</label>
+                </div>
+                <div class="w3-col l3 pr">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" id="height" name="height" type="text" placeholder=""  value="{{patients_details.HEIGHT}}" id="height"><span class="f-12 pt6 r10 pa fclr1 ">cm</span>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col l3 pt6">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Weight</label>
+                </div>
+                <div class="w3-col l3 pr">
+                <input class="brbclr1 h30 w100p fclr1 pl8 h30" id="weight" name="weight" type="text" placeholder="" value="{{patients_details.WEIGHT}}" id="weight"><span class="f-12 pt6 r10 pa fclr1 ">kg</span>
+                </div>
+          </div>
+         <div class="w3-row pt8 mt16">
+           <div class="w3-col l6">
+              <button class=" tdecor h30 f-12 ff-r f-r  bkgclr brclr3  w3-text-white w80 cp save" type="button">Save</button>
+           </div>
+        </div>
+       </form>
+     </div>
+  </div>
+  </div>
+{% endblock %}
+{% block js_script %}
+<script>
+function validMobile(MobileNumber) {
+ var re = /^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$/ ;
+ return re.test(MobileNumber);
+}
+function validEmail(Email) {
+ var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+ return re.test(Email);
+}
+function validpincode(pincode){
+  var re=/^[1-9][0-9]{5}$/;
+  return re.test(pincode);
+}
+function validname(name){
+  var re=/^(?!\.)[A-Za-z. ]+$/
+ return re.test(name);
+}
+$('#mobile_number1,#mobile_number').on("keypress keyup keydown",function (event) {
+     var keycode = event.which;
+     var keys = [96,97,98,99,100,101,102,103,104,105,45,189,43,187];
+     if((keys.indexOf(keycode) == -1)){
+       // event.preventDefault();
+         if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 9 ||  keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+            //  event.preventDefault();
+         }
+      }
+   });
+$('#age_number,#pincode').on("keypress keyup keydown",function (event) {
+     var keycode = event.which;
+     var keys = [96,97,98,99,100,101,102,103,104,105];
+     if((keys.indexOf(keycode) == -1)){
+       // event.preventDefault();
+         if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 9 || keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+            //  event.preventDefault();
+         }
+      }
+   });
+$(document).ready(function(){
+  counter = 0;
+  $("#patient_id").on("keyup keypress" , function(event){
+     var search_patient_id = $(this).val();
+     if(search_patient_id.length > 0 && search_patient_id.length < 6){
+     $("#patient_id_error").html("Please enter atleast 6 characters.").css("color","red");
+     }
+     else if(search_patient_id.length == 0){
+     $("#patient_id_error").html("Please enter Patient ID").css("color","red");
+     counter++;
+     }
+     else{
+      $("#patient_id_error").html("");
+        $.ajax({
+                data : search_patient_id,
+                type : 'GET',
+                url : '/patient/edit/search/'+'{{patients_uid}}'+'/'+search_patient_id,
+                dataType : "application/json; charset=utf-8",
+                 complete : function(data) {
+                     var jdata = data.responseText;
+                     var jsonstr = jQuery.parseJSON(jdata);
+                     console.log(jdata)
+                     if(jsonstr.result == true){
+                      counter = 0;
+                      $("#patient_id_error").html("Patient ID already exists.").css("color","red");
+                      counter++;
+                     }
+                     else if(jsonstr.result == false){
+                      $("#patient_id_error").html("");
+                      counter = 0;
+                     }
+                 }
+        });
+     }
+  });
+  $('#height').mask('000');
+   $('#weight').mask('000.0');
+  $(".save").click(function(){
+     var name=document.getElementById("patient_name").value;
+     var a=document.getElementById("mobile_number").value;
+     var b=document.getElementById("email_text").value;
+     var alternate_email_id = document.getElementById("email_text_alternate").value;
+     var f=document.getElementById("pincode").value;
+     var age_no=document.getElementById("age_number").value;
+     var gender = $("#gender").val();
+     var prefix = $("#prefix").val();
+     var state=$("#state").val();
+     var address=$("#address").val();
+     var alt_contact_num = $("#mobile_number1").val();
+     var flag=0;
+     var is_valid_email = true;
+     var is_alternate_email = true;
+     var is_valid_alternate_contact_no =true;
+     var is_valid_pincode = true;
+     if(b == ""){
+      is_valid_email = true;
+     }
+     else if(!validEmail(b)){
+      $("#email_invalid").html("Please enter Valid E-mail ID");
+      $("#email_invalid").css({"color":"red"});
+      $("#email_text").focus();
+      is_valid_email = false;
+     }
+     else{
+      is_valid_email = true;
+      $("#email_invalid").html("");
+     }
+     if(alternate_email_id == ""){
+      is_alternate_email = true;
+     }
+     else if(!validEmail(alternate_email_id)){
+      $("#email_alternate_invalid").html("Please enter Valid E-mail ID");
+      $("#email_alternate_invalid").css({"color":"red"});
+      $("#email_text_alternate").focus();
+      is_alternate_email = false;
+     }
+     else{
+      is_alternate_email = true;
+      $("#email_alternate_invalid").html("");
+     }
+     if(f==""){
+       is_valid_pincode =true;
+     }
+     else if(!validpincode(f))
+       {
+        // $("#message4").html("Please enter Valid Pincode")
+        // $("#message4").css({"color":"red"});
+        // $("#pincode").focus();
+        is_valid_pincode =false;
+       }
+       else{
+         $("#message4").html("");
+         is_valid_pincode =true;
+       }
+     if(age_no==""){
+      $("#message5").html("Please enter Age");
+      $("#message5").css({"color":"red"});
+      $("#age_number").focus();
+     }
+      else if(age_no >= 200){
+        $("#message5").html("Please enter valid Age");
+        $("#message5").css({"color":"red"});
+        $("#age_number").focus();
+       }
+       else{
+         $("#message5").html("");
+       flag++;
+      
+       }
+    if(a=="")
+     {
+        //  $("#message").html("Please enter Contact Number");
+        //  $("#message").css({"color":"red"});
+        //  $("#mobile_number").focus();
+         flag++;
+     }
+     else if(!validMobile(a))
+       {
+        //  $("#message").html("Please Enter Valid Contact Number");
+        //  $("#message").css({"color":"red"});
+        //  $("#mobile_number").focus();
+     }
+     else
+     {
+       $("#message").html("");
+       flag++;
+     }
+     if(alt_contact_num==""){ 
+       is_valid_alternate_contact_no =true;
+     }
+     else if(!validMobile(alt_contact_num))
+      {
+        // $("#message_alt_contact_no").html("Please enter Valid Contact Number");
+        // $("#message_alt_contact_no").css({"color":"red"});
+        // is_valid_alternate_contact_no = false;
+        // $("#mobile_number1").focus();
+      }
+      else
+      {
+        $("#message_alt_contact_no").html("");
+        is_valid_alternate_contact_no =true;
+      }
+    if(name==""){  
+      $("#message_name").html("Please enter Patient Name")
+      $("#message_name").css({"color":"red"});
+      $("#patient_name").focus();
+
+     }else if(!validname(name)){
+      $("#message_name").html("Please enter only letters")
+      $("#message_name").css({"color":"red"});
+      $("#patient_name").focus();
+     } else {
+      $("#message_name").html("");
+      flag++;
+     }
+       if(flag==3 && counter==0 && is_valid_email && is_alternate_email){
+        $("#patient_edit").submit();
+       }
+       else if(flag == 3 && counter == 1 && is_valid_email && is_alternate_email){
+        $("#patient_id").focus();
+       }
+  });
+})
+</script>
+{% endblock %}

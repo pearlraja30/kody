@@ -1,0 +1,491 @@
+<script  type="text/javascript">
+    google.charts.setOnLoadCallback(drawVisualization);
+    function drawVisualization() {
+        var data18 = google.visualization.arrayToDataTable([
+          ['Frequency', 'Value', { role: 'style' }],
+          ['Total Power', {{report.report_result.hrv_frequency.log_total_power}},'#194d33'],
+          ['VLF', {{report.report_result.hrv_frequency.log_vlf}},'#ff99ff'],
+          ['LF', {{report.report_result.hrv_frequency.log_lf}},'#ff8533'],
+          ['HF', {{report.report_result.hrv_frequency.log_hf}},'#ff5c33'],
+         ]);
+        var options18 = {
+         title : '',
+         titleTextStyle: {
+           fontSize: 14,
+           fontName: 'sans-serif'
+         },
+         legend: { position: 'none',},
+         chartArea: {top:4,right:4,bottom:35,'width': '78%', 'height': '70%', backgroundColor: {
+       stroke: 'black',
+       strokeWidth: 1
+        }},
+         vAxis: {title: 'Ln(ms2/Hz)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         textStyle: {
+         fontSize : 9,
+         fontName: 'sans-serif',
+         bold:true
+       },viewWindow: {
+             max:10,
+             min:0
+           },gridlines: {
+         color: '#ffcccc',
+         count:6,
+       }},
+         hAxis: {title: '',showTextEvery:1,textStyle: {
+         fontSize : 7,
+         fontName: 'sans-serif',
+         bold:true
+       }},
+         lineWidth: 1,
+         lineDashStyle: [5, 1, 3],
+         seriesType: 'bars',
+         series: {1: {type: 'line'}},
+         height:170,
+         enableInteractivity: false,
+
+       };
+      var data19_data =[];
+       // var data19_data_0 =[];
+       // var data19_data_1 = [];
+       // var data19_data_2 = [];
+       data19_data.push(['Frequency','area1','area2','area3','refrenceline1','refrenceline2','refrenceline3']);
+       var v_value_list = [];
+       var k_value_list = [];
+       {% for v in report.report_result.hrv_time.fft_psd_graph %}
+       v_value_list.push({{v.0}});
+       k_value_list.push({{v.1}});
+       {% endfor %}
+       for(i=0;i<v_value_list.length;i++){
+           if(v_value_list[i] <= 0.040)
+           {
+             data19_data.push([v_value_list[i],k_value_list[i],0.0,0.0,0.0,0.0,0.0]);
+           }
+           else if(v_value_list[i] > 0.040 && v_value_list[i] <= 0.150)
+           {
+             data19_data.push([v_value_list[i],0.0,k_value_list[i],0.0,0.0,0.0,0.0]);
+
+           }
+           else if (v_value_list[i] > 0.150 && v_value_list[i] <= 0.400)
+           {
+             data19_data.push([v_value_list[i],0.0,0.0,k_value_list[i],0.0,0.0,0.0]);
+
+           }
+           
+       }
+       var psd_max = {{report.report_result.hrv_time.psd_max}}+0.00005;
+       data19_data.push([0.040,null,null,null,0.0,null,null]);
+       data19_data.push([0.040,null,null,null,psd_max,null,null]);
+       data19_data.push([0.150,null,null,null,null,0.0,null]);
+       data19_data.push([0.150,null,null,null,null,psd_max,null]);
+       data19_data.push([0.400,null,null,null,null,null,0.0]);
+       data19_data.push([0.400,null,null,null,null,null,psd_max]);
+       var data19 = google.visualization.arrayToDataTable(data19_data);
+       var options19 ={
+           title : '',
+           lineWidth: 0.2,
+           titleTextStyle: {
+           fontSize: 14,
+           fontName: 'sans-serif'
+            },
+           legend: { position: 'none',},
+           chartArea: {top:4,right:4,bottom:35,'width': '78%', 'height': '70%', backgroundColor: {
+           stroke: 'black',
+           strokeWidth: 1
+           }},
+         curveType: 'function',
+           legend: { position: 'none' },
+           vAxis: {title: 'PSD (s2/Hz)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+           textStyle: {
+           fontSize : 5,
+           fontName: 'sans-serif',
+           bold:true,
+            },viewWindow: {
+             max:psd_max,
+             min:0
+           },gridlines: {
+           color: '#ffcccc',
+           count:6,
+           }},
+           hAxis: {title: 'Frequency',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+           showTextEvery:1,textStyle: {
+           fontSize : 6,
+           fontName: 'sans-serif',
+           bold:true
+        },
+       viewWindow: {
+         min: 0.0,
+         max: 0.4
+       },gridlines: {
+           color: '#ffcccc',
+           }},
+         height:170,
+         enableInteractivity: false,
+       };
+       var data21 = google.visualization.arrayToDataTable([
+         ["Ln","value"],
+         ['',{{report.report_result.hrv_frequency.log_ratio}}],
+         ]);
+       var options21 = {
+         legend: 'none',
+         isStacked:"true",
+         bar: { groupWidth: '100%' }, // Remove space between bars.
+         vAxis: {title: 'Ln (n.u)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         textStyle: {
+           fontSize : 8,
+           fontName: 'sans-serif',
+           bold:true
+            },
+            ticks: [{v: -1.0, f: '-1.0'},{v:0.0, f: '0.0'},{v: 1.0, f: '1.0'},{v:2.0, f: '2.0'},{v:3.0, f: '3.0'}, {v: 4.0, f: '4.0'}],
+             gridlines: {color: 'transparent'},
+               baselineColor: 'transparent',viewWindow: {
+             max:4.0,
+             min:-1.0
+           },gridlines: {
+           color: '#ffcccc',
+           count:2,
+           },colors: ['yellow','yellow']},
+            chartArea: {top:4,right:2,bottom:35,left:29,'width': '55%', 'height': '70%',backgroundColor: {
+           stroke: 'black',
+           strokeWidth: 1
+           }},
+           hAxis: {title: '',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},showTextEvery:1,textStyle: {
+           fontSize : 8,
+           fontName: 'sans-serif',
+           bold:true
+        },viewWindow: {
+           },gridlines: {
+           color: '#ffcccc',
+           }},
+           colors :['yellow','yellow'],
+           series: {1: {type: 'line'}},
+        height:170,
+       };
+       var rr_interval_list_hrv = [];
+       {% for rr_interval in  report.report_result.hrv_time.rr_interval %}
+         rr_interval_list_hrv.push(parseFloat('{{rr_interval}}')); 
+       {% endfor %}
+       var x_value_list_hrv = [];
+       var x_hrv = rr_interval_list_hrv[0]/1000;
+       for(i = 1;i <= rr_interval_list_hrv.length;i++)
+       {
+         x_value_list_hrv.push(x_hrv);
+         x_hrv = x_hrv + rr_interval_list_hrv[i]/1000;
+       }
+       var data_hrv_value = [];
+       data_hrv_value.push(['Time','Intervals'])
+       for(i = 0;i < rr_interval_list_hrv.length;i++)
+       {
+         data_hrv_value.push([x_value_list_hrv[i],rr_interval_list_hrv[i]])
+       }
+       var data20 = google.visualization.arrayToDataTable(data_hrv_value);
+       var interval_hrv = 20;
+       var dataRange_hrv = data20.getColumnRange(1);
+       var vTicks_hrv = [];
+       for (var i = 0; i <= dataRange_hrv.max + interval_hrv; i = i + interval_hrv) {
+       vTicks_hrv.push(i);
+       }
+       var tacho_chart = new google.visualization.LineChart(document.getElementById('tachogram_chart'));
+       tacho_chart.draw(data20, {
+      title : '',
+           legend: { position: 'none',},
+           chartArea: {right:6,top:12,left:35,'width': '90%', 'height': '70%', backgroundColor: {
+           stroke: 'black',
+           strokeWidth: 1,
+           bottom:'8',
+           }},curveType: 'function',
+           legend: { position: 'none' },
+     vAxis: {title: 'R-R (msec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+     textStyle: {
+             stroke: 'none',
+           fontSize : 8,
+           fontName: 'sans-serif',
+           bold:true
+            },
+       viewWindow: {
+         min: 1500,
+         max: 0
+       },gridlines: {
+           color: '#ffcccc',
+           count:6,
+           }
+     },
+     hAxis: {title: 'Time (seconds)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+           showTextEvery:1,textStyle: {
+           fontSize : 6,
+           fontName: 'sans-serif',
+           bold:true
+        },
+       viewWindow: {
+         min: 0,
+         max: 300
+       },ticks:vTicks_hrv,gridlines:{
+         color: 'transparent'
+       }
+     },lineWidth: 1,
+         series: {0: {type: 'line',color:'red'}},
+         height:137,
+         enableInteractivity: false,
+         colors: ['#ff0000', '#000000', '#0000ff', '#000000', '#000000', '#000000']
+    });
+       var rrn_hrv_scatter = [];
+       var rrn_plus1_hrv_scatter = [];
+        {% for rrn in  report.report_result.hrv_time.rrn %}
+        rrn_hrv_scatter.push({{rrn}}/1000);
+        {% endfor %}
+        {% for rrn_plus1 in report.report_result.hrv_time.rrn_plus1 %}
+        rrn_plus1_hrv_scatter.push({{rrn_plus1}}/1000);
+        {% endfor %}
+        var data_rrn_list_hrv_scatter =[];
+        data_rrn_list_hrv_scatter.push(['rrn','rrn_plus1','referenceline']);
+        for(i=0;i<rrn_plus1_hrv_scatter.length;i++){
+         data_rrn_list_hrv_scatter.push([rrn_hrv_scatter[i],rrn_plus1_hrv_scatter[i],null]);
+        }
+        var min_value = Math.min(...rrn_hrv_scatter);
+        var max_value = Math.max(...rrn_hrv_scatter);
+        data_rrn_list_hrv_scatter.push([min_value-0.01,null,min_value-0.01]);
+        data_rrn_list_hrv_scatter.push([max_value+0.01,null,max_value+0.01]);
+        var data_hrv = new google.visualization.arrayToDataTable(data_rrn_list_hrv_scatter);
+      // var view_hrv = new google.visualization.DataView(data_hrv);
+      // view_hrv.setColumns([0, 1, {
+      //   label: 'y1=rrn',
+      //   type: 'number',
+      //   calc: function (dt, row) {
+      //     return dt.getValue(row, 0)
+      //    }
+      // }]);
+     var options_hrv = {
+     seriesType: 'scatter',
+     series: {
+       1: {
+       type: 'line',pointSize:0,
+      },0:{type: 'scatter',pointSize:2,color:'blue',}
+      },
+      legend: { position: 'none',},
+      chartArea: {right:5,left:31,top:12,'width': '85%', 'height': '70%', backgroundColor: {
+           stroke: 'black',
+           strokeWidth: 1,
+           bottom:'8'
+           }},
+      vAxis: {title: 'R-Rn+1 (sec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+      format: '#.##',
+      axes:{x: {
+             10.5: { side: 'left'}
+           },  y: {
+             69: { side: 'left'}
+           } },textStyle: {
+           fontSize : 8,
+           fontName: 'sans-serif',
+           bold:true
+            },viewWindow: {
+             max:max_value+0.01,
+             min:min_value-0.01
+           },gridlines: {
+           color: '#ffcccc',
+           count:5,
+           }},
+           hAxis: {title: 'R-Rn (sec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+           format: '#.##',
+           showTextEvery:1,
+           textStyle: {
+           fontSize : 8,
+           fontName: 'sans-serif',
+           bold:true
+        },gridlines: {
+           color: '#ffcccc',
+           count:3,
+           },viewWindow: {
+             max:max_value+0.01,
+             min:min_value-0.01
+           },},
+        height:137,
+       };
+       var data_hrate = google.visualization.arrayToDataTable([
+       ["Rate", "Count",{ role: 'style' }],
+       {% for rate,count in report.report_result.hrv_time.heart_rate_graph %}
+       [{{rate}}, {{count}},'fill-color:rgb(203, 7, 239);stroke-color: #000; stroke-width: 0.8;'],
+       {% endfor %}
+       ]);
+       var options_hrate = {
+       title: "",
+       bar: {groupWidth: "10%"},
+       legend: { position: "none" },
+       chartArea: {right:2,top:12,left:23.5,'width': '85%', 'height': '70%', backgroundColor: {
+           stroke: 'black',
+           strokeWidth: 1,
+           bottom:'8'
+           }},
+       vAxis: {title: 'Count',titleTextStyle: {fontSize: 5,fontName: 'sans-serif'},
+       textStyle: {
+           fontSize : 5,
+           fontName: 'sans-serif',
+           bold:true
+            },viewWindow: {
+             max:{{report.report_result.hrv_time.heart_rate_count_end}}+5,
+             min:0
+           },gridlines: {
+           color: '#ffcccc',
+           count:5,
+           }},
+           hAxis: {baselineColor: 'none',title: 'Heart Rate (BPM)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+           showTextEvery:1,textStyle: {
+           fontSize : 5,
+           fontName: 'sans-serif',
+           bold:true
+        },gridlines: {
+           color: '#ffcccc',
+           count:4,
+           },viewWindow: {
+             max:{{report.report_result.hrv_time.heart_rate_end}}+5,
+             min:{{report.report_result.hrv_time.heart_rate_start}}-5
+           },},
+           seriesType: 'bars',
+        height:137,
+       };
+        var data15 = google.visualization.arrayToDataTable([
+          ['Frequency', 'Value', { role: 'style' },{ role: 'annotation' }],
+          ['', {{report.report_result.hrv_frequency.log_lf}},'#00BDB6','SNS'],
+          ['', {{report.report_result.hrv_frequency.log_hf}},'#ff6600','PNS'],
+         ]);
+        var options15 = {
+         title : '',
+         titleTextStyle: {
+           fontSize: 14,
+         },bar: {groupWidth: "30%"},
+         legend: { position: 'none',},
+         annotations:{
+           alwaysOutside: true
+         },
+         chartArea: {top:4,bottom:35,left:15,right:1,'width': '80%', 'height': '70%', backgroundColor: {
+       stroke: 'black',
+       strokeWidth: 1
+        }},
+         vAxis: {title: '',titleTextStyle: {fontSize: 7,fontName: 'sans-serif'},textStyle: {
+         fontSize : 7,
+         fontName: 'sans-serif',
+         bold:true
+       },viewWindow: {
+             max:14,
+             min:0
+           },gridlines: {
+         color: '#ffcccc',
+         count:8,
+       }},
+         hAxis: {title: '',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},showTextEvery:1,textStyle: {
+         fontSize : 8,
+         bold:true
+       }},
+         lineWidth: 1,
+         lineDashStyle: [5, 1, 3],
+         seriesType: 'bars',
+         series: {1: {type: 'line'}},
+         height:170,
+         enableInteractivity: false,
+       };
+       var data_hf_lf = google.visualization.arrayToDataTable([
+          ['LF', 'HF','referenceline','referenceline1','referenceline2','lf_hf_cirlce','area'],
+          [5.9, 0,null,null,null,null,null],
+          [5.9, 14,null,null,null,null,null],
+          [8,null, 0,null,null,null,null],
+          [8,null, 14,null,null,null,null],
+          [0,null, null,3.8,null,null,null],
+          [14,null, null,3.8,null,null,null],
+          [0,null, null,null,7.1,null,null],
+          [14,null, 14,null,7.1,null,null],
+          [{{report.report_result.hrv_frequency.log_lf}}, null,null,null,null,{{report.report_result.hrv_frequency.log_hf}},null],
+          [6,null,null,null,null,null,3.8],
+          [6,null,null,null,null,null,7.1],
+          [8,null,null,null,null,null,7.1],
+          [8,null,null,null,null,null,3.8],
+          [6,null,null,null,null,null,3.8],
+         ]);
+       var options_hf_lf ={
+          title : '',
+         titleTextStyle: {
+           fontSize: 14,
+         },bar: {groupWidth: "30%"},
+         legend: { position: 'none',},
+         annotations:{
+           alwaysOutside: true
+         },
+         chartArea: {top:4,left:22.5,bottom:35,right:5,'width': '85%','height': '70%', backgroundColor: {
+           fill: 'rgb(240, 237, 238)',
+       stroke: 'black',
+       strokeWidth: 1
+        }},
+         vAxis: {title: 'HF (ln)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},textStyle: {
+         fontSize : 7,
+         fontName: 'sans-serif',
+         bold:true
+       },viewWindow: {
+             max:14,
+             min:0
+           },gridlines: {
+         color: '#ffcccc',
+         count:8,
+       }},
+         hAxis: {title: 'LF (ln)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},showTextEvery:1,textStyle: {
+         fontSize : 7,
+         fontName: 'sans-serif',
+         bold:true
+       },viewWindow: {
+             max:14,
+             min:0
+           },gridlines: {
+         color: '#ffcccc',
+         count:8,
+       }},
+         lineWidth: 1,
+         seriesType: 'bars',
+         series: {0: {type: 'line'},1: {type: 'line'},2: {type: 'line'},3: {type: 'line'},4: {type: 'line'},5: {type: 'line'},6:{type: 'scatter'},7:{type: 'area'}},
+         height:170,
+         width: 150,
+         enableInteractivity: false,
+       }
+       var hrvchart = new google.visualization.ComboChart(document.getElementById('Hrv_chart'));
+       hrvchart.draw(data18, options18);
+    //    var fftchart = new google.visualization.AreaChart(document.getElementById('FFT_chart'));
+    //    fftchart.draw(data19, options19);
+      var fftchart = new google.visualization.AreaChart(document.getElementById('FFT_chart'));
+      // Wait for the chart to finish drawing before calling the getImageURI() method.
+        google.visualization.events.addListener(fftchart, 'ready', function () {
+            fftchart.innerHTML = '<img src="' + fftchart.getImageURI() + '">';
+        });
+       fftchart.draw(data19, options19);
+       var Lfchart = new google.visualization.ColumnChart(document.getElementById('LF_chart'));
+       Lfchart.draw(data21, options21);
+       var chart_hrv = new google.visualization.ComboChart(document.getElementById('Scatter_chart_hrv'));
+       chart_hrv.draw(data_hrv, options_hrv);
+       var chart_heartrate = new google.visualization.ComboChart(document.getElementById('bar_chart_hrate'));
+       chart_heartrate.draw(data_hrate, options_hrate);
+       var chart_5 = new google.visualization.ComboChart(document.getElementById('chart_5'));
+       chart_5.draw(data15, options15);
+       var lf_hf_balance_chart = new google.visualization.ComboChart(document.getElementById('lf_hf_balance_chart'));
+       lf_hf_balance_chart.draw(data_hf_lf, options_hf_lf);
+    }
+ </script>
+ <script type="text/javascript">
+    setTimeout(function()
+    {  
+      $("#tachogram_chart").find("g path").addClass("red");
+      $("#Scatter_chart_hrv").find("g path").addClass("red");
+       $("#LF_chart svg g").first().find("g").first().find("g").first().find("path").addClass("stroke_line_lf");
+        $("text:contains('PSD (ms2/Hz)')").next().addClass('stroke_color');
+        $("text:contains('HF (ln)')").next().addClass('stroke_color');
+        $("text:contains('Ln(ms2/Hz)')").next().addClass('stroke_color');
+        $("text:contains('Ln (n.u)')").next().addClass('stroke_color');
+        $("text:contains('R-R (sec)')").next().addClass('stroke_color');
+        $("text:contains('R-Rn+1 (sec)')").next().addClass('stroke_color');
+        $("text:contains('Count')").next().addClass('Heart Rate (BPM)');
+        $("#chart_5").find("svg g").first().find("g").first().find("g:nth-child(3n)").remove();
+        $("#lf_hf_balance_chart").find("svg g").first().find("g").find("path").addClass('stroke_black');
+        $("#lf_hf_balance_chart").find("svg g").first().find("g").first().find("g:eq(1)").find("path:eq(4)").addClass("area_color_4").removeClass("stroke_black");
+        $("#lf_hf_balance_chart").find("svg g").find("circle").attr({"stroke":"black","r":"3","stroke-width":"1","fill":"yellow"});
+        $("#lf_hf_balance_chart").find("svg g").first().find("g").first().find("g").next().find("g").first().addClass("stroke_line_cir").find("circle").attr({"stroke":"none","r":"0","stroke-width":"0","fill":"white"});
+        // $("#FFT_chart svg g").first().find("g").first().find("g").first().find("g").first().find("path:eq(0)").addClass("area_color1");
+        // $("#FFT_chart svg g").first().find("g").first().find("g").first().find("g").first().find("path:eq(1)").addClass("area_color2");
+        // $("#FFT_chart svg g").first().find("g").first().find("g").first().find("g:eq(2)").find("path").addClass("area_color3");
+        // $("#FFT_chart svg g").first().find("g").first().find("g:eq(6)").find("path:eq(1)").addClass("stroke_black_dashed_line");
+        // $("#FFT_chart svg g").first().find("g").first().find("g:eq(6)").find("path:eq(2)").addClass("stroke_black_dashed_line");
+        // $("#FFT_chart svg g").first().find("g").first().find("g:eq(6)").find("path:eq(3)").addClass("stroke_black_dashed_line");
+    }, 2000);
+  </script>

@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.tar.gz
+
+# Large bundled distributions (too large for git)
+py-dist/
+dist_package/
+Kodys_Foot_Clinik_Package.zip
+
+# Build output
+dist/
+
+# Database (contains patient data - do not commit)
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# Generated PDFs (regenerate with scripts)
+# Kodys_Technology_Upgrade_Assessment.pdf
+
+# Temporary
+/tmp/

@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Jquery ProgressBar Demo</title>
+        
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   
+	<script src="../src/jquery.progressBarTimer.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+      <main role="main" class="container">        
+      
+
+        <h2>API</h2>
+        <div class="card" >
+          <div class="card-body">
+            <code>$('...').progressBarTimer();</code>
+            <div id="example11"></div>
+            <div class="mt-3">
+              <button type="button" id="startBtn" class="btn btn-primary">Start</button>
+              <button type="button" id="stopBtn" class="btn btn-secondary" disabled="disabled">Stop</button>
+              <button type="button" id="resetBtn" class="btn btn-info" >Reset</button>
+              <button type="button" id="getElapsedTimeBtn" class="btn btn-success" disabled="disabled">Get Elapsed Time</button>
+              <button type="button" id="getRemainingTimeBtn" class="btn btn-danger" disabled="disabled">Get Remaining Time</button>
+            </div>
+            
+            <form class="form-inline mt-3">
+              <label class="sr-only" for="addSecondsInput">Seconds</label>
+              <input type="text" class="form-control mb-2 mr-sm-2" id="addSecondsInput" placeholder="Add Seconds">
+            
+              <button type="button" id="addSecondsBtn" class="btn btn-primary mb-2" disabled="disabled" >Add</button>
+            </form> 
+          </div>            
+        </div>
+            
+      
+
+        <script>
+        
+          $('#example11').progressBarTimer({ autoStart: true, animated: true });
+        </script>
+
+      </main>
+      
+      <div class="mt-3"></div>
+
+
+      <footer class="footer">
+          <div class="container">
+            <span class="text-muted">Copyright &copy; 2018 <a href="https://www.linkedin.com/in/iakovos-malliaros/">Jacob Malliaros</a></span>
+          </div>
+        </footer>      
+
+</body>
+</html>

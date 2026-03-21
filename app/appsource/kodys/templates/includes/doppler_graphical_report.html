@@ -1,0 +1,204 @@
+{% block header_script %}
+{% load kodystags %}
+<style type="text/css">
+  tbody tr:nth-child(even) {
+      background-color: white!important;
+  }
+  tbody tr:nth-child(odd) {
+      background-color: white!important;
+  }
+  thead tr {
+    background-color: white!important;
+}
+</style>
+<script type="text/javascript">
+  $(document).ready(function(){
+   console.log('{{report.report_result.right_abi_result.0}}')
+   {% for key,value in report.report_result.items %}
+                  {% if key == "right_abi_result" %}
+                     var right_abi_result = parseFloat('{{value.0}}');
+                     console.log(right_abi_result)
+                    {% if value.0 == "No Data" %}
+                   $("#right_abi_val").next().hide();
+                   $("#rightabi").hide();
+                   {% endif %}
+                   {% if value.0 != "No Data"%}
+                    $("#right_abi_val").html('{{value.0}}');
+                   {% if value.1 == "Normal" %}
+                    $("#right_abi_status").html('<span class="color_green">{{value.1}}</span>');
+                    {% elif value.1 == "Severe" %}
+                    $("#right_abi_status").html('<span class="severe">{{value.1}}</span>');
+                     {% elif value.1 == "Mild" %}
+                    $("#right_abi_status").html('<span class="Mild">{{value.1}}</span>');
+                     {% elif value.1 == "Moderate" %}
+                    $("#right_abi_status").html('<span class="Moderate">{{value.1}}</span>');
+                 {% elif  value.1 == "Calcified"%}
+                    $("#right_abi_status").html('<span class="Calcified_doppler">{{value.1}}</span>');
+                    {% else %}
+                    $("#right_abi_status").html('<span style="color:black;">{{value.1}}</span>');
+                 {% endif %}
+                 {% endif %}
+                  {% endif %}
+                  {% if key == "left_abi_result" %}
+                  console.log('{{value.0}}')
+                     var left_abi_result = parseFloat('{{value.0}}');
+                     $("#left_abi_val").html('{{value.0}}');
+                      {% if value.0 == "No Data" %}
+                     $("#left_abi_val").next().hide();
+                     $("#leftabi").hide();
+                     {% endif %}
+                      {% if value.1 == "Normal" %}
+                    $("#left_abi_status").html('<span class="color_green">{{value.1}}</span>');
+                    {% elif value.1 == "Severe" %}
+                    $("#left_abi_status").html('<span class="severe">{{value.1}}</span>');
+                    {% elif value.1 == "Mild" %}
+                    $("#left_abi_status").html('<span class="Mild">{{value.1}}</span>');
+                    {% elif value.1 == "Moderate" %}
+                    $("#left_abi_status").html('<span class="Moderate">{{value.1}}</span>');
+                 {% elif  value.1 == "Calcified"%}
+                    $("#left_abi_status").html('<span class="Calcified_doppler">{{value.1}}</span>');
+                    {% else %}
+                    $("#left_abi_status").html('<span style="color:black;">{{value.1}}</span>');
+                 {% endif %}
+                  {% endif %}
+                $("#abi_image").attr("src","{{MEDIA_URL}}img/png/doppler_tbi.png");
+                  {% if key == "right_tbi_result" %}
+                     var tbi_right_result = parseFloat('{{value.0}}');
+                     {% if value.0 == "No Data" %}
+                       $("#right_tbi_val_result").hide();
+                     {% endif %}
+                     {% if value.0 != "No Data"%}
+                      $(".right_tbi_value").show();
+                     $("#tbi_result_right_val").html('{{value.0}}');
+                      {% if value.1 == "Normal" %}
+                    $("#tbi_result_right_status").html('<span class="color_green">{{value.1}}</span>');
+                      {% else%}
+                    $("#tbi_result_right_status").html('<span style="color:red;">{{value.1}}</span>');
+                  {% endif %}
+                  {% endif %}
+                  {% endif %}
+                  {% if key == "left_tbi_result" %}
+                     var tbi_left_result = parseFloat('{{value.0}}');
+                     {% if value.0 == "No Data" %}
+                        $("#left_tbi_val_result").hide();
+                     {% endif %}
+                     {% if value.0 != "No Data"%}
+                     $(".left_tbi_value").show();
+                     $("#tbi_result_left_val").html('{{value.0}}');
+                      {% if value.1 == "Normal" %}
+                    $("#tbi_result_left_status").html('<span class="color_green">{{value.1}}</span>');
+                      {% else%}
+                    $("#tbi_result_left_status").html('<span style="color:red;">{{value.1}}</span>');
+                  {% endif %}
+                  {% endif %}
+              {% endif %}
+
+    {% endfor %}
+    {% if  report.report_result %}             
+          {% if report.report_result.right_tbi_result.0 == "No Data" and report.report_result.right_abi_result.0 == "No Data" and report.report_result.left_tbi_result.0 == "No Data" and report.report_result.left_abi_result.0 == "No Data" %}
+                  $('#doppler_result').append('<div style="text-align:center;margin-top: 10px;margin-left: -4px;">No Results</div>');
+          {% endif %}
+    {% endif %}
+  });
+</script>
+{% endblock %}
+<div class="" style="margin-top: 2px;height: 655px;margin-left: 26px;margin-right: 26px;" >
+     <div style="width: 94%;margin: auto;margin-top: 45px;">
+         <div style="font-size: 13px;color: #ff299c;text-align: center;display:inline-block;position:relative;width: 32%" class="mt8">RIGHT</div>
+         <div style="width: 34%;display:inline-block;">
+         </div>
+         <div style="font-size: 13px;color: #ff299c;text-align: center;display:inline-block;position:relative;width: 30%" class="mt8">LEFT</div>
+     </div>
+     <div style="width: 100%;margin-left: 4px;">
+       <div  style="width:33%;position: relative;display: inline-block; vertical-align:middle;">
+         {% if report.reports.TEST_TYPE|safe == "VASCULAR_SEGMENTAL_STUDY_REPORT_2" %}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.right_brachial_base64}} " alt="brachial_pdf_report" width="96%">
+         {% elif report.reports.TEST_TYPE|safe == "ABI_TBI_DOPPLER_1" %}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.right_brachial_base64}} " alt="brachial_pdf_report" width="96%" style="position: absolute;top: -190px; left: 0px">
+          {% elif report.reports.TEST_TYPE|safe == "ABI_DOPPLER" %}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.right_brachial_base64}} " alt="brachial_pdf_report" width="96%" style="position: absolute;top: -195px; left: 0px">
+          {% endif %}
+          {% if report.reports.TEST_TYPE|safe == "ABI_TBI_DOPPLER_1"%}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.right_base64}} " alt="right_pdf_report" width="96%" style="position: absolute;top: 10px; left: 0px">
+          {% elif report.reports.TEST_TYPE|safe == "ABI_DOPPLER" %}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.right_base64}} " alt="right_pdf_report" width="96%" style="position: absolute;top: 25px; left: 0px">
+          {% else %}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.right_base64}} " alt="right_pdf_report" width="96%">
+          {% endif %}
+          {% if report.reports.TEST_TYPE|safe == "ABI_TBI_DOPPLER_1"%}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.right_toe_base64}} " alt="toe_pdf_report" width="96%" style="position: absolute;top: 125px; left: 0px">
+          {% endif %}
+       </div>
+       <div  style="width:33%;position: relative;display: inline-block; vertical-align:middle;">
+        <img src="{{MEDIA_URL}}img/png/doppler_graphical_testimg.png" id="doppler_graphical_image" height="500px" style="margin-left: 8px;">
+        {% if report.TM02.0.KEY_VALUE %}<div  class="pa brclr_1_black w50  text_center  bg_white brachial_right" style="top: 151px;left: 45px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.0.KEY_VALUE}}</div>
+          <span style="position: absolute;top: 152px;left: 6px;">mmHg</span>{% endif %}
+           {% if report.TM02.7.KEY_VALUE %}<span class="pa brclr_1_black w50  text_center  bg_white brachial_left" style="top: 151px;right: 45px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.7.KEY_VALUE}}</span>
+          <span style="position: absolute;top:152px;right: 6px">mmHg</span>{% endif %}
+          {% if report.TM02.4.KEY_VALUE %}<span class="pa brclr_1_black w50  text_center  posterior_right bg_white"  style="position: absolute;bottom: 176px;left: 62px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.4.KEY_VALUE}}</span>
+          <span style="position: absolute;bottom: 181px;left: 22px;">mmHg</span>{% endif %}
+          {% if report.TM02.11.KEY_VALUE %}<span class="pa brclr_1_black w50  text_center  posterior_left bg_white" style="position: absolute;bottom: 176px;right: 68px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.11.KEY_VALUE}}</span>
+          <span style="position: absolute;bottom: 181px;right: 28px;">mmHg</span>{% endif %}
+          {% if report.TM02.6.KEY_VALUE %}<span class="pa brclr_1_black w50  text_center  greattoe_right bg_white" style="bottom: 106px;left: 62px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.6.KEY_VALUE}}</span>
+          <span style="position: absolute;bottom: 111px;left: 22px">mmHg</span>{% endif %}
+          {% if report.TM02.13.KEY_VALUE %}<span class="pa brclr_1_black w50  text_center  bg_white greattoe_left" style="position: absolute;bottom: 106px;right: 68px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.13.KEY_VALUE}}</span>
+          <span style="position: absolute;bottom: 111px;right: 28px;">mmHg</span>{% endif %}
+          {% if report.TM02.5.KEY_VALUE %}<span class="pa brclr_1_black w50  text_center  bg_white dorsalis_right" style="position: absolute;bottom: 141px;left: 62px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.5.KEY_VALUE}}</span>
+          <span style="position: absolute;bottom: 149px;left: 22px;">mmHg</span>{% endif %}
+          {% if report.TM02.12.KEY_VALUE %}<span class="pa brclr_1_black w50  text_center  bg_white dorsalis_left" style="position: absolute;bottom: 141px;right: 68px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.12.KEY_VALUE}}</span>
+          <span style="position: absolute;bottom: 149px;right: 28px;">mmHg</span>{% endif %}
+          {% if report.TM02.2.KEY_VALUE %}<span class="pa brclr_1_black w50  text_center  bg_white aboveknee_right" style="position: absolute;bottom: 262px;left: 62px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.2.KEY_VALUE}}</span>
+          <span style="position: absolute;bottom: 267px;left: 22px;">mmHg</span>{% endif %}
+          {% if report.TM02.9.KEY_VALUE %}<span class="pa brclr_1_black w50  text_center  bg_white aboveknee_left" style="position: absolute;bottom: 262px;right: 68px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.9.KEY_VALUE}}</span>
+          <span style="position: absolute;bottom: 267px;right: 28px;">mmHg</span>{% endif %}
+          {% if report.TM02.3.KEY_VALUE %}<span class="pa brclr_1_black w50  text_center  bg_white belowknee_right" style="position: absolute;bottom: 219px;left: 62px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.3.KEY_VALUE}}</span>
+          <span style="position: absolute;bottom: 223px;left: 22px;">mmHg</span>{% endif %}
+          {% if report.TM02.10.KEY_VALUE %}<span class="pa brclr_1_black w50  text_center  bg_white belowknee_left" style="position: absolute;bottom: 219px;right: 68px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.10.KEY_VALUE}}</span>
+          <span style="position: absolute;bottom: 223px;right: 28px;">mmHg</span>{% endif %}
+          {% if report.TM02.1.KEY_VALUE %}<span class="pa brclr_1_black w50  text_center  bg_white thigh_right" style="position: absolute;top: 269px;left: 62px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.1.KEY_VALUE}}</span>
+          <span style="position: absolute;top: 272px;left: 22px;">mmHg</span>{% endif %}
+          {% if report.TM02.8.KEY_VALUE %}<span class="pa brclr_1_black w50  text_center  bg_white thigh_left" style="position: absolute;top: 269px;right: 68px;padding-top: 1px !important;padding-bottom: 3px;">{{report.TM02.8.KEY_VALUE}}</span>
+          <span style="position: absolute;top: 272px;right: 28px;">mmHg</span>{% endif %}
+          <div  style="width: 100%;height: 95px;margin-left: 4px;">
+            <div style="font-size:16px;font-weight: bold;font-family: 'Times_New_Roman' !important;text-align: center;color: #ff299c;text-decoration: underline;">Interpretation</div>
+              <div id="doppler_result">
+               <div class="mb1" style="font-size: 13px;margin-top: 4px;margin-left: 10px;" id="rightabi">
+                <div style="display: inline-block;width: 70px;">Right ABI </div><span>:&nbsp;</span><div style="display: inline-block;width: 80px;text-align: center;" id="right_abi_val"></div> &nbsp;<span id="right_abi_status"></span>
+               </div>
+               <div class="mb1" style="font-size: 13px;margin-left: 10px;" id="leftabi">
+                <div style="display: inline-block;width: 70px;">Left ABI</div><span>:&nbsp;</span><div style="display: inline-block;width: 80px;text-align: center;"  id="left_abi_val"></div> &nbsp;<span id="left_abi_status"></span>
+               </div>
+               <div class="mb1" style="font-size: 13px;margin-left: 10px;" id="right_tbi_val_result">
+                <div style="display: inline-block;width: 70px;">Right TBI</div><span>:&nbsp;</span><div style="display: inline-block;width: 80px;text-align: center;" id="tbi_result_right_val"></div> &nbsp;<span id="tbi_result_right_status"></span>
+               </div>
+               <div class="mb1" style="font-size: 13px;margin-left: 10px;" id="left_tbi_val_result">
+                <div style="display: inline-block;width: 70px;">Left TBI</div><span>:&nbsp;</span><div style="display: inline-block;width: 80px;text-align: center;" id="tbi_result_left_val"></div> &nbsp;<span id="tbi_result_left_status"></span>
+               </div>
+              </div>
+          </div>
+       </div>
+       <div  style="width:33%;position: relative;display: inline-block; vertical-align:middle;">
+         {% if report.reports.TEST_TYPE|safe == "VASCULAR_SEGMENTAL_STUDY_REPORT_2" %}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.left_brachial_base64}} " alt="brachial_pdf_report" width="96%">
+         {% elif report.reports.TEST_TYPE|safe == "ABI_TBI_DOPPLER_1" %}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.left_brachial_base64}} " alt="brachial_pdf_report" width="96%" style="position: absolute;top: -190px; left: 0px">
+         {% elif report.reports.TEST_TYPE|safe == "ABI_DOPPLER" %}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.left_brachial_base64}} " alt="brachial_pdf_report" width="96%" style="position: absolute;top: -195px; left: 0px">
+        {% endif %}
+        {% if report.reports.TEST_TYPE|safe == "ABI_TBI_DOPPLER_1" %}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.left_base64}} " alt="left_pdf_report"  width="96%" style="position: absolute;top: 10px; left: 0px">
+         {% elif report.reports.TEST_TYPE|safe == "ABI_DOPPLER" %}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.left_base64}} " alt="left_pdf_report"  width="96%" style="position: absolute;top: 25px; left: 0px">
+        {% else %}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.left_base64}} " alt="left_pdf_report"  width="96%">
+        {% endif %}
+        {% if report.reports.TEST_TYPE|safe == "ABI_TBI_DOPPLER_1"%}
+            <img src="data:image/jpeg;base64, {{report.doppler_pdf_json.left_toe_base64}} " alt="toe_pdf_report" width="96%" style="position: absolute;top: 125px; left: 0px">
+        {% endif %}
+       </div>
+
+     </div>
+</div>
+     <!-- <div class="mr8 ml8" style="text-align: center;font-size: 12px;margin-top: 16px;border-bottom: 1px solid;">
+          * Report Based on Hadeco - Japan 8Mhz Bidirectional Doppler
+     </div> -->

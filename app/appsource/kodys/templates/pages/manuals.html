@@ -1,0 +1,43 @@
+{% extends "page_layout.html" %}
+{% block content_body %}
+<div class="w3-display-container bgclr3 brclr1">
+	<div class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Manuals
+	</div>  
+</div>
+<div class="w3-row">
+	<div class="w3-col w174">
+		<div class="w3-sidebar  w3-bar-block w174 gclr bgclr7">
+			<a href="{% url 'manuals' %}" class="w3-bar-item w3-button  ft-b pt16 {% if category == 'USERMANUAL' %}bakclr sbrclr{% endif %}  brclr1 fclr1 f-14 ff-r ft-b">User Manuals</a>
+			<a href="{% url 'manuals' 'SERVICEMANUAL' %}" class="w3-bar-item w3-button ft-b pt16 {% if category == 'SERVICEMANUAL' %}bakclr sbrclr{% endif %} brclr1 f-14 ff-r  fclr1">Service Manuals</a>
+			<a href="{% url 'manuals' 'TESTPROCEDURE' %}" class="w3-bar-item w3-button  ft-b pt16 {% if category == 'TESTPROCEDURE' %}bakclr sbrclr{% endif %} brclr1 f-14 ff-r fclr1">Test Procedure</a>
+			<a href="{% url 'manuals' 'INTERPRETATION' %}" class="w3-bar-item w3-button  ft-b pt16 {% if category == 'INTERPRETATION' %}bakclr sbrclr{% endif %} brclr1 f-14 ff-r fclr1">Interpretation</a>
+		</div>
+	</div>
+</div>
+
+<div class="w3-row">
+	<div class="w3-col w1106 ml174  h638 bgclr3">
+		{% if manuals_list %}
+		{% for manuals in manuals_list %}
+			<div class="w3-row pb24 ml-90">
+				<div class="w3-row ml-90 pb8 brclr1">
+					{% if manuals.SUB_CATEGORY %}
+					<p class="f-16 fclr5 ft-b ff-r">{{manuals.get_SUB_CATEGORY_display}}</p> 
+					<div class="w3-col">
+						<div class="w3-row">
+							<a href ="{% url 'manuals_view' manuals.id %}"><div class="w3-row fclr1 f-14 ft-b ff-r">{{manuals.DESCRIPTION}}</div></a>
+					{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		{% else %}
+			<div class="w3-row pb24">
+				<h3 class="fclr" style="margin-left: 37%;margin-top: 25%;">No Manuals</h3>
+			</div>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}
+

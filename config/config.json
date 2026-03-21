@@ -1,0 +1,21 @@
+{
+	"window" : {
+		"title": "Kodys Foot Clinik",
+    	"icon": "appicon.png",
+    	"width": 1280,
+    	"height": 680,
+    	"min_width": 1280,
+    	"min_height": 680,
+    	"fullscreen_allowed": "false", 
+    	"max_width": 1280,
+    	"max_height": 680,
+    	"dev_tools_menu_enabled": "false"
+	},
+	"application" : {
+		"project_dir_name" : "app\\appsource\\app_config",
+        "assets_dir_name" : "app\\app_assets\\DATA",
+        "assets_media_dir_name" : "app\\app_assets\\media",
+		"version" : "1.0",
+		"description": "Kodys Foot Clinik"
+	}
+}

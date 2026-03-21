@@ -1,0 +1,471 @@
+{% extends "page_layout.html" %}
+{% block content_body %}
+<div class="w3-display-container bgclr3 brclr1">
+      <div class="w3-center f-16 ff-r ft-b fclr1 pt8 pb1 ">Settings
+      </div>  
+    </div>
+    <div class="w3-row">
+      <div class="w3-col w174">
+        <div class="w3-sidebar  w3-bar-block w174 gclr bgclr7">
+        <a href="{% url 'hospital_profile' %}" class="w3-bar-item w3-button  ft-b pt16 bakclr sbrclr  brclr1 fclr1 f-14 ff-r ft-b">Hospital Profile</a>
+        <a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'doctors' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item w3-button ft-b pt16 brclr1 f-14 ff-r  fclr1">HCP</a>
+        <a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'patients' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r fclr1">Patients</a>
+        <a href="{% url 'app_configuration' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r fclr1">App Configuration</a>
+      </div>
+      </div>
+      <div class="w3-col w1106 ml174 bgclr3  {% if COMMON_INFO.ACCOUNTUSERROLE != 'MEMBER' %} scroll  {% endif %}" {% if COMMON_INFO.ACCOUNTUSERROLE != 'MEMBER' %} style="height:590px!important"  {% endif %}>
+        <div class="w3-row">
+          <div class="w3-row pl16 pt16 pb16">
+            <span class="f-18 ff-r fclr1 ft-b">Hospital/Clinic Profile</span>
+          </div>
+          <form method="POST" enctype="multipart/form-data" id="hosp_profile">
+            {% csrf_token %}
+            <div class="w3-row f-12 pl16 pt8 ">
+            <div class="w3-row pb10">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr1 ft-b">Hospital Name <span class="mandatory">*</span></span>
+              </div>
+              <div class="w3-col l5">
+                <input type="text" name="hospitalname" class="f-12 ff-r fclr1 w3-input brclr8 h30 w100p" value="{{COMMON_INFO.HOSPITAL_NAME|safe}}" id="hosp_name">
+               
+              </div>
+              <div class="w3-col l4 mt6"> <span id="error_msg"></span>
+              </div>
+            </div>
+            <div class="w3-row pb10">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr1 ft-b">Phone Number <span class="mandatory">*</span></span>
+              </div>
+              <div class="w3-col l5">
+                <input type="tel" autocomplete="off" name="phoneno" class="fclr1 w3-input brclr8 h30 w100p" value="{{COMMON_INFO.PHONE_NUMBER|safe}}" maxlength="15" id="mobile_number1">
+               
+              </div>
+              <div class="w3-col l4 mt6"> <span id="message1"></span>
+              </div>
+            </div>
+            <div class="w3-row pb10">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr1 ft-b">Mobile Number</span>
+              </div>
+              <div class="w3-col l5">
+                <input type="tel" maxlength="10" name="mobileno" class="fclr1 w3-input brclr8 h30 w100p" value="{{COMMON_INFO.MOBILE_NUMBER|safe}}" id="mobile_number" maxlength="15" autocomplete="off">
+              </div>
+              <!-- <div class="w3-col l4 mt6"><span id="message"></span>
+              </div> -->
+            </div>
+            <div class="w3-row pb10">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr1 ft-b">E-mail ID</span>
+              </div>
+              <div class="w3-col l5">
+                <input type="text" name="hospital_email" class="fclr1 w3-input brclr8 h30 w100p" value="{{COMMON_INFO.EMAIL|safe}}" id="hospital_email" autocomplete="off">
+              </div>
+              <div class="w3-col l4 mt6"><span id="message"></span>
+              </div>
+            </div>
+            <div class="w3-row pb10">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr1 ft-b">Fax Number</span>
+              </div>
+              <div class="w3-col l5">
+                <input type="text" name="faxno" autocomplete="off" class="fclr1 w3-input brclr8 h30 w100p" id="fax_no" value="{% if COMMON_INFO.FAX_NUMBER %}{{COMMON_INFO.FAX_NUMBER|safe}}{% endif %}"  maxlength="15">
+              </div>
+              <div class="w3-col l4 mt6"><span id="fax_errormsg"></span>
+              </div>
+            </div>
+            <div class="w3-row pb10">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr1 ft-b">Address <span class="mandatory">*</span></span>
+              </div>
+              <div class="w3-col l5">
+                <input type="text" name="address" class="fclr1 w3-input brclr8 h30 w100p" value="{{COMMON_INFO.HOSPITAL_ADDRESS1|safe}}" id="location_address">
+              </div>
+              <div class="w3-col l4 mt6"> <span id="message_address"></span>
+              </div>
+            </div>
+            <div class="w3-row pb10">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr1 ft-b">Street</span>
+              </div>
+              <div class="w3-col l5">
+                <input type="text" name="streetname" class="fclr1 w3-input brclr8 h30 w100p" value="{{COMMON_INFO.HOSPITAL_ADDRESS2|safe}}" id="location_street">
+              </div>
+            </div>
+
+            <div class="w3-row pb10">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr1 ft-b">Area</span>
+              </div>
+              <div class="w3-col l5">
+                <input type="text" name="areaname" class="fclr1 w3-input brclr8 h30 w100p" value="{{COMMON_INFO.HOSPITAL_ADDRESS3|safe}}" id="location_area">
+              </div>
+            </div>
+            <div class="w3-row pb10">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr1 ft-b">City</span>
+              </div>
+              <div class="w3-col l5">
+                <input type="text" name="cityname" class="fclr1 w3-input brclr8 h30 w100p" value="{% if COMMON_INFO.CITY %}{{COMMON_INFO.CITY|safe}}{% endif %}" id="location_city">
+              </div>
+            </div>
+            <div class="w3-row pb10">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr1 ft-b">State</span>
+              </div>
+              <div class="w3-col l5">
+                <input class="fclr1 w3-input brclr8 h30 w100p" value="{% if COMMON_INFO.STATE %}{{COMMON_INFO.STATE|safe}}{% endif %}" name="statename" id="statename">
+              <!--   <label class="select-add1">
+                    <select name="statename" class="select-1add1 fclr1 f-12 ff-r" id="statename" value="{{COMMON_INFO.STATE|safe}}" style="overflow-y:hidden;max-height: 150px !important" disabled="true">
+                       <option class="f-12 ff-r" disabled selected>Please Select State</option>
+                {% for state in state_list%}
+                      <option class="f-12 ff-r" {% if COMMON_INFO.STATE|safe == state.NAME %} selected="selected" {% endif %} value="{{state.NAME}}" id="statename1">{{state.NAME}}</option>
+                {% endfor %}
+                    </select>
+                  </label> -->
+              </div>
+               <div class="w3-col l4 mt6">
+                 <span id="message_state"></span>
+              </div>
+            </div>
+                <!-- <input type="text" name="statename" class="fclr1 w3-input brclr8 h30 w100p" value="{{COMMON_INFO.STATE|safe}}" required> -->
+            <div class="w3-row pb10">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr1 ft-b">Pincode</span>
+              </div>
+              <div class="w3-col l5">
+                <input type="tel" pattern="[1-9][0-9]{5}" name="pincode" maxlength="15" class="fclr1 w3-input brclr8 h30 w100p" id="pincode" value="{% if COMMON_INFO.ZIPCODE %}{{COMMON_INFO.ZIPCODE|safe}}{% endif %}">
+              </div>
+              <div class="w3-col l4 mt6">
+                <span id="message2"></span>
+              </div>
+            </div>
+             {% if COMMON_INFO.ACCOUNTUSERROLE != "MEMBER" %}
+              <div class="w3-row pb10">
+              <div class="w3-col l2">
+                <span class="f-12 ff-r fclr1 ft-b">Username <span class="mandatory">*</span></span>
+              </div>
+              <div class="w3-col l5">
+                <input type="text" name="username" class="f-12 ff-r fclr1 w3-input brclr8 h30 w100p"  value="{{COMMON_INFO.HOSPITAL_ACCOUNTUSER.USER.username}}" id="user_name">
+               
+              </div>
+              <div class="w3-col l4 mt6"> <span id="error_user"></span>
+              </div>
+            </div>
+            <div class="w3-row pb10">
+              <div class="w3-col l2">
+                <span class="f-12 ff-r fclr1 ft-b">Password <span class="mandatory">*</span></span>
+              </div>
+              <div class="w3-col l5">
+                <input type="password" name="password" class="f-12 ff-r fclr1 w3-input brclr8 h30 w100p" value="" id="password">
+               
+              </div>
+              <div class="w3-col l4 mt6"> <span id="error_pass"></span>
+              </div>
+            </div>
+            {% endif %}
+            <div class="w3-row pb8 pt8">
+              <div class="w3-col l2 pt6">
+                <span class="f-12 ff-r fclr1 ft-b">Logo</span>
+              </div>
+              <div class="w3-col l1">
+
+                <div class="myLabel h30 w80 bgclr10 brclr9 ta cp">
+                             <input type="file" id="file-upload" class="cp" name="logo" />
+                             <div class="f-12 ff-r w3-text-white">Upload</div>
+                </div>
+                
+              </div>
+              <div class="w3-col l3">
+                 <div id="file-upload-filename" class="f-12 ml8  pt8" style="position: relative;">{% if COMMON_INFO.HOSPITAL_LOGO_NAME %} {{COMMON_INFO.HOSPITAL_LOGO_NAME|safe}} <span style="position: absolute;margin-top: 1px;margin-left: 9px;" onclick="remove()"><i class="fa fa-trash fclr" aria-hidden="true" style="font-size: 17px;"></i></span> {% endif %}</div>
+              </div>
+            </div>
+            <div class="w3-row fclr1 pr">
+              <div class="w3-col l2">
+                <p></p>
+              </div>
+              <div class="w3-col l5 ft-b image_pixel">
+                Note: Image must be 174&#xd7;60 pixel (width x height).
+              </div>
+            </div>
+
+            <div class="w3-row pb8  mb63 ">
+              <div class="w3-col l2">
+                <p></p>
+              </div>
+      {% if COMMON_INFO.ACCOUNTUSERROLE != "MEMBER" %}
+              <div class="w3-col l5">
+                <div class="f-r">
+                  <!-- <button class="f-12 ff-r w3-text-white bgclr15 brclr11 w80 h30 cp clear" type="reset">Clear</button> -->
+                  <button class="f-12 ff-r w3-text-white bgclr8 brclr3 ml8 w80 h30 cp save" type="button">Save</button>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          <input type="hidden" name="old_logo" id="file_upload_hide" value="{{COMMON_INFO.HOSPITAL_LOGO_NAME|safe}}">
+        </form>
+        </div>
+      </div>
+    </div>
+            <div id="close_process" class="w3-modal  bgclr18">
+            <div class="w3-modal-content w376 mt11p">
+                <div class="bgclr3 brclr1 ta">
+                    <img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" >
+                    <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Saved successfully</h3>
+                </div>
+                <div class="w3-row pt8  pb16 bgclr3">
+                    <div class="ta">
+                       <button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
+  </div>
+{% endblock %}
+{% block js_script %}
+<script>
+  function  licensekey(){
+             $(".overflow-hidden").append(`<div id="licensekey_alert" class="w3-modal  bgclr18" "><div class="w3-modal-content  mt11p" style="width:445px;"><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please upload license key file in app configuration .</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="licensekey_alert_close();">OK</button>
+                         </div></div></div></div>`);
+                 $("#licensekey_alert").show();  
+          }
+  function licensekey_alert_close(){
+               $("#licensekey_alert").hide(); 
+          }
+  function remove(){
+    $("#file-upload-filename").html('');
+    $("#file_upload_hide").val("");
+  }
+  var input = document.getElementById( 'file-upload' );
+var infoArea = document.getElementById( 'file-upload-filename' );
+
+input.addEventListener( 'change', showFileName );
+var is_file_valid = true;
+
+function showFileName( event ) {
+is_file_valid = true;
+ 
+  $("#file-upload-filename").html("");
+   var _URL = window.URL || window.webkitURL;
+   var filesize=(this.files[0].size); 
+   var Filename=(this.files[0].name);
+    var file, img;
+      ext = Filename.split('.').pop();
+    console.log("filesize",ext)
+    if(is_file_valid === true)
+    {
+    console.log("file",file);
+    console.log("this.files[0]",this.files[0]);
+    if ((file = this.files[0])) {
+    
+        img = new Image();
+        img.src = _URL.createObjectURL(file);
+        img.onload = function () {
+        var img_width=this.width;
+        var img_height=this.height;
+        console.log(img_width,img_height);
+        var maxwidth = 174;
+        var maxheight = 60;
+        if((img_width > maxwidth) || (img_height > maxheight)){
+          
+          $("#file-upload-filename").html("Image must be 174&#xd7;60 pixel (width x height)");
+          $("#file-upload-filename").css("color","red");
+          is_file_valid=false; 
+        }
+        };
+        console.log("ds",ext)
+        if(ext == "jpg" || ext == "png" || ext == "jpeg"){
+           infoArea.textContent = ' ' + Filename;
+           $("#file-upload-filename").html(Filename);
+           $("#file_upload_hide").val(this.files[0].name);
+           $("#file-upload-filename").css("color","rgba(112, 112, 112, 1)");
+        } 
+         else{
+          $("#file-upload-filename").html("Image must be jpg/png/jpeg Format.");
+          $("#file-upload-filename").css("color","red");
+          is_file_valid=false;
+         }
+    }
+  }
+  }
+function validMobile(MobileNumber) {
+ var re = /^[6789]\d{9}$/;
+ return re.test(MobileNumber);
+}
+function validpincode(pincode){
+  var re=/^[1-9][0-9]{5}$/;
+  return re.test(pincode);
+}
+function validphone(phonenumber){
+  var re=/^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$/ ;
+  return re.test(phonenumber);
+}
+$(document).ready(function(){
+  $(".clear").click(function(){ 
+    $("#mobile_number").removeAttr('value');
+    $("#mobile_number1").removeAttr('value');
+    $("#fax_no").removeAttr('value');
+    $("#hospital_email").removeAttr('value');
+    $("#pincode").removeAttr('value');
+    $("#location_address").removeAttr('value');
+    $("#location_street").removeAttr('value');
+    $("#location_area").removeAttr('value');
+    $("#location_city").removeAttr('value');
+    $("#statename option").removeAttr("selected");
+    $("#statename option:first").attr('selected','selected');
+    $("#file-upload-filename").html('');
+   document.getElementById("hosp_profile").reset();
+  });
+   {% if form_save_msg == "Success" %}
+    $("#close_process").show();
+   {% endif %}
+$('#mobile_number1').on("keypress keyup keydown",function (event) {
+     var keycode = event.which;
+     var keys = [96,97,98,99,100,101,102,103,104,105,45,189,43,187];
+     if((keys.indexOf(keycode) == -1)){
+         if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 9 ||  keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+            //  event.preventDefault();
+         }
+      }
+   });
+  $('#mobile_number,#pincode').on("keypress keyup keydown",function (event) {
+     var keycode = event.which;
+     var keys = [96,97,98,99,100,101,102,103,104,105];
+     if((keys.indexOf(keycode) == -1)){
+       // event.preventDefault();
+         if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 9 ||  keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+            //  event.preventDefault();
+         }
+      }
+   });
+  });
+  $(".save").click(function(){
+     var hos_name=document.getElementById("hosp_name").value;
+     var a=document.getElementById("mobile_number").value;
+     var b=document.getElementById("mobile_number1").value;
+     var c=document.getElementById("pincode").value;
+     var d=document.getElementById("fax_no").value;
+     var hosp_email= document.getElementById("hospital_email").value;
+      var statename = $("#statename").val();
+      var address = $("#location_address").val();
+      {% if COMMON_INFO.ACCOUNTUSERROLE != "MEMBER" %}
+     var username = document.getElementById("user_name").value;
+     var pass = document.getElementById("password").value;
+     {% endif %}
+     var flag=0;
+      {% if COMMON_INFO.ACCOUNTUSERROLE != "MEMBER" %}
+     if (username == ""){
+      $("#error_user").html("Please enter Username");
+      $("#error_user").css({"margin-left":"16px","color":"red"});
+     }
+     else{
+       $("#error_user").html("");
+        flag++;
+     }
+     {% endif %}
+     {% if COMMON_INFO.HOSPITAL_ACCOUNTUSER == "" %}
+     if (pass == ""){
+      $("#error_pass").html("Please enter Password");
+      $("#error_pass").css({"margin-left":"16px","color":"red"});
+     }
+     else{
+       $("#error_pass").html("");
+        flag++;
+     }
+      {% endif %}
+      if(address == ""){
+        $("#message_address").html("Please enter Address");
+        $("#message_address").css({"margin-left":"16px","color":"red"});
+      }
+      else {
+        $("#message_address").html("");
+        flag++;
+      }
+
+       if(statename==null){  
+      // $("#message_state").html("Please select State")
+      // $("#message_state").css({"margin-left":"16px","color":"red"});
+      flag++;
+     }
+     else{
+       $("#message_state").html("");
+       flag++;
+     }  
+     if(hos_name==""){
+      $("#error_msg").html("Please enter Hospital Name");
+      $("#error_msg").css({"margin-left":"16px","color":"red"});
+     }
+     else{
+      $("#error_msg").html("");
+      flag++;
+     }
+     if(hosp_email){
+       if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(hosp_email))
+         {
+          $("#message").html("");
+          flag++;
+        }
+        else{
+            $("#message").html("Please enter valid E-mail ID");
+            $("#message").css({"margin-left":"16px","color":"red"});
+          }
+        }
+     if(b==""){
+      $("#message1").html("Please enter Phone Number ");
+      $("#message1").css({"margin-left":"16px","color":"red"});
+     }
+     else if(!validphone(b))
+       {
+        //  $("#message1").html("Please enter valid Phone Number");
+        //  $("#message1").css({"margin-left":"16px","color":"red"});
+        flag++;
+     }
+     else
+     {
+       $("#message1").html("");
+       flag++;
+     }
+     if(c==""){
+      // $("#message2").html("Please enter Pincode");
+      // $("#message2").css({"margin-left":"16px","color":"red"});
+      flag++;
+     }
+     else if(!validpincode(c))
+       {
+        // $("#message2").html("Please enter a valid Pincode Number")
+        // $("#message2").css({"margin-left":"16px","color":"red"});
+        flag++;
+       }
+       else{
+         $("#message2").html("");
+       flag++;
+       }
+      {% if COMMON_INFO.HOSPITAL_ACCOUNTUSER == "" %}
+      if(hosp_email){
+      if(flag==8 && is_file_valid){
+        $("#hosp_profile").submit();
+       }
+     }
+     else{
+      if(flag==7 && is_file_valid){
+        $("#hosp_profile").submit();
+       }
+     }
+       {% else %}
+      if(hosp_email){
+         if(flag==7 && is_file_valid){
+        $("#hosp_profile").submit();
+       }
+     }
+     else{
+      if(flag==6 && is_file_valid){
+        $("#hosp_profile").submit();
+      }
+     }
+       {% endif %}
+  });
+function saved_Data(){
+   window.location.href = "/hospital/profile/";
+}
+</script>
+{% endblock %}

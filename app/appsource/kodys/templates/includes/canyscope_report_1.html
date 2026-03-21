@@ -1,0 +1,154 @@
+{% block header_script %}
+{% load kodystags %}
+  <style>
+  text{
+     font-style:normal;
+  }
+  .stroke_color{
+    stroke: none !important
+  }
+  g path{
+    stroke: red !important
+  }
+  .stroke_blue{
+    stroke:  #0700ff !important
+  }
+  </style>
+{% endblock %}
+<div class="ml26 mr26 ft_tm">
+    <div class="f-14 text_center mb2" style="margin:auto;color:#000066;">PARASYMPATHETIC FUNCTION
+    </div>
+    <div style="width: 100%;">
+      <div class="text_center" style="width: 55%;display: inline-block;color: green;border: 1px solid black;font-size:14px;">CARDIOTACHOGRAM
+      </div>
+      <div class="text_center" style="width: 43.5%;display: inline-block;color: green;border: 1px solid black;font-size:14px;margin-left: 4px;">DISTRIBUTIONS
+      </div>
+  </div>
+  <div style="font-size: 14px;color: #330080;" class="">1. RESTING <span style="color: blue;" class="pl70">{{report.report_result.resting.bpm}}&nbsp;BPM <span id="interpretation_status">-&nbsp;{{report.report_result.resting.final_hr_result}}</span></span>
+  </div>
+  <div style="width: 100%;height: 142px;">
+    <div class="" style="width: 54%;display: inline-block;" id="resting_chart">
+    </div>
+    <div style="width: 21.9%;display: inline-block;" id="scatter_chart_0">
+    </div>
+    <div style="width: 23%;display: inline-block;" id="bar_chart_1">
+    </div>
+  </div>
+  <div style="font-size: 14px;color: #330080;" class="">2. DEEP BREATHING 
+  </div>
+  <div style="width: 100%;height: 142px;">
+    <div class="" style="width: 54%;display: inline-block;" id="breathing_chart">
+    </div>
+    <div style="width: 21.9%;display: inline-block;" id="scatter_chart_1">
+    </div>
+    <div style="width: 23%;display: inline-block;" id="bar_chart_2">
+    </div>
+  </div>
+  <div style="width: 100%;font-size: 13px;">
+    <div class="" style="width: 35%;display: inline-block;">
+      <ul style="list-style-type: none;padding: 0;">
+        <li><span>Mean :&nbsp;</span>{{report.report_result.deep_breathing_time.rr_mean}}&nbsp;ms</li>
+        <li><span>Standard Deviation :&nbsp;</span>{{report.report_result.deep_breathing_time.sdnn}}&nbsp;ms</li>
+        <li><span>Co_Efficient of variation :&nbsp;</span>{{report.report_result.deep_breathing_time.cv}}&nbsp;</li>
+      </ul>
+    </div>
+    <div style="width: 39%;display: inline-block;margin-left: 4px;">
+      <ul style="list-style-type: none;padding: 0;">
+        <li><span>Avg.Deep Breath Diff (DBD) :&nbsp;</span>{{report.report_result.deep_breathing_time.DBD}}&nbsp;BPM</li>
+        <li><span>Resp Sinus Arrhythmia (RSA) Index :&nbsp;</span>{{report.report_result.deep_breathing_time.RSA}}</li>
+        <li><span>Expiration - Inspiration Ratio (E:I) :&nbsp;</span>{{report.report_result.deep_breathing_time.ratio}}&nbsp;</li>
+      </ul>
+    </div>
+     <div style="width: 23%;display: inline-block;margin-left: 10px;position: relative;font-size: 12px;font-weight: normal;">
+      <!-- <span style="position: absolute;top: -56px;left: 41px;">&#60;10<span style="margin-left: 42px;">14&#60;</span></span> -->
+      <!-- <span style="position: absolute;top: -6px;">Abnormal<span style="margin-left: 14px;margin-right: 14px;">Border</span><span>Normal</span></span> -->
+      <div style="position: absolute;width: 22px;top: -41px;height: 22px;border: 1px solid black;border-radius: 4px;display: inline-block;" class="{% if report.report_result.deep_breathing_time.final_result == 'Normal'%} color_interpretation_green {% elif report.report_result.deep_breathing_time.final_result == 'Border' %} color_interpretation_blue {% else %} color_interpretation_red {% endif %}">
+              <!--  <div style="display: inline;background-color: red;border-top:1.3px solid black;border-bottom:1.3px solid black;border-left:1.3px solid black;width: 50.51px;height: 97%;float: left;border-top-left-radius: 5px;border-bottom-left-radius: 5px;">
+               </div>
+               <div style="display: inline;background-color: #000066;border-top:1.3px solid black;border-bottom:1.3px solid black;width: 57px;height: 96%;float: left;">
+               </div>
+               <div style="display: inline;background-color: #ace600;border-top:1.3px solid black;border-bottom:1.3px solid black;border-right:1.3px solid black;width: 50.51px;height: 97%;float: left;border-top-right-radius: 5px;border-bottom-right-radius: 5px;">
+               </div> -->
+      </div><span style="font-size: 14px;position: absolute;top: -41px;left:36px;">- &nbsp;&nbsp; {{report.report_result.deep_breathing_time.final_result}}</span>
+    </div>
+  </div>
+  <div style="font-size: 14px;color: #330080" class="">3. STANDING
+  </div>
+  <div style="width: 100%;height: 142px;">
+    <div class="" style="width: 54%;display: inline-block;position: relative">
+      <div id="standing_chart"></div>
+      <!-- <div style="height:64px;position: absolute;z-index: 1;left: 218px;width:4px;border-right: 1px solid blue;top: 27px;"></div> -->
+    </div>
+    <div style="width: 21.9%;display: inline-block;" id="scatter_chart_2">
+    </div>
+    <div style="width: 23%;display: inline-block;" id="bar_chart_3">
+    </div>
+  </div>
+    <div style="width: 100%;font-size: 13px;">
+    <div class="" style="width: 35%;display: inline-block;">
+      <ul style="list-style-type: none;padding: 0;">
+        <li><span>Mean :&nbsp;</span>{{report.report_result.ecg_standing_time.rr_mean}}&nbsp;ms</li>
+        <li><span>Standard Deviation :&nbsp;</span>{{report.report_result.ecg_standing_time.sdnn}}&nbsp;ms</li>
+        <li><span>Co_Efficient of variation :&nbsp;</span>{{report.report_result.ecg_standing_time.cv}}&nbsp;</li>
+      </ul>
+    </div>
+    <div style="width: 39%;display: inline-block;margin-left: 4px;">
+            <ul style="list-style-type: none;padding: 0;">
+        <li><span>30 Beat R-R Interval :&nbsp;</span>{{report.report_result.ecg_standing_time.30th_max}}&nbsp;ms</li>
+        <li><span>15 Beat R-R Interval :&nbsp;</span>{{report.report_result.ecg_standing_time.15th_min}}&nbsp;ms</li>
+        <li><span>30:15 Ratio :&nbsp;</span>{{report.report_result.ecg_standing_time.ratio}}&nbsp;</li>
+      </ul>
+    </div>
+    <div style="width: 23%;display: inline-block;margin-left: 10px;position: relative;font-size: 12px;font-weight: normal;">
+      <!-- <span style="position: absolute;top: -56px;left: 41px;">&#60;1.00<span style="margin-left: 32px;">1.03&#60;</span></span> -->
+      <!-- <span style="position: absolute;top: -6px;">Abnormal<span style="margin-left: 14px;margin-right: 14px;">Border</span><span>Normal</span></span> -->
+      <div style="position: absolute;width: 22px;top: -41px;height: 22px;border: 1px solid black;border-radius: 4px;display: inline-block;" class="{% if report.report_result.ecg_standing_time.final_result == 'Normal'%} color_interpretation_green {% elif report.report_result.ecg_standing_time.final_result == 'Border' %} color_interpretation_blue {% else %} color_interpretation_red {% endif %}">
+               <!--  <div style="display: inline;background-color: red;border-top:1.3px solid black;border-bottom:1.3px solid black;border-left:1.3px solid black;width: 50.51px;height: 97%;float: left;border-top-left-radius: 5px;border-bottom-left-radius: 5px;">
+               </div>
+               <div style="display: inline;background-color: #000066;border-top:1.3px solid black;border-bottom:1.3px solid black;width: 57px;height: 96%;float: left;">
+               </div>
+               <div style="display: inline;background-color: #ace600;border-top:1.3px solid black;border-bottom:1.3px solid black;border-right:1.3px solid black;width: 50.51px;height: 97%;float: left;border-top-right-radius: 5px;border-bottom-right-radius: 5px;">
+               </div> -->
+      </div><span style="font-size: 14px;position: absolute;top: -41px;left:36px;">- &nbsp;&nbsp;{{report.report_result.ecg_standing_time.final_result}}</span>
+    </div>
+  </div>
+  <div style="font-size: 14px;color: #330080;" class="">4. VALSALVA MANEUVER 
+  </div>
+  <div style="width: 100%;height: 142px;">
+   
+      <div  id="valsalva_chart" style="width:54%;display: inline-block;"></div>
+  
+    <div style="width: 21.9%;display: inline-block;" id="scatter_chart_3">
+    </div>
+    <div style="width: 23%;display: inline-block;" id="bar_chart_4">
+    </div>
+  </div>
+  <div style="width: 100%;font-size: 13px;">
+    <div class="" style="width: 35%;display: inline-block;">
+      <ul style="list-style-type: none;padding: 0;">
+        <li><span>Mean :&nbsp;</span>{{report.report_result.ecg_valsalva_time.rr_mean}}&nbsp;ms</li>
+        <li><span>Standard Deviation :&nbsp;</span>{{report.report_result.ecg_valsalva_time.sdnn}}&nbsp;ms</li>
+        <li><span>Co_Efficient of variation :&nbsp;</span>{{report.report_result.ecg_valsalva_time.cv}}&nbsp;</li>
+      </ul>
+    </div>
+    <div style="width: 39%;display: inline-block;margin-left: 4px;">
+            <ul style="list-style-type: none;padding: 0;">
+        <li><span>Max R-R Interval :&nbsp;</span>{{report.report_result.ecg_valsalva_time.max_rr}}&nbsp;ms</li>
+        <li><span>Min R-R Interval :&nbsp;</span>{{report.report_result.ecg_valsalva_time.min_rr}}&nbsp;ms</li>
+        <li><span>Valsalva Ratio  :&nbsp;</span>{{report.report_result.ecg_valsalva_time.ratio}}&nbsp;</li>
+      </ul>
+    </div>
+    <div style="width: 23%;display: inline-block;margin-left: 10px;position: relative;font-size: 12px;font-weight: normal;">
+      <!-- <span style="position: absolute;top: -56px;left: 41px;">&#60;1.1<span style="margin-left: 40px;">1.2&#60;</span></span> -->
+      <!-- <span style="position: absolute;top: -6px;">Abnormal<span style="margin-left: 14px;margin-right: 14px;">Border</span><span>Normal</span></span> -->
+      <div style="position: absolute;width: 22px;top: -41px;height: 22px;border: 1px solid black;border-radius: 4px;display: inline-block;" class="{% if report.report_result.ecg_valsalva_time.final_result == 'Normal'%} color_interpretation_green {% elif report.report_result.ecg_valsalva_time.final_result == 'Border' %} color_interpretation_blue {% else %} color_interpretation_red {% endif %}">
+              <!--   <div style="display: inline;background-color: red;border-top:1.3px solid black;border-bottom:1.3px solid black;border-left:1.3px solid black;width: 50.51px;height: 97%;float: left;border-top-left-radius: 5px;border-bottom-left-radius: 5px;">
+               </div>
+               <div style="display: inline;background-color: #000066;border-top:1.3px solid black;border-bottom:1.3px solid black;width: 57px;height: 96%;float: left;">
+               </div>
+               <div style="display: inline;background-color: #ace600;border-top:1.3px solid black;border-bottom:1.3px solid black;border-right:1.3px solid black;width: 50.51px;height: 97%;float: left;border-top-right-radius: 5px;border-bottom-right-radius: 5px;">
+               </div> -->
+      </div><span style="font-size: 14px;position: absolute;top: -41px;left:36px;">- &nbsp;&nbsp; {{report.report_result.ecg_valsalva_time.final_result}}</span>
+    </div>
+  </div>
+</div>

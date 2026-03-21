@@ -1,0 +1,730 @@
+{% load kodystags %}
+{% block header_script %}
+<style type="text/css">
+  tbody tr:nth-child(even) {
+      background-color: white!important;
+  }
+  tbody tr:nth-child(odd) {
+      background-color: white!important;
+  }
+  thead tr {
+    background-color: white!important;
+}
+</style>
+<link rel="stylesheet" href="{{MEDIA_URL}}css/kodysreports.css">
+{% if mode %}
+  <script type="text/javascript" src="{{MEDIA_URL}}gstatic/loader.js"></script>
+    <script type="text/javascript">
+            google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawVisualization);
+
+      function drawVisualization() {
+        // Some raw data (not necessarily accurate)
+        var data = google.visualization.arrayToDataTable([
+          ['Foot', 'R', 'L','RR','LL'],
+          ['Great Toe',  parseFloat('{{report.TM07.0.KEY_VALUE}}'),parseFloat('{{report.TM07.8.KEY_VALUE}}'),parseFloat('{{report.TM09.0.KEY_VALUE}}'),parseFloat('{{report.TM09.8.KEY_VALUE}}')],
+          ['1st MTH',  parseFloat('{{report.TM07.1.KEY_VALUE}}'),parseFloat('{{report.TM07.9.KEY_VALUE}}'),parseFloat('{{report.TM09.1.KEY_VALUE}}'),parseFloat('{{report.TM09.9.KEY_VALUE}}')],
+          ['3rd MTH',  parseFloat('{{report.TM07.2.KEY_VALUE}}'),parseFloat('{{report.TM07.10.KEY_VALUE}}'),parseFloat('{{report.TM09.2.KEY_VALUE}}'),parseFloat('{{report.TM09.10.KEY_VALUE}}')],
+          ['5th MTH',  parseFloat('{{report.TM07.3.KEY_VALUE}}'),parseFloat('{{report.TM07.11.KEY_VALUE}}'),parseFloat('{{report.TM09.3.KEY_VALUE}}'),parseFloat('{{report.TM09.11.KEY_VALUE}}')],
+          ['Medial Arch',  parseFloat('{{report.TM07.4.KEY_VALUE}}'),parseFloat('{{report.TM07.12.KEY_VALUE}}'),parseFloat('{{report.TM09.4.KEY_VALUE}}'),parseFloat('{{report.TM09.12.KEY_VALUE}}')],
+          ['Heel',  parseFloat('{{report.TM07.5.KEY_VALUE}}'),parseFloat('{{report.TM07.13.KEY_VALUE}}'),parseFloat('{{report.TM09.5.KEY_VALUE}}'),parseFloat('{{report.TM09.13.KEY_VALUE}}')],
+        ]);
+        var options = {
+          title : 'Warm & Hot',
+          titleTextStyle: {
+            fontSize: 14,
+            fontName: 'sans-serif'
+          },
+          legend: { position: 'none',},
+           chartArea: {'top':30,'width': '78%', 'height': '76%',backgroundColor: {
+        stroke: 'black',
+        strokeWidth: 1
+    }},
+          vAxis: {title: '',viewWindow: {
+              max:60,
+              min:32
+            },gridlines: {
+          color: 'transparent',
+          count: 15,
+        },textStyle: {
+          fontSize : 8,
+         fontName: 'sans-serif',
+          bold : true
+        }},
+          hAxis: {title: '',showTextEvery:1, slantedText:true,
+          textStyle: {
+          fontSize : 8,
+         fontName: 'sans-serif',
+          bold : true
+        }},
+         colors:['#e65c00','green','#8f246b','#00134d','black'],
+          lineWidth: 1,
+          seriesType: 'bars',
+          interpolateNulls: true,
+          series: {4: {type: 'line'},5:{type: 'line',lineDashStyle: [5, 1, 3]}},
+          height:300,
+          enableInteractivity: false,
+        };
+        var data1 = google.visualization.arrayToDataTable([
+          ['Foot', 'R', 'L','RR','LL'],
+          ['Great Toe',  
+          38-parseInt('{{report.TM08.0.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM08.0.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM08.8.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM08.8.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM10.0.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM10.0.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM10.8.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM10.8.KEY_VALUE|slice:"3:"}}')-1.0,
+         ],
+          ['1st MTH',  
+          38-parseInt('{{report.TM08.1.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM08.1.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM08.9.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM08.9.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM10.1.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM10.1.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM10.9.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM10.9.KEY_VALUE|slice:"3:"}}')-1.0,
+          ],
+          ['3rd MTH',  
+          38-parseInt('{{report.TM08.2.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM08.2.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM08.10.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM08.10.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM10.2.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM10.2.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM10.10.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM10.10.KEY_VALUE|slice:"3:"}}')-1.0,
+         ],
+          ['5th MTH',  
+          38-parseInt('{{report.TM08.3.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM08.3.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM08.11.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM08.11.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM10.3.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM10.3.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM10.11.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM10.11.KEY_VALUE|slice:"3:"}}')-1.0,
+         ],
+          ['Medial Arch',  
+          38-parseInt('{{report.TM08.4.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM08.4.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM08.12.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM08.12.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM10.4.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM10.4.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM10.12.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM10.12.KEY_VALUE|slice:"3:"}}')-1.0,
+          ],
+          ['Heel',  
+          38-parseInt('{{report.TM08.5.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM08.5.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM08.13.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM08.13.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM10.5.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM10.5.KEY_VALUE|slice:"3:"}}')-1.0,
+          38-parseInt('{{report.TM10.13.KEY_VALUE}}')+1.0-parseFloat('0.{{report.TM10.13.KEY_VALUE|slice:"3:"}}')-1.0,
+         ],
+        ]);
+
+        var options1 = {
+          title : 'Cool & Cold',
+          titleTextStyle: {
+            fontSize: 14,
+            fontName: 'sans-serif'
+          },
+          legend: { position: 'none'},
+           chartArea: {'top':30,'width': '78%', 'height': '76%',backgroundColor: {
+        stroke: 'black',
+        strokeWidth: 1
+    }},
+          vAxis: {title: '',ticks: [
+        // use object notation to provide y-axis labels
+        {v: 28, f: '10'},
+        {v: 26, f: '12'},
+        {v: 24, f: '14'},
+        {v: 22, f: '16'},
+        {v: 20, f: '18'},
+        {v: 18, f: '20'},
+        {v: 16, f: '22'},
+        {v: 14, f: '24'},
+        {v: 12, f: '26'},
+        {v: 10, f: '28'},
+        {v: 8, f: '30'},
+        {v: 6, f: '32'},
+        {v: 4, f: '34'},
+
+      ],viewWindow: {
+              max:28,
+              min:4
+            },gridlines: {
+          color: 'transparent',
+          count: 15,
+        },textStyle: {
+          fontSize : 8,
+         fontName: 'sans-serif',
+          bold : true
+        }},
+          hAxis: {title: '',showTextEvery:1, slantedText:true,textStyle: {
+          fontSize : 8,
+         fontName: 'sans-serif',
+          bold : true
+        }},
+          lineWidth: 1,
+          colors: ['#005ce6','#00bcd4','#7e4d86','#da00ff','black'],
+          seriesType: 'bars',
+          interpolateNulls: true,
+          series: {4: {type: 'line'},5:{type: 'line',lineDashStyle: [5, 1, 3]}},
+          height:300,
+          enableInteractivity: false,
+        };
+        {% for key,value in report.report_result.items %}
+      {% if key == "TM-07" %}
+          {% for k, v in value.items %}
+              {% if k == "right_foot_result" %}
+                 var right_warm_foot_result = parseFloat('{{v.0}}');
+              {% endif %}
+              {% if k == "left_foot_result" %}
+                 var left_warm_foot_result = parseFloat('{{v.0}}');
+             {% endif %}
+           {% endfor %}
+      {% endif %}
+      {% if key == "TM-08" %}
+          {% for k, v in value.items %}
+              {% if k == "right_foot_result" %}
+                 var right_cool_foot_result = parseFloat('{{v.0}}');
+              {% endif %}
+              {% if k == "left_foot_result" %}
+                 var left_cool_foot_result = parseFloat('{{v.0}}');
+              {% endif %}
+           {% endfor %}
+      {% endif %}
+      {% if key == "TM-09" %}
+          {% for k, v in value.items %}
+              {% if k == "right_foot_result" %}
+                 var right_hot_foot_result = parseFloat('{{v.0}}');
+              {% endif %}
+              {% if k == "left_foot_result" %}
+                 var left_hot_foot_result = parseFloat('{{v.0}}');
+              {% endif %}
+           {% endfor %}
+      {% endif %}
+      {% if key == "TM-10" %}
+          {% for k, v in value.items %}
+              {% if k == "right_foot_result" %}
+                 var right_cold_foot_result = parseFloat('{{v.0}}');
+              {% endif %}
+              {% if k == "left_foot_result" %}
+                 var left_cold_foot_result = parseFloat('{{v.0}}');
+              {% endif %}
+           {% endfor %}
+      {% endif %}
+    {% endfor %}
+        var data2 = google.visualization.arrayToDataTable([
+          ['Foot', 'R',{ role: 'style' },'L',{ role: 'style' }],
+          ['Warm',  right_warm_foot_result,"#e65c00",left_warm_foot_result,"#008000"],
+          ['Hot',  right_hot_foot_result,"#b9007a",left_hot_foot_result,"#33455d"],
+          ['Cool',  right_cool_foot_result,"#006dff",left_cool_foot_result,"#00bcd4"],
+          ['Cold',  right_cold_foot_result,"#7e4d86",left_cold_foot_result,"#da00ff"],
+        ]);
+
+        var options2 = {
+          title : 'Result Average',
+          titleTextStyle: {
+            fontSize: 14,
+            fontName: 'sans-serif'
+          },
+          legend: { position: 'none',},
+          chartArea:{'top':30,'width': '78%', 'height': '76%',backgroundColor: {
+        stroke: 'black',
+        strokeWidth: 1
+    }},
+          vAxis: {title: '',viewWindow: {
+              max:60,
+              min:0
+            },gridlines: {
+          color: 'transparent',
+          count: 11,
+        },textStyle: {
+          fontSize : 8,
+         fontName: 'sans-serif',
+          bold : true
+        }},
+          hAxis: {title: '',showTextEvery:1, slantedText:true,textStyle: {
+          fontSize : 8,
+         fontName: 'sans-serif',
+          bold : true
+        }},
+         colors:['#e65c00','green'],
+         bar: { groupWidth: '20%' },
+          seriesType: 'bars',
+          series: {4: {type: 'line'}},
+          height:300,
+          enableInteractivity: false,
+        };
+
+        var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+        var chart1 = new google.visualization.ComboChart(document.getElementById('chart_div1'));
+        chart1.draw(data1, options1);
+        var chart2 = new google.visualization.ComboChart(document.getElementById('chart_div2'));
+        chart2.draw(data2, options2);   
+      }
+    </script>
+    </script>
+  {% endif %}
+{% endblock %}
+{% if not mode %}
+<div class="brclr_row_black   mr26 ml26 pr">
+<div class="w95p m_auto mt8 ">
+          <div class="w48p d-inline_block">
+            <div  class="text_center f-15 color_brown ft_tm" style="margin: 0 auto;line-height: 1">Warm Perception Study</div>
+            <div class="mt5 pr ft_tm"><img id="warm-foot" src="{{MEDIA_URL}}img/png/hot_foot.png" class="report_img_overal_width">
+              <span class="pa {{report.TM07.0.KEY_VALUE|font_size}}" style="top:13px;left:132px;text-align: center;width: 26px">{{report.TM07.0.KEY_VALUE}}</span>
+            <span class="pa {{report.TM07.1.KEY_VALUE|font_size}}" style="top: 57px;left: 121px;text-align: center;width: 26px">{{report.TM07.1.KEY_VALUE}}</span>
+            <span class="pa {{report.TM07.3.KEY_VALUE|font_size}}" style="top: 85px;left: 54px;text-align: center;width: 26px" >{{report.TM07.3.KEY_VALUE}}</span>
+            <span class="pa {{report.TM07.2.KEY_VALUE|font_size}}"  style="top: 55px;left: 81px;text-align: center;width: 26px">{{report.TM07.2.KEY_VALUE}}</span>
+            <span class="pa {{report.TM07.4.KEY_VALUE|font_size}}" style="top: 134px;left: 104px;text-align: center;width: 26px">{{report.TM07.4.KEY_VALUE}}</span>
+            <span class="pa {{report.TM07.5.KEY_VALUE|font_size}}" style="bottom: 20px;left: 100px;text-align: center;width: 26px">{{report.TM07.5.KEY_VALUE}}</span>
+            <span class="pa {{report.TM07.8.KEY_VALUE|font_size}}" style="top: 14px;right: 123px;text-align: center;width: 26px">{{report.TM07.8.KEY_VALUE}}</span>
+            <span class="pa {{report.TM07.9.KEY_VALUE|font_size}}" style=" right: 113px;top: 57px;text-align: center;width: 26px">{{report.TM07.9.KEY_VALUE}}</span>
+            <span class="pa {{report.TM07.11.KEY_VALUE|font_size}}" style="top: 85px;right: 46px;text-align: center;width: 26px">{{report.TM07.11.KEY_VALUE}}</span>
+            <span class="pa {{report.TM07.10.KEY_VALUE|font_size}} " style="right: 73px;top: 55px;text-align: center;width: 26px">{{report.TM07.10.KEY_VALUE}}</span>
+            <span class="pa {{report.TM07.12.KEY_VALUE|font_size}}" style="top: 133px;right: 96px;text-align: center;width: 26px">{{report.TM07.12.KEY_VALUE}}</span>
+            <span class="pa {{report.TM07.13.KEY_VALUE|font_size}}" style="bottom: 20px;right: 92px;text-align: center;width: 26px">{{report.TM07.13.KEY_VALUE}}</span>
+            <span class="ft_tm pa" style="top: 103px;left: 91px;">RIGHT</span>
+            <span class="ft_tm pa" style=" top: 102px;right: 85px;">LEFT</span>
+          </div>
+          </div>
+          <div class="w48p d-inline_block f-r">
+            <div  class="text_center f-15 color_dark_blue ft_tm"  style="margin: 0 auto;line-height: 1">Cool Perception Study</div>
+            <div class="mt5 pr ft_tm"><img id="cool-foot" src="{{MEDIA_URL}}img/png/cool.png" class="report_img_overal_width">
+            <span class="pa {{report.TM08.0.KEY_VALUE|font_size}}" style="top:13px;left:132px;text-align: center;width: 26px">{{report.TM08.0.KEY_VALUE}}</span>
+            <span class="pa {{report.TM08.1.KEY_VALUE|font_size}}" style="top: 57px;left: 121px;text-align: center;width: 26px">{{report.TM08.1.KEY_VALUE}}</span>
+            <span class="pa {{report.TM08.3.KEY_VALUE|font_size}}" style="top: 85px;left: 54px;text-align: center;width: 26px" >{{report.TM08.3.KEY_VALUE}}</span>
+            <span class="pa {{report.TM08.2.KEY_VALUE|font_size}}" style="top: 55px;left: 81px;text-align: center;width: 26px">{{report.TM08.2.KEY_VALUE}}</span>
+            <span class="pa {{report.TM08.4.KEY_VALUE|font_size}}" style="top: 134px;left: 104px;text-align: center;width: 26px">{{report.TM08.4.KEY_VALUE}}</span>
+            <span class="pa {{report.TM08.5.KEY_VALUE|font_size}}" style="bottom: 20px;left: 100px;text-align: center;width: 26px">{{report.TM08.5.KEY_VALUE}}</span>
+            <span class="pa {{report.TM08.8.KEY_VALUE|font_size}}" style="top: 14px;right: 123px;text-align: center;width: 26px">{{report.TM08.8.KEY_VALUE}}</span>
+            <span class="pa {{report.TM08.9.KEY_VALUE|font_size}}" style=" right: 113px;top: 57px;text-align: center;width: 26px">{{report.TM08.9.KEY_VALUE}}</span>
+            <span class="pa {{report.TM08.10.KEY_VALUE|font_size}} "  style="right: 73px;top: 55px;text-align: center;width: 26px">{{report.TM08.10.KEY_VALUE}}</span>
+            <span class="pa {{report.TM08.11.KEY_VALUE|font_size}}" style="top: 85px;right: 46px;text-align: center;width: 26px">{{report.TM08.11.KEY_VALUE}}</span>
+            <span class="pa {{report.TM08.12.KEY_VALUE|font_size}}" style="top: 133px;right: 96px;text-align: center;width: 26px">{{report.TM08.12.KEY_VALUE}}</span>
+            <span class="pa {{report.TM08.13.KEY_VALUE|font_size}}" style="bottom: 20px;right: 92px;text-align: center;width: 26px">{{report.TM08.13.KEY_VALUE}}</span>
+            <span class="ft_tm pa" style="top: 103px;left: 91px;">RIGHT</span>
+            <span class="ft_tm pa " style=" top: 102px;right: 85px;">LEFT</span>
+          </div>
+          </div>
+        </div>
+        <div class="w95p m_auto mt10" style="margin-bottom: 0px;">
+          <div class="w48p d-inline_block">
+            <div  class="text_center f-15 color_brown ft_tm"  style="margin: 0 auto;line-height: 1">Hot Pain Perception Study</div>
+            <div class="mt5 pr ft_tm"><img id="hot-foot" src="{{MEDIA_URL}}img/png/hot_hcp_foot.png" class="report_img_overal_width">
+            <span class="pa {{report.TM09.0.KEY_VALUE|font_size}}" style="top:13px;left:132px;text-align: center;width: 26px">{{report.TM09.0.KEY_VALUE}}</span>
+            <span class="pa {{report.TM09.1.KEY_VALUE|font_size}}" style="top: 57px;left: 121px;text-align: center;width: 26px">{{report.TM09.1.KEY_VALUE}}</span>
+            <span class="pa {{report.TM09.3.KEY_VALUE|font_size}}" style="top: 85px;left: 54px;text-align: center;width: 26px" >{{report.TM09.3.KEY_VALUE}}</span>
+             <span class="pa {{report.TM09.2.KEY_VALUE|font_size}}"  style="top: 55px;left: 81px;text-align: center;width: 26px">{{report.TM09.2.KEY_VALUE}}</span>
+            <span class="pa {{report.TM09.4.KEY_VALUE|font_size}}" style="top: 134px;left: 104px;text-align: center;width: 26px">{{report.TM09.4.KEY_VALUE}}</span>
+            <span class="pa {{report.TM09.5.KEY_VALUE|font_size}}" style="bottom: 20px;left: 100px;text-align: center;width: 26px">{{report.TM09.5.KEY_VALUE}}</span>
+            <span class="pa {{report.TM09.8.KEY_VALUE|font_size}}" style="top: 14px;right: 123px;text-align: center;width: 26px">{{report.TM09.8.KEY_VALUE}}</span>
+            <span class="pa {{report.TM09.9.KEY_VALUE|font_size}}" style=" right: 113px;top: 57px;text-align: center;width: 26px">{{report.TM09.9.KEY_VALUE}}</span>
+            <span class="pa {{report.TM09.10.KEY_VALUE|font_size}}" style="top: 85px;right: 46px;text-align: center;width: 26px">{{report.TM09.11.KEY_VALUE}}</span>
+            <span class="pa {{report.TM09.11.KEY_VALUE|font_size}} " style="right: 73px;top: 55px;text-align: center;width: 26px">{{report.TM09.10.KEY_VALUE}}</span>
+           <span class="pa {{report.TM09.12.KEY_VALUE|font_size}}" style="top: 133px;right: 96px;text-align: center;width: 26px">{{report.TM09.12.KEY_VALUE}}</span>
+            <span class="pa {{report.TM09.13.KEY_VALUE|font_size}}" style="bottom: 20px;right: 92px;text-align: center;width: 26px">{{report.TM09.13.KEY_VALUE}}</span>
+            <span class="ft_tm pa" style="top: 103px;left: 91px;">RIGHT</span>
+            <span class="ft_tm pa" style=" top: 102px;right: 85px;">LEFT</span>
+          </div>
+          </div>
+          <div class="w48p d-inline_block f-r">
+            <div  class="text_center f-15 color_dark_blue ft_tm"  style="margin: 0 auto;line-height: 1">Cold Pain Perception Study</div>
+            <div class="mt5 pr ft_tm"><img id="cold-foot" src="{{MEDIA_URL}}img/png/cold.png" class="report_img_overal_width">
+            <span class="pa {{report.TM10.0.KEY_VALUE|font_size}}" style="top:13px;left:132px;text-align: center;width: 26px">{{report.TM10.0.KEY_VALUE}}</span>
+            <span class="pa {{report.TM10.1.KEY_VALUE|font_size}}" style="top: 57px;left: 121px;text-align: center;width: 26px">{{report.TM10.1.KEY_VALUE}}</span>
+            <span class="pa {{report.TM10.3.KEY_VALUE|font_size}}" style="top: 85px;left: 54px;text-align: center;width: 26px" >{{report.TM10.3.KEY_VALUE}}</span>
+            <span class="pa {{report.TM10.2.KEY_VALUE|font_size}}" style="top: 55px;left: 81px;text-align: center;width: 26px">{{report.TM10.2.KEY_VALUE}}</span>
+            <span class="pa {{report.TM10.4.KEY_VALUE|font_size}}" style="top: 134px;left: 104px;text-align: center;width: 26px">{{report.TM10.4.KEY_VALUE}}</span>
+            <span class="pa {{report.TM10.5.KEY_VALUE|font_size}}" style="bottom: 20px;left: 100px;text-align: center;width: 26px">{{report.TM10.5.KEY_VALUE}}</span>
+            <span class="pa {{report.TM10.8.KEY_VALUE|font_size}}" style="top: 14px;right: 123px;text-align: center;width: 26px">{{report.TM10.8.KEY_VALUE}}</span>
+            <span class="pa {{report.TM10.9.KEY_VALUE|font_size}}" style=" right: 113px;top: 57px;text-align: center;width: 26px">{{report.TM10.9.KEY_VALUE}}</span>
+            <span class="pa {{report.TM10.10.KEY_VALUE|font_size}} "  style="right: 73px;top: 55px;text-align: center;width: 26px">{{report.TM10.10.KEY_VALUE}}</span>
+               <span class="pa {{report.TM10.11.KEY_VALUE|font_size}}" style="top: 85px;right: 46px;text-align: center;width: 26px">{{report.TM10.11.KEY_VALUE}}</span>
+            <span class="pa {{report.TM10.12.KEY_VALUE|font_size}}" style="top: 133px;right: 96px;text-align: center;width: 26px">{{report.TM10.12.KEY_VALUE}}</span>
+            <span class="pa {{report.TM10.13.KEY_VALUE|font_size}}" style="bottom: 20px;right: 92px;text-align: center;width: 26px">{{report.TM10.13.KEY_VALUE}}</span>
+            <span class="ft_tm pa" style="top: 103px;left: 91px;">RIGHT</span>
+            <span class="ft_tm pa " style=" top: 102px;right: 85px;">LEFT</span>
+          </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="w95p m_auto mt8 brclr_row_black">
+          <div class="w3-row mt8 w98p m_auto">
+        <div>
+          <table class="f-12 w100p h368 ft_tm tab_report_pa mb30" cellspacing="0" cellpadding="0">
+            <thead>
+              <tr>
+                <th rowspan="2">Test Site</th>
+                  <th colspan="4" class="">Right Foot HCP in Deg C</th>
+                  <th colspan="4" class="">Left Foot HCP in Deg C</th>
+              </tr>
+              <tr>
+                  <td class="text_center pt4 pb1 w75">Warm</td>
+                  <td class="text_center pt4 pb1 w75">Cool</td>
+                  <td class="text_center pt4 pb1 w75">Hot Pain</td>
+                  <td class="text_center pt4 pb1 w75">Cold Pain</td>
+                  <td class="text_center pt4 pb1 w75">Warm</td>
+                  <td class="text_center pt4 pb1 w75">Cool</td>
+                  <td class="text_center pt4 pb1 w75">Hot Pain</td>
+                  <td class="text_center pt4 pb1 w75">Cold Pain</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="">
+                <td class="pl8 w100">Great Toe</td>
+                <td class="text_center">{{report.TM07.0.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM08.0.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM09.0.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM10.0.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM07.8.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM08.8.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM09.8.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM10.8.KEY_VALUE}}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w100">1st MTH</td>
+                <td class="text_center">{{report.TM07.1.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM08.1.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM09.1.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM10.1.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM07.9.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM08.9.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM09.9.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM10.9.KEY_VALUE}}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w100">3rd MTH</td>
+                <td class="text_center">{{report.TM07.2.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM08.2.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM09.2.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM10.2.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM07.10.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM08.10.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM09.10.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM10.10.KEY_VALUE}}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w100">5th MTH</td>
+                <td class="text_center">{{report.TM07.3.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM08.3.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM09.3.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM10.3.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM07.11.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM08.11.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM09.11.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM10.11.KEY_VALUE}}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w100">Medial Arch</td>
+                <td class="text_center">{{report.TM07.4.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM08.4.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM09.4.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM10.4.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM07.12.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM08.12.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM09.12.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM10.12.KEY_VALUE}}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w100">Heel</td>
+                <td class="text_center">{{report.TM07.5.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM08.5.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM09.5.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM10.5.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM07.13.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM08.13.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM09.13.KEY_VALUE}}</td>
+                <td class="text_center">{{report.TM10.13.KEY_VALUE}}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w100">Dorsum</td>
+                <td class="text_center">{% if report.TM07.6.KEY_VALUE %} {{report.TM07.6.KEY_VALUE}} {% else %} - {% endif %} </td>
+                <td class="text_center">{% if report.TM08.6.KEY_VALUE  %} {{report.TM08.6.KEY_VALUE}} {% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM09.6.KEY_VALUE %} {{report.TM09.6.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM10.6.KEY_VALUE %} {{report.TM10.6.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM07.14.KEY_VALUE %} {{report.TM07.14.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM08.14.KEY_VALUE %} {{report.TM08.14.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM09.14.KEY_VALUE %} {{report.TM09.14.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM10.14.KEY_VALUE %} {{report.TM10.14.KEY_VALUE}}{% else %} - {% endif %}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w100">Ankle</td>
+                <td class="text_center">{% if report.TM07.7.KEY_VALUE %} {{report.TM07.7.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM08.7.KEY_VALUE %} {{report.TM08.7.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM09.7.KEY_VALUE %} {{report.TM09.7.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM10.7.KEY_VALUE %} {{report.TM10.7.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM07.15.KEY_VALUE %} {{report.TM07.15.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM08.15.KEY_VALUE %} {{report.TM08.15.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM09.15.KEY_VALUE %} {{report.TM09.15.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM10.15.KEY_VALUE %} {{report.TM10.15.KEY_VALUE}}{% else %} - {% endif %}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+           <div class="w98p m_auto">
+
+          <div  class="chartWithOverlay w33p d-inline_block">
+            <div style="  width: 78%;position: absolute;height: 4px;bottom: 89px;z-index: 1;margin: 0 auto;left: 0;right: 0;border-bottom: 2px dotted black;"></div>
+            <div style="  width: 78%;position: absolute;height: 4px;bottom: 146px;z-index: 1;margin: 0 auto;left: 0;right: 0;border-bottom: 1px dashed black;"></div>
+          <div id="chart_div" class=""></div>
+            <div class="overlay lh13 overlay_foot_all">
+                      <div>
+                        <div class="d-inline_block label labelbgclr"></div>
+                        <div class="d-inline_block label labelbgclr2 ml4"></div>
+                        <div class="d-inline_block f-10  ml4">Right Foot</div>
+                      </div>
+                      <div>
+                        <div class="d-inline_block  label  labelbgclr1"></div>
+                        <div class="d-inline_block label labelbgclr3 ml4"></div>
+                        <div class="d-inline_block f-10 ml4">Left Foot</div>
+                      </div>
+                          <div>
+                        <div class="d-inline_block" style="width: 14px;border-bottom: 1px dashed black;"></div>
+                        <div class="d-inline_block f-10 ml4">Hot Threshold</div>
+                      </div>
+                          <div>
+                        <div class="d-inline_block" style="width: 11px;border-bottom: 2px dotted black;"></div>
+                        <div class="d-inline_block f-10 ml4">Warm Threshold</div>
+                      </div>
+                 </div>
+                </div>
+                  <div  class="chartWithOverlay1 w33p d-inline_block">
+                    <div style="  width: 78%;position: absolute;height: 4px;bottom: 89px;z-index: 1;margin: 0 auto;left: 0;right: 0;border-bottom: 2px dotted black;"></div>
+                    <div style="  width: 78%;position: absolute;height: 4px;bottom: 146px;z-index: 1;margin: 0 auto;left: 0;right: 0;border-bottom: 1px dashed black;"></div>
+                    <div id="chart_div1" class=""></div>
+            <div class="overlay1 lh13 overlay_foot_all">
+                      <div>
+                        <div class="d-inline_block label labelbgclr4"></div>
+                        <div class="d-inline_block label ml4" style="background-color: #7e4d86;"></div>
+                        <div class="d-inline_block f-10  ml4">Right Foot</div>
+                      </div>
+                      <div>
+                        <div class="d-inline_block  label" style="background-color: #00bcd4;"></div>
+                        <div class="d-inline_block label  ml4" style="background-color: #da00ff;"></div>
+                        <div class="d-inline_block f-10 ml4">Left Foot</div>
+                      </div>
+                       <div>
+                        <div class="d-inline_block" style="width: 14px;border-bottom: 1px dashed black;"></div>
+                        <div class="d-inline_block f-10 ml4">Cold Threshold</div>
+                      </div>
+                       <div>
+                        <div class="d-inline_block" style="width: 11px;border-bottom: 2px dotted black;"></div>
+                        <div class="d-inline_block f-10 ml4">Cool Threshold</div>
+                      </div>
+                 </div>
+                </div>
+                  <div  class="chartWithOverlay2 w33p d-inline_block">
+          <div id="chart_div2" class=""></div>
+            <div class="overlay2 lh13 overlay_foot_all">
+                      <div>
+                        <div class="d-inline_block label labelbgclr"></div>
+                        <div class="d-inline_block label " style="background-color: #b9007a"></div>
+                        <div class="d-inline_block label " style="background-color: #006dff"></div>
+                        <div class="d-inline_block label " style="background-color: #7e4d86"></div>
+                        <div class="d-inline_block f-10  ml4">Right Foot</div>
+                      </div>
+                      <div>
+                        <div class="d-inline_block label" style="background-color: #008000"></div>
+                        <div class="d-inline_block label " style="background-color: #33455d"></div>
+                        <div class="d-inline_block label " style="background-color: #00bcd4"></div>
+                        <div class="d-inline_block  label " style="background-color: #da00ff"></div>
+                        <div class="d-inline_block f-10 ml4">Left Foot</div>
+                      </div>
+                 </div>
+                </div>
+          <!-- <div id="chart_div1" class="w33p d-inline_block"></div>
+          <div id="chart_div2" class="w33p d-inline_block"></div> -->
+        </div>
+      {% endif %}
+
+      <div class="f-10 text_center" style="left: 0;right: 0;bottom: 0px;">
+       <span>**AMP - Amputated OVR - Over Range WND - Wound TNR - Test Not Required RSC - Reason Specified in Comments</span> <span class="ml50">**All Values are in Deg C</span>
+      </div>
+
+    </div>
+    <div style="font-size: 15px;margin-left: 3.5%;padding-top: 2px;font-weight: bold;font-family: 'Times_New_Roman' !important;">Interpretation</div>
+      <div class="w88p margin_auto">
+        <!-- <div style="font-size: 15px;">Test Result</div> -->
+    <div class=" d-inline_block w30p lh15">
+      <div class="ft_tm f-14">
+        Right Foot Warm PT Average<span></span>
+      </div>
+      <div class="ft_tm f-14">
+        Left Foot Warm PT Average<span></span>
+      </div>
+    </div>
+    <div class="d-inline_block w19_5p lh13 ft_tm f-14">
+          <div>
+        :&nbsp;<span id="right_warm_avg"></span>
+        <span>-</span>
+        <span id="right_warm_status"></span>
+      </div>
+      <div>
+        :&nbsp;<span id="left_warm_avg"></span>
+        <span>-</span>
+        <span id="left_warm_status"></span>
+      </div>
+    </div>
+    <div class="d-inline_block w19_5p f-r lh13 ft_tm f-14">
+          <div>
+        :&nbsp;<span id="right_cool_avg"></span>
+        <span>-</span>
+        <span id="right_cool_status"></span>
+      </div>
+      <div>
+        :&nbsp;<span id="left_cool_avg"></span>
+        <span>-</span>
+        <span id="left_cool_status"></span>
+      </div>
+    </div>
+    <div class="w30p d-inline_block f-r lh15 ">
+      <div class="ft_tm f-14">
+        Right Foot Cool PT Average<span></span>
+      </div>
+      <div class="ft_tm f-14">
+        Left Foot Cool PT Average<span></span>
+      </div>
+    </div>
+    </div>
+    <div class="w88p margin_auto mt8">
+    <div class=" d-inline_block w30p lh15">
+      <div class="ft_tm f-14">
+        Right Foot Hot Pain PT Average<span></span>
+      </div>
+      <div class="ft_tm f-14">
+        Left Foot Hot Pain PT Average<span></span>
+      </div>
+    </div>
+    <div class="d-inline_block w19_5p lh15 ft_tm f-14">
+          <div>
+        :&nbsp;<span id="right_hot_avg"></span>
+        <span>-</span>
+        <span id="right_hot_status"></span>
+      </div>
+      <div>
+        :&nbsp;<span id="left_hot_avg"></span>
+        <span>-</span>
+        <span id="left_hot_status"></span>
+      </div>
+    </div>
+    <div class="d-inline_block w19_5p f-r lh15 ft_tm f-14">
+          <div>
+        :&nbsp;<span id="right_cold_avg"></span>
+        <span>-</span>
+        <span id="right_cold_status"></span>
+      </div>
+      <div>
+        :&nbsp;<span id="left_cold_avg"></span>
+        <span>-</span>
+        <span id="left_cold_status"></span>
+      </div>
+    </div>
+    <div class="w30p d-inline_block f-r lh15">
+      <div class="ft_tm f-14">
+        Right Foot Cold Pain PT Average<span></span>
+      </div>
+      <div class="ft_tm f-14">
+        Left Foot Cold Pain PT Average<span></span>
+      </div>
+    </div>
+    </div>
+</div>
+{% block js_script %}
+<script type="text/javascript">
+{% for key,value in report.report_result.items %}
+      {% if key == "TM-07" %}
+          {% for k, v in value.items %}
+              {% if k == "right_foot_result" %}
+                 $("#right_warm_avg").html('{{v.0}}');
+                  {% if v.0 == "No Data" %}
+                 $("#right_warm_avg").next().hide();
+                 {% endif %}
+                 {% if v.1 == "Normal" %}
+                    $("#right_warm_status").html('<span class="color_green">{{v.1}}</span>');
+                 {% else %}
+                    $("#right_warm_status").html('<span class="color_red">{{v.1}}</span>');
+                 {% endif %}
+              {% endif %}
+              {% if k == "left_foot_result" %}
+                 $("#left_warm_avg").html('{{v.0}}');
+                  {% if v.0 == "No Data" %}
+                 $("#left_warm_avg").next().hide();
+                 {% endif %}
+                 {% if v.1 == "Normal" %}
+                    $("#left_warm_status").html('<span class="color_green">{{v.1}}</span>');
+                 {% else %}
+                    $("#left_warm_status").html('<span class="color_red">{{v.1}}</span>');
+                 {% endif %}
+             {% endif %}
+           {% endfor %}
+      {% endif %}
+      {% if key == "TM-08" %}
+          {% for k, v in value.items %}
+              {% if k == "right_foot_result" %}
+                 $("#right_cool_avg").html('{{v.0}}');
+                  {% if v.0 == "No Data" %}
+                 $("#right_cool_avg").next().hide();
+                 {% endif %}
+                 {% if v.1 == "Normal" %}
+                    $("#right_cool_status").html('<span class="color_green">{{v.1}}</span>');
+                 {% else %}
+                    $("#right_cool_status").html('<span class="color_red">{{v.1}}</span>');
+                 {% endif %}
+              {% endif %}
+              {% if k == "left_foot_result" %}
+                 $("#left_cool_avg").html('{{v.0}}');
+                  {% if v.0 == "No Data" %}
+                 $("#left_cool_avg").next().hide();
+                 {% endif %}
+                 {% if v.1 == "Normal" %}
+                    $("#left_cool_status").html('<span class="color_green">{{v.1}}</span>');
+                 {% else %}
+                    $("#left_cool_status").html('<span class="color_red">{{v.1}}</span>');
+                 {% endif %}
+              {% endif %}
+           {% endfor %}
+      {% endif %}
+      {% if key == "TM-09" %}
+          {% for k, v in value.items %}
+              {% if k == "right_foot_result" %}
+                 $("#right_hot_avg").html('{{v.0}}');
+                 {% if v.0 == "No Data" %}
+                 $("#right_hot_avg").next().hide();
+                 {% endif %}
+                 {% if v.1 == "Normal" %}
+                    $("#right_hot_status").html('<span class="color_green">{{v.1}}</span>');
+                 {% else %}
+                    $("#right_hot_status").html('<span class="color_red">{{v.1}}</span>');
+                 {% endif %}
+              {% endif %}
+              {% if k == "left_foot_result" %}
+                 $("#left_hot_avg").html('{{v.0}}');
+                  {% if v.0 == "No Data" %}
+                 $("#left_hot_avg").next().hide();
+                 {% endif %}
+                 {% if v.1 == "Normal" %}
+                    $("#left_hot_status").html('<span class="color_green">{{v.1}}</span>');
+                 {% else %}
+                    $("#left_hot_status").html('<span class="color_red">{{v.1}}</span>');
+                 {% endif %}
+              {% endif %}
+           {% endfor %}
+      {% endif %}
+      {% if key == "TM-10" %}
+          {% for k, v in value.items %}
+              {% if k == "right_foot_result" %}
+                 $("#right_cold_avg").html('{{v.0}}');
+                  {% if v.0 == "No Data" %}
+                 $("#right_cold_avg").next().hide();
+                 {% endif %}
+                 {% if v.1 == "Normal" %}
+                    $("#right_cold_status").html('<span class="color_green">{{v.1}}</span>');
+                 {% else %}
+                    $("#right_cold_status").html('<span class="color_red">{{v.1}}</span>');
+                 {% endif %}
+              {% endif %}
+              {% if k == "left_foot_result" %}
+                 $("#left_cold_avg").html('{{v.0}}');
+                  {% if v.0 == "No Data" %}
+                 $("#left_cold_avg").next().hide();
+                 {% endif %}
+                 {% if v.1 == "Normal" %}
+                    $("#left_cold_status").html('<span class="color_green">{{v.1}}</span>');
+                 {% else %}
+                    $("#left_cold_status").html('<span class="color_red">{{v.1}}</span>');
+                 {% endif %}
+              {% endif %}
+           {% endfor %}
+      {% endif %}
+    {% endfor %}
+    </script>
+{% endblock %}

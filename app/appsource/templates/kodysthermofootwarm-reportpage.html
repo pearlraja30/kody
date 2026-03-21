@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>kodys</title>
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+	<link rel="stylesheet" href="/app_assets/media/css/kodys1.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script>
+function includeHTML() {
+  var z, i, elmnt, file, xhttp;
+  /*loop through a collection of all HTML elements:*/
+  z = document.getElementsByTagName("*");
+  for (i = 0; i < z.length; i++) {
+    elmnt = z[i];
+    /*search for elements with a certain atrribute:*/
+    file = elmnt.getAttribute("w3-include-html");
+    if (file) {
+      /*make an HTTP request using the attribute value as the file name:*/
+      xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+          if (this.status == 200) {elmnt.innerHTML = this.responseText;}
+          if (this.status == 404) {elmnt.innerHTML = "Page not found.";}
+          /*remove the attribute, and call this function once more:*/
+          elmnt.removeAttribute("w3-include-html");
+          includeHTML();
+        }
+      }      
+      xhttp.open("GET", file, true);
+      xhttp.send();
+      /*exit the function:*/
+      return;
+    }
+  }
+};
+</script>
+</head>
+<body>
+<div class="w3-display-container w1280 h800 w3-display-middle">
+	<div><div w3-include-html="header.html"></div>
+      <script>
+        includeHTML();
+      </script>
+    <div class="w3-display-container bgclr3 brclr1">
+    	<div class="w3-center f-16 ff-r ft-b fclr pt3 ">Thermocool - HCP Elite
+    		<span class="w3-right mr16"><a href="#" class="tdecor">
+          <a href="http://localhost:8000/appsource/templates/kodysapplaunch.html"><img src="/app_assets/media/img/cancel.svg" class="pb4"></a></span>
+    	</div>	
+    </div> </div>
+    <div class="w3-row bgclr3">
+      <div class="w3-col w25p">
+        <p></p>
+      </div>
+      <div class="w3-col w50p h650 scroll">
+        <div class="w3-row mt16 bgclr11">
+          <div class="w3-row brclr1">
+            <div class="">
+              <div class="w3-container h77">
+
+              </div>
+          </div>
+          </div>
+          <div class="w3-row">
+            <div class="w3-container w3-padding-16">
+              <div class="w3-row">
+                <div class="w3-col l9 f-18 ff-r ft-b fclr1">
+                  DIABETIC NEUROPATHY TESTING REPORT-HCP
+                </div>
+                <div class="w3-col l3">
+                  <span class="f-9 f-r">22-08-2018, 03:15 PM</span>
+                </div>
+              </div>
+              <div class="w3-row pt16 f-12 ff-r pb16 fclr1">
+                <div class="w3-col l6">
+                  <span>Patient Name:<span class="ft-b"> Mr. Manish Harichandran.</span></span><br>
+                   <span>Patient ID:<span class="ft-b"> PID101012</span></span><br>
+                   <span> Age/Sex: <span class="ft-b">26 Years / Male</span></span>
+                </div>
+                <div class="w3-col l6">
+                  <span>Doctor: <span class="ft-b">Dr. Siva Suburamanian</span></span><br>
+                  <span> Examiner:<span class="ft-b"> Dr.Kailash</span></span>
+                </div>
+              </div>
+              <div class="w3-row mt16 brclr7 w606">
+                <div class="w3-row mt16">
+                  <div class="w3-col l6">
+                    <div class="w3-row f-16 ff-r ft-b ta">
+                      <span class="fclr7">Warm Perception Study</span>
+                    </div>
+                    <div class="w3-row">
+                      <div class="w162 h190">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-col l6">
+                    <div class="w3-row f-16 ff-r ft-b ta">
+                      <span class="fclr8">Cool Perception Study</span>
+                    </div>
+                    <div class="w3-row">
+                      <div class="w162 h190">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+               <div class="w3-row mt16">
+                <div class="w3-col l4">
+                  <div class="w3-row ta f-10 ff-r ft-b fclr1">Warm
+                  </div>
+                  <div class="w3-row w162 h116">
+                  </div>
+                </div>
+                <div class="w3-col l4">
+                  <div class="w3-row ta f-10 ff-r ft-b fclr1">Cool
+                  </div>
+                  <div class="w3-row w162 h116">
+                  </div>
+                </div>
+                <div class="w3-col l4">
+                  <div class="w3-row ta f-10 ff-r ft-b fclr1">Result Average
+                  </div>
+                  <div class="w3-row w162 h116">
+                  </div>
+                </div>
+               </div>
+                
+                <div class="w3-row mb18 brclr5">
+                  <div class="w3-row ml8p">
+                   <span class="f-12 ff-r ft-b fclr1">Result</span>
+                  </div>
+                  <div class="w3-col l5 ml8p">
+                    <div class="w3-row ff-r f-10">
+                      <span class="fclr1">Right Foot Warm PT Average:<span class="ft-b"> 36.5</span> -</span> <span class="fclr5">Normal</span><br>
+                     <span class="fclr1">Left Foot Warm PT Average:<span class="ft-b"> 36.5</span> -</span> <span class="fclr5">Normal</span><br>
+                    </div>
+                  </div>
+                  <div class="w3-col l5 ml8p">
+                    <div class="w3-row ff-r f-10">
+                      <span class="fclr1">Right Foot Cool PT Average:<span class="ft-b"> 36.5</span> -</span> <span class="fclr5">Normal</span><br>
+                     <span class="fclr1">Left Foot Cool PT Average:<span class="ft-b"> 36.5</span> -</span> <span class="fclr13">Abnormal</span><br>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w3-col w12p"><p></p>
+      </div>
+      <div class="w3-col w12p mt16 ml12">
+       <div class="w3-row">
+         <button  class="w137 h30 w3-text-white bgclr8 brclr3 f-12 mb8" onclick="document.getElementById('emailreport').style.display='block'">Email Report</button>
+         <button class="w137 h30 w3-text-white bgclr8 brclr3 f-12 mb8">Export PDF</button>
+         <button class="w137 h30 w3-text-white bgclr8 brclr3 f-12 mb8">Print</button>
+       </div>
+       <div class="w3-row mt324p">
+         <div class=" f-10 ff-r fclr2  pb8">
+          Kodys Foot Clinik Software 2.0
+         </div>
+       </div>
+      </div>
+    </div>
+      <div class="w3-modal bgclr18" id="emailreport">
+      <div class="w3-modal-content w371  h310  mt11p">
+        <div class="w3-row">
+          <div class="w3-container bgclr8 h61">
+            <div class="pt16 lh pb16">
+              <span class="f-18 ff-r w3-text-white">Test Report</span><br>
+              <span class="f-12 ff-r w3-text-white">PID101012 - Mr. Manish Harichandran.</span>
+            </div>
+          </div>
+          <div class="w3-row brclr1 h172 pt16 pb32 bgclr3 pl9p">
+            <div class="w3-row">
+              <div class="w3-row mb8">
+                <div class="w3-col l4">
+                  <label class="f-12 mr16 mt4 f-r ff-r fclr1">Patient Email ID</label>
+                </div>
+                <div class="w3-col l6">
+                  <input type="text" name="emailid" class="pl8 w205 brclr8">
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-col l4">
+                  <label class="f-12 mr16 mt4 f-r ff-r fclr1">Message</label>
+                </div>
+                <div class="w3-col l6">
+                  <textarea rows="3" class="w205 brclr8 pl8"></textarea>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="w3-row pt8  pb16 bgclr3">
+                <div class="mr20 f-r">
+                    <a href="kodysthermofootwarm-reportpage.html"><button class="f-12 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6">Cancel</button></a>
+                    <button class="f-12 w3-text-white ff-r w80 bgclr8 brclr3 h30">Send</button>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+</body>
+</html>

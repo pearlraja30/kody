@@ -1,0 +1,236 @@
+{% block header_script %}
+{% load kodystags %}
+<script type="text/javascript">
+  $(document).ready(function(){
+  $(".first_right_field").hide();
+  $(".second_right_field").hide();
+  $(".third_right_field").hide();
+  $(".fourth_right_field").hide();
+  $(".fifth_right_field").hide();
+  $(".sixth_right_field").hide();
+  $(".first_left_field").hide();
+  $(".second_left_field").hide();
+  $(".third_left_field").hide();
+  $(".fourth_left_field").hide();
+  $(".fifth_left_field").hide();
+  $(".sixth_left_field").hide();
+  {% if  report.report_result.items %}
+    $('#test_report_result').remove('.no_result');
+  {% endif %}
+  {% if not report.report_result.items %}
+    $('#test_report_result').append('<div class="no_result">No Abnormal value</div>');
+  {% endif %}
+  {% for key,value in report.report_result.items %}
+                  {% if key == 'F-01' %}
+                  $(".first_right_field").show();
+                     var right_first_field_value = '{{value.0}}';
+                     $("#right_first_field_value").html('{{value.0}}');
+                     {% if value.1 == "Normal" %}
+                        $("#right_first_field_status").html('<span class="color_green">{{value.1}}</span>');
+                     {% else %}
+                        $("#right_first_field_status").html('<span class="color_red">{{value.1}}</span>');
+                     {% endif %}
+                  {% endif %}
+
+                   {% if key == 'F-03' %}
+                   $(".second_right_field").show();
+                     var right_second_field_value = '{{value.0}}';
+                     $("#right_second_field_value").html('{{value.0}}');
+                     {% if value.1 == "Normal" %}
+                        $("#right_second_field_status").html('<span class="color_green">{{value.1}}</span>');
+                     {% else %}
+                        $("#right_second_field_status").html('<span class="color_red">{{value.1}}</span>');
+                     {% endif %}
+                  {% endif %}
+
+                   {% if key == 'F-05' %}
+                   $(".third_right_field").show();
+                     var right_third_field_value = '{{value.0}}';
+                     $("#right_third_field_value").html('{{value.0}}');
+                     {% if value.1 == "Normal" %}
+                        $("#right_third_field_status").html('<span class="color_green">{{value.1}}</span>');
+                     {% else %}
+                        $("#right_third_field_status").html('<span class="color_red">{{value.1}}</span>');
+                     {% endif %}
+                  {% endif %}
+
+                  {% if key == 'F-07' %}
+                  $(".fourth_right_field").show();
+                     var right_fourth_field_value = '{{value.0}}';
+                     $("#right_fourth_field_value").html('{{value.0}}');
+                     {% if value.1 == "Normal" %}
+                        $("#right_fourth_field_status").html('<span class="color_green">{{value.1}}</span>');
+                     {% else %}
+                        $("#right_fourth_field_status").html('<span class="color_red">{{value.1}}</span>');
+                     {% endif %}
+                  {% endif %}
+                
+                {% if key == 'F-09' %}
+                 $(".fifth_right_field").show();
+                     var right_fifth_field_value = '{{value.0}}';
+                     $("#right_fifth_field_value").html('{{value.0}}');
+                     {% if value.1 == "Normal" %}
+                        $("#right_fifth_field_status").html('<span class="color_green">{{value.1}}</span>');
+                     {% else %}
+                        $("#right_fifth_field_status").html('<span class="color_red">{{value.1}}</span>');
+                     {% endif %}
+                  {% endif %}
+
+                  {% if key == 'F-11' %}
+                  $(".sixth_right_field").show();
+                     var right_sixth_field_value = '{{value.0}}';
+                     console.log('{{report.report_result.items}}')
+                     console.log('{{value.0}}')
+                     $("#right_sixth_field_value").html('{{value.0}}');
+                     {% if value.1 == "Normal" %}
+                        $("#right_sixth_field_status").html('<span class="color_green">{{value.1}}</span>');
+                     {% else %}
+                        $("#right_sixth_field_status").html('<span class="color_red">{{value.1}}</span>');
+                     {% endif %}
+                  {% endif %}
+
+                   {% if key == 'F-15' %}
+                   $(".first_left_field").show();
+                     var left_first_field_value = '{{value.0}}';
+                     $("#left_first_field_value").html('{{value.0}}');
+                     {% if value.1 == "Normal" %}
+                        $("#left_first_field_status").html('<span class="color_green">{{value.1}}</span>');
+                     {% else %}
+                        $("#left_first_field_status").html('<span class="color_red">{{value.1}}</span>');
+                     {% endif %}
+                  {% endif %}
+
+                   {% if key == 'F-17' %}
+                   $(".second_left_field").show();
+                     var left_second_field_value = '{{value.0}}';
+                     $("#left_second_field_value").html('{{value.0}}');
+                     {% if value.1 == "Normal" %}
+                        $("#left_second_field_status").html('<span class="color_green">{{value.1}}</span>');
+                     {% else %}
+                        $("#left_second_field_status").html('<span class="color_red">{{value.1}}</span>');
+                     {% endif %}
+                  {% endif %}
+
+                   {% if key == 'F-19' %}
+                   $(".third_left_field").show();
+                     var left_third_field_value = '{{value.0}}';
+                     $("#left_third_field_value").html('{{value.0}}');
+                     {% if value.1 == "Normal" %}
+                        $("#left_third_field_status").html('<span class="color_green">{{value.1}}</span>');
+                     {% else %}
+                        $("#left_third_field_status").html('<span class="color_red">{{value.1}}</span>');
+                     {% endif %}
+                  {% endif %}
+
+                  {% if key == 'F-21' %}
+                  $(".fourth_left_field").show();
+                     var left_fourth_field_value = '{{value.0}}';
+                     $("#left_fourth_field_value").html('{{value.0}}');
+                     {% if value.1 == "Normal" %}
+                        $("#left_fourth_field_status").html('<span class="color_green">{{value.1}}</span>');
+                     {% else %}
+                        $("#left_fourth_field_status").html('<span class="color_red">{{value.1}}</span>');
+                     {% endif %}
+                  {% endif %}
+                
+                {% if key == 'F-23' %}
+                $(".fifth_left_field").show();
+                     var left_fifth_field_value = '{{value.0}}';
+                     $("#left_fifth_field_value").html('{{value.0}}');
+                     {% if value.1 == "Normal" %}
+                        $("#left_fifth_field_status").html('<span class="color_green">{{value.1}}</span>');
+                     {% else %}
+                        $("#left_fifth_field_status").html('<span class="color_red">{{value.1}}</span>');
+                     {% endif %}
+                  {% endif %}
+
+                  {% if key == 'F-25' %}
+                  $(".sixth_left_field").show();
+                     var left_sixth_field_value = '{{value.0}}';
+                     $("#left_sixth_field_value").html('{{value.0}}');
+                     {% if value.1 == "Normal" %}
+                        $("#left_sixth_field_status").html('<span class="color_green">{{value.1}}</span>');
+                     {% else %}
+                        $("#left_sixth_field_status").html('<span class="color_red">{{value.1}}</span>');
+                     {% endif %}
+                  {% endif %}
+
+              
+          
+    {% endfor %}
+  });
+</script>
+{% endblock %}
+<div class="brclr_row_black   mr26 ml26" height="17.2cm">
+         <div class="w95p m_auto" style="margin-top: 24px;">
+          <div class="w48p d-inline_block"><div  class="text_center ft_tm" style="color: #ff299c;font-size: 13px;padding-left: 105px;">RIGHT</div></div>
+           <div class="w48p d-inline_block"><div  class="text_center ft_tm" style="color: #ff299c;font-size: 13px;padding-right: 105px;">LEFT</div></div>
+          <div class="m_auto" style="width:100%;">
+            <!-- <div  class="text_center f-15  color_brown ft_tm"></div> -->
+            <div class="pr ft_tm mb14"  style="width:100%;margin-left: 7%;margin-top: 2%;">
+              <img src="{% if report.reports.TEST_TYPE == 'Celsius' %}{{MEDIA_URL}}img/png/podo_t_map_report_deg_c.png{% else %} {{MEDIA_URL}}img/png/podo_t_map_report_deg_f.png{% endif %}" class="report_img_overal_width_vpt_form" style="width:85%" >
+              <span class="pa {{report.TM14.0.KEY_VALUE_STATUS}}" style="left: 223px;top: 34px;text-align: center;width:39px;">{{report.TM14.0.KEY_VALUE}}</span>
+              
+            <span class="pa {{report.TM14.1.KEY_VALUE_STATUS}}" style="top: 116px;left: 205px;text-align: center;width:39px;">{{report.TM14.1.KEY_VALUE}}</span>
+             
+
+            <span class="pa {{report.TM14.3.KEY_VALUE_STATUS}}"  style="top: 112px;left: 138px;text-align: center;width:39px;">{{report.TM14.2.KEY_VALUE}}</span>
+          
+            <span class="pa {{report.TM14.2.KEY_VALUE_STATUS}}"  style="left: 92px;top: 169px;text-align: center;width:39px;" >{{report.TM14.3.KEY_VALUE}}</span>
+            
+            <span class="pa {{report.TM14.4.KEY_VALUE_STATUS}}" style="top: 259px;left: 176px;text-align: center;width:39px;">{{report.TM14.4.KEY_VALUE}}</span>
+            
+            <span class="pa {{report.TM14.5.KEY_VALUE_STATUS}}" style="bottom: 45px;left: 170px;text-align: center;width:39px;">{{report.TM14.5.KEY_VALUE}}</span>
+              <span class="pa {{report.TM14.6.KEY_VALUE_STATUS}}" style="bottom: 33px;left: 28px;text-align: center;width:39px;">{{report.TM14.6.KEY_VALUE}}</span>
+            <span class="pa {{report.TM14.7.KEY_VALUE_STATUS}}" style="top: 34px;left: 333px;text-align: center;width:39px;">{{report.TM14.7.KEY_VALUE}}</span>
+            
+            <span class="pa {{report.TM14.8.KEY_VALUE_STATUS}}" style="left: 351px;top: 116px;text-align: center;width:39px;">{{report.TM14.8.KEY_VALUE}}</span>
+           
+            <span class="pa {{report.TM14.9.KEY_VALUE_STATUS}}" style="top: 112px;left: 418px;text-align: center;width:39px;">{{report.TM14.9.KEY_VALUE}}</span>
+            
+            <span class="pa {{report.TM14.10.KEY_VALUE_STATUS}}" style="top: 169px;left: 464px;text-align: center;width:39px;">{{report.TM14.10.KEY_VALUE}}</span>
+             
+            <span class="pa {{report.TM14.11.KEY_VALUE_STATUS}}" style="top: 259px;right: 281px;text-align: center;width:39px;">{{report.TM14.11.KEY_VALUE}}</span>
+             
+            <span class="pa {{report.TM14.12.KEY_VALUE_STATUS}}" style="left: 387px;bottom: 45px;text-align: center;width:39px;">{{report.TM14.12.KEY_VALUE}}</span>
+            <span class="pa {{report.TM14.13.KEY_VALUE_STATUS}}" style="right: 134px;bottom: 33px;text-align: center;width:39px;">{{report.TM14.13.KEY_VALUE}}</span>
+            <span style="left: 30px;position: absolute;bottom: 80px;">DP</span>
+            <span style="right: 136px;position: absolute;bottom: 80px;">DP</span>
+          </div>
+          </div>
+        </div>
+        <div style="width:100%;text-align:center;font-size: 12px;">
+         <span>*DP - Dorsalis Pedis</span> &nbsp; <wbr> * Report Based on IR Thermometer
+        </div>
+      </div>
+      <div style="margin-left: 3.5%;margin-top:16px;"><span style="font-size:16px;font-weight: bold;font-family: 'Times_New_Roman' !important;">Interpretation</span></div>
+       <div class="w91p margin_auto  pb16" style="display: flex;margin-bottom: 16px;">
+       <div id="test_report_result" style="width: 100%;height: 100px;">
+        <ul style="margin:0;">
+        <li><div class="first_right_field"><div style="display: inline-block;width: 135px;" id="right_first_field_value"></div> - &nbsp;<span id="right_first_field_status"></span>
+        </div></li>
+        
+        <li><div class="first_left_field"><div style="display: inline-block;width: 135px;" id="left_first_field_value"></div> - &nbsp;<span id="left_first_field_status"></span>
+        </div></li>
+        <li><div class="second_right_field"><div  style="display: inline-block;width: 135px;" id="right_second_field_value"></div> - &nbsp;<span id="right_second_field_status"></span>
+        </div></li>
+        <li><div class="second_left_field"><div style="display: inline-block;width: 135px;" id="left_second_field_value"></div> - &nbsp;<span id="left_second_field_status"></span>
+        </div></li>
+        <li><div class="third_right_field"><div style="display: inline-block;width: 135px;" id="right_third_field_value"></div> - &nbsp;<span id="right_third_field_status"></span>
+        </div></li>
+        <li><div class="third_left_field"><div style="display: inline-block;width: 135px;" id="left_third_field_value"></div> - &nbsp;<span id="left_third_field_status"></span>
+        </div></li>
+        <li><div class="fourth_right_field"><div style="display: inline-block;width: 135px;" id="right_fourth_field_value"></div> - &nbsp;<span id="right_fourth_field_status"></span>
+        </div></li>
+        <li><div class="fourth_left_field"><div style="display: inline-block;width: 135px;" id="left_fourth_field_value"></div> - &nbsp;<span id="left_fourth_field_status"></span>
+        </div></li>
+        <li><div class="fifth_right_field"><div style="display: inline-block;width: 135px;" id="right_fifth_field_value"></div> - &nbsp;<span id="right_fifth_field_status"></span>
+        </div></li>
+        <li><div class="fifth_left_field"><div style="display: inline-block;width: 135px;" id="left_fifth_field_value"></div> - &nbsp;<span id="left_fifth_field_status"></span>
+        </div></li>
+        <li><div class="sixth_right_field"><div style="display: inline-block;width: 135px;" id="right_sixth_field_value"></div> - &nbsp;<span id="right_sixth_field_status"></span>
+        </div></li>
+        <li><div class="sixth_left_field"><div style="display: inline-block;width: 135px;" id="left_sixth_field_value"></div> - &nbsp;<span id="left_sixth_field_status"></span>
+        </div></li>
+      </ul> </div>
+    </div>

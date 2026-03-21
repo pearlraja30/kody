@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>kodys</title>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+  <link rel="stylesheet" href="/app_assets/media/css/kodys1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+     <script>
+function includeHTML() {
+  var z, i, elmnt, file, xhttp;
+  /*loop through a collection of all HTML elements:*/
+  z = document.getElementsByTagName("*");
+  for (i = 0; i < z.length; i++) {
+    elmnt = z[i];
+    /*search for elements with a certain atrribute:*/
+    file = elmnt.getAttribute("w3-include-html");
+    if (file) {
+      /*make an HTTP request using the attribute value as the file name:*/
+      xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+          if (this.status == 200) {elmnt.innerHTML = this.responseText;}
+          if (this.status == 404) {elmnt.innerHTML = "Page not found.";}
+          /*remove the attribute, and call this function once more:*/
+          elmnt.removeAttribute("w3-include-html");
+          includeHTML();
+        }
+      }      
+      xhttp.open("GET", file, true);
+      xhttp.send();
+      /*exit the function:*/
+      return;
+    }
+  }
+};
+$(function() {
+      $(".meter > span").each(function() {
+        $(this)
+          .data("origWidth", $(this).width())
+          .width(0)
+          .animate({
+            width: $(this).data("origWidth")
+          }, 1200);
+      });
+    });
+</script>
+<style>
+   ::-webkit-input-placeholder { 
+  text-align:right;
+  } 
+   .meter { 
+      height: 20px;  /* Can be anything */
+      position: relative;
+      /*margin: 60px 0 20px 0;  Just for demo spacing */
+      background: #555;
+      -moz-border-radius: 25px;
+      -webkit-border-radius: 25px;
+      border-radius: 25px;
+      /*padding: 10px;*/
+      /*-webkit-box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);*/
+      /*-moz-box-shadow   : inset 0 -1px 1px rgba(255,255,255,0.3);*/
+      /*box-shadow        : inset 0 -1px 1px rgba(255,255,255,0.3);*/
+    }
+    .meter > span {
+      display: block;
+      height: 100%;
+         -webkit-border-top-right-radius: 8px;
+      -webkit-border-bottom-right-radius: 8px;
+             -moz-border-radius-topright: 8px;
+          -moz-border-radius-bottomright: 8px;
+                 border-top-right-radius: 8px;
+              border-bottom-right-radius: 8px;
+          -webkit-border-top-left-radius: 20px;
+       -webkit-border-bottom-left-radius: 20px;
+              -moz-border-radius-topleft: 20px;
+           -moz-border-radius-bottomleft: 20px;
+                  border-top-left-radius: 20px;
+               border-bottom-left-radius: 20px;
+      background-color: rgb(43,194,83);
+      background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(43,194,83)),
+        color-stop(1, rgb(84,240,84))
+       );
+      background-image: -moz-linear-gradient(
+        center bottom,
+        rgb(43,194,83) 37%,
+        rgb(84,240,84) 69%
+       );
+      -webkit-box-shadow: 
+        inset 0 2px 9px  rgba(255,255,255,0.3),
+        inset 0 -2px 6px rgba(0,0,0,0.4);
+      -moz-box-shadow: 
+        inset 0 2px 9px  rgba(255,255,255,0.3),
+        inset 0 -2px 6px rgba(0,0,0,0.4);
+      box-shadow: 
+        inset 0 2px 9px  rgba(255,255,255,0.3),
+        inset 0 -2px 6px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    .meter > span:after, .animate > span > span {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background-image: 
+         -webkit-gradient(linear, 0 0, 100% 100%, 
+            color-stop(.25, rgba(255, 255, 255, .2)), 
+            color-stop(.25, transparent), color-stop(.5, transparent), 
+            color-stop(.5, rgba(255, 255, 255, .2)), 
+            color-stop(.75, rgba(255, 255, 255, .2)), 
+            color-stop(.75, transparent), to(transparent)
+         );
+      background-image: 
+        -moz-linear-gradient(
+          -45deg, 
+            rgba(255, 255, 255, .2) 25%, 
+            transparent 25%, 
+            transparent 50%, 
+            rgba(255, 255, 255, .2) 50%, 
+            rgba(255, 255, 255, .2) 75%, 
+            transparent 75%, 
+            transparent
+         );
+      z-index: 1;
+      -webkit-background-size: 20px 20px;
+      -moz-background-size: 20px 20px;
+      -webkit-animation: move 2s linear infinite;
+         -webkit-border-top-right-radius: 8px;
+      -webkit-border-bottom-right-radius: 8px;
+             -moz-border-radius-topright: 8px;
+          -moz-border-radius-bottomright: 8px;
+                 border-top-right-radius: 8px;
+              border-bottom-right-radius: 8px;
+          -webkit-border-top-left-radius: 20px;
+       -webkit-border-bottom-left-radius: 20px;
+              -moz-border-radius-topleft: 20px;
+           -moz-border-radius-bottomleft: 20px;
+                  border-top-left-radius: 20px;
+               border-bottom-left-radius: 20px;
+      overflow: hidden;
+    }
+    
+    .animate > span:after {
+      display: none;
+    }
+    
+    @-webkit-keyframes move {
+        0% {
+           background-position: 0 0;
+        }
+        100% {
+           background-position: 50px 50px;
+        }
+    }
+</style>
+</head>
+<body>
+<div class="w3-display-container w1280 h800 w3-display-middle">
+<div w3-include-html="header.html"></div>
+      <script>
+        includeHTML();
+      </script>
+    <div class="w3-display-container bgclr3 brclr1">
+      <div class="w3-center f-16 ff-r ft-b fclr pt6 pb3 ">Canyscope Test
+        <span class="w3-right mr16"><a href="kodysapplaunch.html" class="tdecor"><img src="/app_assets/media/img/cancel.svg" class="pb4"></a></span>
+      </div>  
+    </div>
+    <div class="w3-display-container bgclr3">
+      <div class="w3-row">
+        <div class="w3-col l8">
+          <div class="w3-row h613 w100p bgclr3">
+            <div class="w3-row">
+              <div class="w3-row w3-container">
+                <p class="f-16 ff-r ft-b fclr1">ECG Retesting</p>
+              </div>
+              <div class="w3-row w3-container">
+                <div class="w3-row w100p f-14 ff-r fclr1 ft-b">Lead 1</div>
+                <div class="w3-row h110 w100p bgclr11">
+                </div>
+              </div>
+              <div class="w3-row w3-container mt25">
+                <div class="w3-row w100p f-14 ff-r fclr1 ft-b">Lead 2</div>
+                <div class="w3-row h110 w100p bgclr11">
+                </div>
+              </div>
+              <div class="w3-row w3-container mt25">
+                <div class="w3-row w100p f-14 ff-r fclr1 ft-b">Lead 3</div>
+                <div class="w3-row h110 w100p bgclr11">
+                </div>
+              </div>
+             <!--  <div class="meter animate">
+                <span style="width: 100%"><span></span></span>
+              </div> -->
+              
+
+              <div class="w3-row w3-container">
+                <div class="f-r">
+                  <button class="ff-r f-12 w3-text-white brclr3 bgclr8 h30 w80 mr4">Start</button>
+                  <button class="ff-r f-12 w3-text-white brclr3 bgclr8 h30 w80 mr4">Finish</button>
+                  <button class="ff-r f-12 w3-text-white brclr6 bgclr9 h30 w80 mr4">Repeat</button>
+                  <button class="ff-r f-12 w3-text-white brclr6 bgclr9 h30 w80 mr4">Cancel</button>
+                  <button class="ff-r f-12 w3-text-white brclr6 bgclr9 h30 w80">Help</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w3-col l4 bgclr16 h613">
+          <div class="w3-row">
+            <div class="w3-row brclr4">
+              <div class="w3-container pt16 pb8">
+                <div class="w3-row">
+                  <div class="w3-col l9 ft-b ff-r f-12 fclr1">
+                    Patient Details
+                  </div>
+                  <div class="w3-col l3">
+                    <button class="w42 f-r h30 w3-text-white bgclr8 brclr3 f-12" onclick="document.getElementById('dataentry').style.display='block'">Edit</button>
+                  </div>
+                </div>
+                <div class="ff-r f-12 fclr1">
+                  <span>Mr. Manish Harichandran. (PID101012)</span><br>
+                  <span><label class="ft-b">Age:</label> 26 Years,<label class="ft-b"> Sex:</label> Male</span><br>
+                  <span><label class="ft-b">Doctor:</label> Dr. Rajesh</span><br>
+                  <span><label class="ft-b">Examiner:</label> Dr.Kailash</span><br>
+                </div>
+              </div>
+            </div>
+                    
+                    <div class="w3-row brclr4 pt8 pb8">
+                        <div class="w3-container w3-padding-8">
+                            <div class="w3-row">
+                                <div class="w3-col l2">
+                                    <span class="f-12 fclr1 ff-r ft-b">Test For</span>
+                                </div>
+                                <div class="w3-col l2 ">
+                                  <label class="container f-12 ff-r fclr1"><a href="" class="tdecor">All
+                                    <input type="radio" checked="checked" name="radio1">
+                                    <span class="checkmark"></span></a>
+                                  </label>
+                                </div>
+                                <div class="w3-col l5 ml8">
+                                  <label class="container f-12 ff-r fclr1">Parasympathetic Test
+                                    <input type="radio"  name="radio">
+                                    <span class="checkmark"></span></label>
+                                  </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="w3-row  pt8 pb8 brclr4">
+                        <div class="w3-container">
+                           <div class="w3-row f-12 ff-r ft-b fclr1">Parasympathetic Test
+                           </div>
+                           <div class="w3-row pb4 brclr1">
+                            <div class="w3-left pt8 f-12 ff-r fclr1">
+                              ECG Retesting
+                            </div>
+                            <div class="w3-right">
+                              <button class="h30 fclr5 f-12 bgclr7 brclr3 w105 mr4">Test Procedure</button>
+                              <button class="h30 f-12 ff-r bgclr8 w3-text-white brclr3 w72" onclick="document.getElementById('test1').style.display='block'">Start Test</button>
+                            </div>
+                           </div>
+                           <div class="w3-row pb4 pt4 brclr1">
+                            <div class="w3-left pt8 f-12 ff-r fclr1">
+                              ECG - Deep Breathing
+                            </div>
+                            <div class="w3-right">
+                              <button class="h30 fclr5 f-12 bgclr7 brclr3 w105 mr4">Test Procedure</button>
+                              <button class="h30 f-12 ff-r bgclr8 w3-text-white brclr3 w72">Start Test</button>
+                            </div>
+                           </div>
+                           <div class="w3-row pb4 pt4 brclr1">
+                            <div class="w3-left pt8 f-12 ff-r fclr1">
+                              ECG Standing
+                            </div>
+                            <div class="w3-right">
+                              <button class="h30 fclr5 f-12 bgclr7 brclr3 w105 mr4">Test Procedure</button>
+                              <button class="h30 f-12 ff-r bgclr8 w3-text-white brclr3 w72">Start Test</button>
+                            </div>
+                           </div>
+                           <div class="w3-row pb4 pt4 brclr1">
+                            <div class="w3-left pt8 f-12 ff-r fclr1">
+                              ECG- Valsalva Maneuver
+                            </div>
+                            <div class="w3-right">
+                              <button class="h30 fclr5 f-12 bgclr7 brclr3 w105 mr4">Test Procedure</button>
+                              <button class="h30 f-12 ff-r bgclr8 w3-text-white brclr3 w72">Start Test</button>
+                            </div>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="w3-row brclr4 pb8">
+                       <div class="w3-container">
+                           <div class="w3-row f-12 ff-r ft-b fclr1">Sympathetic Test
+                           </div>
+                           <div class="w3-row pb4 brclr1">
+                            <div class="w3-left pt8 f-12 ff-r fclr1">
+                              Postural Hypotension
+                            </div>
+                            <div class="w3-right">
+                              <button class="h30 fclr5 f-12 bgclr7 brclr3 w105 mr4">Test Procedure</button>
+                              <button class="h30 f-12 ff-r bgclr8 w3-text-white brclr3 w72">Start Test</button>
+                            </div>
+                           </div>
+                           <div class="w3-row pb4 pt4 brclr1">
+                            <div class="w3-left pt8 f-12 ff-r fclr1">
+                              Sustained Handgrip
+                            </div>
+                            <div class="w3-right">
+                              <button class="h30 fclr5 f-12 bgclr7 brclr3 w105 mr4">Test Procedure</button>
+                              <button class="h30 f-12 ff-r bgclr8 w3-text-white brclr3 w72">Start Test</button>
+                            </div>
+                           </div>
+                        </div>
+                    </div>
+            <div class="w3-row">
+              <div class="w3-container ">
+                <div class="ff-r f-12 fclr1 ft-b pb4 pt4">Impression / Notes
+                </div>
+                <div class="w3-row">
+                  <div class="w3-col l12">
+                     <textarea rows="3" class="pl8 w99p  ml2  brclr8  "></textarea>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+            <div class="w3-row  mb8 mt4">
+              <div class="w3-container w3-row">
+                <div class="w3-col l12">
+                                <div class="f-l">
+                                    <a href="" class="tdecor"><button class="w80 mr8  h30 w3-text-white bgclr8 brclr3 f-12 ff-r">Save</button></a>
+                                    <button class="w80  h30 w3-text-white bgclr9 brclr6 f-12">Clear</button>
+                                </div>
+                                <div class="f-r">
+                                    <a href="biothezihand2reportpage.html"><button class="w133 h30 bgclr8 brclr3  ff-r ta w3-text-white"><i class="fa fa-file-text f-11" aria-hidden="true"></i>
+                                        <span class="f-12">Generate Report</span></button></a>
+                                </div>
+                            </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+    <div class="w3-display-bottom bgclr3 brclr5">
+      <div class="w3-container">
+        <div class="w3-left">
+                <div class="mt2">
+          <span class="f-10 ff-r fclr1">Device Status</span>
+          <span><i class="f-10 fa fa-bluetooth-b bgclr4 w14 h14 w3-text-white ta pt1 br brclr2" aria-hidden="true"></i></span>
+          <span><i class="f-8 fa fa-usb fa-rotate-270 bgclr5 br w14 h14 ta  pt4 fclr1" aria-hidden="true"></i></span>
+          <span><i class="f-8 fa fa-plug bgclr5 br w14 h14 ta pt3 fclr1" aria-hidden="true"></i></span>
+          <span class="cp" onclick="document.getElementById('settingsdev').style.display='block'">
+                    <span class="ml8"><i class="f-10 fa fa-cog w14 h14 br ta bgclr6 fclr3 pt1" aria-hidden="true"></i></span>
+             <span class="f-10 ff-r fclr1">Device Configuration</span>
+                </span>
+               </div>
+        </div>
+        <div class="w3-right f-10 ff-r fclr2 pt8 pb8">
+          Kodys Foot Clinik Software 2.0
+        </div>
+      </div>
+    </div>
+    <div id="settingsdev" class="w3-modal  bgclr18">
+        <div class="w3-modal-content w376 mt11p">
+            <div class="w3-container bgclr8 ">
+                <p class="ff-r f-18 ft-b w3-text-white">Device Config(Canyscope)</p>
+            </div>
+            <div class="bgclr3 brclr1">
+                <div class="w3-row pt20 mb32 ml24">
+                    <div class="w3-row mb16">
+                        <div class="w3-col l2 mt3">
+                           <label class="f-12 ff-r f-r fclr1">Key</label>
+                        </div>
+                        <div class="w3-col l3 ml16">
+                            <input type="text" class="h30 w80 brclr8 pl8" name="key">
+                        </div>
+                        <div class="w3-col l3">
+                            <input type="text" class="h30 w80 brclr8 pl8" name="key">
+                        </div>
+                        <div class="w3-col l3">
+                            <input type="text" class="h30 w80 brclr8 pl8" name="key">
+                        </div>
+
+                    </div>
+                    <div class="w3-row mb16">
+                        <div class="w3-col l2 mt3">
+                            <label class="f-12 ff-r f-r fclr1">Printer</label>
+                        </div>
+                        <div class="w3-col l8 ml16">
+                            <label class="select">
+                               <select name="email" id="email">
+                                   <option>aaaa1</option>
+                                   <option>aaaa2</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>  
+                </div>
+                
+            </div>
+            <div class="w3-row pt8  pb16 bgclr3">
+                <div class="ml48p">
+                    <a href="kodyscanyscope2.html"><button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6">Close</button></a>
+                    <button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,2063 @@
+{% extends "page_layout.html" %}
+    {% block content_body %}
+    <style type="text/css">
+    .ta{
+      text-align: center !important;
+    }
+    </style>
+    <script src="{{MEDIA_URL}}jQuery-Mask-Plugin-master/dist/jquery.mask.js" type="text/javascript"></script>
+    <script src="{{MEDIA_URL}}countuptimer_1/dist/ez.countimer.js" type="text/javascript"></script>
+    <div class="w3-display-container bgclr3 brclr1 " draggable="false" ondragstart="return false;">
+            <div class="f-16 ff-r ft-b fclr pt8 pb1"><span style="margin-left: 371px;" class="heading_title">{{medical_test.medical_test_type}}</span> 
+                <span class="w3-right" style="margin-right: 16px;position: relative;">
+                     <span style="margin-right: 70px;">
+                        <span class="f-12 ft-b fclr1" style="position
+                        :absolute;margin-top: 3px;margin-left: 50px;margin-top: 3px;margin-left: -94px;">Device Connection</span>
+                        <span class="bgclr4 w16 h16 ta pt1 br bgclr5 device_icon" id="bluetooth" style="position: relative;margin-left: 12px;">
+                        <i class="f-10 fa fa-bluetooth-b " aria-hidden="true" style="position: absolute;margin-top: 4px;
+                    margin-left: -2px;"></i></span>
+                        <span class="device_icon bgclr5 br w14 h14 ta  pt1 fclr1" id="usb" style="position: relative;">
+                        <i class="f-8 fa fa-usb fa-rotate-270 " aria-hidden="true" style="position: absolute;margin-top: 5px;
+                    margin-left: -4px;"></i></span>
+                        <span class="device_icon  bred br w14 h14 ta pt1 w3-text-white" style="position: relative;cursor: pointer;" id="device_status" connected="0" onclick="reconnect()">
+                        <i class="f-10 fa fa-plug" aria-hidden="true" style="position: absolute;margin-top: 4px;
+                    margin-left: -5px;"></i></span>
+                    <div style="display: inline-block;border-left: 1px solid black;position: absolute;font-size: 20px;
+                         margin-left: 10px;"><p></p></div>
+                        <span class="cp device_configure" style="margin-right: 74px;" onclick="document.getElementById('settingsdev').style.display='block'">
+                           <span class="ml8 device_icon  br ta bgclr6 fclr3" style="position: relative;margin-left: 25px;"><i class="f-10 fa fa-cog" aria-hidden="true" style="position: absolute;margin-left: -4px;margin-top: 5px;"></i></span>
+                           <span class="f-12 ft-b fclr1" style="position: absolute;margin-top: 3px;">Device Configuration</span>
+                        </span>
+                    </span>
+                    <span class="close_test"><img src="{{MEDIA_URL}}img/png/cancel.png" style="margin-top: -6px;" class="pb4"></span>
+                </span>
+            </div>  
+        </div>
+        <div class="w3-display-container bgclr3">
+            <div class="w3-row">
+                <div class="w3-col l8 ">
+                    <form id="can_sympathetic2_form" class="user_data_form" method="POST">
+                            {% csrf_token %}
+                    <div class="w3-row">
+                    <div class="w3-row">
+                        <div class="w3-container">
+                            <!-- <h6 class="f-16 fclr1 ft-b title">Postural Hypotension / BP Measurements</h6> -->
+                            <div class="w3-row mb2 test_process" style="width: 100%;margin-top: 10px;">
+                                <div class="w3-col l6 mr25 brclr8" style="height:452px;width: 48%;">
+                                  <h6 class="ta fclr1 f-14 brclr_8 pb8 ft-b">Before Hand Grip</h6>
+                                  <div class="w3-row bgclr_21 ml16 mr16" style="height: 100px;">
+                                    <p class="f-12 fclr1 ft-b ta" style="padding:0;margin: 5px 0px 0px 0px;">Pressure</p>
+                                    <p class="fclr5 f42 ta" style="padding:0;margin: 0;" id="before_handgrip_pressure">000</p>
+                                    <p class="f-12 fclr9 ta" style="padding:0;margin:-8px 0px 0px 0px;">mmHg</p>
+                                  </div>
+                                  <div class="w3-row  brclr_8 ml16 mr16" style="height:100px;">
+                                    <div class="w3-col l7 f-16 fclr1 ft-b w3-container" style="padding-top: 10%;">Systolic
+                                    </div>
+                                    <div class="w3-col l5 mt12">
+                                      <input type="text" class="fclr5 ta f-52 field_value w100p" style="height:55px;background-color: rgba(232, 255, 251, 1) !important;" value=""  maxlength="3" name="B-01" id="B-01">
+                                      <br/>
+                                      <div class="f-12 fclr9 ta ft-b">mmHg</div>
+                                    </div>
+                                  </div>
+                                  <div class="w3-row" style="height:105px;margin:0px 16px;">
+                                    <div class="w3-col l7 f-16 fclr1 ft-b w3-container" style="padding-top: 10%;">Diastolic
+                                    </div>
+                                    <div class="w3-col l5 mt12">
+                                      <input type="text" class="fclr5 ta f-52 field_value w100p" style="height:55px;background-color: rgba(232, 255, 251, 1) !important;" value=""  maxlength="3" name="B-03" id="B-03">
+                                      <br/>
+                                      <div class="f-12 fclr9 ta ft-b">mmHg</div>
+                                    </div>
+                                  </div>
+                                  <div class="w3-row  ml16 mr16" style="height:100px;">
+                                    <div class="w3-col l7 f-16 fclr1 ft-b w3-container" style="padding-top: 10%;">Pulse Rate
+                                    </div>
+                                    <div class="w3-col l5 mt12">
+                                      <input type="text" class="fclr5 ta f-52 field_value w100p " style="height:55px;background-color: rgba(232, 255, 251, 1) !important;" value=""  maxlength="3" name="B-05" id="B-05">
+                                      <br/>
+                                      <div class="f-12 fclr9 ta ft-b">Beats/Min</div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="w3-col l6 brclr8" style="height:452px;width: 48%;">
+                                  <h6 class="ta fclr1 f-14 brclr_8 pb8 ft-b">After Hand Grip</h6>
+                                  <div class="w3-row bgclr_21 ml16 mr16 after_grip" style="height: 100px;">
+                                    <p class="f-12 fclr1 ft-b ta" style="padding:0;margin: 5px 0px 0px 0px;">Pressure</p>
+                                    <p class="fclr5 f42 ta" style="padding:0;margin: 0;" id="after_handgrip_pressure">000</p>
+                                    <p class="f-12 fclr9 ta" style="padding:0;margin:-8px 0px 0px 0px;">mmHg</p>
+                                  </div>
+                                  <div class="w3-row  brclr_8 ml16 mr16 after_grip" style="height:100px;">
+                                    <div class="w3-col l7 f-16 fclr1 ft-b w3-container" style="padding-top: 10%;">Systolic
+                                    </div>
+                                    <div class="w3-col l5 mt12">
+                                      <input type="text" class="fclr5 ta f-52 field_value_1 w100p" style="height:55px;background-color: rgba(232, 255, 251, 1) !important;" value=""  maxlength="3" name="B-07" id="B-07">
+                                      <br/>
+                                      <div class="f-12 fclr9 ta ft-b">mmHg</div>
+                                    </div>
+                                  </div>
+                                  <div class="w3-row after_grip" style="height:100px;margin:0px 16px;">
+                                    <div class="w3-col l7 f-16 fclr1 ft-b w3-container" style="padding-top: 10%;">Diastolic
+                                    </div>
+                                    <div class="w3-col l5 mt12">
+                                      <input type="text" class="fclr5 ta f-52 field_value_1 w100p" style="height:55px;background-color: rgba(232, 255, 251, 1) !important;" value=""  maxlength="3" name="B-09" id="B-09">
+                                      <br/>
+                                      <div class="f-12 fclr9 ta ft-b">mmHg</div>
+                                    </div>
+                                  </div>
+                                  <div class="w3-row after_grip" style="height:100px;margin:0px 16px;">
+                                    <div class="w3-col l7 f-16 fclr1 ft-b w3-container" style="padding-top: 10%;">Pulse Rate
+                                    </div>
+                                    <div class="w3-col l5 mt12">
+                                      <input type="text" class="fclr5 ta f-52 field_value_1 w100p " style="height:55px;background-color: rgba(232, 255, 251, 1) !important;" value=""  maxlength="3" name="B-11" id="B-11">
+                                      <br/>
+                                      <div class="f-12 fclr9 ta ft-b">Beats/Min</div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                            <div  class="test_result" style="margin-top: 14px;">
+                             <table class="w3-table result_canyscope">
+                                <tr>
+                                <th class="bgclr16 fclr1 f-14" colspan="7">Parasympathetic Test</th>
+                                </tr>
+                                <tr>
+                                  <td style="padding-left: 16px !important;font-weight: 600;">ECG - Resting</td>
+                                  <td>Resting</td>
+                                  <td colspan="3" class="ta">{{medical_test.result.resting.bpm}} BPM</td>
+                                </tr>
+                                <tr>
+                                  <td rowspan="3" style="padding-left: 16px !important;vertical-align: middle;font-weight: 600;">ECG - Deep Breathing</td>
+                                  <td>Mean </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.deep_breathing_time.rr_mean}} ms</td>
+                                  <td class="w220">Avg.Deep Breath Diff (DBD) </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.deep_breathing_time.DBD}} BPM</td>
+                                </tr>
+                                <tr>
+                                  <td>Standard Deviation </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.deep_breathing_time.sdnn}} ms</td>
+                                  <td class="w220">Resp Sinus Arrhythmia (RSA) Index </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.deep_breathing_time.RSA}} </td>
+                                </tr>
+                                <tr>
+                                  <td>Co_Efficient of variation </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.deep_breathing_time.cv}} </td>
+                                  <td class="w220">Expiration - Inspiration Ratio (E:I) </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.deep_breathing_time.ratio}} </td>
+                                </tr>
+                                <!-- <tr>
+                                <th class="bgclr16 fclr1 f-15" colspan="7">Sympathetic Test</th>
+                                </tr> -->
+                                <tr>
+                                  <td rowspan="3" style="padding-left: 16px !important;vertical-align: middle;font-weight: 600;">ECG - Standing</td>
+                                  <td>Mean </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_standing_time.rr_mean}} ms</td>
+                                  <td class="w220">30 Beat R-R Interval </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_standing_time.30th_max}} ms</td>
+                                </tr>
+                                <tr>
+                                  <td>Standard Deviation </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_standing_time.sdnn}} ms</td>
+                                  <td class="w220">15 Beat R-R Interval </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_standing_time.15th_min}} </td>
+                                </tr>
+                                <tr>
+                                  <td>Co_Efficient of variation </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_standing_time.cv}} </td>
+                                  <td class="w220">30:15 Ratio </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_standing_time.ratio}} </td>
+                                </tr>
+
+
+                                <tr>
+                                  <td rowspan="3" style="padding-left: 16px !important;vertical-align: middle;font-weight: 600;">ECG - Valsalva Maneuver</td>
+                                  <td>Mean </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_valsalva_time.rr_mean}} ms</td>
+                                  <td class="w220">Max R-R Interval </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_valsalva_time.max_rr}} ms</td>
+                                </tr>
+                                <tr>
+                                  <td>Standard Deviation :</td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_valsalva_time.sdnn}} ms</td>
+                                  <td class="w220">Min R-R Interval :</td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_valsalva_time.min_rr}} </td>
+                                </tr>
+                                <tr>
+                                  <td>Co_Efficient of variation </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_valsalva_time.cv}} </td>
+                                  <td class="w220">Valsalva Ratio (E:I) </td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_valsalva_time.ratio}} </td>
+                                </tr>
+                                 <tr>
+                                   <th class="bgclr16 fclr1 f-14" colspan="7">Sympathetic Test</th>
+                                 </tr>
+                                 <tr>
+                                   <td rowspan="2" style="padding-left: 16px !important;vertical-align: middle;font-weight: 600;">Postural Hypotension</td>
+                                   <td>BP Supine</td>
+                                   <td class="ta">&nbsp;{{medical_test.result.ecg_postural.supine_bp}} mmHg</td>
+                                   <td class="w220">BP Standing Immediate</td>
+                                   <td class="ta">&nbsp;{{medical_test.result.ecg_postural.standing_bp}} mmHg</td>
+                                 </tr>
+                                 <tr>
+                                  <td>BP After 60 seconds</td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_postural.after_1_min_bp}} mmHg</td>
+                                  <td class="w220">Fall in systolic</td>
+                                  <td class="ta">&nbsp;{{medical_test.result.ecg_postural.fall_in_systolic}} mmHg</td>
+                                 </tr>
+                                 <tr>
+                                   <td rowspan="2" style="padding-left: 16px !important;vertical-align: middle;font-weight: 600;">Sustained Handgrip</td>
+                                   <td>BP Before Handgrip</td>
+                                   <td class="ta">&nbsp;{{medical_test.result.ecg_sustained.before_bp}} mmHg</td>
+                                   <td class="w220">BP After Handgrip</td>
+                                   <td class="ta">&nbsp;{{medical_test.result.ecg_sustained.after_bp}} mmHg</td>
+                                 </tr>
+                                 <tr>
+                                   <td colspan="3">Increase in Diastolic</td>
+                                   <td colspan="2" class="ta">&nbsp;{{medical_test.result.ecg_sustained.increase_in_diasystolic}} mmHg</td>
+                                 </tr>
+                              </table>
+                              <div class="w3-row" id="impression_all">
+                                  <div>
+                                      <div class="ff-r f-12 fclr1 ft-b pb4 pt4">Impression / Notes
+                                      </div>
+                                      <div class="w3-row">
+                                          <div class="w3-col l12">
+                                             <textarea rows="3" class="pl8 w100p  ml2  brclr8 "  maxlength="255" id="impression_notes_all" style="height: 46px;"></textarea>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="w3-row" id="notes_sympathetic">
+                                <button class="w80   h30 w3-text-white bgclr8 brclr3 f-12 ff-r f-r" id="save_notes_sym" onclick="save_notes_sympathetic();" type="button">Save</button>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <input type="hidden"  name="app_code" value="{{option.app_code}}">
+                    <input type="hidden"   name="patient_uid" value="{{option.patient_uid}}">
+                    <input type="hidden"   name="doctor_uid" value="{{option.doctor_uid}}">
+                    <input type="hidden"   name="examiner_uid" value="{{option.examiner_uid}}">
+                    <input type="hidden"   name="test_code" value="TM-15" id="test_code">
+                    <input type="hidden"   name="test_type" id="test_type" value="">
+                    <input type="hidden"   name="test_for" id="test_for" value="">
+                    {% if test_entry %}
+                    <input type="hidden"   name="test_entry" id="test_for" value="{{option.test_entry}}">
+                    {% endif %}
+                                </form>
+                    <div class="timer_reset">
+                          <div class="w3-row f-18  w3-container w100p mt4 timer timer_1_min pl768 timer_reset_test" style="padding-top: 5px;color:red;">
+                          </div>
+                    </div> 
+                    <div class="w3-row">
+                      <!-- <div class="dis_inline_block f-l w3-container led_button">
+                          <div class="led-green dis_inline_block mr94"><div class="ml16 f-14 fclr1 ml36 mt3">Inspiration</div></div>
+                          <div class="led-red dis_inline_block"><div class="ml16 f-14 fclr1 dis_inline_block mt3 ml34">Expiration</div></div>
+                      </div> -->
+                      <div class="w3-container  fclr1 f-r mt6" id="control_button" style="margin-top: 34px !important">
+                        <button type="button" class="f-12 ff-r bgclr8 w3-text-white brclr3 w72 h30 mr8" id="start_test">Record</button>
+                        <button type="button" class="f-12 ff-r bgclr8 w3-text-white brclr3 w72 h30 mr8" id="finish_test">Finish</button>
+                        <button type="button" class="f-12 ff-r bgclr9 brclr6 w3-text-white  w72 h30 mr8" id="repeat" >Repeat</button>
+                        <button type="button" class="f-12 ff-r bgclr_red brclr_red w3-text-white  h30 mr8" id="stop" style="width: 115px;" onclick="emergency_stop()">Emergency Stop</button>
+                        <button type="button" class="f-12 ff-r bgclr9 brclr6 w3-text-white  w72 h30 mr8" id="cancel">Cancel</button>
+                        <button type="button" class="f-12 ff-r bgclr9 brclr6 w3-text-white  w72 h30" id="help" onclick="document.getElementById('test_procedure').style.display='block'">Help</button>
+                      </div>
+                    </div>
+                   
+                </div>
+                <div class="w3-col l4 bgclr16">
+                    <div class="w3-row">
+                        <div class="w3-row brclr4">
+                            <div class="w3-container pt15" style="padding-bottom: 4px;padding-top: 8px!important">
+                                <div class="w3-row">
+                                    <div class="w3-col l9 ft-b ff-r f-12 fclr1">
+                                        Patient Details
+                                    </div>
+                                    <div class="w3-col l3">
+                                            <button class="w42 f-r h30 w3-text-white bgclr8 brclr3 f-12 edit_btn" onclick="document.getElementById('id01').style.display='block'" id="edit_test">Edit</button>
+                                    </div>
+                                </div>
+                                <div class="ff-r f-12 fclr1">
+                                    <span>{{medical_test.patient.PREFIX|title}} {{medical_test.patient.NAME}} {{medical_test.patient.LAST_NAME}} ({{medical_test.patient.FRIENDLY_UID}})</span><br>
+                                    <span><label class="ft-b">Age:</label> {{medical_test.patient.AGE}} Years,<label class="ft-b"> Sex:</label> {{medical_test.patient.GENDER}}</span><span class="f-r r16"><label class="ft-b"> Height:</label> {{medical_test.patient.HEIGHT}} &nbsp;cm,<label class="ft-b"> Weight:</label> {{medical_test.patient.WEIGHT}}  &nbsp;kg </span><br>
+                                    <span><label class="ft-b">Doctor:</label>{% if medical_test.doctor %} {{medical_test.doctor.PREFIX|title}} {{medical_test.doctor.NAME}}{% endif %}</span><br>
+                                    <span><label class="ft-b">Examiner:</label> {% if medical_test.examiner %}{{medical_test.examiner.PREFIX|title}} {{medical_test.examiner.NAME}}{% endif %}</span><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w3-row brclr4 pt12 pb12">
+                            <div class="w3-row w3-container" id="Select_option">
+                                <div class="w3-col l2 fclr1 f-12 ft-b w14_2p">
+                                    Test for
+                                </div>
+                                <div class="w3-col l2 w14_2p">
+                                    <label class="container f-12 ff-r fclr1">All
+                                        <input type="radio" checked="checked" name="radio" id="all_test" value="All_test">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="w3-col l7">
+                                    <label class="container f-12 ff-r fclr1">Parasympathetic / Sympathetic Test
+                                        <input type="radio"  name="radio" id="parasympathetic_test" value="parasympathetic_test">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="w3-col l1">
+                                  <label class="container f-12 ff-r fclr1">HRV
+                                        <input type="radio"  name="radio" id="hrv_test" value="hrv_test">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                           <div class="w3-row  pt8 pb8 brclr4" id="test_for_1">
+                        <div class="w3-container">
+                           <div class="w3-row f-12 ff-r ft-b fclr1">Parasympathetic Test
+                           </div>
+                           <div class="w3-row pb4 brclr1">
+                            <div class="w3-left pt8 f-12 ff-r fclr1">
+                              ECG - Resting
+                            </div>
+                            <div class="w3-right ecg_retest mt4">
+                              <span class='fclr ff-r f-10'><img src='{{MEDIA_URL}}img/png/completed_status.png' class='pb4 status_width'>&nbsp;Test Completed and Saved.</span>
+                            </div>
+                           </div>
+                           <div class="w3-row pb4 pt4 brclr1">
+                            <div class="w3-left pt8 f-12 ff-r fclr1">
+                              ECG - Deep Breathing
+                            </div>
+                            <div class="w3-right ecg_retest_1 mt4">
+                              <span class='fclr ff-r f-10'><img src='{{MEDIA_URL}}img/png/completed_status.png' class='pb4 status_width'>&nbsp;Test Completed and Saved.</span>
+                            </div>
+                           </div>
+                           <div class="w3-row pb4 pt4 brclr1">
+                            <div class="w3-left pt8 f-12 ff-r fclr1">
+                              ECG - Standing
+                            </div>
+                            <div class="w3-right ecg_retest_2 mt4">
+                              <span class='fclr ff-r f-10'><img src='{{MEDIA_URL}}img/png/completed_status.png' class='pb4 status_width'>&nbsp;Test Completed and Saved.</span>
+                            </div>
+                           </div>
+                           <div class="w3-row pb4 pt4 brclr1">
+                            <div class="w3-left pt8 f-12 ff-r fclr1">
+                              ECG- Valsalva Maneuver
+                            </div>
+                            <div class="w3-right ecg_retest_3 mt4">
+                              <span class='fclr ff-r f-10'><img src='{{MEDIA_URL}}img/png/completed_status.png' class='pb4 status_width'>&nbsp;Test Completed and Saved.</span>
+                            </div>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="w3-row brclr4 pb8" id="test_for_2">
+                       <div class="w3-container">
+                           <div class="w3-row f-12 ff-r ft-b fclr1">Sympathetic Test
+                           </div>
+                           <div class="w3-row pb4 brclr1">
+                            <div class="w3-left pt8 f-12 ff-r fclr1">
+                              Postural Hypotension
+                            </div>
+                            <div class="w3-right ecg_retest_4 mt4">
+                              <span class='fclr ff-r f-10'><img src='{{MEDIA_URL}}img/png/completed_status.png' class='pb4 status_width'>&nbsp;Test Completed and Saved.</span>
+                            </div>
+                           </div>
+                           <div class="w3-row pb4 pt4 brclr1">
+                            <div class="w3-left pt8 f-12 ff-r fclr1" id="ecg_6_test" data-id="TM-24">
+                              Sustained Handgrip
+                            </div>
+                            <div class="w3-right ecg_retest_5">
+                              <button class="fclr5 f-12 bgclr7 brclr3 w105 mr4 test_6 test_procedure_modal" style="height: 26.5px;">Test Procedure</button>
+                              <button class="f-12 ff-r bgclr8 w3-text-white brclr3 w72 test_6 start_test_6" style="height: 26.5px;">Start Test</button>
+                            </div>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="w3-row" id="test_for_3">
+                       <div class="w3-container">
+                           <div class="w3-row f-12 ff-r ft-b fclr1">HRV Test
+                           </div>
+                           <div class="w3-row pb4 brclr1">
+                            <div class="w3-left pt8 f-12 ff-r fclr1">
+                              ECG
+                            </div>
+                            <div class="w3-right ecg_retest_hrv">
+                              <button class="fclr5 f-12 bgclr7 brclr3 w105 mr4 test_hrv test_procedure_modal test_proc_7" style="height: 26.5px;">Test Procedure</button>
+                              <button class="f-12 ff-r bgclr8 w3-text-white brclr3 w72 test_hrv start_test_5" style="height: 26.5px;">Start Test</button>
+                            </div>
+                           </div>
+                        </div>
+                    </div>
+                        <div class="w3-row" id="impression">
+                            <div class="w3-container ">
+                                <div class="ff-r f-12 fclr1 ft-b pb4 pt4">Impression / Notes
+                                </div>
+                                <div class="w3-row">
+                                    <div class="w3-col l12">
+                                       <textarea rows="3" class="pl8 w99p  ml2  brclr8 "  maxlength="255" id="impression_notes" style="height: 46px;"></textarea>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="w3-row  mb8 mt7">
+                            <div class="w3-container w3-row">
+                                <div class="w3-col l12">
+                                    <div class="f-l">
+                                   <button class="w80 mr8  h30 w3-text-white bgclr8 brclr3 f-12 ff-r " onclick="para_save();"  id="final_save"> Save</button>
+                                        <!-- <button class="w80  h30 w3-text-white bgclr9 brclr6 f-12 " id="final_clear">Clear</button> -->
+                                    </div>
+                                    <div class="f-r">
+                                       <button class="w133 h30 bgclr8 brclr3  ff-r ta w3-text-white " id="final_report" onclick="can_report()"> <i class="fa fa-file-text f-11" aria-hidden="true"></i>
+                                            <span class="f-12">Generate Report</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fg -->
+                    </div>
+                </div>
+    <div id="id01" class="w3-modal bgclr18">
+      <div class="w3-modal-content w80p h80p w3-round" style="height: 98% !important;margin-top: -3% !important">
+         <header class="w3-container w3-padding-16 bkgclr lh12"> 
+          <span class="ff-r f-18 ft-b w3-text-white pl16">Patient Details</span><br>
+          <!-- <span class="f-12 ff-r w3-text-white">Capture Patient Details</span> -->
+        </header>
+        <div class="w3-padding-16 w3-container scroll h525">
+           <form class="mt38" method="POST" action="{% url 'test_patient_edit' medical_test.patient.UID option.app_code option.doctor_uid option.examiner_uid %}" id="canyscope_sym2_patient_edit" style="margin-top: 30px !important">
+                    {% csrf_token %}
+                    <div class="w3-row-padding">
+                        <div class="w3-col l6">
+                            <div class="w3-row pt8 ">
+                               <div class="w3-col l5 pt6">
+                                   <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient ID</label>
+                               </div>
+                               <div class="w3-col l7">
+                                  <input class="brbclr1 h30  fclr1 pl8 h30 w100p " name="patient_id" type="text" id="patient_id" placeholder="" maxlength="25" disabled value="{{medical_test.patient.FRIENDLY_UID}}">
+                               </div>
+                            </div>
+                                 <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Prefix <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <label class="select-add">
+                        <select name="prefix" class="select-1add fclr1 f-12 ff-r w100" id="prefix" style="padding-left: 8px;">
+                            <option class="f-12 ff-r" disabled selected>Please Select Prefix</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.PREFIX == "Mr." %} selected="selected" {% endif %} value="Mr.">Mr.</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.PREFIX == "Mrs." %} selected="selected" {% endif %} value="Mrs.">Mrs.</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.PREFIX == "Miss." %} selected="selected" {% endif %} value="Miss.">Miss.</option>
+                        </select>
+                      </label>
+                      <span id="message_prefix"></span>
+                    </div>
+                 </div>
+                <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">First Name <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class=" brbclr1  h30 w100p fclr1 pl8 h30" name="name" type="text" value="{{medical_test.patient.NAME}}" id="name">
+                    <span id="message_name"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Last Name</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class=" brbclr1  h30  fclr1 pl8 h30 w100p" name="last_name" type="text" id="last_name" value="{{medical_test.patient.LAST_NAME}}">
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Sur Name</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class=" brbclr1  h30  fclr1 pl8 h30 w100p" name="sur_name" type="text" id="sur_name" value="{{medical_test.patient.SUR_NAME}}"><span id="message_name"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient Contact Number <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" id="mobile_number" name="mobile_number" type="text" placeholder="" value="{{medical_test.patient.PATIENT_MOBILE_NUMBER}}" maxlength="15">
+                    <span id="message"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient E-mail ID </label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" id="emailid" name="email" type="email" placeholder="" value="{{medical_test.patient.PATIENT_EMAIL}}">
+                    <span id="message_email"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient Alternate Contact Number </label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30"  name="poc_mobile_number" type="text" placeholder="" value="{{medical_test.patient.POC_MOBILE_NUMBER}}" id="mobile_number1" maxlength="15">
+                    <span id="message_alt_contact_no"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b" >Patient Alternate E-mail ID </label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="poc_email" type="email" placeholder=""  value="{{medical_test.patient.POC_EMAIL}}" id="alternate_emailid">
+                    <span id="email_alternate_invalid"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Gender <span class="mandatory">*</span></label>
+                    </div>
+                   <div class="w3-col l7">
+                      <label class="select-add">
+                        <select name="gender" class="select-1add fclr1 f-12 ff-r w100" id="gender" value="{{medical_test.patient.GENDER}}" style="padding-left: 8px;">
+                          <option class="f-12 ff-r" {% if medical_test.patient.GENDER == "FEMALE" %} selected="selected" {% endif %} value="FEMALE">Female</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.GENDER == "MALE" %} selected="selected" {% endif %} value="MALE">Male</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.GENDER == "TRANSGENDER" %} selected="selected" {% endif %} value="TRANSGENDER">Transgender</option>
+                        </select>
+                      </label>
+                    <span id="message_gender"></span>
+                    </div>
+              </div>
+              
+                        </div>
+                        
+                        <div class="w3-col l6">
+               <div class="w3-row pt8 ">
+                    <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Age <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="age" type="text" placeholder="" id="age" value="{{medical_test.patient.AGE}}">
+                    <span id="message_age"></span>
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Address</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="address1" type="text" placeholder="" value="{{medical_test.patient.ADDRESS_LINE_1}}" id="address">
+                    <span id="message_address"></span>
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Street</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="address2" type="text" placeholder="" value="{{medical_test.patient.ADDRESS_LINE_2}}">
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Area</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="address3" type="text" placeholder="" value="{{medical_test.patient.ADDRESS_LINE_3}}">
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">City</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="city" type="text" placeholder="" value="{{medical_test.patient.CITY}}">
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">State</label>
+                    </div>
+                    <div class="w3-col l7">
+                     <label class="select-add">
+                      <select name="state" class="select-1add fclr1 f-12 ff-r w100" id="state" style="padding-left: 8px;">
+                      <option class="f-12 ff-r"  selected value="">Please Select State</option>
+                        {% for state in state_list%}
+                          <option class="f-12 ff-r" {% if medical_test.patient.STATE|safe == state.NAME %} selected="selected" {% endif %} value="{{state.NAME}}">{{state.NAME}}</option>
+                        {% endfor %}
+                    </select>
+                  </label>
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Pincode</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="pincode" id="pincode" maxlength="6" type="text" placeholder="" value="{{medical_test.patient.ZIPCODE}}">
+                    <span id="message_pincode"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Height</label>
+                    </div>
+                    <div class="w3-col l7 pr">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="height" type="text" placeholder="" value="{{medical_test.patient.HEIGHT}}"  id="height">
+                    <span class="f-12 pt6 r10 pa fclr1 t0">cm</span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Weight</label>
+                    </div>
+                    <div class="w3-col l7 pr">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="weight" type="text" placeholder="" value="{{medical_test.patient.WEIGHT}}"  id="weight">
+                    <span class="f-12 pt6 r10 pa fclr1 t0">kg</span>
+                    </div>
+              </div>
+                        </div>
+                    </div>
+             <div class="w3-row pt8 mt16">
+               <div class="w3-col l12">
+                  <button class=" tdecor h30 f-12 ff-r f-r  bkgclr brclr3  w3-text-white w80 cp mr16" id="save" type="button">Save</button>
+                  <button  type="button" class=" tdecor h30 f-12 ff-r f-r  bgclr9 brclr9  w3-text-white w80 cp mr16"  onclick="document.getElementById('id01').style.display='none';resetform()">Close</button>
+               </div>
+            </div>
+           </form>
+
+         </div>
+      </div>
+      </div>
+            </div>
+           <div id="close_process" class="w3-modal  bgclr18">
+            <div class="w3-modal-content w376 mt11p">
+                <div class="w3-container bgclr8 ">
+                    <p class="ff-r f-18 ft-b w3-text-white">{{medical_test.medical_test_type}} </p>
+                </div>
+                <div class="bgclr3 brclr1">
+                    <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Are you sure want to Close Test process ?</h3>
+                </div>
+                <div class="w3-row pt8  pb16 bgclr3">
+                    <div class="ta">
+                        <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6 modal_text_cancel">Yes</button>
+                        <button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6">No</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
+          <div id="close_app_popup" class="w3-modal  bgclr18">
+            <div class="w3-modal-content w376 mt11p">
+                <div class="w3-container bgclr8 ">
+                    <p class="ff-r f-18 ft-b w3-text-white">{{medical_test.medical_test_type}} </p>
+                </div>
+                <div class="bgclr3 brclr1">
+                    <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Are you sure want to Logout ?</h3>
+                </div>
+                <div class="w3-row pt8  pb16 bgclr3">
+                    <div class="ta">
+                        <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6" id="modal_text_cancel_app">Yes</button>
+                        <button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="close_modal_test" class="w3-modal  bgclr18">
+          <div class="w3-modal-content w376 mt11p">
+              <div class="w3-container bgclr8 ">
+                  <p class="ff-r f-18 ft-b w3-text-white">{{medical_test.medical_test_type}} </p>
+              </div>
+              <div class="bgclr3 brclr1">
+                  <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Are you sure want to close the test ?</h3>
+              </div>
+              <div class="w3-row pt8  pb16 bgclr3">
+                  <div class="ta">
+                      <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6" id="cancel_test">Yes</button>
+                      <button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6">No</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+         <div id="test_procedure" class="w3-modal  bgclr18">
+            <div class="w3-modal-content w65p">
+                <div class="w3-container bgclr8 ">
+                    <p class="ff-r f-18 ft-b w3-text-white"><span id="procedure_title"></span> - Test Procedure</p>
+                    <span onclick="document.getElementById('test_procedure').style.display='none'" class="w3-button w3-display-topright w3-large">&times;</span>
+                </div>
+                <div class="brclr1" style="height: 385px;position: relative;">
+                  <div style="width:100%;display: inline-block;position: absolute;top: 5%;" class="w3-row w3-container">
+                    <div class="w3-col l4" style="height: 345px;padding-right:15px;border-right:4px solid rgba(0, 189, 182, 1);">
+                      <img src='{{MEDIA_URL}}{{medical_test.prodecure_image.sustained}}'  style="padding-top: 28%;" class="w100p h100p"  alt="sustained_image" id="sustained_image">
+                    </div>
+                    <div class="w3-col l8 f-14 procedure_sustained" style="padding:0px 4px 0px 0px;">{{medical_test.prodecure.sustained|safe}}</div>
+                  </div>
+                </div>
+                <div class="w3-row-padding footer">
+                    <button  type="button" class=" tdecor h30 f-12 ff-r f-r  bgclr9 brclr9  w3-text-white w80 cp mr16 mb8 mt8" onclick="document.getElementById('test_procedure').style.display='none'">Close</button>
+                </div>
+            </div>
+        </div>
+        <div id="start_test_modal" class="w3-modal  bgclr18">
+            <div class="w3-modal-content mt8p" style="width: 376px;">
+                <div class="w3-container bgclr8 ">
+                    <p class="ff-r f-18 ft-b w3-text-white modal_heading">{{medical_test.medical_test_type}} </p>
+                </div>
+                <div class="bgclr3 brclr1 w3-container" style="padding-left: 25px;padding-right: 22px;">
+                    <h3 class="f-16 ff-r fclr pt8 pb1 modal_content"></h3> <div></div>
+                </div>
+                <div class="w3-row pt8  pb16 bgclr3">
+                    <div class="f-r mr16">
+                        <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6" onclick="start_test_modal_hide()" type="button">Cancel</button>
+                        <button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr8 brclr3 test_start can_bp_button" onclick="test_begin()" type="button">BP Start</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="bp_error_alert" class="w3-modal  bgclr18" onclick="bp_error_alert_close()">
+          <div class="w3-modal-content w376 mt11p">
+              <div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;">
+                   <span class="device_icon  bred br w14 h14 ta pt1 w3-text-white"  style="position: relative;top: 15px;">
+                    <i class="f-10 fa fa-info" aria-hidden="true"></i></span>
+                  <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 " id="bp_error_msg"></h3>
+                <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6" onclick="bp_error_alert_close()">ok</button>
+              </div>
+          </div>
+      </div>  
+         <div id="settingsdev" class="w3-modal  bgclr18">
+            <div class="w3-modal-content w376 mt11p" style="width: 450px !important">
+                <div class="w3-container bgclr8 ">
+                    <p class="ff-r f-18 ft-b w3-text-white">Device Config (Kodys CAN) </p>
+                </div>
+                <div class="bgclr3 brclr1">
+                    <div class="w3-row pt16">
+                        <div class="w3-row mb16">
+                            <div class="w3-col l3 mt3 mr16">
+                               <label class="f-12 ff-r f-r fclr1">Key</label>
+                            </div>
+                            <div class="passkey 12 ml16">
+                                <input type="text" class="h30  brclr8" name="constant_passcode" maxlength="1" style="width: 25px;text-align: center;" value="K" readonly="readonly">
+                                <input type="text" class="h30  brclr8 pl8" name="key1" maxlength="4" style="width: 80px;">
+                                <input type="text" class="h30  brclr8 pl8" name="key2" maxlength="4" style="margin-left: 8px;width: 80px;">
+                                <input type="text" class="l3 h30  brclr8 pl8" name="key3" maxlength="4" style="margin-left: 8px;width: 80px;">
+                            </div>
+                        </div>
+                        <div class="w3-row mb16">
+                            <div class="w3-col l3 mt3 mr16">
+                               <label class="f-12 ff-r f-r fclr1">Mac ID <span style="color: red;">*</span></label>
+                            </div>
+                            <div class="ml16 pass_mac_addressi_id">
+                                <input type="text" class="h30  brclr8" name="ID_1" maxlength="2" style="width: 40px;text-align: center;"><span style="margin-left: 4px;margin-right: 2px;font-weight: bold;">:</span>
+                                <input type="text" class="h30  brclr8" name="ID_2" maxlength="2" style="width: 40px;text-align: center;"><span style="margin-left: 4px;margin-right: 2px;font-weight: bold;">:</span>
+                                <input type="text" class="l3 h30  brclr8" name="ID_3" maxlength="2" style="width: 40px;text-align: center;"><span style="margin-left: 4px;margin-right: 2px;font-weight: bold;">:</span>
+                                <input type="text" class="h30  brclr8" name="ID_4" maxlength="2" style="width: 40px;text-align: center;"><span style="margin-left: 4px;margin-right: 2px;font-weight: bold;">:</span>
+                                <input type="text" class="h30  brclr8" name="ID_5" maxlength="2" style="width: 40px;text-align: center;"><span style="margin-left: 4px;margin-right: 2px;font-weight: bold;">:</span>
+                                <input type="text" class="l3 h30  brclr8" name="ID_6" maxlength="2" style="width: 40px;text-align: center;">
+                            </div>
+                        </div>
+                        <div class="w3-row mb16">
+                            <div class="w3-col l3 mt3">
+                                <label class="f-12 ff-r f-r fclr1 tar">Connection Type</label>
+                            </div>
+                            <div class="w3-col l8 ml16">
+                                <label class="select" style="width: 299px !important">
+                                   <select name="connection_type" id="connection_type" style="width: 299px !important">
+                                        <option selected="selected" disabled>Select connection type</option>
+                                       <option value="USB">USB</option>
+                                       <option value="BLUETOOTH">BLUETOOTH</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="w3-row mb16">
+                          <div class="w3-col l3 mt3">
+                              <label class="f-12 ff-r f-r fclr1 tar">Mode</label>
+                          </div>
+                          <div class="w3-col l8 ml16 pt-2" id="setting_mode">
+                              <label class="fclr1" style="margin: 10px;" for="operation">
+                              <input type="radio" name="mode" id="operation" value="operation" {% if medical_test_result.DEVICE_MORE_OPTION.mode == "operation" %}checked{% endif %}> 
+                              <span style="position: relative;top: -3px;left: 3px;">Operation</span>
+                              </label>
+                              <label class="fclr1"  style="margin: 10px;" for="monitor">
+                              <input type="radio" name="mode" id="monitor" value="monitor" {% if medical_test_result.DEVICE_MORE_OPTION.mode == "monitor" %}checked{% endif %}> 
+                              <span style="position: relative;top: -3px;left: 3px;">Monitor</span>
+                              </label>
+                              <label class="fclr1"  style="margin: 10px;" for="diagnose">
+                              <input type="radio" name="mode" id="diagnose" value="diagnose" {% if medical_test_result.DEVICE_MORE_OPTION.mode == "diagnose" %}checked{% endif %}> 
+                              <span style="position: relative;top: -3px;left: 3px;">Diagnose</span>
+                              </label>
+                          </div>
+                      </div>
+                      <div class="w3-row mb16">
+                          <div class="w3-col l3 mt3">
+                              <label class="f-12 ff-r f-r fclr1 tar">Gain</label>
+                          </div>
+                          <div class="w3-col l8 ml16 pt-3" id="setting_gain">
+                              <label class="fclr1" style="margin: 10px;" for="gain_1">
+                              <input type="radio" name="gain" id="gain_1" value="gain_1" {% if medical_test_result.DEVICE_MORE_OPTION.gain == "gain_1" %}checked{% endif %}> 
+                              <span style="position: relative;top: -3px;left: 3px;">Gain 1</span>
+                              </label>
+                              <label class="fclr1"  style="margin: 10px;" for="gain_2">
+                              <input type="radio" name="gain" id="gain_2" value="gain_2" {% if medical_test_result.DEVICE_MORE_OPTION.gain == "gain_2" %}checked{% endif %}> 
+                              <span style="position: relative;top: -3px;left: 3px;">Gain 2</span>
+                              </label>
+                              <label class="fclr1"  style="margin: 10px;" for="gain_3">
+                              <input type="radio" name="gain" id="gain_3" value="gain_3" {% if medical_test_result.DEVICE_MORE_OPTION.gain == "gain_3" %}checked{% endif %}> 
+                              <span style="position: relative;top: -3px;left: 3px;">Gain 3</span>
+                              </label>
+                              <label class="fclr1"  style="margin: 10px;" for="gain_4">
+                              <input type="radio" name="gain" id="gain_4" value="gain_4" {% if medical_test_result.DEVICE_MORE_OPTION.gain == "gain_4" %}checked{% endif %}> 
+                              <span style="position: relative;top: -3px;left: 3px;">Gain 4</span>
+                              </label>
+                          </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="w3-row pt8  pb16 bgclr3">
+                    <div class="" style="margin-left: 57%">
+                        <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6" onclick="settingsdev_close();">Cancel</button>
+                        <button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="device_config()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div id="password_incorrect" class="w3-modal  bgclr18" onclick="password_close()">
+      <div class="w3-modal-content w376 mt11p">
+          <div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;">
+               <span class="device_icon  bred br w14 h14 ta pt1 w3-text-white"  style="position: relative;top: 15px;">
+              <i class="f-10 fa fa-plug" aria-hidden="true"></i></span>
+              <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Device Configuration Password is incorrect </h3>
+            <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6" onclick="password_close()">ok</button>
+          </div>
+      </div>
+  </div>
+  <div id="device_shutdown" class="w3-modal  bgclr18" onclick="device_shutdown_close()">
+          <div class="w3-modal-content w376 mt11p">
+              <div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;">
+                   <span class="device_icon  bred br w14 h14 ta pt1 w3-text-white"  style="position: relative;top: 15px;">
+                  <i class="f-10 fa fa-plug" aria-hidden="true"></i></span>
+                  <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please check the device is ON.</h3>
+                <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6" onclick="device_shutdown_close()">ok</button>
+              </div>
+          </div>
+      </div>
+      <div id="device_not_connected" class="w3-modal  bgclr18" onclick="device_not_connected_close()">
+        <div class="w3-modal-content w376 mt11p">
+            <div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;">
+                 <span class="device_icon  bred br w14 h14 ta pt1 w3-text-white"  style="position: relative;top: 15px;">
+                <i class="f-10 fa fa-info" aria-hidden="true"></i></span>
+                <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">You can't start test without device connection.</h3>
+              <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6" onclick="device_not_connected_close()">ok</button>
+            </div>
+        </div>
+    </div>
+    <div id="emergency_stop" class="w3-modal  bgclr18" onclick="emergency_stop_close()">
+      <div class="w3-modal-content w376 mt11p">
+          <div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;">
+               <span class="device_icon  bred br w14 h14 ta pt1 w3-text-white"  style="position: relative;top: 15px;">
+              <i class="f-10 fa fa-info" aria-hidden="true"></i></span>
+              <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">BP Emergency Stopped</h3>
+            <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6" onclick="emergency_stop_close()">ok</button>
+          </div>
+      </div>
+  </div>
+  <div id="response_stop" class="w3-modal  bgclr18" onclick="response_stop_close()">
+    <div class="w3-modal-content w376 mt11p">
+        <div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;">
+             <span class="device_icon  bred br w14 h14 ta pt1 w3-text-white"  style="position: relative;top: 15px;">
+            <i class="f-10 fa fa-plug" aria-hidden="true"></i></span>
+            <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">BP Not Responding</h3>
+          <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6" onclick="response_stop_close()">ok</button>
+        </div>
+    </div>
+</div>  
+    {% endblock%}
+ {% block js_script %}
+<script>
+    var test_type = "BEFORE";
+    function start_test_modal_hide(){
+      $("#start_test_modal").hide();
+     }
+     function bp_error_alert_close()
+    {
+      $("#bp_error_alert").hide();
+      {% if app %}
+          if($("#connection_type").val() == 'USB'){
+              external.can_test_command(send_air_leak_error_off_command);
+          }
+          if($("#connection_type").val() == 'BLUETOOTH'){
+              external.can_test_command(blu_send_air_leak_error_off_command);
+          }
+      {% endif %}
+    }
+    function pleasewait_loader_start()
+    {
+        if($("#wait_process").length == 0)
+        {
+            $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+            $("#wait_process").show();
+        }
+    }
+    function pleasewait_loader_end()
+    {
+        if($("#wait_process").length == 1) {
+            $("#wait_process").remove();
+        }
+    }
+    function password_close(){
+    $("#password_incorrect").hide();
+    }
+    function password_show(){
+    $("#password_incorrect").show();
+    }
+    function device_shutdown()
+    {
+        $("#device_shutdown").show();
+        $("#device_status").removeClass("bgclr4");
+        $("#device_status").addClass("bred");
+        $("#device_status").attr("connected","0");
+        $("#stop").attr("disabled",true).addClass("w3-disabled");
+        if(test_type == "BEFORE")
+        {
+          $(".field_value").val("");
+          $("#B-01").focus();
+          $("#start_test").attr("disabled",false).removeClass("w3-disabled");
+        }
+        else if(test_type == "AFTER"){
+          $(".field_value_1").val("");
+          $("#B-07").focus();
+          $("#start_test").attr("disabled",false).removeClass("w3-disabled");
+        }
+    }
+    function bp_not_responding()
+    {
+        $("#stop").attr("disabled",true).addClass("w3-disabled");
+        $("#response_stop").show();
+        if(test_type == "BEFORE")
+        {
+          $(".field_value").val("");
+          $("#B-01").focus();
+          $("#start_test").attr("disabled",false).removeClass("w3-disabled");
+        }
+        else if(test_type == "AFTER"){
+          $(".field_value_1").val("");
+          $("#B-07").focus();
+          $("#start_test").attr("disabled",false).removeClass("w3-disabled");
+        }
+    }
+    function response_stop_close()
+    {
+        $("#response_stop").hide();
+    }
+    function device_shutdown_close()
+    {
+        $("#device_shutdown").hide();
+    }
+    function device_not_connected_close()
+    {
+        $("#device_not_connected").hide();
+    }
+    function settingsdev_close()
+    {
+        document.getElementById('settingsdev').style.display='none';
+        $("#connection_type").val(connection_type);
+        if(connection_type == 'USB'){
+            $('#bluetooth').removeClass("bgclr4 w3-text-white").addClass("fclr1 bgclr5");
+            $('#usb').removeClass("fclr1 bgclr5").addClass("bgclr4 w3-text-white");
+        }
+          if(connection_type == 'BLUETOOTH'){
+            $('#usb').removeClass("bgclr4 w3-text-white").addClass("fclr1 bgclr5");
+            $('#bluetooth').removeClass("fclr1 bgclr5").addClass("bgclr4 w3-text-white");
+        }
+        {% if medical_test_result.DEVICE_KEY %}
+          $("input[name='key1']").val("{{medical_test_result.DEVICE_KEY|slice:':4'}}");
+          $("input[name='key2']").val("{{medical_test_result.DEVICE_KEY|slice:'4:8'}}");
+          $("input[name='key3']").val("{{medical_test_result.DEVICE_KEY|slice:'8:12'}}");
+        {% else %}
+            $("input[name='key1']").val("");
+            $("input[name='key2']").val("");
+            $("input[name='key3']").val("");
+        {% endif %}
+    }
+    function validMobile(MobileNumber) {
+    var re = /^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$/ ;
+    return re.test(MobileNumber);
+    }
+    function validEmail(Email) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(Email);
+    }
+    function validpincode(pincode){
+    var re=/^[1-9][0-9]{5}$/;
+    return re.test(pincode);
+    }
+    function validphone(phonenumber){
+    var re=/^\d{10}$/ ;
+    return re.test(phonenumber);
+    }
+    function validname(name){
+    var re=/^(?!\.)[A-Za-z. ]+$/;
+    return re.test(name);
+    }
+    function resetform(){
+        document.getElementById("canyscope_sym2_patient_edit").reset();
+    }
+    function device_connect(msg, connect) {
+      var key = $("input[name='key1']").val()+$("input[name='key2']").val()+$("input[name='key3']").val();
+      var mode = $("input[name='mode']:checked").val();
+      var gain = $("input[name='gain']:checked").val();
+      if (key)
+      {
+        connect("CAN",key+":"+mode+":"+gain,"USB");
+      }
+    }
+    function connect_close(msg,close_device)
+    {
+      close_device("CAN","USB");
+    }
+    function redirect_connect_close(msg,close_device)
+    {
+        close_device("CAN","USB");
+        setTimeout(function(){ 
+            window.location.href = "{% url 'home' %}";
+        }, 2000);
+    }
+    function redirect_connect_close_1(msg,close_device)
+    {
+        close_device("CAN","USB");
+        setTimeout(function(){ 
+            window.location.href = "{% url 'signout' %}";
+        }, 2000);
+    }
+     function blu_device_connect(msg, connect) {
+        var key = $("input[name='key1']").val()+$("input[name='key2']").val()+$("input[name='key3']").val();
+        var mac_address_id =  $("input[name='ID_1']").val()+$("input[name='ID_2']").val()+$("input[name='ID_3']").val()+$("input[name='ID_4']").val()+$("input[name='ID_5']").val()+$("input[name='ID_6']").val();
+        var mode = $("input[name='mode']:checked").val();
+        var gain = $("input[name='gain']:checked").val();
+        if(key)
+        {
+            connect("CAN",key+":"+mac_address_id+":"+mode+":"+gain,"BLU");
+        }
+    }
+    function blu_connect_close(msg,close_device)
+    {
+      close_device("CAN","BLU");
+    }
+    function redirect_blu_connect_close(msg,close_device)
+    {
+        close_device("CAN","BLU");
+        setTimeout(function(){ 
+            window.location.href = "{% url 'home' %}";
+        }, 2000);
+    }
+    function redirect_blu_connect_close_1(msg,close_device)
+    {
+        close_device("CAN","BLU");
+        setTimeout(function(){ 
+            window.location.href = "{% url 'signout' %}";
+        }, 2000);
+    }
+    function send_bp_before_start_command(command_send)
+    {
+      $("#stop").removeAttr("disabled").removeClass("w3-disabled");
+      command_send("USB","S");
+    }
+    function blu_send_bp_before_start_command(command_send)
+    {
+      $("#stop").removeAttr("disabled").removeClass("w3-disabled");
+      command_send("BLU","S");
+    }
+    function send_bp_before_end_command(command_send)
+    {
+      $("#stop").attr("disabled",true).addClass("w3-disabled");
+      command_send("USB","T");
+    }
+    function blu_send_bp_before_end_command(command_send)
+    {
+      $("#stop").attr("disabled",true).addClass("w3-disabled");
+      command_send("BLU","T")
+    }
+    function send_bp_after_start_command(command_send)
+    {
+      $("#stop").removeAttr("disabled").removeClass("w3-disabled");
+      command_send("USB","U");
+    }
+    function blu_send_bp_after_start_command(command_send)
+    {
+      $("#stop").removeAttr("disabled").removeClass("w3-disabled");
+      command_send("BLU","U");
+    }
+    function send_bp_after_end_command(command_send)
+    {
+      $("#stop").attr("disabled",true).addClass("w3-disabled");
+      command_send("USB","V");
+    }
+    function blu_send_bp_after_end_command(command_send)
+    {
+      $("#stop").attr("disabled",true).addClass("w3-disabled");
+      command_send("BLU","V");
+    }
+    function send_air_leak_error_off_command(command_send)
+    {
+      command_send("USB","7")
+    }
+    function blu_send_air_leak_error_off_command(command_send)
+    {
+      command_send("BLU","7")
+    }
+    function send_bp_emergency_command(command_send)
+    {
+      command_send("USB","K")
+    }
+    function blu_send_bp_emergency_command(command_send)
+    {
+      command_send("BLU","K")
+    }
+    function send_bp_led_reset_command(command_send)
+    {
+      command_send('USB','h')
+    }
+    function blu_send_bp_led_reset_command(command_send)
+    {
+      command_send('BLU','h')
+    }
+    function emergency_stop()
+    {
+      if(test_type == "BEFORE")
+      {
+        $(".field_value").val("");
+        $("#B-01").focus();
+        $("#start_test").attr("disabled",false).removeClass("w3-disabled");
+      }
+      else if(test_type == "AFTER"){
+        $(".field_value_1").val("");
+        $("#B-07").focus();
+        $("#start_test").attr("disabled",false).removeClass("w3-disabled");
+      }
+      $("#stop").attr("disabled",true).addClass("w3-disabled");
+      emergency_stop_command();
+    }
+    function emergency_stop_command()
+    {
+      {% if app %}
+          if($("#connection_type").val() == 'USB'){
+              external.can_test_command(send_bp_emergency_command);
+          }
+          if($("#connection_type").val() == 'BLUETOOTH'){
+              external.can_test_command(blu_send_bp_emergency_command);
+          }
+      {% endif %}
+    }
+    function emergency_stop_for_device()
+    {
+      $("#emergency_stop").show();
+      if(test_type == "BEFORE")
+      {
+        $(".field_value").val("");
+        $("#B-01").focus();
+        $("#start_test").attr("disabled",false).removeClass("w3-disabled");
+      }
+      else if(test_type == "AFTER"){
+        $(".field_value_1").val("");
+        $("#B-07").focus();
+        $("#start_test").attr("disabled",false).removeClass("w3-disabled");
+      }
+      $("#stop").attr("disabled",true).addClass("w3-disabled");
+    }
+    function emergency_stop_close()
+    {
+      $("#emergency_stop").hide();
+    }
+    function js_print(value)
+    {
+       if(test_type == "BEFORE")
+       {
+          $("#before_handgrip_pressure").text(value);
+       }
+       else if(test_type == "AFTER")
+       {
+          $("#after_handgrip_pressure").text(value);
+       }
+    }
+    function js_bp_error(message_code)
+        {
+          $("#stop").attr("disabled",true).addClass("w3-disabled");
+          if(test_type == "BEFORE")
+          {
+            $("#start_test").text('Record');
+            $("#start_test").removeAttr("disabled","disabled").removeClass("w3-disabled");
+          }
+          else if(test_type == "AFTER")
+          {
+            $("#start_test").removeAttr("disabled","disabled").removeClass("w3-disabled");
+          }
+          if(message_code == "07")
+          {
+            $("#bp_error_msg").text('Air leakage. Air leakage in valve or hose');
+            $("#bp_error_alert").show();
+          }
+          else if(message_code == "02")
+          {
+            $("#bp_error_msg").text('Self test Failure. Probably sensor or A/D sampling error;');
+            $("#bp_error_alert").show();
+          }
+          else if(message_code == "06")
+          {
+            $("#bp_error_msg").text('Cuff is loosely wrapped. The cuff may be too loosely wound or not attached at all');
+            $("#bp_error_alert").show();
+          }
+          else if(message_code == "08")
+          {
+            $("#bp_error_msg").text('Air pressure error. Possibly cannot open valve normally');
+            $("#bp_error_alert").show();
+          }
+          else if(message_code == "09")
+          {
+            $("#bp_error_msg").text('Weak signal. The pulse of the patient may be too weak or the cuff is loosely wrapped');
+            $("#bp_error_alert").show();
+          }
+          else if(message_code == "10")
+          {
+            $("#bp_error_msg").text('Range exceeded. The blood pressure of the patient may exceed the measuring range;');
+            $("#bp_error_alert").show();
+          }
+          else if(message_code == "11")
+          {
+            $("#bp_error_msg").text('Excessive motion. In measurement, signals contain motion artifact or too much interference');
+            $("#bp_error_alert").show();
+          }
+          else if(message_code == "12")
+          {
+            $("#bp_error_msg").text('Overpressure. The cuff pressure exceeds 290mmHg in ADU mode and 145mmHg in NEO mode');
+            $("#bp_error_alert").show();
+          }
+          else if(message_code == "13")
+          {
+            $("#bp_error_msg").text('Signal saturated. Motion or other reason leads to very large signal amplitude');
+            $("#bp_error_alert").show();
+          }
+          else if(message_code == "14")
+          {
+            $("#bp_error_msg").text('Leakage. In Leakage check, air leakage is found in hose');
+            $("#bp_error_alert").show();
+          }
+          else if(message_code == "15")
+          {
+            $("#bp_error_msg").text('System error. After start-up, the inflating pump, A/D sampling unit, pressure sensor have error or the pointer has error when the software is in running process');
+            $("#bp_error_alert").show();
+          }
+          else if(message_code == "19")
+          {
+            $("#bp_error_msg").text('Timeout. Measurement takes more than 120 seconds in ADU mode when cuff pressure above 190mmHg and 90 seconds below 190mmHg.');
+            $("#bp_error_alert").show();
+          }
+
+        }
+    function js_bp_print(systolic,diastolic,pulse_rate)
+    {
+       if(test_type == "BEFORE")
+       {
+        $("#before_handgrip_pressure").text("000");
+        $("#B-01").val(systolic);
+        $("#B-03").val(diastolic);
+        $("#B-05").val(pulse_rate);
+        $(".field_value").attr("disabled",true);
+        $("#repeat").removeAttr("disabled",true).removeClass("w3-disabled");
+        $("#start_test").html("Next");
+        $("#start_test").removeAttr("disabled","disabled").removeClass("w3-disabled");
+        $("#start_test_modal").show();
+        $(".modal_heading").html("Sustained Handgrip / After Handgrip");
+        $(".modal_content").html("{{medical_test.instruction.after_handgrip|safe}}");
+        {% if app %}
+            if($("#connection_type").val() == 'USB'){
+                external.can_test_command(send_bp_before_end_command);
+            }
+            if($("#connection_type").val() == 'BLUETOOTH'){
+                external.can_test_command(blu_send_bp_before_end_command);
+            }
+        {% endif %}
+        test_type = "AFTER";
+       }
+       else if(test_type == "AFTER")
+       {
+          $("#after_handgrip_pressure").text("000");
+          $("#B-07").val(systolic);
+          $("#B-09").val(diastolic);
+          $("#B-11").val(pulse_rate);
+          $('.field_value_1').attr("disabled",true);
+          $(".timer1").countimer('stop');
+          $("#finish_test,#cancel").removeAttr("disabled",true).removeClass("w3-disabled");
+          $("#repeat").removeAttr("disabled",true).removeClass("w3-disabled");
+          $(".timer1").countimer('stop');
+          $(".timer1").countimer('start');
+          $(".timer1").countimer('stop');
+          {% if app %}
+              if($("#connection_type").val() == 'USB'){
+                  external.can_test_command(send_bp_after_end_command);
+              }
+              if($("#connection_type").val() == 'BLUETOOTH'){
+                  external.can_test_command(blu_send_bp_after_end_command);
+              }
+          {% endif %}
+          test_type = "COMPLETE";
+       }
+        
+    }
+    $('#mobile_number1,#mobile_number').on("keypress keyup keydown",function (event) {
+       var keycode = event.which;
+       var keys = [96,97,98,99,100,101,102,103,104,105,45,189,43,187];
+       if(keys.indexOf(keycode) == -1){
+       if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 9 ||  keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+       event.preventDefault();
+       }
+      }
+     });
+    $('#pincode,#age').on("keypress keyup keydown",function (event) {
+       var keycode = event.which;
+       var keys = [96,97,98,99,100,101,102,103,104,105];
+       if(keys.indexOf(keycode) == -1){
+       if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 9 ||  keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+       event.preventDefault();
+      }
+    }
+  });
+  $(document).ready(function(){
+      $("#stop").attr("disabled",true).addClass("w3-disabled");
+      $('#height').mask('000');
+      $('#weight').mask('000.0');
+      $("#save").click(function(){
+          var name=$("#name").val();
+          var mobile_number=$("#mobile_number").val();
+          var address=$("#address").val();
+          var gender=$("#gender").val();
+          var age=$("#age").val();
+          var prefix=$("#prefix").val();
+          var state=$("#state").val();
+          var pincode=$("#pincode").val();
+          var email_id = $("#emailid").val();
+          var alternate_email = $("#alternate_emailid").val();
+          var alt_contact_num = $("#mobile_number1").val();
+          var flag=0;
+          var is_valid_email = true;
+          var is_valid_alternate_email = true;
+          var is_valid_alternate_contact_no =true;
+          var is_valid_pincode = true;
+          if(email_id == ""){
+            is_valid_email = true;
+          }
+          else if(!validEmail(email_id)){
+            $("#message_email").html("Please enter Valid E-mail ID");
+            $("#message_email").css({"color":"red"});
+            $("#emailid").focus();
+            is_valid_email = false;
+          }
+          else{
+            is_valid_email = true;
+            $("#message_email").html("");
+          }
+          if(alternate_email == ""){
+            is_valid_alternate_email = true;
+          }
+          else if(!validEmail(alternate_email)){
+            $("#email_alternate_invalid").html("Please enter Valid E-mail ID");
+            $("#email_alternate_invalid").css({"color":"red"});
+            $("#email_text_alternate").focus();
+            is_valid_alternate_email = false;
+          }
+          else{
+            is_valid_alternate_email = true;
+            $("#email_alternate_invalid").html("");
+          }
+          if(name==""){
+            $("#message_name").html("Please enter Patient Name");
+            $("#message_name").css({"color":"red"});
+          }
+          else  if(!validname(name)){
+            $("#message_name").html("Please enter letters");
+            $("#message_name").css({"color":"red"});
+          }
+          else {
+            $("#message_name").html("");
+            flag++;
+          }
+          if(mobile_number==""){ 
+            $("#message").html("Please enter Contact Number");
+            $("#message").css({"color":"red"});
+          }
+          else if(!validMobile(mobile_number))
+          {
+            $("#message").html("Please enter Valid Contact Number");
+            $("#message").css({"color":"red"});
+           }
+          else
+          {
+            $("#message").html("");
+            flag++;
+          }
+          if(alt_contact_num==""){ 
+           is_valid_alternate_contact_no =true;
+          }
+          else if(!validMobile(alt_contact_num))
+          {
+            $("#message_alt_contact_no").html("Please enter Valid Contact Number");
+            $("#message_alt_contact_no").css({"color":"red"});
+            is_valid_alternate_contact_no = false;
+           }
+          else
+          {
+            $("#message_alt_contact_no").html("");
+            is_valid_alternate_contact_no =true;
+          }
+          if(pincode==""){
+            is_valid_pincode = true;
+          }
+          else if(!validpincode(pincode))
+          {
+            $("#message_pincode").html("Please Enter Valid Pincode")
+            $("#message_pincode").css({"color":"red"});
+          is_valid_pincode = false;
+          }
+          else{
+            $("#message_pincode").html("");
+            is_valid_pincode = true;
+          }
+          if(age==""){
+            $("#message_age").html("Please enter Age");
+            $("#message_age").css({"color":"red"});
+          }
+          else if(age>= 200){
+            $("#message_age").html("Please enter valid Age");
+            $("#message_age").css({"color":"red"});
+          }
+          else{
+            $("#message_age").html("");
+            flag++;
+          }
+          if(prefix==null){  
+            $("#message_prefix").html("Please Select Prefix")
+            $("#message_prefix").css({"color":"red"});
+          }
+          else{
+            $("#message_prefix").html("");
+            flag++;
+          }
+          if(gender==null){  
+            $("#message_gender").html("Please Select Gender")
+            $("#message_gender").css({"color":"red"});
+          }
+          else{
+            $("#message_gender").html("");
+            flag++;
+          }
+          if(flag==5 && is_valid_email && is_valid_alternate_email && is_valid_alternate_contact_no && is_valid_pincode){
+            $("#canyscope_sym2_patient_edit").submit();
+          }
+      });
+      $('body').on('keydown', 'input, select, textarea', function(e) {
+              var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
+              if (e.keyCode == 13) {
+                  focusable = form.find('input,a,select,button,textarea').filter(':visible');
+                  next = focusable.eq(focusable.index(this)+1);
+                  if (next.length) {
+                      next.focus();
+                  }
+                  return false;
+              }
+        });
+       $('.field_value,.field_value_1').on("keypress keyup keydown",function (event) {
+            var keycode = event.which;
+            var keys = [96,97,98,99,100,101,102,103,104,105,110];
+            if((keys.indexOf(keycode) == -1)){
+            if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 9 || keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+             event.preventDefault();
+             }
+          }
+        });
+        $("#connection_type").val("{{medical_test_result.CONNECTION_TYPE}}");
+        $("input[name='key1']").val("{{medical_test_result.DEVICE_KEY|slice:':4'}}");
+        $("input[name='key2']").val("{{medical_test_result.DEVICE_KEY|slice:'4:8'}}");
+        $("input[name='key3']").val("{{medical_test_result.DEVICE_KEY|slice:'8:12'}}");
+        $("input[name='ID_1']").val("{{medical_test_result.DEVICE_CONFIG|slice:':2'}}");
+        $("input[name='ID_2']").val("{{medical_test_result.DEVICE_CONFIG|slice:'2:4'}}");
+        $("input[name='ID_3']").val("{{medical_test_result.DEVICE_CONFIG|slice:'4:6'}}");
+        $("input[name='ID_4']").val("{{medical_test_result.DEVICE_CONFIG|slice:'6:8'}}");
+        $("input[name='ID_5']").val("{{medical_test_result.DEVICE_CONFIG|slice:'8:10'}}");
+        $("input[name='ID_6']").val("{{medical_test_result.DEVICE_CONFIG|slice:'10:12'}}");
+        connection_type = $("#connection_type").val();
+        if($("#connection_type").val() == 'USB'){
+            $('#bluetooth').removeClass("bgclr4 w3-text-white").addClass("fclr1 bgclr5");
+            $('#usb').removeClass("fclr1 bgclr5").addClass("bgclr4 w3-text-white");
+        }
+         if($("#connection_type").val() == 'BLUETOOTH'){
+            $('#usb').removeClass("bgclr4 w3-text-white").addClass("fclr1 bgclr5");
+            $('#bluetooth').removeClass("fclr1 bgclr5").addClass("bgclr4 w3-text-white");
+        }
+        before_test();
+        {% if not medical_test.test_entry_data  and test_code %}
+            {% if medical_test.test_type == "All_test" %}
+              all_test();
+            {% elif medical_test.test_type == "parasympathetic_test" %}
+               para_sym();
+               $("#test_for_2").css("margin-bottom","84px");
+            {% endif %}
+        {% endif %}
+        $(".test_start").click(function() {
+          if($(".field_value").val() == "" && $(".field_value_1").val() == ""){
+            $("#start_test").attr("disabled",true).addClass("w3-disabled");
+            $("#B-01").focus();
+          }
+          if($('.field_value').val()!= "" && $(".field_value_1").val()== ""){
+             $("#start_test").attr("disabled","disabled").addClass("w3-disabled");
+             $(".after_grip").show();
+             $(".field_value").attr("disabled","disabled");
+             $("#B-07").focus();
+          }
+         
+         } );
+        $("#start_test").click(function(){
+          var connected = $("#device_status").attr("connected");
+          if (connected != 0)
+          { 
+            if(test_type == "BEFORE")
+            {
+              start_test_process(); 
+            }
+            if(test_type == "AFTER")
+            {
+                $(".after_grip").show();
+                $(".modal_heading").html("Sustained Handgrip / After Handgrip");
+                $(".modal_content").html("{{medical_test.instruction.after_handgrip|safe}}");
+                $("#start_test_modal").show();
+            }
+          }
+          else
+          {
+            $("#device_not_connected").show();
+          }
+        });
+        $(".title").css("visibility","hidden");
+        $("#finish_test").click(function(){
+          $(".field_value").removeClass("w3-disabled").removeAttr("disabled");
+          $(".field_value_1").removeClass("w3-disabled").removeAttr("disabled");
+          var testtype = $("#Select_option input:checked").val();
+          $("#test_type").val(testtype);
+          var code = $("#ecg_6_test").attr("data-id");
+          $("#test_code").val(code);
+          var canyscope_sym2_data = $("#can_sympathetic2_form").serialize();
+              $(".overflow-hidden").append('<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>');
+                $("#wait_process").show(); 
+                  $.ajax({
+                    data: canyscope_sym2_data,
+                     type : 'POST',                            
+                     url :"/sympathetic/{{option.app_code}}/{{option.patient_uid}}/{{option.doctor_uid}}/{{option.examiner_uid}}/TM-24/",
+                     dataType : "application/json; charset=utf-8",
+                     complete : function(data) 
+                     {
+                        var jdata = data.responseText;
+                        var jsonstr = jQuery.parseJSON(jdata);
+                        if(jsonstr.test_entry_id){
+                          text_entery_code = jsonstr.test_entry_id;
+                          previous_code = jsonstr.current_test_code;
+                          window.location.href = "/sympathetic/{{option.app_code}}/{{option.patient_uid}}/{{option.doctor_uid}}/{{option.examiner_uid}}/"+previous_code+"/"+text_entery_code;
+                        }
+                    }
+           });
+        });
+        $("#repeat").click(function(){
+          if($(".field_value").val() == ""){
+            $("#start_test").attr("disabled",true).addClass("w3-disabled");
+          }
+          if($(".field_value").val() != "" && $(".field_value_1").val() == ""){
+            $(".field_value").val("");
+            $(".field_value").removeAttr("disabled",true).removeClass("w3-disabled");
+            $("#start_test").attr("disabled",true).addClass("w3-disabled");
+          }
+          if($(".field_value").val() != "" && $(".field_value_1").val() != ""){
+            $(".field_value_1").val("");
+            $(".timer1").countimer('start');
+            $(".field_value_1").removeAttr("disabled",true).removeClass("w3-disabled");
+            $("#start_test").attr("disabled",true).addClass("w3-disabled");
+            $("#finish_test").attr("disabled",true).addClass("w3-disabled");
+          }
+          $("#repeat").attr("disabled",true).addClass("w3-disabled");
+          if(test_type == "COMPLETE")
+          {
+          $("#cancel").attr("disabled",true).addClass("w3-disabled");  
+          }
+          {% if app %}
+            if(test_type == "AFTER")
+            {
+              test_type = "BEFORE";
+              if($("#connection_type").val() == 'USB'){
+                external.can_test_command(send_bp_before_start_command);
+              }
+              if($("#connection_type").val() == 'BLUETOOTH'){
+
+                external.can_test_command(blu_send_bp_before_start_command);
+              }
+            }
+            else if(test_type == "COMPLETE")
+            {
+              test_type = "AFTER";
+              if($("#connection_type").val() == 'USB'){
+                external.can_test_command(send_bp_after_start_command);
+              }
+              if($("#connection_type").val() == 'BLUETOOTH'){
+                external.can_test_command(blu_send_bp_after_start_command);
+              }
+            } 
+        {% endif %}
+        });
+        $(".test_procedure_modal").click(function(){
+               $("#test_procedure").show();
+        });
+        $(".close_test").css("cursor","pointer");
+        $(".close_test").click(function(){
+            $("#close_process").show();
+        });
+        $(".close_test_page").removeAttr("href","");
+        $(".close_test_page,.close_test").click(function(){
+           $("#close_process").show();
+        });
+        $(".close_app").removeAttr("href","").css("cursor","pointer");
+        $(".close_app").click(function(){
+            $("#close_app_popup").show();
+        });
+        $("#close_app_popup").click(function(){
+            $("#close_app_popup").hide();
+        });
+        $(".modal_text_cancel").click(function(){
+            $("#close_process").hide();
+          {% if app %}
+              if($("#connection_type").val() == 'USB'){
+                  external.connection_close(redirect_connect_close);
+              }
+              else if($("#connection_type").val() == 'BLUETOOTH'){
+                  external.connection_close(redirect_blu_connect_close);
+              }
+              else
+              {
+                  window.location.href = "{% url 'home' %}";
+              }
+          {% else %}
+               window.location.href = "{% url 'home' %}";
+          {% endif %}
+        });
+          $("#modal_text_cancel_app").click(function(){
+              $("#close_app_popup").hide();
+            {% if app %}
+                if($("#connection_type").val() == 'USB'){
+                    external.connection_close(redirect_connect_close_1);
+                }
+                else if($("#connection_type").val() == 'BLUETOOTH'){
+                    external.connection_close(redirect_blu_connect_close_1);
+                }
+                else
+                {
+                    window.location.href = "{% url 'home' %}";
+                }
+            {% else %}
+                 window.location.href = "{% url 'signout' %}";
+            {% endif %}
+          });
+        $("#cancel").click(function(){
+          $("#close_modal_test").show();
+        });
+        $("#cancel_test").click(function(){
+            test_type = "BEFORE";
+            before_test();
+            $("#close_modal_test").hide();
+            $("#start_test").text("Record");
+            $("#start_test").removeAttr("disabled").removeClass("w3-disabled");
+            $(".ecg_retest_4 button").removeAttr("disabled").removeClass("w3-disabled");
+            {% if app %}
+                if($("#connection_type").val() == 'USB'){
+                    external.can_test_command(send_bp_led_reset_command);
+                }
+                if($("#connection_type").val() == 'BLUETOOTH'){
+                    external.can_test_command(blu_send_bp_led_reset_command);
+                }
+            {% endif %}
+        });
+        $("#close_modal_test").click(function(){
+          $("#close_modal_test").hide();
+          });
+  });  
+function before_test(){
+  {% if medical_test.test_entry_data  and test_code == "TM-24" %}
+    $("title").css({"display":"none"});
+    $(".timer1").css("visibility","hidden");
+    $(".timer").css("visibility","hidden");
+    $(".test_6").hide();
+    $(".test_process").css("display","none");
+    $(".test_result").css("display","block");
+    $("#control_button").hide();
+    $("#test_for_2").css("margin-bottom","4px");
+    $(".ecg_retest_5").append("<span class='fclr ff-r f-10'><img src='{{MEDIA_URL}}img/png/completed_status.png' class='pb4 status_width'>&nbsp;Test Completed and Saved.</span>");
+    $(".ecg_retest_5").css("margin-top","4px");
+    $(".heading_title").html("Kodys CAN - Test Results");
+    $(".start_test_5").text("Next Test");
+    $(".start_test_5").click(function(){
+      window.location.href = '/hrv/'+"{{option.app_code}}"+'/{{option.patient_uid}}/'+'{{option.doctor_uid}}'+'/'+'{{option.examiner_uid}}'+'/TM-25/'+'{{option.test_entry}}';
+    });
+    {% if medical_test.test_type == "parasympathetic_test" %}
+      $("#final_save").removeAttr("disabled").removeClass("w3-disabled");
+      $("#test_for_2").css("margin-bottom","2px");
+      $("#impression_all").hide();
+      $("#notes_sympathetic").hide();
+      para_sym();
+    {% elif medical_test.test_type == "All_test" %}
+      $(".start_test_5").removeClass("w3-disabled").removeAttr("disabled");
+      $(".test_proc_7").attr("disabled",false);
+      $(".procedure_sustained").html("{{medical_test.next_prodecure.hrv|safe}}");
+      $("#sustained_image").attr({"src":"{{MEDIA_URL}}{{medical_test.next_prodecure_image.hrv|safe}}","alt":"hrv_image"});
+      $(".procedure_sustained ol").css("margin-top","35px");
+      $("#procedure_title").html("ECG HRV");
+      $("#impression").hide();
+      $("#impression_all").show();
+      $("#final_report").attr("disabled",true).addClass("w3-disabled");
+      $("#final_save").attr("disabled",true).addClass("w3-disabled");
+      $("#notes_sympathetic").show();
+      all_test();
+    {% endif %}
+  {% else %}
+    $(".procedure_sustained").html("{{medical_test.prodecure.sustained|safe}}");
+    $("#sustained_image").attr("src","{{MEDIA_URL}}{{medical_test.prodecure_image.sustained|safe}}");
+    $("#procedure_title").html("Sustained Handgrip");
+    $(".test_7").attr("disabled",true).addClass("w3-disabled");
+    $(".test_result").css("display","none");
+    $("#impression").hide();
+    $("#impression_all").hide();
+    $(".field_value").attr("disabled","disabled");
+    $(".after_grip").hide();
+    $("#final_report").attr("disabled",true).addClass("w3-disabled");
+    $("#final_save").attr("disabled",true).addClass("w3-disabled");
+    $("#cancel").attr("disabled","disabled").addClass("w3-disabled");
+    $("#start_test").removeAttr("disabled").removeClass("w3-disabled");
+    $("#start_test").text("Record");
+    $(".field_value_1").val("");
+    $(".field_value").val("");
+    $(".test_hrv").attr("disabled",true).addClass("w3-disabled");
+    $("#control_button").show();
+    $(".start_test_6").attr("disabled",true).addClass("w3-disabled");
+    $("#notes_sympathetic").hide();
+  {% endif %}
+    $("#Select_option input").attr("disabled",true).parent().css({"cursor":"not-allowed"});
+    $("#test_for_1 button").addClass("w3-disabled");
+    $("#finish_test,#repeat").attr("disabled",true).addClass("w3-disabled");
+    $('.timer_reset_test').removeClass('timer1');
+    $('.timer_reset_test').addClass('timer');
+    $("#edit_test").attr("disabled",true).addClass("w3-disabled");
+    $("#parasympathetic_test").css("cursor","not-allowed");
+    $("#all_test").css("cursor","not-allowed");
+    $("#hrv_test").css("cursor","not-allowed");
+}   
+function  test_begin(){
+   $("#finish_test").attr("disabled",true).addClass("w3-disabled");
+   $("#repeat").attr("disabled",true).addClass("w3-disabled");
+   $(".field_value").removeClass("w3-disabled").removeAttr("disabled");
+   $(".field_value_1").removeClass("w3-disabled").removeAttr("disabled");
+   $(".field_value_2").removeClass("w3-disabled").removeAttr("disabled");
+   $("#control_button").show();
+   $("#start_test_modal").hide();
+   $("#start_test").removeClass("w3-disabled").removeAttr("disabled");
+   $("#edit_test").attr("disabled",true).addClass("w3-disabled");
+   $("#Select_option input").attr("disabled",true).parent().css({"cursor":"not-allowed"});
+   $(".device_configure").removeAttr("onclick").css("cursor","not-allowed");
+   $(".test_5").attr("disabled","disabled").addClass("w3-disabled");
+   {% if app %}
+      if(test_type == "BEFORE")
+      {
+        if($("#connection_type").val() == 'USB'){
+          external.can_test_command(send_bp_before_start_command);
+        }
+        if($("#connection_type").val() == 'BLUETOOTH'){
+
+          external.can_test_command(blu_send_bp_before_start_command);
+        }
+      }
+      else if(test_type == "AFTER")
+      {
+        if($("#connection_type").val() == 'USB'){
+          external.can_test_command(send_bp_after_start_command);
+        }
+        if($("#connection_type").val() == 'BLUETOOTH'){
+          external.can_test_command(blu_send_bp_after_start_command);
+        }
+      } 
+  {% endif %}
+}
+function start_test_process(){
+  $('.field_value').removeAttr("disabled").removeClass("w3-disabled");
+  $('#stop').removeAttr("disabled").removeClass("w3-disabled");
+  $("#start_test_modal").show();
+  $(".modal_heading").html("Sustained Handgrip / Before Handgrip");
+  $(".modal_content").html("{{medical_test.instruction.before_handgrip|safe}}");
+
+ } 
+function close_test(){
+
+  $("#close_process").show();
+}
+function request_process(){
+  $("#request_process").remove();
+}
+$("#close_process").click(function(){
+ $("#close_process").hide();
+});
+function request_process(){
+   $("#request_process").remove();
+ }
+ function after_handgrip(){
+
+ }
+ function para_save()
+  { 
+    {% if medical_test.test_type == 'parasympathetic_test' %}
+    {% if app %}
+          if(connection_type == 'USB'){
+              external.connection_close(connect_close);
+          }
+          else if (connection_type == 'BLUETOOTH')
+          {
+              external.connection_close(blu_connect_close);
+          }
+      {% endif %}
+    {% endif %}
+    impression = $("#impression_notes").val();
+    var data = {
+                "notes":impression,
+                "test_entry": '{{option.test_entry}}',
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                }
+     $.ajax({
+      data: data,
+      type : 'POST',                            
+      url :"{% url 'test_impression' %}",
+      dataType : "application/json; charset=utf-8",
+      complete : function(data){
+        setTimeout(function(){ 
+              window.location.href = "{% url 'reports' %}";
+        },2000);
+      }
+      });
+  }
+function save_notes_sympathetic(){
+    impression = $("#impression_notes_all").val();
+        var data = {
+                    "notes":impression,
+                    "test_entry": '{{option.test_entry}}',
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    }
+               $.ajax({
+                data: data,
+                type : 'POST',                            
+                url :"{% url 'test_impression' %}",
+                dataType : "application/json; charset=utf-8",
+                complete : function(data){
+                  $("#save_notes_sym").attr("disabled","disabled").addClass("w3-disabled");
+                }
+                });
+
+}
+function reconnect()
+    {
+        pleasewait_loader_start();
+        setTimeout(reconnect_process,1000);
+        
+    }
+    function reconnect_process()
+    {
+        var connected = $("#device_status").attr("connected");
+        var cur_connection_type = $("#connection_type").val();
+        if (connected == 0)
+        {
+
+            var key = $("input[name='key1']").val()+$("input[name='key2']").val()+$("input[name='key3']").val();
+            var mac_address_id = $("input[name='ID_1']").val()+$("input[name='ID_2']").val()+$("input[name='ID_3']").val()+$("input[name='ID_4']").val()+$("input[name='ID_5']").val()+$("input[name='ID_6']").val();
+            if(key)
+            {
+                {% if app %}
+                    if(cur_connection_type == 'USB'){
+                        external.connection(device_connect);
+                    }
+                    if(cur_connection_type == 'BLUETOOTH'){
+                        external.connection(blu_device_connect);
+                    }
+                {% else %}
+                    pleasewait_loader_end();
+                {% endif %}
+            }
+             else
+            {
+                pleasewait_loader_end();
+                $(".overflow-hidden").append(`<div id="device_alert" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please Enter Device Key in Device Configuration.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="device_alert_close();">OK</button>
+                        </div></div></div></div>`);
+                $("#device_alert").show();
+            }
+        }
+        else
+        {
+            pleasewait_loader_end();
+        }
+    }
+function device_config() {
+            var cur_connection_type = $("#connection_type").val();
+            var prev_mode = '{{medical_test_result.DEVICE_MORE_OPTION.mode}}';
+            var prev_gain = '{{medical_test_result.DEVICE_MORE_OPTION.gain}}';
+            var mode = $("input[name='mode']:checked").val();
+            var gain = $("input[name='gain']:checked").val();
+            var device_key = '{{medical_test_result.DEVICE_KEY}}';
+            var key = $("input[name='key1']").val()+$("input[name='key2']").val()+$("input[name='key3']").val();
+            if (prev_gain != gain || prev_mode != mode || device_key != key || connection_type != cur_connection_type)
+            {
+              {% if app %}
+                  if(connection_type == 'USB'){
+                      external.connection_close(connect_close);
+                  }
+                  if(connection_type == 'BLUETOOTH'){
+                      external.connection_close(blu_connect_close);
+                  }
+              {% endif %}
+            }
+            var mac_address_id = $("input[name='ID_1']").val()+$("input[name='ID_2']").val()+$("input[name='ID_3']").val()+$("input[name='ID_4']").val()+$("input[name='ID_5']").val()+$("input[name='ID_6']").val();
+            var mac_address_id_length = mac_address_id.length;
+            var data = {
+                        connection_type:cur_connection_type,
+                        key:key,
+                        mac_address_id:mac_address_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                        }
+            if(mac_address_id_length == 12){
+            $.ajax({
+                data: data,
+                type : 'POST',                            
+                url :"{% url 'device_config_save' option.app_code %}",
+                dataType : "application/json; charset=utf-8",
+                complete : function(data) 
+                {
+                    document.getElementById('settingsdev').style.display='none';
+                    connection_type = $("#connection_type").val();
+                    if(connection_type == 'USB'){
+                       $('#bluetooth').removeClass("bgclr4 w3-text-white").addClass("fclr1 bgclr5");
+                       $('#usb').removeClass("fclr1 bgclr5").addClass("bgclr4 w3-text-white");
+                    }
+                    if(connection_type == 'BLUETOOTH'){
+                       $('#usb').removeClass("bgclr4 w3-text-white").addClass("fclr1 bgclr5");
+                       $('#bluetooth').removeClass("fclr1 bgclr5").addClass("bgclr4 w3-text-white");
+                   }
+                 }
+            });
+        }
+        else{
+            $("#settingsdev").hide();
+            $(".overflow-hidden").append(`<div id="mac_address_validate" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter a valid Mac Address ID.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" id="alert_pdf_confirm" onclick="opensettingdev()">OK</button>
+                            </div></div></div></div>`);
+            $("#mac_address_validate").show();
+            }
+        }
+function device_alert_close(){
+   $("#device_alert").hide();   
+}
+function device_status(value)
+{
+    if(value=="ON")
+    {
+        $("#device_status").removeClass("bred");
+        $("#device_status").addClass("bgclr4");
+        $("#device_status").attr("connected","1");
+    }
+    else
+    {
+        $("#device_status").removeClass("bgclr4");
+        $("#device_status").addClass("bred");
+        $("#device_status").attr("connected","0");
+    }
+}
+function device_config_reset(){
+ {% if medical_test_result.DEVICE_KEY %}
+    $("input[name='key1']").val("{{medical_test_result.DEVICE_KEY|slice:':4'}}");
+    $("input[name='key2']").val("{{medical_test_result.DEVICE_KEY|slice:'4:8'}}");
+    $("input[name='key3']").val("{{medical_test_result.DEVICE_KEY|slice:'8:12'}}");
+ {% else %}
+    $("input[name='key1']").val("");
+    $("input[name='key2']").val("");
+    $("input[name='key3']").val("");
+ {% endif %}
+}
+function all_test(){
+   $("#test_for_2").show();
+   $("#test_for_1").show();
+   $("#test_for_2").css("margin-bottom","0px");
+   $("#test_for_3").css("margin-bottom","37px");
+   $("#test_for_1").css("margin-bottom","0px");
+   $("#parasympathetic_test").removeAttr("checked");
+   $("#hrv_test").removeAttr("checked");
+   $("#all_test").attr("checked",true);
+   $("#test_for_3").show();
+}
+function para_sym(){
+  $("#test_for_2").show();
+  $("#test_for_3").hide();
+  $("#test_for_1").show();
+  $("#test_for_1").css("margin-bottom","0px");
+  $("#all_test").removeAttr("checked");
+  $("#parasympathetic_test").attr("checked",true);
+  $("#hrv_test").removeAttr("checked");
+}
+function can_report()
+{
+    device_disconnect();
+    setTimeout(can_report_ajax,1000);
+    
+}
+function device_disconnect()
+{
+  {% if medical_test.test_type == 'parasympathetic_test' %}
+  {% if app %}
+      var connection_type = $("#connection_type").val();
+        if(connection_type == 'USB'){
+            external.connection_close(connect_close);
+        }
+        else if (connection_type == 'BLUETOOTH')
+        {
+            external.connection_close(blu_connect_close);
+        }
+    {% endif %}
+  {% endif %}
+}
+function can_report_ajax(){
+  impression = $("#impression_notes").val();
+  var data = {
+      "notes":impression,
+      "test_entry": '{{option.test_entry}}',
+      csrfmiddlewaretoken: '{{ csrf_token }}',
+      }
+  $.ajax({
+      data: data,
+      type : 'POST',                            
+      url :"{% url 'test_impression' %}",
+      dataType : "application/json; charset=utf-8",
+      complete : function(data){
+          window.location.href = "{% url 'canyscope_report_view' test_entry %}";
+      }
+  });
+}
+</script>
+{% endblock %}   

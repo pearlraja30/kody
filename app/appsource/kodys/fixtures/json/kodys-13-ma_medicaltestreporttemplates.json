@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "kodys.ma_medicaltestreporttemplates", "fields": {"DATAMODE": "A", "CODE": "TMP-01", "DESCRIPTION": "Doppler ABI Template", "MEDICALTESTMASTER": 1, "TEMPLATE_PATH": "documents/Doppler_Interpretations.docx", "CREATED_ON": "2019-01-28 12:15:09", "UPDATED_ON": "2019-01-28 12:15:09", "NAME": "ABI Doppler Test Report"}}]

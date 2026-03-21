@@ -1,0 +1,798 @@
+<script type="text/javascript">
+  setTimeout(function()
+  { 
+    $("text:contains('R-R (msec)')").next().addClass('stroke_color');
+    $("text:contains('R-R (sec)')").next().addClass('stroke_color');
+    $("text:contains('R-Rn+1 (msec)')").next().addClass('stroke_color');
+    $("text:contains('Count')").next().addClass('stroke_color');
+    $("text:contains('Count')").next().addClass('Heart Rate (BPM)');
+    $("#standing_chart").find("svg g").first().find("g").first().find("g").first().next().find("path").next().addClass("stroke_blue");
+    $("#valsalva_chart").find("svg g").first().find("g").first().find("g").first().next().find("path").next().addClass("stroke_blue");
+  }, 2000);
+</script>
+<script  type="text/javascript">
+  google.charts.setOnLoadCallback(drawVisualization);
+  function drawVisualization() {
+     var rrn_breathing = [];
+     var rrn_plus1_breathing = [];
+      {% for rrn in  report.report_result.deep_breathing_time.rrn %}
+      rrn_breathing.push({{rrn}}/1000);
+      {% endfor %}
+      {% for rrn_plus1 in report.report_result.deep_breathing_time.rrn_plus1 %}
+      rrn_plus1_breathing.push({{rrn_plus1}}/1000);
+      {% endfor %}
+      var data_rrn_list_breathing =[];
+      data_rrn_list_breathing.push(['rrn','rrn_plus1','referenceline']);
+      min_value = Math.min(...rrn_breathing);
+      max_value = Math.max(...rrn_breathing);
+      for(i=0;i<rrn_plus1_breathing.length;i++){
+       data_rrn_list_breathing.push([rrn_breathing[i],rrn_plus1_breathing[i],null]);
+      }
+      data_rrn_list_breathing.push([min_value-0.01,null,min_value-0.01]);
+      data_rrn_list_breathing.push([max_value+0.01,null,max_value+0.01]);
+    var data = new google.visualization.arrayToDataTable(data_rrn_list_breathing);
+     // var view = new google.visualization.DataView(data);
+     // view.setColumns([0, 1, {
+     //  label: 'y1=rrn',
+     //  type: 'number',
+     //  calc: function (dt, row) {
+     //  return dt.getValue(row, 0)
+     //   }
+     // }]);
+
+   var options = {
+   seriesType: 'scatter',
+   series: {
+     1: {
+     type: 'line',pointSize:0
+    },0:{type: 'scatter',pointSize:2,color:'blue'},2:{type: 'line'}
+    },
+    legend: { position: 'none',},
+    chartArea: {right:5,left:31,top:12,'width': '85%', 'height': '70%', backgroundColor: {
+         stroke: 'black',
+         strokeWidth: 1,
+         bottom:'5'
+         }},
+    vAxis: {title: 'R-Rn+1 (sec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+    format: '#.##',
+    axes:{x: {
+           10.5: { side: 'left'}
+         },  y: {
+           69: { side: 'left'}
+         } },textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+          },viewWindow: {
+           max:max_value+0.01,
+           min:min_value-0.01
+         },gridlines: {
+         color: '#ffcccc',
+         count:5,
+         }},
+         hAxis: {title: 'R-Rn (sec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         format: '#.##',
+         showTextEvery:1,textStyle: {
+         fontSize : 7,
+         fontName: 'sans-serif',
+         bold:true
+      },gridlines: {
+         color: '#ffcccc',
+         count:3,
+         },viewWindow: {
+           max:max_value+0.01,
+           min:min_value-0.01
+         },},
+      height:137,
+       enableInteractivity: false,
+     };
+     var rrn_standing = [];
+     var rrn_plus1_standing = [];
+      {% for rrn in  report.report_result.ecg_standing_time.rrn %}
+      rrn_standing.push({{rrn}}/1000);
+      {% endfor %}
+      {% for rrn_plus1 in report.report_result.ecg_standing_time.rrn_plus1 %}
+      rrn_plus1_standing.push({{rrn_plus1}}/1000);
+      {% endfor %}
+      var data_rrn_list_standing =[];
+      data_rrn_list_standing.push(['rrn','rrn_plus1','referenceline']);
+      for(i=0;i<rrn_plus1_standing.length;i++){
+       data_rrn_list_standing.push([rrn_standing[i],rrn_plus1_standing[i],null]);
+      }
+      var min_value = Math.min(...rrn_standing);
+      var max_value = Math.max(...rrn_standing);
+      data_rrn_list_standing.push([min_value-0.01,null,min_value-0.01]);
+      data_rrn_list_standing.push([max_value+0.01,null,max_value+0.01]);
+    var data_5 = new google.visualization.arrayToDataTable(data_rrn_list_standing);
+
+   var options4 = {
+   seriesType: 'scatter',
+   series: {
+     1: {
+     type: 'line',pointSize:0
+    },0:{type: 'scatter',pointSize:2,color:'blue'},2: {type: 'line'}
+    },
+    legend: { position: 'none',},
+    chartArea: {right:5,left:31,top:12,'width': '85%', 'height': '70%', backgroundColor: {
+         stroke: 'black',
+         strokeWidth: 1,
+         bottom:'8'
+         }},
+    vAxis: {title: 'R-Rn+1 (sec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+    format: '#.##',
+    axes:{x: {
+           10.5: { side: 'left'}
+         },  y: {
+           69: { side: 'left'}
+         } },textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+          },viewWindow: {
+           max:max_value+0.01,
+           min:min_value-0.01
+         },gridlines: {
+         color: '#ffcccc',
+         count:5,
+         }},
+         hAxis: {title: 'R-Rn (sec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         format: '#.##',
+         showTextEvery:1,textStyle: {
+         fontSize : 7,
+         fontName: 'sans-serif',
+         bold:true
+      },gridlines: {
+         color: '#ffcccc',
+         count:3,
+         },viewWindow: {
+           max:max_value+0.01,
+           min:min_value-0.01
+         },},
+      height:137,
+     };
+     var rrn_valsalva = [];
+     var rrn_plus1_valsalva = [];
+      {% for rrn in  report.report_result.ecg_valsalva_time.rrn %}
+      rrn_valsalva.push({{rrn}}/1000);
+      {% endfor %}
+      {% for rrn_plus1 in report.report_result.ecg_valsalva_time.rrn_plus1 %}
+      rrn_plus1_valsalva.push({{rrn_plus1}}/1000);
+      {% endfor %}
+      var data_rrn_list_valsalva =[];
+      data_rrn_list_valsalva.push(['rrn','rrn_plus1','referenceline']);
+      for(i=0;i<rrn_plus1_valsalva.length;i++){
+       data_rrn_list_valsalva.push([rrn_valsalva[i],rrn_plus1_valsalva[i],null]);
+      }
+      min_value = Math.min(...rrn_plus1_valsalva);
+      max_value = Math.max(...rrn_plus1_valsalva);
+      data_rrn_list_valsalva.push([min_value-0.01,null,min_value-0.01]);
+      data_rrn_list_valsalva.push([max_value+0.01,null,max_value+0.01]);
+      var data_6 = new google.visualization.arrayToDataTable(data_rrn_list_valsalva);
+    // var view2 = new google.visualization.DataView(data_6);
+    // view2.setColumns([0, 1, {
+    //   label: 'y1=x',
+    //   type: 'number',
+    //   calc: function (dt, row) {
+    //     return dt.getValue(row, 0)
+    //    }
+    // }]);
+   var options5 = {
+   seriesType: 'scatter',
+   series: {
+     1: {
+     type: 'line',pointSize:0
+    },0:{type: 'scatter',pointSize:2,color:'blue'},2: {type: 'line'}
+    },
+    legend: { position: 'none',},
+    chartArea: {right:5,left:31,top:12,'width': '85%', 'height': '70%', backgroundColor: {
+         stroke: 'black',
+         strokeWidth: 1,
+         bottom:'8'
+         }},
+    vAxis: {title: 'R-Rn+1 (sec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+    format: '#.##',
+    axes:{x: {
+           10.5: { side: 'left'}
+         },  y: {
+           69: { side: 'left'}
+         } },textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+          },viewWindow: {
+           max:max_value+0.01,
+           min:min_value-0.01
+         },gridlines: {
+         color: '#ffcccc',
+         count:5,
+         }},
+         hAxis: {title: 'R-Rn (sec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         format: '#.##',
+         showTextEvery:1,textStyle: {
+         fontSize : 7,
+         fontName: 'sans-serif',
+         bold:true
+      },gridlines: {
+         color: '#ffcccc',
+         count:3,
+         },viewWindow: {
+           max:max_value+0.01,
+           min:min_value-0.01
+         },},
+      height:137,
+     };
+     var rrn = [];
+     var rrn_plus1 = [];
+      {% for rrn in  report.report_result.resting.rrn %}
+      rrn.push({{rrn}}/1000);
+      {% endfor %}
+      {% for rrn_plus1 in report.report_result.resting.rrn_plus1 %}
+      rrn_plus1.push({{rrn_plus1}}/1000);
+      {% endfor %}
+      var data_rrn_list =[];
+      data_rrn_list.push(['rrn','rrn_plus1','referenceline']);
+      for(i=0;i<rrn_plus1.length;i++){
+       data_rrn_list.push([rrn[i],rrn_plus1[i],null]);
+      }
+      min_value = Math.min(...rrn);
+      max_value = Math.max(...rrn);
+      data_rrn_list.push([min_value-0.01,null,min_value-0.01]);
+      data_rrn_list.push([max_value+0.01,null,max_value+0.01]);
+      var data_7 = new google.visualization.arrayToDataTable(data_rrn_list);
+    // var view3 = new google.visualization.DataView(data_7);
+    // view3.setColumns([0, 1, {
+    //   label: 'y1=rrn',
+    //   type: 'number',
+    //   calc: function (dt, row) {
+    //     return dt.getValue(row, 0)
+    //    }
+    // }]);
+   var options6 = {
+   seriesType: 'scatter',
+   series: {
+     1: {
+     type: 'line',pointSize:0,
+    },0:{type: 'scatter',pointSize:2,color:'blue',},2:{type: 'line'}
+    },
+    legend: { position: 'none',},
+    chartArea: {right:5,left:31,top:12,'width': '85%', 'height': '70%', backgroundColor: {
+         stroke: 'black',
+         strokeWidth: 1,
+         bottom:'8'
+         }},
+    vAxis: {title: 'R-Rn+1 (sec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+    format: '#.##',
+    axes:{x: {
+           10.5: { side: 'left'}
+         },  y: {
+           69: { side: 'left'}
+         } },textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+          },viewWindow: {
+           max:max_value+0.01,
+           min:min_value-0.01
+         },gridlines: {
+         color: '#ffcccc',
+         count:5,
+         }},
+         hAxis: {title: 'R-Rn (sec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         format: '#.##',
+         showTextEvery:1,textStyle: {
+         fontSize : 7,
+         fontName: 'sans-serif',
+         bold:true
+      },gridlines: {
+         color: '#ffcccc',
+         count:3,
+         },viewWindow: {
+           max:max_value+0.01,
+           min:min_value-0.01
+         },},
+      height:137,
+     };
+     var data_8 = google.visualization.arrayToDataTable([
+     ["Rate", "Count",{ role: 'style' }],
+     {% for rate,count in report.report_result.resting.heart_rate_graph %}
+     [{{rate}}, {{count}},'fill-color:rgb(203, 7, 239);stroke-color: #000; stroke-width: 0.8;'],
+     {% endfor %}
+     ]);
+     var options7 = {
+     title: "",
+     bar: {groupWidth: "10%"},
+     legend: { position: "none" },
+     chartArea: {right:2,top:12,left:23.5,'width': '85%', 'height': '70%', backgroundColor: {
+         stroke: 'black',
+         strokeWidth: 1,
+         bottom:'8'
+         }},
+     vAxis: {title: 'Count',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+     format: '###',
+     textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+          },viewWindow: {
+           max:{{report.report_result.resting.heart_rate_count_end}}+5,
+           min:0
+         },gridlines: {
+         color: '#ffcccc',
+         count:5,
+         }},
+         hAxis: {baselineColor: 'none',title: 'Heart Rate (BPM)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         showTextEvery:1,textStyle: {
+         fontSize : 5,
+         fontName: 'sans-serif',
+         bold:true
+      },gridlines: {
+         color: '#ffcccc',
+         count:4,
+         },viewWindow: {
+           max:{{report.report_result.resting.heart_rate_end}}+5,
+           min:{{report.report_result.resting.heart_rate_start}}-5
+         },},
+         seriesType: 'bars',
+      height:137,
+     };
+     var data_9 = google.visualization.arrayToDataTable([
+     ["Rate", "Count",{role:'style'}],
+     {% for rate,count in report.report_result.deep_breathing_time.heart_rate_graph %}
+     [{{rate}}, {{count}},'fill-color:rgb(203, 7, 239);stroke-color: #000; stroke-width: 0.8;'],
+     {% endfor %}
+     ]);
+     var options8 = {
+     title: "",
+     bar: {groupWidth: "10%"},
+     legend: { position: "none" },
+     chartArea: {right:2,top:12,left:23.5,'width': '85%', 'height': '70%', backgroundColor: {
+         stroke: 'black',
+         strokeWidth: 1,
+         bottom:'8'
+         }},
+     vAxis: {title: 'Count',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+     format: '###',
+     textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+          },viewWindow: {
+           max:{{report.report_result.deep_breathing_time.heart_rate_count_end}}+5,
+           min:0
+         },gridlines: {
+         color: '#ffcccc',
+         count:5,
+         }},
+         hAxis: {baselineColor: 'none',title: 'Heart Rate (BPM)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         showTextEvery:1,textStyle: {
+         fontSize : 5,
+         fontName: 'sans-serif',
+         bold:true
+      },viewWindow: {
+           max:{{report.report_result.deep_breathing_time.heart_rate_end}}+5,
+           min:{{report.report_result.deep_breathing_time.heart_rate_start}}-5
+         },gridlines: {
+         color: '#ffcccc',
+         count:4,
+         }},
+         seriesType: 'bars',
+      height:137,
+     };
+     var data_10 = google.visualization.arrayToDataTable([
+     ["Rate", "Count",{role:'style'}],
+     {% for rate,count in report.report_result.ecg_standing_time.heart_rate_graph %}
+     [{{rate}}, {{count}},'fill-color:rgb(203, 7, 239);stroke-color: #000; stroke-width: 0.8;'],
+     {% endfor %}
+     ]);
+     var options9 = {
+     title: "",
+     bar: {groupWidth: "10%"},
+     legend: { position: "none" },
+     chartArea: {right:2,top:12,left:23.5,'width': '85%', 'height': '70%', backgroundColor: {
+         stroke: 'black',
+         strokeWidth: 1,
+         bottom:'8'
+         }},
+     vAxis: {title: 'Count',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+     format: '###',
+     textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+          },viewWindow: {
+           max:{{report.report_result.ecg_standing_time.heart_rate_count_end}}+5,
+           min:0
+         },gridlines: {
+         color: '#ffcccc',
+         count:5,
+         }},
+         hAxis: {baselineColor: 'none',title: 'Heart Rate (BPM)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         showTextEvery:1,textStyle: {
+         fontSize : 5,
+         fontName: 'sans-serif',
+         bold:true
+      },viewWindow: {
+           max:{{report.report_result.ecg_standing_time.heart_rate_end}}+5,
+           min:{{report.report_result.ecg_standing_time.heart_rate_start}}-5
+         },gridlines: {
+         color: '#ffcccc',
+         count:4,
+         }},
+         seriesType: 'bars',
+      height:137,
+     };
+     var data_11 = google.visualization.arrayToDataTable([
+     ["Rate", "Count",{role:'style'}],
+     {% for rate,count in report.report_result.ecg_valsalva_time.heart_rate_graph %}
+     [{{rate}}, {{count}},'fill-color:rgb(203, 7, 239);stroke-color: #000; stroke-width: 0.8;'],
+     {% endfor %}
+     ]);
+     var options10 = {
+     title: "",
+     bar: {groupWidth: "10%"},
+     legend: { position: "none" },
+     chartArea: {right:2,top:12,left:23.5,'width': '85%', 'height': '70%', backgroundColor: {
+         stroke: 'black',
+         strokeWidth: 1,
+         bottom:'8'
+         }},
+     vAxis: {title: 'Count',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+     format: '###',
+     axes:{x: {
+           10.5: { side: 'left'}
+         },  y: {
+           69: { side: 'left'}
+         } },textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+          },viewWindow: {
+           max:{{report.report_result.ecg_valsalva_time.heart_rate_count_end}}+5,
+           min:0
+         },gridlines: {
+         color: '#ffcccc',
+         count:5,
+         }},
+         hAxis: {baselineColor: 'none',title: 'Heart Rate (BPM)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         showTextEvery:1,textStyle: {
+         fontSize : 5,
+         fontName: 'sans-serif',
+         bold:true
+      },viewWindow: {
+           max:{{report.report_result.ecg_valsalva_time.heart_rate_end}}+5,
+           min:{{report.report_result.ecg_valsalva_time.heart_rate_start}}-5
+         },gridlines: {
+         color: '#ffcccc',
+         count:4,
+         }},
+         seriesType: 'bars',
+      height:137,
+     };
+   var rr_interval_list_resting = [];
+   {% for rr_interval in  report.report_result.resting.rr_interval %}
+     rr_interval_list_resting.push(parseFloat('{{rr_interval}}')); 
+   {% endfor %}
+   var x_value_list = [];
+   var x = rr_interval_list_resting[0]/1000;
+   for(i = 1;i < rr_interval_list_resting.length;i++)
+   {
+     x_value_list.push(x);
+     x = x + rr_interval_list_resting[i]/1000;
+   }
+   var data_resting_value = [];
+   data_resting_value.push(['Time','Intervals'])
+   for(i = 0;i < rr_interval_list_resting.length;i++)
+   {
+     data_resting_value.push([x_value_list[i],rr_interval_list_resting[i]])
+   }
+   var data_resting = google.visualization.arrayToDataTable(data_resting_value);
+ var interval = 5;
+ var dataRange = data_resting.getColumnRange(1);
+ var vTicks = [];
+ for (var i = 0; i <= dataRange.max + interval; i = i + interval) {
+   vTicks.push(i);
+ }
+ var chart_resting = new google.visualization.LineChart(document.getElementById('resting_chart'));
+ chart_resting.draw(data_resting, {
+    title : '',
+         legend: { position: 'none',},
+         chartArea: {right:4,top:12,'width': '90%', 'height': '70%', backgroundColor: {
+         stroke: 'black',
+         strokeWidth: 1,
+         bottom:'8',
+         }},curveType: 'function',
+         legend: { position: 'none' },
+   vAxis: {title: 'R-R (msec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+   textStyle: {
+           stroke: 'none',
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+          },
+     viewWindow: {
+       min: 1500,
+       max: 0
+     },gridlines: {
+         color: '#ffcccc',
+         count:6,
+         }
+   },
+   hAxis: {title: 'Time (seconds)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         showTextEvery:1,textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+      },
+     viewWindow: {
+       min: 0,
+       max: 60
+     },ticks:vTicks,gridlines:{
+       color: 'transparent'
+     }
+   },lineWidth: 1,
+       series: {1: {type: 'line',color:'red'}},
+       height:137,
+       enableInteractivity: false,
+  });
+   var rr_interval_list_breathing = [];
+   {% for rr_interval in  report.report_result.deep_breathing_time.rr_interval %}
+     rr_interval_list_breathing.push(parseFloat('{{rr_interval}}')); 
+   {% endfor %}
+   var x_value_list_breathing = [];
+   var x_value_breathing = rr_interval_list_breathing[0]/1000;
+   for(i = 1;i <= rr_interval_list_breathing.length;i++)
+   {
+     x_value_list_breathing.push(x_value_breathing);
+     x_value_breathing = x_value_breathing + rr_interval_list_breathing[i]/1000;
+   }
+   var data_breathing_value = [];
+   data_breathing_value.push(['Time','Intervals'])
+   for(i = 0;i < rr_interval_list_breathing.length;i++)
+   {
+     data_breathing_value.push([x_value_list_breathing[i],rr_interval_list_breathing[i]])
+   }
+   var data_breathing = google.visualization.arrayToDataTable(data_breathing_value);
+ var interval1 = 5;
+ var dataRange1 = data_breathing.getColumnRange(1);
+ var vTicks_1 = [];
+ for (var i = 0; i <= dataRange1.max + interval1; i = i + interval1) {
+   vTicks_1.push(i);
+ } 
+  var chart_breathing = new google.visualization.LineChart(document.getElementById('breathing_chart'));
+ chart_breathing.draw(data_breathing, {
+      title : '',
+         titleTextStyle: {
+         fontSize: 14,
+         fontName: 'sans-serif'
+          },
+         legend: { position: 'none',},
+         chartArea: {right:4,top:12,'width': '90%', 'height': '70%', backgroundColor: {
+         stroke: 'black',
+         strokeWidth: 1,
+         bottom:'8',
+         }},
+       curveType: 'function',
+         legend: { position: 'none' },
+   vAxis: {title: 'R-R (msec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+   textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+          },
+     viewWindow: {
+       min: 0,
+       max: 1500
+     },gridlines: {
+         color: '#ffcccc',
+         count:6,
+         }
+   },
+   hAxis: {title: 'Time (seconds)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         showTextEvery:1,textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+      },
+     viewWindow: {
+       min: 0,
+       max: 60
+     },ticks:vTicks_1,
+     gridlines: {
+         color: '#ffcccc',
+         }
+   },
+   lineWidth: 1,
+       series: {1: {type: 'line'}},
+       height:137,
+       enableInteractivity: false,
+ });
+ var rr_interval_list_supine = [];
+ var rr_interval_list_standing = [];
+ {% for supine_rr_interval in report.report_result.ecg_standing_time.supine_rr_interval %}
+   rr_interval_list_supine.push(parseFloat('{{supine_rr_interval}}'));
+ {% endfor %}
+ {% for rr_interval in  report.report_result.ecg_standing_time.rr_interval %}
+   rr_interval_list_standing.push(parseFloat('{{rr_interval}}')); 
+ {% endfor %}
+ var supine_last_value_list = [];
+ x_value_supine = rr_interval_list_supine[0]/1000; 
+ for(i=1;i <= rr_interval_list_supine.length; i++){
+ supine_last_value_list.push(x_value_supine);  
+ x_value_supine = x_value_supine + rr_interval_list_supine[i]/1000;
+ }
+ var lastElement_supine = supine_last_value_list[supine_last_value_list.length-1];
+ var rr_interval_complete_list = $.merge(rr_interval_list_supine,rr_interval_list_standing);
+ var x_value_list_standing = [];
+ var x_value_standing = rr_interval_complete_list[0]/1000;
+ for(i = 1;i <= rr_interval_complete_list.length;i++)
+ {
+   x_value_list_standing.push(x_value_standing);
+   x_value_standing = x_value_standing + rr_interval_complete_list[i]/1000;
+ }
+ var data_standing_value = [];
+ data_standing_value.push(['Time','Intervals','referenceline']);
+ for(i = 0;i < rr_interval_complete_list.length;i++)
+ {
+   data_standing_value.push([x_value_list_standing[i],rr_interval_complete_list[i],null])
+ }
+ data_standing_value.push([60,null,250]);
+ data_standing_value.push([60,null,1300]);
+ var data_standing = google.visualization.arrayToDataTable(data_standing_value);
+ var interval2 = 5;
+ var dataRange2 = data_standing.getColumnRange(1);
+ var vTicks_2 = [];
+ for (var i = 0; i <= dataRange2.max + interval2; i = i + interval2) {
+   vTicks_2.push(i);
+ }
+ var chart_standing = new google.visualization.ComboChart(document.getElementById('standing_chart'));
+ chart_standing.draw(data_standing, {
+         showRowNumber: true,
+         title : '',
+         titleTextStyle: {
+         fontSize: 14,
+         fontName: 'sans-serif'
+          },
+         legend: { position: 'none',},
+         chartArea: {right:4,top:12,'width': '90%', 'height': '70%', backgroundColor: {
+         stroke: 'black',
+         strokeWidth: 1,
+         bottom:'8',
+         }},
+       curveType: 'function',
+         legend: { position: 'none' },
+   vAxis: {title: 'R-R (msec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+   textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+          },
+     viewWindow: {
+       min: 0,
+       max: 1500
+     },gridlines: {
+         color: '#ffcccc',
+         count:6,
+         }
+   },
+   hAxis: {title: 'Time (seconds)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         showTextEvery:1,textStyle: {
+         fontSize : 5,
+         fontName: 'sans-serif',
+         bold:true
+      },
+     viewWindow: {
+       min: 0,
+       max: 120
+     },ticks:vTicks_2,
+     gridlines: {
+         color: '#ffcccc',
+         }
+   },
+   lineWidth: 1,
+       series: {1: {type: 'line'},2:{type: 'line'}},
+       height:137,
+       enableInteractivity: false,
+ });
+   var rr_interval_list_valsalva = [];
+   {% for rr_interval in  report.report_result.ecg_valsalva_time.rr_interval %}
+     rr_interval_list_valsalva.push(parseFloat('{{rr_interval}}')); 
+   {% endfor %}
+   var x_value_list_valsalva = [];
+   var x_value_valsalva = rr_interval_list_valsalva[0]/1000;
+   for(i = 1;i <= rr_interval_list_valsalva.length;i++)
+   {
+     x_value_list_valsalva.push(x_value_valsalva);
+     x_value_valsalva = x_value_valsalva + rr_interval_list_valsalva[i]/1000;
+   }
+   var data_valsalva_value = [];
+   data_valsalva_value.push(['Time','Intervals','referenceline1','referenceline2'])
+   for(i = 0;i < rr_interval_list_valsalva.length;i++)
+   {
+     data_valsalva_value.push([x_value_list_valsalva[i],rr_interval_list_valsalva[i],null,null])
+   }
+ data_valsalva_value.push([5,null,250,null]);
+ data_valsalva_value.push([5,null,1300,null]);
+ data_valsalva_value.push([20,null,null,250]);
+ data_valsalva_value.push([20,null,null,1300]);
+   var data_valsalva = google.visualization.arrayToDataTable(data_valsalva_value);
+ var interval3 = 5;
+ var dataRange3 = data_valsalva.getColumnRange(1);
+ var vTicks_3 = [];
+ for (var i = 0; i <= dataRange3.max + interval3; i = i + interval3) {
+   vTicks_3.push(i);
+ }
+ var chart_valsalva = new google.visualization.ComboChart(document.getElementById('valsalva_chart'));
+ chart_valsalva.draw(data_valsalva, {
+    title : '',
+         titleTextStyle: {
+         fontSize: 14,
+         fontName: 'sans-serif'
+          },
+         legend: { position: 'none',},
+         chartArea: {right:4,top:12,'width': '90%', 'height': '70%', backgroundColor: {
+         stroke: 'black',
+         strokeWidth: 1,
+         bottom:'8',
+         }},
+       curveType: 'function',
+         legend: { position: 'none' },
+   vAxis: {title: 'R-R (msec)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+   textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+          },
+     viewWindow: {
+       min: 0,
+       max: 1500
+     },gridlines: {
+         color: '#ffcccc',
+         count:6,
+         }
+   },
+   hAxis: {
+     title: 'Time (seconds)',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+         showTextEvery:1,textStyle: {
+         fontSize : 8,
+         fontName: 'sans-serif',
+         bold:true
+      },
+     viewWindow: {
+       min: 0,
+       max: 60
+     },ticks:vTicks_3,
+       gridlines: {
+         color: '#ffcccc',
+         }
+   },
+    lineWidth: 1,
+       series: {1: {type: 'line'},2:{type: 'line'},3:{type: 'line'}},
+       height:137,
+       enableInteractivity: false,
+ });
+     var chart4 = new google.visualization.ComboChart(document.getElementById('scatter_chart_1'));
+     chart4.draw(data, options);
+     var chart5 = new google.visualization.ComboChart(document.getElementById('scatter_chart_2'));
+     chart5.draw(data_5, options4);
+     var chart6 = new google.visualization.ComboChart(document.getElementById('scatter_chart_3'));
+     chart6.draw(data_6, options5);
+     var chart7 = new google.visualization.ComboChart(document.getElementById('scatter_chart_0'));
+     chart7.draw(data_7, options6);
+     var chart8 = new google.visualization.ComboChart(document.getElementById('bar_chart_1'));
+     chart8.draw(data_8, options7);
+     var chart9 = new google.visualization.ComboChart(document.getElementById('bar_chart_2'));
+     chart9.draw(data_9, options8);
+     var chart10 = new google.visualization.ComboChart(document.getElementById('bar_chart_3'));
+     chart10.draw(data_10, options9);
+     var chart11 = new google.visualization.ComboChart(document.getElementById('bar_chart_4'));
+     chart11.draw(data_11, options10);
+     
+  }
+  $(document).ready(function(){
+   {% if report.report_result.resting.final_hr_result == "Normal" %}
+     $("#interpretation_status").css("color","green");
+   {% else %}
+     $("#interpretation_status").css("color","red");
+   {% endif %}
+  });
+</script>

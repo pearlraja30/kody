@@ -1,0 +1,301 @@
+{% extends "page_layout.html" %}
+{% block content_body %}
+		<div class="background1" style="height:679px!important">
+			<div class="w3-row  w81p ml10p ">
+			<div class="w3-row-padding mt6p " style="margin-top: 3.4% !important">
+               {% for apps in kodys_apps|slice:"0:4" %}
+               <div class="w3-quarter ">
+                <div class="pr bgclr19 w230 h220 w3-round {% if apps.DATAMODE == "A" %} cp {% endif %}" {% if COMMON_INFO.HOSPITAL_NAME %} {% if apps.DATAMODE == "A" %} onclick="document.getElementById('{{apps.CODE}}').style.display='block'" {% endif %} {% else %} onclick="licensekey()" {% endif %} >
+                    <div class="w3-center">
+               	        <img class="home_img h150"  src="{{MEDIA_URL}}{{apps.ICON_PATH}}" alt="heart-beat">
+                    </div>
+               	    <div class="w3-center img_caption " style="position: absolute;bottom: 0;width: 100%;"><span class="w3-text-white ff-r ft-b f-18">{{apps.APP_NAME}}</span>
+               	    </div>
+                  </div>
+               </div>
+               {% endfor%}
+			</div>
+			<div class="w3-row-padding " style="margin-top: 23px;">
+               {% for apps in kodys_apps|slice:"4:8" %}
+               <div class="w3-quarter ">
+                <div class=" pr bgclr19 w230 h220 w3-round {% if apps.DATAMODE == "A" %} cp {% endif %}" {% if COMMON_INFO.HOSPITAL_NAME %} {% if apps.DATAMODE == "A" %} {% if apps.CODE == "APP-08" %} onclick="location.reload();location.href='/manuals/'" {% else %}
+                onclick="document.getElementById('{{apps.CODE}}').style.display='block';" {% endif %} {% endif %} {% else %} onclick="licensekey()"  {% endif %} >
+                    <div class="w3-center">
+               	        <img class="home_img" src="{{MEDIA_URL}}{{apps.ICON_PATH}}"  alt="heart-beat">
+                    </div>
+               	    <div class="w3-center img_caption " style="position: absolute;bottom: 0;width: 100%;"><span class="w3-text-white ff-r ft-b f-18">{{apps.APP_NAME}}</span>
+               	    </div>
+                  </div>
+               </div>
+               {% endfor%}
+			</div>
+		</div>
+
+        <div class="w3-container  w3-display-bottomleft fclr11 ff-r f-20 ft-b w100 pt12 pb12 brclr5 ">
+			Kodys Foot Clinik Software Version 2.0
+		</div>
+
+		</div>
+    <!-- m1 -->
+{% for apps in kodys_apps|slice:"0:7" %}
+<div id="{{apps.CODE}}" class="w3-modal bgclr18">
+  <div class="w3-modal-content w372 mt8p w3-round" style="margin-top: 2% !important">
+     <header class="w3-container w3-padding-16 bkgclr lh12"> 
+      <span class="ff-r f-18 ft-b w3-text-white">{{apps.APP_NAME}}</span><br>
+      <span class="f-12 ff-r w3-text-white">Capture Patient Details</span>
+    </header>
+    <div class="w3-padding-16 pr">
+      <div class="patient_error">Please Enter Patient Name</div>
+       <form class="w3-container" action="" method="">
+          <div class="w3-row pt8 ">
+                <div class="w3-col m4">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient Name</label>
+                </div>
+                <div class="w3-col m8 pr">
+                <input class=" brbclr1  h30 w228 fclr1 fontawesome1 text_indent pl8 h30 patient_name" name="patientname" type="text" placeholder="&#xF002;" value="{{search_result.NAME}}" required autocomplete="off">
+                <ul id="patient_name_search_list" class="pa w3-col patient_name_search_list"></ul>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col m4">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient ID</label>
+                </div>
+                <div class="w3-col m8">
+                <input class="brbclr1 h30 w228 fclr1 pl8 h30 search_patient_val" name="patient_uid" type="text" placeholder="" value="{{search_result.FRIENDLY_UID}}" required>
+                <input class="brbclr1 h30 w228 fclr1 pl8 h30 search_patient_id" name="patient_id" type="hidden" placeholder="" value="{{search_result.UID}}" required>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col m4">
+                  <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Age</label>
+                </div>
+                <div class="w3-col m8">
+                <input class="brbclr1 h30 w228 fclr1 pl8 h30 search_age_val" name="age" type="number" placeholder="" value="{{search_result.AGE}}" required >
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col m4">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Sex</label>
+
+                </div>
+                <div class="w3-col m8">
+                    <input class="brbclr1 h30 w228 fclr1 pl8 h30 gender" name="gender" type="text" placeholder="" alue="{{search_result.GENDER}}" required >
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col m4">
+                  <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Doctor</label>
+                </div>
+                <div class="w3-col m8">
+                <label class="select-a">
+                    <select name="doctor_uid" class="select-1 f-12 ff-r fclr1 doctor_uid_{{apps.CODE}}" id="doctor_uid">
+                      <option class="f-12 ff-r"  selected>Please Select Doctor</option>
+                       {% for doctor_key, doctor_value in doctors.items %}
+                         {% if doctor_key == apps.CODE %}
+                           {% for doctor in doctor_value %}
+                              {% for last_doctor_key, last_doctor_value in last_test_doctor.items %}
+                                {% if last_doctor_key == apps.CODE %}
+                                  {% if last_doctor_value == doctor.UID %}
+                                    <option class="f-12 ff-r" value="{{doctor.UID}}" selected>{{doctor.PREFIX}} {{doctor.NAME}} ({{doctor.FRIENDLY_UID}})</option>
+                                  {% else %}
+                                    <option class="f-12 ff-r" value="{{doctor.UID}}">{{doctor.PREFIX}}  {{doctor.NAME}} ({{doctor.FRIENDLY_UID}})</option>
+                                  {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                      {% endfor %}
+                    </select>
+                  </label>
+                </div>
+          </div>
+          <div class="w3-row pt8 ">
+                <div class="w3-col m4">
+                  <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Examiner</label>
+                </div>
+                <div class="w3-col m8">
+                <label class="select-a">
+                    <select name="examiner_uid" class="select-1 f-12 ff-r fclr1 examiner_uid_{{apps.CODE}}" id="examiner_uid">
+                       <option class="f-12 ff-r"  selected>Please Select Examiner</option>
+                       {% for examiner_key, examiner_value in examiners.items %}
+                         {% if examiner_key == apps.CODE %}
+                            {% for examiner in examiner_value %}
+                              {% for last_examiner_key, last_examiner_value in last_test_examiner.items %}
+                                {% if last_examiner_key == apps.CODE %}
+                                  {% if last_examiner_value == examiner.UID %}
+                                    <option class="f-12 ff-r"  selected value="{{examiner.UID}}">{{examiner.PREFIX}} {{examiner.NAME}} ({{examiner.FRIENDLY_UID}})</option>
+                                  {% else %}
+                                    <option class="f-12 ff-r" value="{{examiner.UID}}">{{examiner.PREFIX}} {{examiner.NAME}} ({{examiner.FRIENDLY_UID}})</option>
+                                  {% endif %}
+                                {% endif %}
+                              {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                      {% endfor %}
+                    </select>
+                  </label>
+                
+                </div>
+          </div>
+            <div class="w3-row pt8 ">
+            <div class="w3-col m4">
+              <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Referred By</label>
+            </div>
+            <div class="w3-col m8">
+            <input class="brbclr1 h30 w228 fclr1 pl8 h30 refrered_by" name="refrered_by" type="text" placeholder="">
+            </div>
+            </div>
+       </form>
+       <div class="w3-row">
+                <div class="w3-col m12 mt6p pt16 brclr5">
+                  <div class="f-r">
+                  <a href="{% url 'home' %}"><button class=" buttonsty bgclr15 f-12 ff-r w3-text-white brclr11
+                  mr8 w80 h30 cp">Cancel</button></a>
+            
+                  <button class="h30 f-12 ff-r mr16 bkgclr brclr3  w3-text-white w80" onclick="redirect_url('{{apps.CODE}}');">Next</button>
+              </div>
+                </div>
+       </div> 
+     </div>
+  </div>
+  </div>
+{% endfor%}
+
+  <!-- m2 -->
+	</div>
+{% endblock %}
+{% block js_script %}
+<script>
+  function  licensekey(){
+             $(".overflow-hidden").append(`<div id="licensekey_alert" class="w3-modal  bgclr18" "><div class="w3-modal-content  mt11p" style="width:445px;"><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please upload license key file in app configuration .</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="licensekey_alert_close();">OK</button>
+                         </div></div></div></div>`);
+                 $("#licensekey_alert").show();  
+          }
+  function licensekey_alert_close(){
+               $("#licensekey_alert").hide(); 
+          }
+$(document).ready(function(){
+  $(".patient_name").val("");
+  $(".search_patient_val").val("");
+  $(".search_patient_id").val("");
+  $(".search_age_val").val("");
+  $(".gender").val("");
+  $(".search_patient_val").attr("disabled",true);
+  $(".search_age_val").attr("disabled",true);
+  $(".gender").attr("disabled",true);
+  $(".patient_name").on("keyup keydown",function(){
+    console.log("1")
+    $(".patient_error").hide();
+    var search_name = $(this).val();
+    if(search_name.length < 3){
+      $(".patient_name_search_list").html('');
+      $(".patient_name_search_list").hide();
+    }
+    else{
+           $.ajax({
+                data : search_name,
+                type : 'GET',
+                url : '/patient/search/'+search_name,
+                dataType : "application/json; charset=utf-8",
+                complete : function(xhr, flag) {
+                  jsonstr = xhr.responseText;
+                  jsonObj = jQuery.parseJSON(jsonstr);
+                  console.log(jsonObj);
+                  if(jsonObj.length >=  1){
+                   for (var i = 0; i < jsonObj.length; i++) {
+                    console.log("inside");
+                    $(".error_search").hide();
+                    $(".suggestion_list").show();
+                    var value = jsonObj[i];
+                    if($("#search_"+i).length == 0){
+                    $(".patient_name_search_list").show();
+                    $(".patient_name_search_list").append(`<li class='suggestion_list' id=search_`+i+` onclick='search_name("`+value.NAME+`","`+value.UID+`","`+value.GENDER+`","`+value.AGE+`","`+value.FRIENDLY_UID+`")'>`+value.NAME+`</li>`);
+                    $(".error_search").hide();
+                    }
+                  }
+                  }
+                  else{
+                    $(".error_search").show();
+                    $(".suggestion_list").hide();
+                    console.log($(".error_search").length)
+                    if($(".error_search").length == 0){
+                    $(".patient_name_search_list").show();
+                   $(".patient_name_search_list").append(`<li class='error_search'>Patient Name Not Found</li>`);
+                   $(".suggestion_list").hide();
+                    }
+                  }
+          
+                }
+            });
+    }
+
+  });
+  $(".patient_name").click(function(){
+  if($(".patient_name").val()){
+  $(".patient_name").val("");
+$(".search_patient_val").val("");
+$(".search_patient_id").val("");
+$(".search_age_val").val("");
+$(".gender").val("");
+  }
+  })
+});
+function search_name(name,id,sex,age,friendly_id){
+$(".patient_name").val(name);
+$(".search_patient_val").val(friendly_id);
+$(".search_patient_id").val(id);
+$(".search_age_val").val(age);
+$(".gender").val(sex);
+$(".patient_name_search_list").hide();
+}
+function redirect_url(app_code){
+    var doctor_uid = $('.doctor_uid_'+app_code+' option:selected').val();
+    var examiner_uid =$('.examiner_uid_'+app_code+' option:selected').val();
+    var patient_uid =$(".search_patient_id").val();
+    if(patient_uid){
+        if( (examiner_uid == "Please Select Examiner") && (doctor_uid == "Please Select Doctor")){
+         event.preventDefault();
+          $(".patient_error").text("Please Select Doctor or Examiner");
+           $(".patient_error").show();
+        }
+    else{
+          if( (examiner_uid == "Please Select Examiner")){
+               window.location.href = '/'+app_code+'/'+patient_uid+'/'+doctor_uid+'/no_uid/';
+               referred_ajax(app_code);
+          }
+          else if((doctor_uid == "Please Select Doctor")){
+                window.location.href = '/'+app_code+'/'+patient_uid+'/no_uid/'+examiner_uid+'/';
+                referred_ajax(app_code);
+          }
+          else{
+                window.location.href = '/'+app_code+'/'+patient_uid+'/'+doctor_uid+'/'+examiner_uid+'/';
+                referred_ajax(app_code);
+          }
+     }
+    }
+    else{
+      $(".patient_error").show();
+      }
+  }
+
+  function referred_ajax(app_code){
+    console.log(app_code);
+     var referred = [];
+    $(".refrered_by").each(function(){
+     reft = $(this).val();
+      referred.push(reft);
+    });
+    var dat = { referred ,  "csrfmiddlewaretoken": '{{ csrf_token }}', "app_code":app_code};
+     $.ajax({
+                data: dat,
+                 type : 'POST',                            
+                 url :"/test/referred/",
+                 dataType : "application/json; charset=utf-8",
+                 complete : function(data) 
+                 {
+                    console.log(data);
+                 }
+               });
+  }
+</script>
+{% endblock %}

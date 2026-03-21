@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  web:
+    platform: linux/amd64
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "5423:5423"
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python manage.py runserver 0.0.0.0:5423
+    working_dir: /app/app/appsource/app_config

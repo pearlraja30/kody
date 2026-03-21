@@ -1,0 +1,204 @@
+<script type="text/javascript">
+  setTimeout(function()
+  { 
+    $("text:contains('Pressure mmHg')").next().addClass('stroke_color');
+    $("#chart_1").find("svg g").first().find("text").attr({"font-size":"14","x":"95","y":"11.4","font-family":"Times New Roman","font-weight":"normal"});
+    $("#chart_2").find("svg g").first().find("text").attr({"font-size":"14","x":"77","y":"11.4","font-family":"Times New Roman","font-weight":"normal"});
+    $("#chart_3").find("svg g").first().find("text").attr({"font-size":"14","x":"65","y":"11.4","font-family":"Times New Roman","font-weight":"normal"});
+    $("#chart_4").find("svg g").first().find("text").attr({"font-size":"14","x":"70","y":"11.4","font-family":"Times New Roman","font-weight":"normal"});
+  }, 2000);
+</script>
+<script  type="text/javascript">
+   google.charts.setOnLoadCallback(drawVisualization);
+   function drawVisualization() {
+       var data11 = google.visualization.arrayToDataTable([
+         ['Frequency', 'Value', { role: 'style' }],
+         {% if report.TM23.0.KEY_VALUE and report.TM23.1.KEY_VALUE %}
+         ['Sys', {{report.TM23.0.KEY_VALUE|floatformat:0}},'#00BDB6'],
+         ['Dia', {{report.TM23.1.KEY_VALUE|floatformat:0}},'#ff6600'],
+         {% else %}
+         ['Sys', 20,'#00BDB6'],
+         ['Dia', 20,'#ff6600'],
+         {% endif %}
+        ]);
+       var options11 = {
+        title : 'Supine',
+        titleTextStyle: {
+          fontSize: 14,
+        },bar: {groupWidth: "30%"},
+        legend: { position: 'none',},
+        chartArea: {right:2,'width': '80%', 'height': '71%', backgroundColor: {
+      stroke: 'black',
+      strokeWidth: 1
+       }},
+        vAxis: {title: 'Pressure mmHg',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+        textStyle: {
+        fontSize : 7,
+        fontName: 'sans-serif',
+        bold:true
+      },viewWindow: {
+            max:200,
+            min:25
+          },gridlines: {
+        color: '#ffcccc',
+        count:10,
+      }},
+        hAxis: {title: '',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+        showTextEvery:1,textStyle: {
+        fontSize : 8,
+        fontName: 'sans-serif',
+        bold:true
+      }},
+        lineWidth: 1,
+        lineDashStyle: [5, 1, 3],
+        seriesType: 'bars',
+        series: {1: {type: 'line'}},
+        height:145,
+        enableInteractivity: false,
+      };
+      var data12 = google.visualization.arrayToDataTable([
+         ['Frequency', 'Value', { role: 'style' }],
+         {% if report.TM23.6.KEY_VALUE and report.TM23.7.KEY_VALUE %}
+         ['Sys', {{report.TM23.6.KEY_VALUE|floatformat:0}},'#00BDB6'],  
+         ['Dia', {{report.TM23.7.KEY_VALUE|floatformat:0}},'#ff6600'],
+         {% else %}
+         ['Sys', 20,'#00BDB6'],  
+         ['Dia', 20,'#ff6600'],
+         {% endif %}
+
+        ]);
+       var options12 = {
+        title : 'After 60 sec',
+        titleTextStyle: {
+          fontSize: 14,
+        },bar: {groupWidth: "30%"},
+        legend: { position: 'none',},
+        chartArea: {right:2,'width': '80%', 'height': '71%', backgroundColor: {
+      stroke: 'black',
+      strokeWidth: 1
+       }},
+        vAxis: {title: 'Pressure mmHg',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+        textStyle: {
+        fontSize : 7,
+        fontName: 'sans-serif',
+        bold:true
+      },viewWindow: {
+            max:200,
+            min:25
+          },gridlines: {
+        color: '#ffcccc',
+        count:10,
+      }},
+        hAxis: {title: '',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+        showTextEvery:1,textStyle: {
+        fontSize : 8,
+        fontName: 'sans-serif',
+        bold:true
+      }},
+        lineWidth: 1,
+        lineDashStyle: [5, 1, 3],
+        seriesType: 'bars',
+        series: {1: {type: 'line'}},
+        height:145,
+        enableInteractivity: false,
+      };
+      var data13 = google.visualization.arrayToDataTable([
+         ['Frequency', 'Value', { role: 'style' }],
+         {% if report.TM24.0.KEY_VALUE  and report.TM24.1.KEY_VALUE  %}
+         ['Sys', {{report.TM24.0.KEY_VALUE|floatformat:0}},'#00BDB6'],
+         ['Dia', {{report.TM24.1.KEY_VALUE|floatformat:0}},'#ff6600'],
+         {% else %}
+         ['Sys', 20,'#00BDB6'],  
+         ['Dia', 20,'#ff6600'],
+         {% endif %}
+        ]);
+       var options13 = {
+        title : 'Before Handgrip',
+        titleTextStyle: {
+          fontSize: 14,
+        },bar: {groupWidth: "30%"},
+        legend: { position: 'none',},
+        chartArea: {right:2,'width': '80%', 'height': '71%', backgroundColor: {
+      stroke: 'black',
+      strokeWidth: 1
+       }},
+        vAxis: {title: 'Pressure mmHg',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+        textStyle: {
+        fontSize : 7,
+        fontName: 'sans-serif',
+        bold:true
+      },viewWindow: {
+            max:200,
+            min:25
+          },gridlines: {
+        color: '#ffcccc',
+        count:10,
+      }},
+        hAxis: {title: '',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+        showTextEvery:1,textStyle: {
+        fontSize : 8,
+        fontName: 'sans-serif',
+        bold:true
+      }},
+        lineWidth: 1,
+        lineDashStyle: [5, 1, 3],
+        seriesType: 'bars',
+        series: {1: {type: 'line'}},
+        height:145,
+        enableInteractivity: false,
+      };
+      var data14 = google.visualization.arrayToDataTable([
+         ['Frequency', 'Value', { role: 'style' }],
+         {% if report.TM24.3.KEY_VALUE and report.TM24.4.KEY_VALUE %}
+         ['Sys', {{report.TM24.3.KEY_VALUE|floatformat:0}},'#00BDB6'],
+         ['Dia', {{report.TM24.4.KEY_VALUE|floatformat:0}},'#ff6600'],
+         {% else %}
+         ['Sys', 20,'#00BDB6'],  
+         ['Dia', 20,'#ff6600'],
+         {% endif %}
+        ]);
+       var options14 = {
+        title : 'After Handgrip',
+        titleTextStyle: {
+          fontSize: 14,
+        },bar: {groupWidth: "30%"},
+        legend: { position: 'none',},
+        chartArea: {right:2,'width': '80%', 'height': '71%', backgroundColor: {
+      stroke: 'black',
+      strokeWidth: 1
+       }},
+        vAxis: {title: 'Pressure mmHg',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+        textStyle: {
+        fontSize : 7,
+        fontName: 'sans-serif',
+        bold:true
+      },viewWindow: {
+            max:200,
+            min:25
+          },gridlines: {
+        color: '#ffcccc',
+        count:10,
+      }},
+        hAxis: {title: '',titleTextStyle: {fontSize: 9,fontName: 'sans-serif'},
+        showTextEvery:1,textStyle: {
+        fontSize : 8,
+        fontName: 'sans-serif',
+        bold:true
+      }},
+        lineWidth: 1,
+        lineDashStyle: [5, 1, 3],
+        seriesType: 'bars',
+        series: {1: {type: 'line'}},
+        height:145,
+        enableInteractivity: false,
+      };
+      var chart_1 = new google.visualization.ComboChart(document.getElementById('chart_1'));
+      chart_1.draw(data11, options11);
+      var chart_2 = new google.visualization.ComboChart(document.getElementById('chart_2'));
+      chart_2.draw(data12, options12);
+      var chart_3 = new google.visualization.ComboChart(document.getElementById('chart_3'));
+      chart_3.draw(data13, options13);
+      var chart_4 = new google.visualization.ComboChart(document.getElementById('chart_4'));
+      chart_4.draw(data14, options14);
+   }
+</script>

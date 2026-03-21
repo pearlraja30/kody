@@ -1,0 +1,575 @@
+{% extends "page_layout.html" %}
+{% block content_body %}
+<link href="{{MEDIA_URL}}css/kodysreports.css" rel="stylesheet">
+<div class="w3-display-container bgclr3 brclr1">
+	<div class="w3-center f-16 ff-r ft-b fclr pt3 ">Reports
+	   <span class="w3-right mr16"><a href="/reports"><img src="{{MEDIA_URL}}img/png/cancel.png" style="margin-top: -3px;"></a></span>
+    </div>  
+</div>
+{% if report.APP_CODE == "APP-04" %}
+<div class="w3-display-container bgclr3 brclr1">
+	<div class="w3-center f-16 ff-r ft-b fclr pt3" style="height: 55px">
+		<!-- <div style="float:left;margin-left: 16px;margin-top: 10px;">
+			<a href="/{{report.APP_CODE}}/{{report.medical_test.PATIENT.UID}}/{% if report.medical_test.DOCTOR %}{{report.medical_test.DOCTOR.UID}}{% else %}no_uid{% endif %}/{% if report.medical_test.EXAMINER %}{{report.medical_test.EXAMINER.UID}}{% else %}no_uid{% endif %}/"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Back to Test</button></a>
+		</div> -->
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			{% if report.medical_test_organ_type == 'Foot' %}
+				{% if not mode %} 
+				<a href="{% url 'report_view' test_entry_code 'table' %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to table View</button></a>
+				{% else %}
+				<a href="{% url 'report_view' test_entry_code %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to foot View</button></a>
+				{% endif %}
+			{% elif report.medical_test_organ_type == 'Hand' %}
+				{% if "warm" in mode %}
+		    		<a href="{% url 'report_view' test_entry_code 'cool' %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to Cool View</button></a>
+		    		<a href="{% url 'report_view' test_entry_code  %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to Hand View</button></a>
+		    	{% elif "cool" in mode %}
+		    		<a href="{% url 'report_view' test_entry_code 'warm' %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to Warm View</button></a>
+		    		<a href="{% url 'report_view' test_entry_code  %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to Hand View</button></a>
+		    	{% else %}
+		    		{% if not mode %}
+		    			<a href="{% url 'report_view' test_entry_code 'warm' %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to Warm View</button></a>
+		    			<a href="{% url 'report_view' test_entry_code 'cool' %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to Cool View</button></a>
+						<a href="{% url 'report_view' test_entry_code 'table' %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to table View</button></a>
+					{% else %}
+						<a href="{% url 'report_view' test_entry_code 'warm' %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to Warm View</button></a>
+		    			<a href="{% url 'report_view' test_entry_code 'cool' %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to Cool View</button></a>
+						<a href="{% url 'report_view' test_entry_code %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to Hand View</button></a>
+					{% endif %}
+		    	{% endif %}
+		    {% elif report.medical_test_organ_type == 'Other' %}
+		    	{% if not mode %}
+		    	<a href="{% url 'report_view' test_entry_code 'cool' %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to Cool View</button></a>
+		    	{% else %}
+		    	<a href="{% url 'report_view' test_entry_code  %}"><button class="h30 f-12 ff-r bkgclr brclr3  w3-text-white ft-b">Change to warm View</button></a>
+		    	{% endif %}
+			{% endif %}
+		</div>
+		{% comment %}
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12  bkgclr brclr3  w3-text-white ft-b" onclick="previewPDF()">Preview</button>
+		</div>
+		{% endcomment %}
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="emailsend()">E-mail</button>
+		</div>
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12  bkgclr brclr3  w3-text-white ft-b" onclick="printPDF()">Print</button>
+		</div>
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12  bkgclr brclr3  w3-text-white ft-b" onclick="generatePDF()">Export as PDF</button>
+		</div>
+	</div>  
+</div>
+{% elif report.APP_CODE == "APP-03" %}
+	<div class="w3-display-container bgclr3 brclr1">
+	<div class="w3-center f-16 ff-r ft-b fclr pt3" style="height: 55px">
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			{% if report.medical_test_organ_type == 'Foot' %}
+				{% if not mode %} 
+				<a href="{% url 'report_view' test_entry_code 'table' %}"><button class="h30 f-12  bkgclr brclr3  w3-text-white ft-b">Change to table View</button></a>
+				{% else %}
+				<a href="{% url 'report_view' test_entry_code %}"><button class="h30 f-12  bkgclr brclr3  w3-text-white ft-b">Change to Picture View</button></a>
+				{% endif %}
+			{% elif report.medical_test_organ_type == 'Hand' %}
+				{% if not mode %} 
+				<a href="{% url 'report_view' test_entry_code 'table' %}"><button class="h30 f-12  bkgclr brclr3  w3-text-white ft-b">Change to table View</button></a>
+				{% else %}
+				<a href="{% url 'report_view' test_entry_code %}"><button class="h30 f-12  bkgclr brclr3  w3-text-white ft-b">Change to Picture View</button></a>
+				{% endif %}
+		    {% elif report.medical_test_organ_type == 'Other' %}
+			{% endif %}
+		</div>
+		{% comment %}
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="previewPDF()">Preview</button>
+		</div>
+		{% endcomment %}
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="emailsend()">E-mail</button>
+		</div>
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="printPDF()">Print</button>
+		</div>
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="generatePDF()">Export as PDF</button>
+		</div>
+	</div>  
+</div>
+{% elif report.APP_CODE == "APP-02" %}
+<div class="w3-display-container bgclr3 brclr1">
+	<div class="w3-center f-16 ff-r ft-b fclr pt3" style="height: 55px">
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			{% if report.medical_test_organ_type == 'Foot' %}
+				{% if not mode %} 
+				<a href="{% url 'report_view' test_entry_code 'table' %}"><button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white">Change to table View</button></a>
+				{% else %}
+				<a href="{% url 'report_view' test_entry_code %}"><button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white">Change to Picture View</button></a>
+				{% endif %}
+			{% elif report.medical_test_organ_type == 'Hand' %}
+				{% if not mode %} 
+				<a href="{% url 'report_view' test_entry_code 'table' %}"><button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white">Change to table View</button></a>
+				{% else %}
+				<a href="{% url 'report_view' test_entry_code %}"><button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white">Change to Picture View</button></a>
+				{% endif %}
+		    {% elif report.medical_test_organ_type == 'Other' %}
+			{% endif %}
+		</div>
+		{% comment %}
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="previewPDF()">Preview</button>
+		</div>
+		{% endcomment %}
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="emailsend()">E-mail</button>
+		</div>
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="printPDF()">Print</button>
+		</div>
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="generatePDF()">Export as PDF</button>
+		</div>
+	</div>  
+</div>
+{% elif report.APP_CODE == "APP-01" %}
+<div class="w3-display-container bgclr3 brclr1">
+	<div class="w3-center f-16 ff-r ft-b fclr pt3" style="height: 55px">
+		{% comment %}
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="previewPDF()">Preview</button>
+		</div>
+		{% endcomment %}
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="emailsend()">E-mail</button>
+		</div>
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="printPDF()">Print</button>
+		</div>
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="generatePDF()">Export as PDF</button>
+		</div>
+	</div>  
+</div>
+{% elif report.APP_CODE == "APP-05" %}
+<div class="w3-display-container bgclr3 brclr1">
+	<div class="w3-center f-16 ff-r ft-b fclr pt3" style="height: 55px">
+		{% comment %}
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="previewPDF()">Preview</button>
+		</div>
+		{% endcomment %}
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="emailsend()">E-mail</button>
+		</div>
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="printPDF()">Print</button>
+		</div>
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="generatePDF()">Export as PDF</button>
+		</div>
+	</div>  
+</div>
+{% elif report.APP_CODE == "APP-06" %}
+<div class="w3-display-container bgclr3 brclr1">
+	<div class="w3-center f-16 ff-r ft-b fclr pt3" style="height: 55px">
+		{% comment %}
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="previewPDF()">Preview</button>
+		</div>
+		{% endcomment %}
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="emailsend()">E-mail</button>
+		</div>
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="printPDF()">Print</button>
+		</div>
+		<div style="display: inline-block;float: right;margin-top: 10px;margin-right: 10px;">
+			<button class="h30 f-12 ft-b bkgclr brclr3  w3-text-white" onclick="generatePDF()">Export as PDF</button>
+		</div>
+	</div>  
+</div>
+{% endif %}
+
+<div class="bg_white ft-family a4 scroll" style="height: auto; margin-left: auto; margin-right: auto;" id="PDF-body">
+	{% if COMMON_INFO.HOSPITAL_LOGO  != "/site_media/img/png/default_hospital_logo.png" %}
+	<div class="brclr_black ml8 mr8 pt15 pb12" style="width: 100%;">
+		{% if COMMON_INFO.IS_REPORT_HEADER %}
+		<div class=" pl8 pr8" style="width: 23%;position: absolute;height: 92px;overflow: hidden;display: inline-block;float: left;margin-top: 12px;">
+			<img src="{{COMMON_INFO.HOSPITAL_LOGO}}" alt="logo" style="position: absolute;top: 0;">
+		</div>
+		{% endif %}
+		<div class="h80 pl8 pr8" style="height: 92px;width: 76%;display: inline-block;float: right;">
+			{% if COMMON_INFO.IS_REPORT_HEADER %}
+			<div class="color_green f-23 lh-1  h40 " style="font-weight:bold;font-family:{{COMMON_INFO.HOSPITAL_NAME_FONT_STYLE}};font-size: {{COMMON_INFO.HOSPITAL_NAME_FONT_SIZE}}px!important; color:{{COMMON_INFO.HOSPITAL_NAME_FONT_COLOR}};"> 
+				{{COMMON_INFO.HOSPITAL_NAME|safe}}
+
+				
+			</div>
+			<div class="color_red f-16 h13  mt5 mb5" style="font-weight:bold;font-family:{{COMMON_INFO.HOSPITAL_ADDRESS_FONT_STYLE}};font-size: {{COMMON_INFO.HOSPITAL_ADDRESS_FONT_SIZE}}px!important; color:{{COMMON_INFO.HOSPITAL_ADDRESS_FONT_COLOR}};">
+				{{COMMON_INFO.HOSPITAL_ADDRESS1|safe|title}}{% if COMMON_INFO.HOSPITAL_ADDRESS2 %}, {{COMMON_INFO.HOSPITAL_ADDRESS2|safe|title}} {% endif %}{% if COMMON_INFO.HOSPITAL_ADDRESS3 %}, {{COMMON_INFO.HOSPITAL_ADDRESS3|safe|title}}{% endif %}{% if COMMON_INFO.CITY %}, {{COMMON_INFO.CITY|safe|title}}{% endif %}{% if COMMON_INFO.ZIPCODE %} - {{COMMON_INFO.ZIPCODE}}{% endif %}
+			</div>
+			<div class="color_blue f-16 h13 mt5" style="font-weight:bold;font-family:{{COMMON_INFO.HOSPITAL_NUMBER_FONT_STYLE}};font-size: {{COMMON_INFO.HOSPITAL_NUMBER_FONT_SIZE}}px!important; color:{{COMMON_INFO.HOSPITAL_NUMBER_FONT_COLOR}};">
+				{% if COMMON_INFO.PHONE_NUMBER %}Ph:{{COMMON_INFO.PHONE_NUMBER|safe}}{% endif %}{% if COMMON_INFO.MOBILE_NUMBER %}, Mob:{{COMMON_INFO.MOBILE_NUMBER|safe}}{% endif %}{% if COMMON_INFO.EMAIL %},  Mail:{{COMMON_INFO.EMAIL|safe}}{% endif %}
+			</div>
+			{% endif %}
+	    </div>
+	    <div style="clear: both"></div>
+	</div>
+	{% else %}
+		<div class="brclr_black ml8 mr8 pt23 pb16">
+		<div class="h80  text_center pl8 pr8">
+			{% if COMMON_INFO.IS_REPORT_HEADER %}
+			<div class="color_green f-23 lh-1  h40 {{COMMON_INFO.HOSPITAL_NAME_FONT_STYLE}}" style="font-weight:bold;font-size: {{COMMON_INFO.HOSPITAL_NAME_FONT_SIZE}}px!important; color:{{COMMON_INFO.HOSPITAL_NAME_FONT_COLOR}};"> 
+				{{COMMON_INFO.HOSPITAL_NAME|safe}}
+
+				
+			</div>
+			<div class="color_red f-16 h13  mt5 mb5 {{COMMON_INFO.HOSPITAL_ADDRESS_FONT_STYLE}}" style="font-weight:bold;font-size: {{COMMON_INFO.HOSPITAL_ADDRESS_FONT_SIZE}}px!important; color:{{COMMON_INFO.HOSPITAL_ADDRESS_FONT_COLOR}};">
+				{{COMMON_INFO.HOSPITAL_ADDRESS1|safe|title}}{% if COMMON_INFO.HOSPITAL_ADDRESS2 %}, {{COMMON_INFO.HOSPITAL_ADDRESS2|safe|title}} {% endif %}{% if COMMON_INFO.HOSPITAL_ADDRESS3 %}, {{COMMON_INFO.HOSPITAL_ADDRESS3|safe|title}}{% endif %}{% if COMMON_INFO.CITY %}, {{COMMON_INFO.CITY|safe|title}}{% endif %}{% if COMMON_INFO.ZIPCODE %} - {{COMMON_INFO.ZIPCODE}}{% endif %}
+			</div>
+			<div class="color_blue f-16 h13 mt5 {{COMMON_INFO.HOSPITAL_NUMBER_FONT_STYLE}}" style="font-weight:bold;font-size: {{COMMON_INFO.HOSPITAL_NUMBER_FONT_SIZE}}px!important; color:{{COMMON_INFO.HOSPITAL_NUMBER_FONT_COLOR}};">
+				{% if COMMON_INFO.PHONE_NUMBER %}Ph:{{COMMON_INFO.PHONE_NUMBER|safe}}{% endif %}{% if COMMON_INFO.MOBILE_NUMBER %}, Mob:{{COMMON_INFO.MOBILE_NUMBER|safe}}{% endif %}{% if COMMON_INFO.EMAIL %},  Mail:{{COMMON_INFO.EMAIL|safe}}{% endif %}
+			</div>
+			{% endif %}
+	    </div>
+	</div>
+	{% endif %}
+	<div class="w90p margin_auto mt8">
+		<div class="w58p d-inline_block lh2">
+			<div class="ft_tm f-14 ">
+				Patient Name: <span>{{report.medical_test.PATIENT.PREFIX|title}} {{report.medical_test.PATIENT.NAME}} {{report.medical_test.PATIENT.LAST_NAME}}</span>
+			</div>
+			<div class="ft_tm f-14 ">
+				Patient ID: <span>{{report.medical_test.PATIENT.FRIENDLY_UID}}</span>
+			</div>
+			<div class="ft_tm f-14 ">
+    		{% if report.reports.REFERRED_BY %}
+    		Referred By: <span>{{report.reports.REFERRED_BY}}</span>
+    		{% else %}
+    		&nbsp
+    		{% endif %}
+		     </div>
+		
+		</div>
+		<div class="w40p d-inline_block f-r lh2">
+		
+			<div class="ft_tm f-14 ">
+				Date & Time: <span>{{report.reports.REPORTED_ON| date:"d/m/Y h:i A"}}</span>
+			</div>
+			 <div class="ft_tm f-14 ">
+		        Mobile: <span>{{report.medical_test.PATIENT.PATIENT_MOBILE_NUMBER}}{% if report.medical_test.PATIENT.POC_MOBILE_NUMBER %}, {{report.medical_test.PATIENT.POC_MOBILE_NUMBER}} {% endif %}</span>
+		      </div>
+	
+		      	<div class="ft_tm f-14 ">
+				Age/Sex: <span>{{report.medical_test.PATIENT.AGE}}/{{report.medical_test.PATIENT.GENDER}}</span>
+			</div>
+		</div>
+    </div>
+    <div>
+    {% if report.APP_CODE == "APP-04" %}
+    	{% if report.medical_test_organ_type == 'Other' %}
+    	<div class="f-16 text_center color_red mt8 ft_tm mb2" style="text-decoration: underline;">POLY NEUROPATHY TESTING REPORT - {% if "cool" in mode %}COOL{% else %}WARM{% endif %}
+    	</div>
+    	{% elif  report.medical_test_organ_type == 'Hand' %}
+    	<div class="f-16 text_center color_red mt8 ft_tm mb2" style="margin:auto;text-decoration: underline;{% if 'warm' in mode  or  'cool' in mode %} {% else %} {% endif %} ">HAND SENSORY TESTING REPORT {% if 'warm' in mode %} - WARM{% elif 'cool' in mode  %} - COOL {% else %} - HCP {% endif %}
+    	</div>
+    	{% else %}
+    	<div class="f-16 text_center color_red mt8 ft_tm mb2" style="text-decoration: underline;">DIABETIC NEUROPATHY TESTING REPORT- HCP
+    	</div>
+    	{% endif %}
+    		{% if report.medical_test_organ_type == 'Foot' %}
+	    		{% if report.reports.TEST_TYPE == 'Warm' %}
+	    		{% include 'includes/hcp_foot_warm_report.html' %}
+	    		{% elif report.reports.TEST_TYPE == 'All' %}
+	    		{% include 'includes/hcp_foot_all_report.html' %}
+	    		{% endif %}
+	    	{% elif report.medical_test_organ_type == 'Hand' %}
+		    	{% if "warm" in mode %}
+		    		{% include 'includes/hcp_hand_warm_report.html' %}
+		    	{% elif "cool" in mode %}
+		    		{% include 'includes/hcp_hand_cool_report.html' %}
+		    	{% else %}
+		    		{% include 'includes/hcp_hand_all_report.html' %}
+		    	{% endif %}
+		    {% else %}
+		    	{% if "cool" in mode %}
+		    		{% include 'includes/hcp_cool_other_report.html' %}
+		    	{% else %}
+		    		{% include 'includes/hcp_warm_other_report.html' %}
+		    	{% endif %}
+	    	{% endif %}
+	  {% elif report.APP_CODE == "APP-03" %}
+	    	{% if report.medical_test_organ_type == 'Other' %}
+    	<div class="f-16 text_center color_red mt8 ft_tm mb2" style="text-decoration: underline;margin:auto;">POLY NEUROPATHY TESTING REPORT- VPT 
+    	</div>
+    	{% elif  report.medical_test_organ_type == 'Hand' %}
+    	<div class="f-16 text_center color_red mt8 ft_tm mb2" style="text-decoration:underline;margin:auto;">HAND SENSORY TESTING REPORT- VPT 
+    	</div>
+    	{% else %}
+    	<div class="f-16 text_center color_red mt8 ft_tm mb2  " style="text-decoration:underline;margin:auto;">DIABETIC NEUROPATHY TESTING REPORT- VPT 
+    	</div>
+    	{% endif %}
+    		{% if report.medical_test_organ_type == 'Foot' %}
+    			{% include 'includes/vptultra_foot_report.html' %}
+	    	{% elif report.medical_test_organ_type == 'Hand' %}
+		    	{% include 'includes/vptultra_hand_report.html' %}
+		    {% else %}
+		    	{% include 'includes/vptultra_other_report.html' %}
+	    	{% endif %}
+	   {% elif report.APP_CODE == "APP-02" %}	
+	       {% if report.medical_test_organ_type == 'Other' %}
+    	       <div class="f-16 text_center color_red mt8 ft_tm mb2" style="text-decoration: underline;">POLY NEUROPATHY TESTING REPORT - VPT
+    	       </div>
+    	   {% elif  report.medical_test_organ_type == 'Hand' %}
+    	      <div class="f-16 text_center color_red mt8 ft_tm mb2" style="text-decoration:underline;margin:auto;">
+    	      	HAND SENSORY TESTING REPORT- VPT
+    	      </div>
+    	   {% else %}
+    	      <div class="f-16 text_center color_red mt8 ft_tm mb2" style="text-decoration:underline;margin:auto;">
+    	      	DIABETIC NEUROPATHY TESTING REPORT- VPT 
+    	       </div>
+    	    {% endif %}
+    		{% if report.medical_test_organ_type == 'Foot' %}
+    			{% include 'includes/vpt_foot_report.html' %}
+	    	{% elif report.medical_test_organ_type == 'Hand' %}
+		    	{% include 'includes/vpt_hand_report.html' %}
+		    {% else %}
+		    	{% include 'includes/vpt_other_report.html' %}
+	    	{% endif %}
+	     {% elif report.APP_CODE == "APP-01" %}
+	       {% if report.TEST_CODE == 'TM-01' %}
+	        {% if report.reports.TEST_TYPE == 'ABI' %}
+    	       <div class="f-16 text_center  mt8 ft_tm " style="text-decoration: underline;margin:auto;color:#ff299c;margin-bottom: 16px;">ABI DOPPLER REPORT 
+    	       </div>
+    	    {% elif  report.reports.TEST_TYPE == 'TBI' %}
+    	       <div class="f-16 text_center  mt8 ft_tm " style="text-decoration:underline;margin:auto;color:#ff299c;margin-bottom: 16px;">ABI & TBI DOPPLER REPORT 
+    	       </div>
+    	    {% endif %}
+	            {% if report.reports.TEST_TYPE  %}
+	    		   {% include 'includes/doppler_abi_report.html' %}
+	    		{% endif %}
+	       {% elif report.TEST_CODE == 'TM-02' %}
+	       <div style="width: 94%;margin: auto;">
+	        
+	        {% if report.reports.TEST_TYPE == 'ABI_DOPPLER' %}
+    	       <div class="f-16 text_center  mt8 ft_tm mb2" style="text-decoration: underline;margin:auto;color:#ff299c;display:inline-block;width: 100%;text-align: center !important;">ABI DOPPLER REPORT
+    	       </div>
+    	    {% elif  report.reports.TEST_TYPE == 'ABI_TBI_DOPPLER_1' %}
+    	       <div class="f-16 text_center  mt8 ft_tm mb2" style="text-decoration:underline;margin:auto;color:#ff299c;display:inline-block;width: 100%;text-align: center !important;">ABI & TBI Doppler Report - 1
+    	       </div>
+    	       {% elif  report.reports.TEST_TYPE == 'ABI_TBI_DOPPLER_2' %}
+    	       <div class="f-16 text_center  mt8 ft_tm mb2" style="text-decoration:underline;margin:auto;color:#ff299c;display:inline-block;width: 100%;text-align: center !important;">ABI & TBI Doppler Report - 2 
+    	       </div>
+    	       {% elif  report.reports.TEST_TYPE == 'ABI_TBI_CAROTID_1' %}
+    	       <div class="f-16 text_center  mt8 ft_tm mb2" style="text-decoration:underline;margin:auto;color:#ff299c;display:inline-block;width: 100%;text-align: center !important;">ABI,TBI & CAROTID Doppler Report
+    	       </div>
+    	       {% elif  report.reports.TEST_TYPE == 'VASCULAR_SEGMENTAL_STUDY_REPORT_1' %}
+    	       <div class="f-16 text_center  mt8 ft_tm mb2" style="text-decoration:underline;margin:auto;color:#ff299c;display:inline-block;width: 100%;text-align: center !important;">Vascular Segmental Study Report - 1 
+    	       </div>
+    	       {% elif  report.reports.TEST_TYPE == 'VASCULAR_SEGMENTAL_STUDY_REPORT_2' %}
+    	       <div class="f-16 text_center  mt8 ft_tm mb2" style="text-decoration:underline;margin:auto;color:#ff299c;display:inline-block;width: 100%;text-align: center !important;">Vascular Segmental Study Report - 2 
+    	       </div>
+    	    {% endif %}
+    	    
+    	</div>
+    	    {% if report.reports.TEST_TYPE  %}
+	    		   {% include 'includes/doppler_graphical_report.html' %}
+	    		{% endif %}
+	       {% endif %}
+	   {% elif report.APP_CODE == "APP-05" %}
+	          <div class="f-16 text_center  mt8 ft_tm mb2" style="margin:auto;color:#ff299c;padding-bottom: 12px;text-decoration: underline;">FOOT PRESSURE REPORT 
+    	       </div>
+	    	  {% include 'includes/podo_i_mat_report.html' %}
+	   {% elif report.APP_CODE == "APP-06" %}
+	   {% if report.reports.TEST_TYPE %}
+    	       <div class="f-16 text_center  mt8 ft_tm mb2" style="text-decoration: underline;margin:auto;color:#ff299c;">FOOT TEMPERATURE REPORT 
+    	       </div>
+    	    {% endif %}
+	            {% if report.reports.TEST_TYPE  %}
+	    		   {% include 'includes/podo_t_map_report.html' %}
+	    		{% endif %}
+	    
+	   {% endif %}
+    <div class="w95p ml26 f-12 mt8 lh11" style="height: 2cm;">
+				<span class="ft_tm f-16">Comments</span><br>	
+				{% if report.reports.IMPRESSION_NOTES %}
+				<span class="ft_tm "  style="word-break: break-word;">{{report.reports.IMPRESSION_NOTES}}</span>
+				{% else %}
+				<span></span>
+				{% endif %}
+	</div>
+	<div class="w94p margin_auto">
+		<div class="d-inline_block {% if report.APP_CODE == 'APP-01' %} w75p {% else %} w65p {% endif %} ">
+			<div class="f-12 ft_tm ">
+				{% if report.medical_test.DOCTOR.NAME %} Dr. {{report.medical_test.DOCTOR.NAME}}{% endif %}
+			</div>
+			<!-- <div class="ft_tm f-16 ">
+				Doctor
+			</div> -->
+		</div>
+		<div class=" {% if report.APP_CODE == 'APP-01' %} w24p {% else %} w30p {% endif %} d-inline_block">
+			<div class="f-12 ft_tm ">
+				{% if report.medical_test.EXAMINER %}{{report.medical_test.EXAMINER.PREFIX|title}} {{report.medical_test.EXAMINER.NAME}}{% endif %}
+			</div>
+			<!-- <div class="ft_tm f-16 ">
+				Examiner
+			</div> -->
+		</div>
+    </div>
+	<div class="w94p margin_auto">
+		<div class="d-inline_block {% if report.APP_CODE == 'APP-01' %} w6p {% else %} w65p {% endif %} ">
+			<!-- <div class="f-12 ft_tm ">
+				{% if report.medical_test.DOCTOR.NAME %} Dr. {{report.medical_test.DOCTOR.NAME}}{% endif %}
+			</div> -->
+			<div class="ft_tm f-16 ">
+				Doctor
+			</div>
+		</div>
+		{% if report.APP_CODE == "APP-01" %}
+		<div class="d-inline_block" style="text-align: right;width: 491px;" class="f-10"> {% if  report.reports.TEST_TYPE == "VASCULAR_SEGMENTAL_STUDY_REPORT_1" or report.reports.TEST_TYPE == "VASCULAR_SEGMENTAL_STUDY_REPORT_2"  %} * Report Based on Hadeco - Japan SmartDop - XT Doppler {% else %} * Report Based on Hadeco - Japan 8MHz Bidirectional Doppler{% endif %}</div>
+		 &nbsp; &nbsp; &nbsp;
+		{% endif %}
+		<div class="d-inline_block {% if report.APP_CODE == 'APP-01' %} w20p {% else %} w30p {% endif %}">
+			<!-- <div class="f-12 ft_tm ">
+				{% if report.medical_test.EXAMINER %}{{report.medical_test.EXAMINER.PREFIX|title}} {{report.medical_test.EXAMINER.NAME}}{% endif %}
+			</div> -->
+			<div class="ft_tm f-16 ">
+				Examiner
+			</div>
+		</div>
+    </div>
+	<div class="ml8 mr8 brtop_black">
+			<div class="text_center f-8 pb25 ft_tm pt2 f-12 ">Software Designed and Supported by KODYS www.kodymedical.com
+			</div>
+	</div>
+
+    </div>
+</div>	
+<div id="can_img"></div>
+{% endblock %}
+{% block js_script %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/jspdf.min.js"></script>
+<script type="text/javascript">
+function generatePDF()
+  {
+		{% if app %}
+			external.export_as_pdf(export_pdf);
+		{% endif %}
+  }
+function export_pdf(save_file)
+{
+	var element = $("#PDF-body");
+	save_file(element.html());
+}
+function printPDF()
+ {
+
+		{% if app %}
+			$("#report_title").removeClass('pt23');
+			external.print_pdf(print_pdf);
+		{% endif %}
+  }
+function print_pdf(print_file)
+{
+	var element = $("#PDF-body");
+	print_file(element.html());
+}
+function previewPDF()
+ {
+		{% if app %}
+			$("#report_title").removeClass('pt23');
+			external.preview_pdf(preview_pdf);
+		{% endif %}
+  }
+function preview_pdf(preview_file)
+{
+	var element = $("#PDF-body");
+	preview_file(element.html());
+}
+function email_pdf(email_file)
+{
+	var element = $("#PDF-body");
+	email_file(element.html());
+}
+function pdf_file_name(file_name)
+{
+	$("#request_process").hide();
+	$(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+    $("#wait_process").show(); 
+	email = $("#email").val();
+	patient_id = $("#patient_id").val();
+	report_id = $("#report_id").val();
+	var data = {
+                    "patient_email":email,
+                    "patient_uid":'{{report.reports.MEDICALTEST.PATIENT.UID}}',
+                    "report_uid":'{{report.reports.UID}}',
+                    "ele":file_name,
+                    "csrfmiddlewaretoken": '{{ csrf_token }}',
+                }
+   $.ajax({
+    data: data,
+    type : 'POST',                            
+    url :"{% url 'email_report' %}",
+    dataType : "application/json; charset=utf-8",
+    complete : function(data) {
+    	var jdata = data.responseText;
+        var jsonstr = jQuery.parseJSON(jdata);
+            if(jsonstr.result == true){
+            	$("#wait_process").hide();
+            	$(".overflow-hidden").append('<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Report has been sent successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
+            	$("#close_process").show();
+            }
+            else{
+               $("#wait_process").hide();
+               $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Sometime went Wrong</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+               $("#close_process").show();
+            }   
+    }
+    });	
+}
+function pdf_file_error()
+{
+	$(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Sometime went Wrong</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+    $("#close_process").show();
+}
+function emailsend(){
+   $(".overflow-hidden").append('<div id="request_process" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1">Please enter your E-mail ID</h3><input type="text"  id="email" class="brbclr1 pl8" style="height:30px;width:245px;" {% if report.reports.MEDICALTEST.PATIENT.PATIENT_EMAIL %}value="{{report.reports.MEDICALTEST.PATIENT.PATIENT_EMAIL}}"{% else %}value = ""{% endif %}><h6 id="alert_email" class="f-12" ><h6><div class="ta" style="margin-top:16px;"><button class=" tdecor f-15 ff-r w3-text-white w75 h30 bgclr9 brclr6" onclick="request_process_email()" id="email_check">Send</button><button  class=" tdecor f-15 ff-r w3-text-white w75 h30 bgclr9 brclr6" style="margin-left:16px;" type="button" onclick="javascript:window.location.reload()">Cancel</button></div></div></div></div>');
+   $("#request_process").show();
+}
+function validEmail(email) {
+ var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+ return re.test(email);
+}
+function cancel_alert(){
+	$("#request_process").hide();
+}
+function saved_Data(){
+	$("#close_process").hide();
+}
+function request_process_email(){
+	var email = $("#email").val();
+	var flag = 0;
+	if(email == ""){
+		$("#alert_email").text("This field is required");
+		$("#alert_email").css("color","red");
+	}
+	else if(!validEmail(email)){	
+
+        $("#alert_email").text("Please enter valid E-mail ID");
+        $("#alert_email").css("color","red");
+	}
+	else{
+		$("#alert_email").hide();
+		flag++;
+	}
+	if(flag == 1){
+		{% if app %}
+			external.email_pdf(email_pdf);
+		{% else %}
+		$(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Feature only for application.</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+               $("#close_process").show();
+		{% endif %}
+	}
+}
+</script>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% block header_script %}
+{% load kodystags %}
+<style type="text/css">
+  tbody tr:nth-child(even) {
+      background-color: white!important;
+  }
+  tbody tr:nth-child(odd) {
+      background-color: white!important;
+  }
+  thead tr {
+    background-color: white!important;
+}
+</style>
+<script type="text/javascript">
+  $(document).ready(function(){
+  {% for key,value in report.report_result.items %}
+          {% if key == "TM-16" %}
+              {% for k, v in value.items %}
+   console.log('{{report.report_result.items}}')
+                  {% if k == "other_result" %}
+                     var right_warm_hand_result = parseFloat('{{v.0}}');
+                     $("#right_other_avg").html('{{v.0}}');
+                     {% if v.1 == "Normal" %}
+                        $("#right_other_status").html('<span class="color_green">{{v.1}}</span>');
+                     {% else %}
+                        $("#right_other_status").html('<span class="color_red">{{v.1}}</span>');
+                     {% endif %}
+                  {% endif %}
+                  {% if k == "left_result" %}
+                     var left_warm_hand_result = parseFloat('{{v.0}}');
+                     $("#left_other_avg").html('{{v.0}}');
+                     {% if v.1 == "Normal" %}
+                        $("#left_other_status").html('<span class="color_green">{{v.1}}</span>');
+                     {% else %}
+                        $("#left_other_status").html('<span class="color_red">{{v.1}}</span>');
+                     {% endif %}
+                 {% endif %}
+               {% endfor %}
+          {% endif %}
+    {% endfor %}
+  });
+</script>
+{% endblock %}
+<div class="brclr_row_black   mr26 ml26" >
+        <div class="w95p m_auto pt12 pb12 pr" style="height: 15.3cm;">
+         <div  class="mt50" style="display: inline-block;width: 33%;">
+            <div style="display: inline-block;width: 64%;"> <p class="f-16" style="margin: 0px;">TEST SITE</p> 
+              <div>
+                 <p class="ta f-14 ft_tm vpt_other_text  vpt_w_147 bd_bottom">{% if report.TM16.0.KEY_NAME %}{{report.TM16.0.KEY_NAME}}{% else %}-{% endif %}</p>
+                 <p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{% if report.TM16.1.KEY_NAME %}{{report.TM16.1.KEY_NAME}}{% else %}-{% endif %}</p>
+                 {% if report.TM16.2.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM16.2.KEY_NAME}}</p>{% endif %}
+                 {% if report.TM16.3.KEY_NAME %} <p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM16.3.KEY_NAME}}</p>{% endif %}
+                 {% if report.TM16.4.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM16.4.KEY_NAME}}</p>{% endif %}
+                 {% if report.TM16.5.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM16.5.KEY_NAME}}</p>{% endif %}
+                
+              </div>
+            </div>
+             <div style="display: inline-block;width: 25%;"> <p class="f-16 ta" style="margin: 0px;">WARM</p>
+              <div>
+                 <p  class=" ta f-14 ft_tm pr vpt_other_text bd_bottom"> {% if report.TM16.0.KEY_VALUE %}{{report.TM16.0.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM16.24.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM16.24.KEY_VALUE|color}};">{{report.TM16.24.KEY_VALUE}}</span> {% endif %}</p>
+                 <p class=" ta f-14 ft_tm pr vpt_other_text  bd_bottom">{% if report.TM16.1.KEY_VALUE %}{{report.TM16.1.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM16.25.KEY_VALUE %} <span class="other_yn f-12" style="color: {{report.TM16.25.KEY_VALUE|color}};">{{report.TM16.25.KEY_VALUE}}</span> {% endif %}</p>
+                 {% if report.TM16.2.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom">
+                  {% if report.TM16.2.KEY_VALUE %}{{report.TM16.2.KEY_VALUE}}{% else %}-{% endif %}{% if report.TM16.26.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM16.26.KEY_VALUE|color}};">{{report.TM16.26.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+                 {% if report.TM16.3.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text  bd_bottom">{% if report.TM16.3.KEY_VALUE %}{{report.TM16.3.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM16.27.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM16.27.KEY_VALUE|color}};">{{report.TM16.27.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+                 {% if report.TM16.4.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom">{% if report.TM16.4.KEY_VALUE %}{{report.TM16.4.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM16.28.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM16.40.KEY_VALUE|color}};">{{report.TM16.28.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+                 {% if report.TM16.5.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom"  >{% if report.TM16.5.KEY_VALUE %}{{report.TM16.5.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM16.29.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM16.29.KEY_VALUE|color}};">{{report.TM16.29.KEY_VALUE}}</span>{% endif %}</p>{% endif %} 
+              </div>
+               </div>
+          </div>
+          <div style="width: 33%;display: inline-block;">
+          <img src="{{MEDIA_URL}}img/png/other.png" width="250px" style="position: absolute;
+    top: 30px;;">
+        </div>               
+        <div class="mt50" style=" display: inline-block; width: 33%;">
+            <div style=" display: inline-block;width: 64%;"> <p class="f-16" style="margin: 0px;">TEST SITE</p> 
+              <div>
+                 <p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom"> {% if report.TM16.6.KEY_NAME %}{{report.TM16.6.KEY_NAME}}{% else %}-{% endif %}</p>
+                 <p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom" >{% if report.TM16.7.KEY_NAME %}{{report.TM16.7.KEY_NAME}}{% else %}-{% endif %}</p>
+                 {% if report.TM16.8.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM16.8.KEY_NAME}}</p>{% endif %}
+                 {% if report.TM16.9.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM16.9.KEY_NAME}}</p>{% endif %}
+                  {% if report.TM16.10.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM16.10.KEY_NAME}}</p>{% endif %}
+                 {% if report.TM16.11.KEY_NAME %}<p class="ta f-14 ft_tm vpt_other_text vpt_w_147 bd_bottom">{{report.TM16.11.KEY_NAME}}</p>{% endif %}
+              </div>
+            </div>
+             <div style="display: inline-block;width: 25%;"> <p class="f-16 ta " style="margin: 0px;">WARM</p>
+                 <div>
+                  <p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom"> {% if report.TM16.6.KEY_VALUE %}{{report.TM16.6.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM16.30.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM16.30.KEY_VALUE|color}};">{{report.TM16.30.KEY_VALUE}}</span>{% endif %}</p>
+                 <p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom">{% if report.TM16.7.KEY_VALUE %}{{report.TM16.7.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM16.31.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM16.31.KEY_VALUE|color}};">{{report.TM16.31.KEY_VALUE}}</span>{% endif %}</p>
+                 {% if report.TM16.8.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom">{% if report.TM16.8.KEY_VALUE %}{{report.TM16.8.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM16.32.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM16.32.KEY_VALUE|color}};">{{report.TM16.32.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+                 {% if report.TM16.9.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom">{% if report.TM16.9.KEY_VALUE %}{{report.TM16.9.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM16.33.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM16.33.KEY_VALUE|color}};">{{report.TM16.33.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+                 {% if report.TM16.10.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom">{% if report.TM16.10.KEY_VALUE %}{{report.TM16.10.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM16.34.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM16.34.KEY_VALUE|color}};">{{report.TM16.34.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+                 {% if report.TM16.11.KEY_NAME %}<p class=" ta f-14 ft_tm pr vpt_other_text bd_bottom">{% if report.TM16.11.KEY_VALUE %}{{report.TM16.11.KEY_VALUE}}{% else %}-{% endif %} {% if report.TM16.35.KEY_VALUE %}<span class="other_yn f-12" style="color: {{report.TM16.35.KEY_VALUE|color}};">{{report.TM16.35.KEY_VALUE}}</span>{% endif %}</p>{% endif %}
+              </div> 
+            </div>
+          </div>
+        </div>
+            <div class="f-9 text_center ft_tm f-10" >
+        <span>**AMP - Amputated&nbsp; OVR - Over Range&nbsp; WND - Wound&nbsp; TNR - Test Not Required&nbsp; RSC - Reason Specified in Comments</span> <span class="ml50">**All Values are in Deg C</span>
+      </div>
+      </div>
+       <div style="margin-left: 3.5%;margin-top:16px;"><span style="font-size:15px;font-weight: bold;font-family: 'Times_New_Roman' !important;">Test Results</span></div>
+       <div class="w91p margin_auto mt8 pb16">
+    <div class="d-inline_block  lh15 ft_tm f-14">
+      <div>
+        Warm PT Average<span></span>
+      </div>
+    </div>
+    <div class="d-inline_block w27p lh15 ft_tm f-14">
+      <div>
+        :&nbsp;<span id="right_other_avg"></span>
+        <span>-</span>
+        <span id="right_other_status"></span>
+      </div>
+    </div>
+    <!-- <div class="d-inline_block w27p f-r lh15 ft-b f-14">
+      <div>
+        :<span id="left_other_avg"></span>
+        <span>-</span>
+        <span id="left_other_status"></span>
+      </div>
+    </div> -->
+    <!-- <div class="d-inline_block f-r lh15 ft-b f-14">
+      <div>
+        Left Average<span></span>
+      </div>
+
+    </div> -->
+    </div>

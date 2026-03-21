@@ -1,0 +1,1958 @@
+{% extends "page_layout.html" %}
+{% block content_body %}
+<script src="{{MEDIA_URL}}jQuery-Mask-Plugin-master/dist/jquery.mask.js" type="text/javascript"></script>
+<div class="w3-display-container bgclr3 brclr1">
+        <div class="f-16 ff-r ft-b fclr pt8 pb1"  style="height: 33px;">
+            <span style="margin-left: 25%;">{{medical_test.medical_test_type}}</span>
+             <span class="w3-right" style="margin-right: 16px;position: relative;">
+                <span style="margin-right: 70px;">
+                    <span class="f-12 ft-b fclr1" style="position
+                        :absolute;margin-top: 3px;margin-left: 50px;margin-top: 3px;margin-left: -94px;">Device Connection</span>
+                    <span class="bgclr4 w16 h16 ta pt1 br bgclr5 device_icon" id="bluetooth" style="position: relative;margin-left: 12px;">
+                    <i class="f-10 fa fa-bluetooth-b " aria-hidden="true" style="position: absolute;margin-top: 4px;
+                    margin-left: -2px;"></i></span>
+                    <span class="device_icon bgclr5 br w14 h14 ta  pt1 fclr1" id="usb" style="position: relative;">
+                    <i class="f-8 fa fa-usb fa-rotate-270 " aria-hidden="true" style="position: absolute;margin-top: 5px;
+                    margin-left: -4px;"></i></span>
+                     <span class="device_icon  bred br w14 h14 ta pt1 w3-text-white"  id="device_status" connected="0" onclick="reconnect()" style="position: relative;cursor: pointer;">
+                    <i class="f-10 fa fa-plug" aria-hidden="true" style="position: absolute;margin-top: 4px;
+                    margin-left: -5px;"></i></span>
+                    <div style="display: inline-block;border-left: 1px solid black;position: absolute;font-size: 20px;
+                         margin-left: 10px;"><p></p></div>
+                    <span class="cp device_configure" style="margin-right: 74px;" onclick="document.getElementById('settingsdev').style.display='block'">
+                        <span class="device_icon  br ta bgclr6 fclr3" style="position: relative;margin-left: 25px;"><i class="f-10  fa fa-cog" aria-hidden="true" style="position: absolute;margin-left: -4px;margin-top: 5px;"></i></span>
+                       <span class="f-12 ft-b fclr1" style="position: absolute;margin-top: 3px;">Device Configuration</span>
+                    </span>
+                </span>
+                <span class="close_test"><img src="{{MEDIA_URL}}img/png/cancel.png" style="margin-top: -6px;" class="pb4"></span>
+             </span> 
+        </div>  
+    </div>
+    <div class="w3-display-container bgclr3">
+        <div class="w3-row">
+            <div class="w3-col l8 ">
+                 <form id="thermocool_other_form" class="user_data_form" method="POST">
+                        {% csrf_token %}
+                      <div class="mt3p w95p m_auto">
+                         <div class="w3-row h525" style="height: 500px !important;">
+                     <div class="w3-col l4 ml28">
+                        <div class="w3-row">
+                            <div class="w3-row">
+                                <div class="w3-col l6">
+                                    <p class="f-16 fclr w3-center">TEST SITE</p>
+                                </div>
+                                <div class="w3-col l4 ml6">
+                                    <p class="f-16 w3-center fclr">{% if  test_code == "TM-16" %}WARM {% else %} COOL{% endif %}</p>
+                                </div>
+                            </div>
+                            <div class="w3-row">
+                                 <input type="text" class="ft_black left-field ta brbclr1 w135 field1 f-14 test-field1 mb8 h30 input_check_data" {% if medical_test.medical_test_fields.0.KEY_NAME %}value = "{{medical_test.medical_test_fields.0.KEY_NAME}}"{% else %}value=""{% endif %}{% if medical_test.test_entry_data.0.KEY_NAME %}value = "{{medical_test.test_entry_data.0.KEY_NAME}}"{% else %}value=""{% endif %} name="K-01" tabIndex="1" id="K-01">
+                                 <input type="text" class="ml8 data-check-val ta brbclr1 mb8 h30 w75 field test-field f-14 {{medical_test.test_entry_data.0.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.0.KEY_VALUE %}value = "{{medical_test.test_entry_data.0.KEY_VALUE}}"{% else %}value=""{% endif %} name="V-01" field-order="1" {% if medical_test.test_entry_data.1.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="2" id="V-01" >
+                            </div>
+                            <div class="w3-row">
+                                <input type="text" class="ft_black left-field ta brbclr1 w135 field1  f-14 test-field1 mb8 h30 input_check_data" {% if medical_test.medical_test_fields.1.KEY_NAME %}value = "{{medical_test.medical_test_fields.1.KEY_NAME}}"{% else %}value=""{% endif %} {% if medical_test.test_entry_data.1.KEY_NAME %}value = "{{medical_test.test_entry_data.1.KEY_NAME}}"{% else %}value=""{% endif %} name="K-02" tabIndex="5" id="K-02">
+                                <input type="text" class="ml8 data-check-val ta brbclr1 mb8 h30 w75 field test-field f-14 {{medical_test.test_entry_data.1.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.1.KEY_VALUE %}value = "{{medical_test.test_entry_data.1.KEY_VALUE}}"{% else %}value=""{% endif %} name="V-02" field-order="3" {% if medical_test.test_entry_data.1.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="6" id="V-02">
+                            </div>
+                            <div class="w3-row   {% if medical_test.test_entry_data.2.KEY_NAME or  medical_test.test_entry_data.2.KEY_VALUE or medical_test.test_entry_data.8.KEY_NAME or  medical_test.test_entry_data.8.KEY_VALUE or medical_test.medical_test_fields.2.KEY_NAME %} dis_block {% else %}display_none{% endif %}" id="row_1">
+                                 <input type="text" class="ft_black left-field ta brbclr1 w135 field1 f-14 test-field1 mb8 h30 {% if medical_test.medical_test_fields.2.KEY_NAME %}input_check_data{% endif %}" {% if medical_test.medical_test_fields.2.KEY_NAME %}value = "{{medical_test.medical_test_fields.2.KEY_NAME}}"{% else %}value=""{% endif %} {% if medical_test.test_entry_data.2.KEY_NAME %}value = "{{medical_test.test_entry_data.2.KEY_NAME}}"{% else %}value=""{% endif %} name="K-03" tabIndex="9" id="K-03">
+                                 <input type="text" class="ml8 data-check-val ta brbclr1 mb8 h30 w75 field test-field f-14 {{medical_test.test_entry_data.2.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.2.KEY_VALUE %}value = "{{medical_test.test_entry_data.2.KEY_VALUE}}"{% else %}value=""{% endif %} name="V-03" field-order="5" {% if medical_test.test_entry_data.2.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="10" id="V-03" >
+                            </div>
+                            <div class="w3-row {% if  medical_test.test_entry_data.3.KEY_NAME or medical_test.test_entry_data.3.KEY_VALUE or medical_test.test_entry_data.9.KEY_NAME or  medical_test.test_entry_data.9.KEY_VALUE or medical_test.medical_test_fields.3.KEY_NAME %} dis_block {% else %}display_none{% endif %}" id="row_2">
+                                <input type="text" class="ft_black left-field ta brbclr1 w135 field1 f-14 test-field1 mb8 h30 {% if medical_test.medical_test_fields.3.KEY_NAME %}input_check_data{% endif %}" {% if medical_test.medical_test_fields.3.KEY_NAME %}value = "{{medical_test.medical_test_fields.3.KEY_NAME}}"{% else %}value=""{% endif %} {% if medical_test.test_entry_data.3.KEY_NAME %}value = "{{medical_test.test_entry_data.3.KEY_NAME}}"{% else %}value=""{% endif %} name="K-04"  tabIndex="13" id="K-04">
+                                <input type="text" class="ml8 data-check-val ta brbclr1 mb8 h30 w75 field test-field f-14 {{medical_test.test_entry_data.3.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.3.KEY_VALUE %}value = "{{medical_test.test_entry_data.3.KEY_VALUE}}"{% else %}value=""{% endif %} name="V-04" field-order="7" {% if medical_test.test_entry_data.3.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="14" id="V-04" >
+                            </div>
+                            <div class="w3-row {% if  medical_test.test_entry_data.4.KEY_NAME or  medical_test.test_entry_data.4.KEY_VALUE or  medical_test.test_entry_data.10.KEY_NAME or  medical_test.test_entry_data.10.KEY_VALUE or medical_test.medical_test_fields.4.KEY_NAME %} dis_block {% else %}display_none{% endif %}" id="row_3">
+                                <input type="text" class="ft_black left-field ta brbclr1 w135 field1 f-14 test-field1 mb8 h30 {% if medical_test.medical_test_fields.4.KEY_NAME %}input_check_data{% endif %}" {% if medical_test.medical_test_fields.4.KEY_NAME %}value = "{{medical_test.medical_test_fields.4.KEY_NAME}}"{% else %}value=""{% endif %} {% if medical_test.test_entry_data.4.KEY_NAME %}value = "{{medical_test.test_entry_data.4.KEY_NAME}}"{% else %}value=""{% endif %} name="K-05"  tabIndex="17" id="K-05">
+                                <input type="text" class="ml8 data-check-val ta brbclr1 mb8 h30 w75 field test-field f-14 {{medical_test.test_entry_data.4.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.4.KEY_VALUE %}value = "{{medical_test.test_entry_data.4.KEY_VALUE}}"{% else %}value=""{% endif %} name="V-05" field-order="9" {% if medical_test.test_entry_data.4.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="18" id="V-05" >
+                            </div>
+                            <div class="w3-row {% if  medical_test.test_entry_data.5.KEY_NAME or  medical_test.test_entry_data.5.KEY_VALUE or medical_test.test_entry_data.11.KEY_NAME or  medical_test.test_entry_data.11.KEY_VALUE or medical_test.medical_test_fields.5.KEY_NAME %} dis_block {% else %}display_none{% endif %}" id="row_4">
+                                <input type="text" class="ft_black left-field ta brbclr1 w135 field1 f-14 test-field1 mb8 h30 {% if medical_test.medical_test_fields.5.KEY_NAME %}input_check_data{% endif %}" {% if medical_test.medical_test_fields.5.KEY_NAME %}value = "{{medical_test.medical_test_fields.5.KEY_NAME}}"{% else %}value=""{% endif %} {% if medical_test.test_entry_data.5.KEY_NAME %}value = "{{medical_test.test_entry_data.5.KEY_NAME}}"{% else %}value=""{% endif %} name="K-06"   tabIndex="21" id="K-06">
+                                <input type="text" class="ml8 data-check-val ta brbclr1 mb8 h30 w75 field test-field f-14 {{medical_test.test_entry_data.5.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.5.KEY_VALUE %}value = "{{medical_test.test_entry_data.5.KEY_VALUE}}"{% else %}value=""{% endif %} name="V-06" field-order="11" {% if medical_test.test_entry_data.5.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="22" id="V-06" >
+                            </div>
+                            </div>
+                        </div>
+                     
+                     <div class="w3-col l3 h100" style="position: relative;">
+                        <img src="{{MEDIA_URL}}{{medical_test.medical_test_type.ORGAN_IMAGE}}" class="h100">
+                        <div class="pa f-14 fclr1 ft-b" style="top: -18px;margin-left :27%;position: absolute;">Custom Site Screen </div>
+                     </div>
+                     <div class="w3-col l4 ml16">
+                        <div class="w3-row">
+                            <div class="w3-row">
+                                <div class="w3-col l6">
+                                    <p class="f-16 fclr  w3-center">TEST SITE</p>
+                                </div>
+                                <div class="w3-col l3 w3-center ml6">
+                                    <p class="f-16 ml16 fclr">{% if  test_code == "TM-16" %}WARM {% else %} COOL{% endif %}</p>
+                                </div>
+                            </div>
+                            <div class="w3-row">
+                                <input type="text" class="ft_black right-field ta brbclr1 w135 field1 test-field1 f-14 mb8 h30 input_check_data" {% if medical_test.medical_test_fields.6.KEY_NAME %}value = "{{medical_test.medical_test_fields.6.KEY_NAME}}"{% else %}value=""{% endif %} {% if medical_test.test_entry_data.6.KEY_NAME %}value = "{{medical_test.test_entry_data.6.KEY_NAME}}"{% else %}value=""{% endif %} name="K-07" tabIndex="3" id="K-07">
+                                <input type="text" class="ml8 data-check-val ta brbclr1 mb8 h30 w75 field test-field f-14 {{medical_test.test_entry_data.6.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.6.KEY_VALUE %}value = "{{medical_test.test_entry_data.6.KEY_VALUE}}"{% else %}value=""{% endif %} name="V-07" field-order="2" {% if medical_test.test_entry_data.6.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="4" id="V-07">
+                            </div>
+                            <div class="w3-row">
+                                <input type="text" class="ft_black right-field ta brbclr1 w135 field1 f-14 test-field1 mb8 h30 input_check_data" {% if medical_test.medical_test_fields.7.KEY_NAME %}value = "{{medical_test.medical_test_fields.7.KEY_NAME}}"{% else %}value=""{% endif %} {% if medical_test.test_entry_data.7.KEY_NAME %}value = "{{medical_test.test_entry_data.7.KEY_NAME}}"{% else %}value=""{% endif %} name="K-08" tabIndex="7" id="K-08">
+                                <input type="text" class="ml8 data-check-val ta brbclr1 mb8 h30 w75 field f-14 test-field {{medical_test.test_entry_data.7.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.7.KEY_VALUE %}value = "{{medical_test.test_entry_data.7.KEY_VALUE}}"{% else %}value=""{% endif %} name="V-08" field-order="4" {% if medical_test.test_entry_data.7.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="8" id="V-08">
+                                 <button  type="button" class="b_all" style="background-color: #00BDB6;color: white;border:1px solid #00BDB6;height: 28px;margin-left: 21px;" id="new_button_1" onclick="new_check();"><i class="fa fa-plus" aria-hidden="true" style="font-size: 14px;"></i></button>
+                            </div>
+                            <div class="w3-row {% if  medical_test.test_entry_data.8.KEY_NAME or  medical_test.test_entry_data.8.KEY_VALUE or  medical_test.test_entry_data.2.KEY_NAME or  medical_test.test_entry_data.2.KEY_VALUE or medical_test.medical_test_fields.8.KEY_NAME %} dis_block {% else %}display_none{% endif %}"  id="row_11">
+                                <input type="text" class="ft_black right-field ta brbclr1 w135 field1 f-14 test-field1 mb8 h30 {% if medical_test.medical_test_fields.8.KEY_NAME %}input_check_data{% endif %}" {% if medical_test.medical_test_fields.8.KEY_NAME %}value = "{{medical_test.medical_test_fields.8.KEY_NAME}}"{% else %}value=""{% endif %} {% if medical_test.test_entry_data.8.KEY_NAME %}value = "{{medical_test.test_entry_data.8.KEY_NAME}}"{% else %}value=""{% endif %} name="K-09"  tabIndex="11" id="K-09">
+                                <input type="text" class="ml8 data-check-val ta brbclr1 mb8 h30 w75 field f-14 test-field {{medical_test.test_entry_data.8.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.8.KEY_VALUE %}value = "{{medical_test.test_entry_data.8.KEY_VALUE}}"{% else %}value=""{% endif %} name="V-09" field-order="6" {% if medical_test.test_entry_data.8.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="12" id="V-09">
+                                <button class="b_all button_clear {% if  medical_test.test_entry_data.9.KEY_NAME or  medical_test.test_entry_data.9.KEY_VALUE or medical_test.test_entry_data.3.KEY_NAME or medical_test.test_entry_data.3.KEY_VALUE or medical_test.medical_test_fields.9.KEY_NAME %} display_none {% else %}dis_inline_block {% endif %}" type="button" style="background-color: #00BDB6;color: white;border:1px solid #00BDB6;height: 28px;margin-left: 21px;" id="b_2"><i class="fa fa-minus" aria-hidden="true" style="font-size: 14px;"></i></button>
+                            </div>
+                            <div class="w3-row {% if  medical_test.test_entry_data.9.KEY_NAME or  medical_test.test_entry_data.9.KEY_VALUE or  medical_test.test_entry_data.3.KEY_NAME or  medical_test.test_entry_data.3.KEY_VALUE or medical_test.medical_test_fields.9.KEY_NAME %} dis_block {% else %}display_none{% endif %}" id="row_12">
+                               <input type="text" class="ft_black right-field ta brbclr1 w135 field1 f-14 test-field1 mbdis_inline_block8 h30 {% if medical_test.medical_test_fields.9.KEY_NAME %}input_check_data{% endif %}" {% if medical_test.medical_test_fields.9.KEY_NAME %}value = "{{medical_test.medical_test_fields.9.KEY_NAME}}"{% else %}value=""{% endif %} {% if medical_test.test_entry_data.9.KEY_NAME %}value = "{{medical_test.test_entry_data.9.KEY_NAME}}"{% else %}value=""{% endif %} name="K-10"  tabIndex="15" id="K-10">
+                                <input type="text" class="ml8 data-check-val ta brbclr1 mb8 h30 w75 field f-14 test-field {{medical_test.test_entry_data.9.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.9.KEY_VALUE %}value = "{{medical_test.test_entry_data.9.KEY_VALUE}}"{% else %}value=""{% endif %} name="V-10" field-order="8" {% if medical_test.test_entry_data.9.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="16" id="V-10">
+                                <button class="b_all button_clear {% if  medical_test.test_entry_data.10.KEY_NAME or  medical_test.test_entry_data.10.KEY_VALUE or  medical_test.test_entry_data.4.KEY_NAME or  medical_test.test_entry_data.4.KEY_VALUE or medical_test.medical_test_fields.10.KEY_NAME %} display_none {% else %}dis_inline_block {% endif %}" type="button" style="background-color: #00BDB6;color: white;border:1px solid #00BDB6;height: 28px;margin-left: 21px;" id="b_3"><i class="fa fa-minus" aria-hidden="true" style="font-size: 14px;"></i></button>
+
+                            </div>
+                            <div class="w3-row {% if  medical_test.test_entry_data.10.KEY_NAME or  medical_test.test_entry_data.10.KEY_VALUE or medical_test.test_entry_data.4.KEY_NAME or  medical_test.test_entry_data.4.KEY_VALUE or medical_test.medical_test_fields.10.KEY_NAME %} dis_block {% else %}display_none{% endif %}" id="row_13">
+                                <input type="text" class="ft_black right-field ta brbclr1 w135 field1 f-14 test-field1  mb8 h30 {% if medical_test.medical_test_fields.10.KEY_NAME %}input_check_data{% endif %}" {% if medical_test.medical_test_fields.10.KEY_NAME %}value = "{{medical_test.medical_test_fields.10.KEY_NAME}}"{% else %}value=""{% endif %} {% if medical_test.test_entry_data.10.KEY_NAME %}value = "{{medical_test.test_entry_data.10.KEY_NAME}}"{% else %}value=""{% endif %} name="K-11"  tabIndex="19" id="K-11">
+                                <input type="text" class="ml8 data-check-val ta brbclr1 mb8 h30 w75 field f-14 test-field {{medical_test.test_entry_data.10.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.10.KEY_VALUE %}value = "{{medical_test.test_entry_data.10.KEY_VALUE}}"{% else %}value=""{% endif %} name="V-11" field-order="10" {% if medical_test.test_entry_data.10.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="20" id="V-11">
+                                <button class="b_all button_clear {% if  medical_test.test_entry_data.11.KEY_NAME or  medical_test.test_entry_data.11.KEY_VALUE or  medical_test.test_entry_data.5.KEY_NAME or  medical_test.test_entry_data.5.KEY_VALUE or medical_test.medical_test_fields.11.KEY_NAME  %} display_none {% else %}dis_inline_block {% endif %}" type="button" style="background-color: #00BDB6;color: white;border:1px solid #00BDB6;height: 28px;margin-left: 21px;" id="b_4"><i class="fa fa-minus" aria-hidden="true" style="font-size: 14px;"></i></button>
+                            </div>
+                            <div class="w3-row {% if  medical_test.test_entry_data.11.KEY_NAME or  medical_test.test_entry_data.11.KEY_VALUE or medical_test.test_entry_data.5.KEY_NAME or  medical_test.test_entry_data.5.KEY_VALUE or medical_test.medical_test_fields.11.KEY_NAME %} dis_block {% else %}display_none{% endif %}" id="row_14">
+                                <input type="text" class="ft_black right-field ta brbclr1 w135 field1 f-14 test-field1 mb8 h30 {% if medical_test.medical_test_fields.11.KEY_NAME %}input_check_data{% endif %}" {% if medical_test.medical_test_fields.11.KEY_NAME %}value = "{{medical_test.medical_test_fields.11.KEY_NAME}}"{% else %}value=""{% endif %} {% if medical_test.test_entry_data.11.KEY_NAME %}value = "{{medical_test.test_entry_data.11.KEY_NAME}}"{% else %}value=""{% endif %} name="K-12"  tabIndex="23" id="K-12">
+                                <input type="text" class="ml8 data-check-val ta brbclr1 mb8 h30 w75 field f-14 test-field {{medical_test.test_entry_data.11.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.11.KEY_VALUE %}value = "{{medical_test.test_entry_data.11.KEY_VALUE}}"{% else %}value=""{% endif %} name="V-12" field-order="12" {% if medical_test.test_entry_data.11.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="24" id="V-12">
+                                <button class="b_all button_clear" type="button" style="background-color: #00BDB6;color: white;border:1px solid #00BDB6;height: 28px;margin-left: 21px;" id="b_5"><i class="fa fa-minus" aria-hidden="true" style="font-size: 14px;"></i></button>
+                            </div>
+                        </div>
+                     </div>
+                    </div>
+
+               
+                      </div> 
+                     
+                <input type="hidden"  name="app_code" value="{{option.app_code}}">
+                <input type="hidden"   name="patient_uid" value="{{option.patient_uid}}">
+                <input type="hidden"   name="doctor_uid" value="{{option.doctor_uid}}">
+                <input type="hidden"   name="examiner_uid" value="{{option.examiner_uid}}">
+                <input type="hidden"   name="test_code" value="" id="test_code">
+                <input type="hidden"   name="test_type" id="test_type" value="">
+                {% if test_entry %}
+                <input type="hidden"   name="test_entry" id="test_for" value="{{option.test_entry}}">
+                {% endif %}
+            </form>
+                <div class="w3-row w3-container   fclr1">
+            <span class="f-12 ff-r mr16"><span class="ft-b">**AMP</span> - Amputated</span>
+            <span class="f-12 ff-r mr16"><span class="ft-b">OVR</span> - Over Range</span>
+            <span class="f-12 ff-r mr16"><span class="ft-b">WND</span> - Wound</span>
+            <span class="f-12 ff-r mr16"><span class="ft-b">TNR</span> - Test Not Required</span>
+            <span class="f-12 ff-r "><span class="ft-b">RSC</span> - Reason specified in comments</span>
+        </div>
+            </div>
+            <div class="w3-col l4 bgclr16">
+                <div class="w3-row">
+                    <div class="w3-row brclr4">
+                        <div class="w3-container pt15" style="padding-bottom: 4px;padding-top: 8px!important">
+                            <div class="w3-row">
+                                <div class="w3-col l9 ft-b ff-r f-12 fclr1">
+                                    Patient Details
+                                </div>
+                                <div class="w3-col l3">
+                                        <button class="w42 f-r h30 w3-text-white bgclr8 brclr3 f-12" onclick="document.getElementById('id01').style.display='block'" id="other_edit">Edit</button>
+                                </div>
+                            </div>
+                            <div class="ff-r f-12 fclr1">
+                                <span>{{medical_test.patient.PREFIX|title}} {{medical_test.patient.NAME}} {{medical_test.patient.LAST_NAME}} ({{medical_test.patient.FRIENDLY_UID}})</span><br>
+                                <span><label class="ft-b">Age:</label> {{medical_test.patient.AGE}} Years,<label class="ft-b"> Sex:</label> {{medical_test.patient.GENDER}}</span><span class="f-r r16"><label class="ft-b"> Height:</label> {{medical_test.patient.HEIGHT}} &nbsp;cm,<label class="ft-b"> Weight:</label> {{medical_test.patient.WEIGHT}}  &nbsp;kg </span><br>
+                                <span><label class="ft-b">Doctor: </label>{% if medical_test.doctor %} {{medical_test.doctor.PREFIX|title}} {{medical_test.doctor.NAME}}{% endif %}</span><br>
+                                <span><label class="ft-b">Examiner: </label>{% if medical_test.examiner %}{{medical_test.examiner.PREFIX|title}} {{medical_test.examiner.NAME}}{% endif %}</span><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-row brclr4 pt12 pb12" style="padding-bottom: 8px!important;">
+                        <div class="w3-container w3-padding-8">
+                            <div class="w3-row" id="other_Select">
+                                <div class="w3-col l3">
+                                    <span class="f-12 fclr1 ff-r ft-b">Test For</span>
+                                </div>
+                                <div class="w3-col l2">
+                                  <label class="container f-12 ff-r fclr1" id="page_foot" >Foot
+                                    <input type="radio" name="radio" id="foot" value="Foot">
+                                    <span class="checkmark"></span>
+                                  </label>
+                                </div>
+                                <div class="w3-col l2">
+                                  <label class="container f-12 ff-r fclr1" id="page_hand" >Hand
+                                    <input type="radio"  name="radio" id="hand" value="hand">
+                                    <span class="checkmark"></span>
+                                  </label>
+                                </div>
+                                 <div class="w3-col l2">
+                                  <label class="container f-12 ff-r fclr1" id="page_other" >Others
+                                    <input type="radio"  name="radio" checked="checked" id="others" value="others">
+                                    <span class="checkmark"></span>
+                                  </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="w3-row   mt4 brclr4">
+                        <div class="w3-container w3-padding-8" id="test_type_select">
+                            <div class="w3-row brclr1 pt8 pb4">
+                                <div class="w3-col l8 f-12 ff-r fclr1 mt5 " id="other_warm" data-id="TM-16"">Warm Perception Test
+                                </div>
+                                <div class="w3-col l4">
+                                    <div class="f-r">
+                                        <button class="w70 f-r h30 w3-text-white bgclr8 brclr3 f-12 almi1 cp" id="othertest1">Start Test</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w3-row brclr1 mt4 pb4" >
+                                <div class="w3-col l8 f-12 ff-r fclr1 mt5"  id="other_cool" data-id="TM-17">Cool Perception Test
+                                </div>
+                                <div class="w3-col l4">
+                                    <div class="f-r">
+                                        <button class="w70 f-r h30 w3-text-white bgclr8 brclr3 f-12 cp" id="othertest2">Start Test</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-row " id="other_text_result">
+                        <div class="w3-row brclr4 pb12 mt4">
+                        <div class="w3-container">
+                            <span class="f-12 ff-r ft-b fclr1">Test Results</span>
+                            <ul>
+                                {% for key,value in medical_test.hcp_test_values.items %}
+                                    {% if key == "TM-16" %}
+                                        {% for k, v in value.items %}
+                                            {% if k == "other_result" %}
+                                                <li>Warm PT Avg : {{v.0}}{% if v.1 == "Normal" %} - <span class="normal">{{v.1}}</span>{% else %} {% if v.1 == "Not in Range" %}-{% endif %} <span class="abnormal">{{v.1}}</span>{% endif %}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if key == "TM-17" %}
+                                        {% for k, v in value.items %}
+                                            {% if k == "other_result" %}
+                                                <li>Cool PT Avg : {{v.0}}{% if v.1 == "Normal" %} - <span class="normal">{{v.1}}</span>{% else %} {% if v.1 == "Not in Range" %}-{% endif %} <span class="abnormal">{{v.1}}</span>{% endif %}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                               </ul>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="w3-row" id="impression">
+                        <div class="w3-container ">
+                            <div class="ff-r f-12 fclr1 ft-b pb4 pt8">Impression / Notes
+                            </div>
+                            <div class="w3-row">
+                                <div class="w3-col l12">
+                                   <textarea rows="3" class="pl8 w99p  ml2  brclr8 " maxlength="255" id="impression_notes"></textarea>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="w3-row  mb8 mt7">
+                        <div class="w3-container w3-row">
+                            <div class="w3-col l12">
+                                <div class="f-l">
+                                    <button class="w80 mr8  h30 w3-text-white bgclr8 brclr3 f-12 ff-r" id="final_other_save" onclick="hcp_save()">Save</button>
+                                    <button class="w80  h30 w3-text-white bgclr9 brclr6 f-12" id="final_other_clear">Clear</button>
+                                </div>
+                                <div class="f-r">
+                                    <button class="w133 h30 bgclr8 brclr3  ff-r ta w3-text-white" id="final_other_report" onclick="hcp_report()"><i class="fa fa-file-text f-11" aria-hidden="true"></i>
+                                        <span class="f-12">Generate Report</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- fg -->
+                </div>
+            </div>
+     <div id="id01" class="w3-modal bgclr18">
+      <div class="w3-modal-content w80p h80p w3-round" style="height: 98% !important;margin-top: -3% !important">
+         <header class="w3-container w3-padding-16 bkgclr lh12"> 
+          <span class="ff-r f-18 ft-b w3-text-white pl16">Patient Details</span><br>
+          <!-- <span class="f-12 ff-r w3-text-white">Capture Patient Details</span> -->
+        </header>
+        <div class="w3-padding-16 w3-container scroll h525">
+           <form class="mt38" method="POST" action="{% url 'test_patient_other_edit' medical_test.patient.UID option.app_code option.doctor_uid option.examiner_uid option.test_code %}" id="thermocool_other_form1" style="margin-top: 30px !important">
+                    {% csrf_token %}
+                    <div class="w3-row-padding">
+                        <div class="w3-col l6">
+                            <div class="w3-row pt8 ">
+                               <div class="w3-col l5 pt6">
+                                   <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient ID <span class="mandatory">*</span></label>
+                               </div>
+                               <div class="w3-col l7">
+                                  <input class="brbclr1 h30  fclr1 pl8 h30 w100p " name="patient_id" type="text" id="patient_id" placeholder="" maxlength="25"  value="{{medical_test.patient.FRIENDLY_UID}}">
+                                  <span id="patient_id_error"></span>
+                               </div>
+                            </div>
+                                 <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Prefix <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <label class="select-add">
+                        <select name="prefix" class="select-1add fclr1 f-12 ff-r w100" id="prefix" style="padding-left: 8px;">
+                            <option class="f-12 ff-r" disabled selected>Please Select Prefix</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.PREFIX == "Mr." %} selected="selected" {% endif %} value="Mr.">Mr.</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.PREFIX == "Mrs." %} selected="selected" {% endif %} value="Mrs.">Mrs.</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.PREFIX == "Miss." %} selected="selected" {% endif %} value="Miss.">Miss.</option>
+                        </select>
+                      </label>
+                      <span id="message_prefix"></span>
+                    </div>
+                 </div>
+                <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">First Name <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class=" brbclr1  h30 w100p fclr1 pl8 h30" name="name" type="text" value="{{medical_test.patient.NAME}}" id="name">
+                    <span id="message_name"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Last Name</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class=" brbclr1  h30  fclr1 pl8 h30 w100p" name="last_name" type="text" id="last_name" value="{{medical_test.patient.LAST_NAME}}">
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Sur Name</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class=" brbclr1  h30  fclr1 pl8 h30 w100p" name="sur_name" type="text" id="sur_name" value="{{medical_test.patient.SUR_NAME}}"><span id="message_name"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient Contact Number <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" id="mobile_number" name="mobile_number" type="text" placeholder="" value="{{medical_test.patient.PATIENT_MOBILE_NUMBER}}" maxlength="15">
+                    <span id="message"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient E-mail ID </label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" id="emailid" name="email" type="email" placeholder="" value="{{medical_test.patient.PATIENT_EMAIL}}">
+                    <span id="message_email"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient Alternate Contact Number </label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30"  name="poc_mobile_number" type="text" placeholder="" value="{{medical_test.patient.POC_MOBILE_NUMBER}}" id="mobile_number1" maxlength="15">
+                    <span id="message_alt_contact_no"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b" >Patient Alternate E-mail ID </label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="poc_email" type="email" placeholder=""  value="{{medical_test.patient.POC_EMAIL}}" id="email_text_alternate">
+                    <span id="email_alternate_invalid"></span> 
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Gender <span class="mandatory">*</span></label>
+                    </div>
+                   <div class="w3-col l7">
+                      <label class="select-add">
+                        <select name="gender" class="select-1add fclr1 f-12 ff-r w100" id="gender" value="{{medical_test.patient.GENDER}}" style="padding-left: 8px;">
+                          <option class="f-12 ff-r" {% if medical_test.patient.GENDER == "FEMALE" %} selected="selected" {% endif %} value="FEMALE">Female</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.GENDER == "MALE" %} selected="selected" {% endif %} value="MALE">Male</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.GENDER == "TRANSGENDER" %} selected="selected" {% endif %} value="TRANSGENDER">Transgender</option>
+                        </select>
+                      </label>
+                    <span id="message_gender"></span>
+                    </div>
+              </div>
+             </div>
+            <div class="w3-col l6">
+               <div class="w3-row pt8 ">
+                    <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Age <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="age" type="text" placeholder="" id="age" value="{{medical_test.patient.AGE}}">
+                    <span id="message_age"></span>
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Address</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="address1" type="text" placeholder="" value="{{medical_test.patient.ADDRESS_LINE_1}}" id="address">
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Street</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="address2" type="text" placeholder="" value="{{medical_test.patient.ADDRESS_LINE_2}}">
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Area</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="address3" type="text" placeholder="" value="{{medical_test.patient.ADDRESS_LINE_3}}">
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">City</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="city" type="text" placeholder="" value="{{medical_test.patient.CITY}}">
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">State</label>
+                    </div>
+                    <div class="w3-col l7">
+                     <label class="select-add">
+                      <select name="state" class="select-1add fclr1 f-12 ff-r w100" id="state" style="padding-left: 8px;">
+                      <option class="f-12 ff-r"  selected value="">Please Select State</option>
+                        {% for state in state_list%}
+                          <option class="f-12 ff-r" {% if medical_test.patient.STATE|safe == state.NAME %} selected="selected" {% endif %} value="{{state.NAME}}">{{state.NAME}}</option>
+                        {% endfor %}
+                    </select>
+                  </label>
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Pincode</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="pincode" id="pincode" maxlength="6" type="text" placeholder="" value="{{medical_test.patient.ZIPCODE}}">
+                    <span id="message_pincode"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Height</label>
+                    </div>
+                    <div class="w3-col l7 pr">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="height" type="text" placeholder="" value="{{medical_test.patient.HEIGHT}}"  id="height">
+                    <span class="f-12 pt6 r10 pa fclr1 t0">cm</span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Weight</label>
+                    </div>
+                    <div class="w3-col l7 pr">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="weight" type="text" placeholder="" value="{{medical_test.patient.WEIGHT}}"  id="weight">
+                    <span class="f-12 pt6 r10 pa fclr1 t0">kg</span>
+                    </div>
+              </div>
+                        </div>
+                    </div>
+             <div class="w3-row pt8 mt16">
+               <div class="w3-col l12">
+                  <button class=" tdecor h30 f-12 ff-r f-r  bkgclr brclr3  w3-text-white w80 cp mr16" id="save" type="button">Save</button>
+                  <button  type="button" class=" tdecor h30 f-12 ff-r f-r  bgclr9 brclr9  w3-text-white w80 cp mr16"  onclick="document.getElementById('id01').style.display='none';resetform()">Close</button>
+               </div>
+            </div>
+           </form>
+
+         </div>
+      </div>
+      </div>
+        </div>
+              <div id="close_process" class="w3-modal  bgclr18">
+        <div class="w3-modal-content w376 mt11p">
+            <div class="w3-container bgclr8 ">
+                <p class="ff-r f-18 ft-b w3-text-white">{{medical_test.medical_test_type}} </p>
+            </div>
+            <div class="bgclr3 brclr1">
+                <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Are you sure want to Close Test process ?</h3>
+            </div>
+            <div class="w3-row pt8  pb16 bgclr3">
+                <div class="ta">
+                   <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6 modal_text_cancel">Yes</button>
+                   <button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6">No</button>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div id="close_app_popup" class="w3-modal  bgclr18 ">
+            <div class="w3-modal-content w376 mt11p">
+                <div class="w3-container bgclr8 ">
+                    <p class="ff-r f-18 ft-b w3-text-white">{{medical_test.medical_test_type}} </p>
+                </div>
+                <div class="bgclr3 brclr1">
+                    <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Are you sure want to Logout ?</h3>
+                </div>
+                <div class="w3-row pt8  pb16 bgclr3">
+                    <div class="ta">
+                        <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6 modal_text_cancel_app">Yes</button>
+                        <button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6">No</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <div id="settingsdev" class="w3-modal  bgclr18">
+        <div class="w3-modal-content w376 mt11p" style="width: 450px !important">
+            <div class="w3-container bgclr8 ">
+                <p class="ff-r f-18 ft-b w3-text-white">Device Config (Thermocool HCP Elite)</p>
+            </div>
+            <div class="bgclr3 brclr1">
+                <div class="w3-row pt16">
+                    <div class="w3-row mb16">
+                        <div class="w3-col l3 mt3 mr16">
+                           <label class="f-12 ff-r f-r fclr1">Key</label>
+                        </div>
+                        <div class="passkey 12 ml16">
+                                <input type="text" class="h30  brclr8" name="constant_passcode" maxlength="1" style="width: 25px;text-align: center;" value="K" readonly="readonly">
+                                <input type="text" class="h30  brclr8 pl8" name="key1" maxlength="4" style="width: 80px;">
+                                <input type="text" class="h30  brclr8 pl8" name="key2" maxlength="4" style="margin-left: 8px;width: 80px;">
+                                <input type="text" class="l3 h30  brclr8 pl8" name="key3" maxlength="4" style="margin-left: 8px;width: 80px;">
+                        </div>
+                    </div>
+                    <div class="w3-row mb16">
+                            <div class="w3-col l3 mt3 mr16">
+                               <label class="f-12 ff-r f-r fclr1">MAC ID <span style="color: red;">*</span></label>
+                            </div>
+                            <div class="ml16 pass_mac_addressi_id">
+                                <input type="text" class="h30  brclr8" name="ID_1" maxlength="2" style="width: 40px;text-align: center;"><span style="margin-left: 4px;margin-right: 2px;font-weight: bold;">:</span>
+                                <input type="text" class="h30  brclr8" name="ID_2" maxlength="2" style="width: 40px;text-align: center;"><span style="margin-left: 4px;margin-right: 2px;font-weight: bold;">:</span>
+                                <input type="text" class="l3 h30  brclr8" name="ID_3" maxlength="2" style="width: 40px;text-align: center;"><span style="margin-left: 4px;margin-right: 2px;font-weight: bold;">:</span>
+                                <input type="text" class="h30  brclr8" name="ID_4" maxlength="2" style="width: 40px;text-align: center;"><span style="margin-left: 4px;margin-right: 2px;font-weight: bold;">:</span>
+                                <input type="text" class="h30  brclr8" name="ID_5" maxlength="2" style="width: 40px;text-align: center;"><span style="margin-left: 4px;margin-right: 2px;font-weight: bold;">:</span>
+                                <input type="text" class="l3 h30  brclr8" name="ID_6" maxlength="2" style="width: 40px;text-align: center;">
+                            </div>
+                        </div>
+                    <div class="w3-row mb16">
+                        <div class="w3-col l3 mt3">
+                            <label class="f-12 ff-r f-r fclr1 tar">Connection Type</label>
+                        </div>
+                        <div class="w3-col l8 ml16">
+                            <label class="select" style="width: 299px !important">
+                               <select name="connection_type" id="connection_type" style="width: 299px !important">
+                                    <option selected="selected" disabled>Select connection type</option>
+                                    <option value="USB">USB</option>
+                                    <option value="BLUETOOTH">BLUETOOTH</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w3-row pt8  pb16 bgclr3">
+                <div class=""  style="margin-left: 57%">
+                    <a href="javascript:void(0);" onclick="settingsdev_close()"><button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6">Cancel</button></a>
+                    <button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="device_config()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+      <div id="error_modal" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 " id="error_display_text"></h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w75 h30 bgclr9 brclr6" onclick="error_modal();">OK</button>
+                        </div></div></div></div>
+<div id="password_incorrect" class="w3-modal  bgclr18" onclick="password_close()">
+        <div class="w3-modal-content w376 mt11p">
+            <div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;">
+                    <span class="device_icon  bred br w14 h14 ta pt1 w3-text-white"  style="position: relative;top: 15px;">
+                <i class="f-10 fa fa-plug" aria-hidden="true"></i></span>
+                <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Device Configuration Password is incorrect </h3>
+                <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6" onclick="password_close()">ok</button>
+            </div>
+        </div>
+    </div>
+    <div id="device_shutdown" class="w3-modal  bgclr18" onclick="device_shutdown_close()">
+            <div class="w3-modal-content w376 mt11p">
+                <div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;">
+                        <span class="device_icon  bred br w14 h14 ta pt1 w3-text-white"  style="position: relative;top: 15px;">
+                    <i class="f-10 fa fa-plug" aria-hidden="true"></i></span>
+                    <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please check the device is ON.</h3>
+                    <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6" onclick="device_shutdown_close()">ok</button>
+                </div>
+            </div>
+        </div>
+{% endblock%}
+
+{% block js_script %}
+<script>
+    function password_close(){
+            $("#password_incorrect").hide();
+        }
+        function password_show(){
+            $("#password_incorrect").show();
+        }
+    function device_shutdown()
+    {
+        $("#device_shutdown").show();
+        $("#device_status").removeClass("bgclr4");
+        $("#device_status").addClass("bred");
+        $("#device_status").attr("connected","0");
+    }
+    function pleasewait_loader_start()
+    {
+        if($("#wait_process").length == 0)
+        {
+            $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+            $("#wait_process").show();
+        }
+    }
+    function pleasewait_loader_end()
+    {
+        if($("#wait_process").length == 1) {
+            $("#wait_process").remove();
+        }
+    }
+    function settingsdev_close()
+    {
+        document.getElementById('settingsdev').style.display='none';
+        $("#connection_type").val(connection_type);
+        if(connection_type == 'USB'){
+            $('#bluetooth').removeClass("bgclr4 w3-text-white").addClass("fclr1 bgclr5");
+            $('#usb').removeClass("fclr1 bgclr5").addClass("bgclr4 w3-text-white");
+        }
+            if(connection_type == 'BLUETOOTH'){
+            $('#usb').removeClass("bgclr4 w3-text-white").addClass("fclr1 bgclr5");
+            $('#bluetooth').removeClass("fclr1 bgclr5").addClass("bgclr4 w3-text-white");
+        }
+    }
+    function device_shutdown_close()
+    {
+        $("#device_shutdown").hide();
+    }
+    function validMobile(MobileNumber) {
+    var re = /^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$/ ;
+    return re.test(MobileNumber);
+    }
+    function validEmail(Email) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(Email);
+    }
+    function validpincode(pincode){
+    var re=/^[1-9][0-9]{5}$/;
+    return re.test(pincode);
+    }
+    function validphone(phonenumber){
+    var re=/^\d{10}$/ ;
+    return re.test(phonenumber);
+    }
+    function validname(name){
+    var re=/^(?!\.)[A-Za-z. ]+$/;
+    return re.test(name);
+    }
+    function resetform(){
+        document.getElementById("thermocool_other_form1").reset();
+    }
+     $('#mobile_number1,#mobile_number').on("keypress keyup keydown",function (event) {
+     var keycode = event.which;
+     var keys = [96,97,98,99,100,101,102,103,104,105,45,189,43,187];
+     if((keys.indexOf(keycode) == -1)){
+       // event.preventDefault();
+         if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 9 ||  keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+             event.preventDefault();
+         }
+      }
+   });
+     $('#pincode,#age').on("keypress keyup keydown",function (event) {
+                 var keycode = event.which;
+                 var keys = [96,97,98,99,100,101,102,103,104,105];
+                if((keys.indexOf(keycode) == -1)){
+       // event.preventDefault();
+                  if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 9 ||  keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+                 event.preventDefault();
+                }
+              }
+     });
+       function new_check(){
+                 if(($("#K-02").val() != "" && $("#K-08").val() != "" && $("#K-01").val() != "" && $("#K-07").val() != "")){
+                     $("#row_1").show();
+                         $("#row_11").show();
+                         $("#K-03,#K-09").addClass("input_check_data");
+                         $("#K-03,#K-09,#V-03,#V-09,#B-03,#B-09").show();
+                           $("#b_2").show();
+                           $("#new_button_1").removeAttr("onclick");
+                         $("#new_button_1").attr("onclick","error_check()"); 
+                 }
+                     else{
+                        $("#new_button_1").removeAttr("onclick");
+                        $("#new_button_1").attr("onclick","error_check()"); 
+                        error_check();
+                     }
+                      if($("#K-03").val() != "" && $("#K-09").val() != ""){
+                         $("#row_2").show();
+                         $("#row_12").show();
+                          $("#K-04,#K-10").addClass("input_check_data");
+                         $("#K-04,#K-10,#V-04,#V-10,#B-04,#B-10").show();
+                         $("#b_1,#b_2").hide();
+                           $("#b_3").show();
+                           // $("#B-10").addClass("ml3n");
+                           $("#new_button_1").removeAttr("onclick");
+                         $("#new_button_1").attr("onclick","error_check()"); 
+                    }
+                    if($("#K-04").val() != "" && $("#K-10").val() != ""){
+                         $("#row_3").show();
+                         $("#row_13").show();
+                          $("#K-05,#K-11").addClass("input_check_data");
+                         $("#K-05,#K-11,#V-05,#V-11,#B-05,#B-11").show();
+                         $("#b_1,#b_2,#b_3").hide();
+                           $("#b_4").show();
+                           // $("#B-11").addClass("ml3n");
+                             $("#new_button_1").removeAttr("onclick");
+                         $("#new_button_1").attr("onclick","error_check()"); 
+                     }
+                      if($("#K-05").val() != "" && $("#K-11").val() != ""){
+                         $("#row_4").show();
+                         $("#row_14").show();
+                          $("#K-06,#K-11").addClass("input_check_data");
+                         $("#K-06,#K-12,#V-06,#V-12,#B-06,#B-12").show();
+                         $("#b_1,#b_2,#b_3,#b_4").hide();
+                           $("#b_5").show();
+                           // $("#B-12").addClass("ml3n");
+                            $("#new_button_1").removeAttr("onclick");
+                         $("#new_button_1").attr("onclick","error_check()"); 
+                       }
+                       if($("#K-06").val() != "" && $("#K-12").val() != ""){
+                           $(".overflow-hidden").append(`<div id="request_process" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">You can't add more than 6 fields.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="request_process();">Ok</button>  </div></div></div></div>`);
+                           $("#request_process").show(); 
+                       }
+        
+         }
+
+            function error_check(){
+                         var err_arr = [];
+                         $(".left-field:visible").each(function(){
+                            err_arr.push($(this).val());
+                         });
+                          var err_right = [];
+                         $(".right-field:visible").each(function(){
+                            err_right.push($(this).val());
+                         });
+                        if(!err_arr.includes("") && !err_right.includes("")){
+                             $("#new_button_1").removeAttr("onclick");
+                            $("#new_button_1").attr("onclick","new_check()");
+                             new_check();
+                        }
+                        else{
+                            if(err_arr.includes("") && err_right.includes("")){
+                            $("#error_display_text").text("Please fill Test site field");
+                             $("#error_modal").show(); 
+                            }
+                            else if(err_arr.includes("")){
+                                $("#error_display_text").text("Please fill the left field");
+                             $("#error_modal").show(); 
+                            }
+                            else if(err_right.includes("")){
+                                $("#error_display_text").text("Please fill the right field");
+                                 $("#error_modal").show(); 
+                            }
+
+                         }
+                    }
+$(document).ready(function() {
+    counter = 0;
+   $("#patient_id").on("keyup keypress" , function(event){
+     var search_patient_id = $(this).val();
+     if(search_patient_id.length > 0 && search_patient_id.length < 6){
+     $("#patient_id_error").html("Please enter atleast 6 characters.").css("color","red");
+     }
+     else if(search_patient_id.length == 0){
+     $("#patient_id_error").html("Please enter Patient ID").css("color","red");
+     counter++;
+     }
+     else{
+      $("#patient_id_error").html("");
+        $.ajax({
+                data : search_patient_id,
+                type : 'GET',
+                url : '/patient/edit/search/'+'{{medical_test.patient.UID}}'+'/'+search_patient_id,
+                dataType : "application/json; charset=utf-8",
+                 complete : function(data) {
+                     var jdata = data.responseText;
+                     var jsonstr = jQuery.parseJSON(jdata);
+                     console.log(jdata)
+                     if(jsonstr.result == true){
+                      counter = 0;
+                      $("#patient_id_error").html("Patient ID already exists.").css("color","red");
+                      counter++;
+                     }
+                     else if(jsonstr.result == false){
+                      $("#patient_id_error").html("");
+                      counter = 0;
+                     }
+                 }
+        });
+     }
+  });
+    $('#height').mask('000');
+    $('#weight').mask('000.0');
+    $("#new_button_1").attr("disabled",true).css("cursor","not-allowed");
+    $("#b_5,#b_4,#b_3,#b_2").attr("disabled",true).css("cursor","not-allowed");
+               $("#b_2").on("click", function(){
+                         $("#row_1").hide();
+                         $("#row_11").hide();
+                         $("#K-03,#K-09").removeClass("input_check_data");
+                         $("#K-03,#K-09,#V-03,#V-09").hide().val('');
+                         $("#V-03,#V-09").attr('recorded','0');
+                         $("#b_1").hide();
+                         $("#b_2").hide();
+                    });
+               $("#b_3").on("click", function(){
+                         $("#row_2").hide();
+                         $("#row_12").hide();
+                         $("#K-04,#K-10").removeClass("input_check_data");
+                         $("#K-04,#K-10,#V-04,#V-10").hide().val('');
+                         $("#V-04,#V-10").attr('recorded','0');
+                         $("#b_1").hide();
+                         $("#b_2").show();
+                         $("#b_3").hide();
+                });
+               $("#b_4").on("click", function(){
+                         $("#row_3").hide();
+                         $("#row_13").hide();
+                         $("#K-05,#K-11").removeClass("input_check_data");
+                         $("#K-05,#K-11,#V-05,#V-11").hide().val('');
+                         $("#V-05,#V-11").attr('recorded','0');
+                         $("#b_3").show();
+                         $("#b_4").hide();
+                 
+                 });
+               $("#b_5").on("click", function(){
+                         $("#row_4").hide();
+                         $("#row_14").hide();
+                         $("#K-06,#K-12").removeClass("input_check_data");
+                         $("#K-06,#K-12,#V-06,#V-12").hide().val('');
+                         $("#V-06,#V-12").attr('recorded','0');
+                         $("#b_4").show();
+                         $("#b_5").hide();
+                
+                });
+        $("#save").click(function(){
+            var name=$("#name").val();
+            var mobile_number=$("#mobile_number").val();
+            var address=$("#address").val();
+            var gender=$("#gender").val();
+            var age=$("#age").val();
+            var prefix=$("#prefix").val();
+            var state=$("#state").val();
+            var pincode=$("#pincode").val();
+            var email_id = $("#emailid").val();
+            var alternate_email_id = $("#email_text_alternate").val();
+            var alt_contact_num = $("#mobile_number1").val();
+            var flag=0;
+            var is_valid_email = true;
+            var is_alternate_email = true;
+            var is_valid_alternate_contact_no =true;
+            var is_valid_pincode = true;
+            if(email_id == ""){
+               is_valid_email = true;
+            }
+            else if(!validEmail(email_id)){
+               $("#message_email").html("Please enter Valid E-mail ID");
+               $("#message_email").css({"color":"red"});
+               $("#email_text").focus();
+               is_valid_email = false;
+            }
+            else{
+            is_valid_email = true;
+               $("#message_email").html("");
+            }
+            if(alternate_email_id == ""){
+               is_alternate_email = true;
+            }
+            else if(!validEmail(alternate_email_id)){
+               $("#email_alternate_invalid").html("Please enter Valid E-mail ID");
+               $("#email_alternate_invalid").css({"color":"red"});
+               $("#email_text_alternate").focus();
+               is_alternate_email = false;
+            }
+            else{
+               is_alternate_email = true;
+               $("#email_alternate_invalid").html("");
+            }
+            if(alt_contact_num==""){ 
+               is_valid_alternate_contact_no =true;
+            }
+            else if(!validMobile(alt_contact_num))
+            {
+               $("#message_alt_contact_no").html("Please enter Valid Contact Number");
+               $("#message_alt_contact_no").css({"color":"red"});
+               is_valid_alternate_contact_no = false;
+               $("#mobile_number1").focus();
+            }
+            else
+            {
+               $("#message_alt_contact_no").html("");
+               is_valid_alternate_contact_no =true;
+            }   
+            if(name==""){
+              $("#message_name").html("Please enter Patient Name");
+              $("#message_name").css({"color":"red"});
+            }
+            else  if(!validname(name)){
+              $("#message_name").html("Please enter letters");
+              $("#message_name").css({"color":"red"});
+            }
+            else {
+              $("#message_name").html("");
+              flag++;
+            }
+            if(mobile_number==""){ 
+              $("#message").html("Please enter Contact Number");
+              $("#message").css({"color":"red"});
+             }
+            else if(!validMobile(mobile_number))
+            {
+              $("#message").html("Please Enter Valid Contact Number");
+              $("#message").css({"color":"red"});
+             }
+            else
+            {
+              $("#message").html("");
+              flag++;
+            }
+            if(pincode==""){
+              is_valid_pincode = true;
+            }
+            else if(!validpincode(pincode))
+            {
+              $("#message_pincode").html("Please Enter Valid Pincode")
+              $("#message_pincode").css({"color":"red"});
+              is_valid_pincode = false;
+            }
+            else{
+              $("#message_pincode").html("");
+               is_valid_pincode = true;
+            }
+            if(age==""){
+              $("#message_age").html("Please enter Age");
+              $("#message_age").css({"color":"red"});
+            }
+            else if(age>= 200){
+              $("#message_age").html("Please enter valid Age");
+              $("#message_age").css({"color":"red"});
+             }
+            else{
+              $("#message_age").html("");
+              flag++;
+               }
+            if(prefix==null){  
+              $("#message_prefix").html("Please Select Prefix")
+              $("#message_prefix").css({"color":"red"});
+             }
+            else{
+              $("#message_prefix").html("");
+              flag++;
+             }
+            if(gender==null){  
+              $("#message_gender").html("Please Select Gender")
+              $("#message_gender").css({"color":"red"});
+            }
+            else{
+               $("#message_gender").html("");
+               flag++;
+             }
+          if(flag==5 && counter == 0 && is_valid_email && is_alternate_email && is_valid_alternate_contact_no && is_valid_pincode){
+            $("#thermocool_other_form1").submit();
+          }
+          else if(flag == 5 && counter == 1 && is_valid_email && is_alternate_email && is_valid_alternate_contact_no && is_valid_pincode){
+            $("#patient_id").focus();
+           }
+
+             });
+         $("#othertest1").click(function(){
+            if($("#othertest1").text() == 'Save'){
+        
+            }
+          });   
+         $("#othertest2").click(function(){
+            if($("#othertest2").text() == 'Save'){
+       
+            }
+          });
+        {% if app %}
+        $(".test-field").focusout(function() {
+                var recorded = $(this).attr("recorded");
+                var connected = $("#device_status").attr("connected");
+                if(recorded == 0 && connected == "1")
+                {
+                    $(this).val("");
+                    $(this).removeAttr("lock");
+                }
+            });
+        {% endif %}
+       $('.field').on("keypress keyup keydown",function (event) {
+
+             var keycode = event.which;
+             var keys = [96,97,98,99,100,101,102,103,104,105,46];
+             if((keys.indexOf(keycode) == -1)){
+               // event.preventDefault();
+               if (!(event.shiftKey == false && (keycode == 65 || keycode == 79 || keycode == 87 || keycode == 84 ||  keycode == 82  || keycode ==  9 || keycode == 190 || keycode == 110 || keycode == 8 || keycode == 13 || keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
+                         event.preventDefault();
+                     }
+                if(keycode == 65){
+                $(this).val(" AMP ");
+                $(this).css("color","red").attr("spellcheck",false);
+                $(this).attr("lock","1");
+                  }
+                if(keycode == 79){
+                $(this).val(" OVR ");
+                $(this).css("color","red").attr("spellcheck",false);
+                $(this).attr("lock","1");
+                  }
+                if(keycode == 87){
+                $(this).val(" WND ");
+                $(this).css("color","red").attr("spellcheck",false);
+                $(this).attr("lock","1");
+                  }
+                if(keycode == 84){
+                $(this).val(" TNR ");
+                $(this).css("color","red").attr("spellcheck",false);
+                $(this).attr("lock","1");
+                  }
+                if(keycode == 82){
+                $(this).val(" RSC ");
+                $(this).css("color","red").attr("spellcheck",false);
+                $(this).attr("lock","1");
+                  }
+               if(keycode == 8){
+                if($(this).val().indexOf("AMP") != -1 || $(this).val().indexOf("OVR") != -1 || $(this).val().indexOf("WND") != -1 || $(this).val().indexOf("TNR") != -1 || $(this).val().indexOf("RSC") != -1){
+                   $(this).val("");
+                   $(this).removeAttr("style");
+                   $(this).removeAttr("lock");
+                }
+                }
+              }
+              var num1 = ('{{medical_test.normal}}').replace("-", "");
+                  var first = parseFloat(num1.slice(0,2));
+                  console.log(first)
+                  var second = parseFloat(num1.slice(2,4));
+                  console.log(second)
+                  if ( $(this).val() >= first && $(this).val() <= second) {
+                    $(this).css("color","green");
+                  }
+                  else if($(this).val() > second){
+                     $(this).css("color","red");
+                  }
+                  if($(this).val() < first){
+                     $(this).css("color","red");
+                  }
+           });
+          $('body').on('keydown', 'input, select, textarea', function(e) {
+                var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
+                if (e.keyCode == 13) {
+                    focusable = form.find('input,a,select,button,textarea').filter(':visible');
+                    next = focusable.eq(focusable.index(this)+1);
+                    if (next.length) {
+                        next.focus();
+                    }
+                    return false;
+                }
+            });
+        $("#connection_type").val("{{medical_test_result.CONNECTION_TYPE}}");
+        $("input[name='key1']").val("{{medical_test_result.DEVICE_KEY|slice:':4'}}");
+        $("input[name='key2']").val("{{medical_test_result.DEVICE_KEY|slice:'4:8'}}");
+        $("input[name='key3']").val("{{medical_test_result.DEVICE_KEY|slice:'8:12'}}");
+        $("input[name='ID_1']").val("{{medical_test_result.DEVICE_CONFIG|slice:':2'}}");
+            $("input[name='ID_2']").val("{{medical_test_result.DEVICE_CONFIG|slice:'2:4'}}");
+            $("input[name='ID_3']").val("{{medical_test_result.DEVICE_CONFIG|slice:'4:6'}}");
+            $("input[name='ID_4']").val("{{medical_test_result.DEVICE_CONFIG|slice:'6:8'}}");
+            $("input[name='ID_5']").val("{{medical_test_result.DEVICE_CONFIG|slice:'8:10'}}");
+            $("input[name='ID_6']").val("{{medical_test_result.DEVICE_CONFIG|slice:'10:12'}}");
+        connection_type = $("#connection_type").val();
+        if($("#connection_type").val() == 'USB'){
+            $('#bluetooth').removeClass("bgclr4 w3-text-white").addClass("fclr1 bgclr5");
+            $('#usb').removeClass("fclr1 bgclr5").addClass("bgclr4 w3-text-white");
+        }
+         if($("#connection_type").val() == 'BLUETOOTH'){
+            $('#usb').removeClass("bgclr4 w3-text-white").addClass("fclr1 bgclr5");
+            $('#bluetooth').removeClass("fclr1 bgclr5").addClass("bgclr4 w3-text-white");
+        }
+        var container = document.getElementsByClassName("passkey")[0];
+        container.onkeyup = function(e) {
+            var target = e.srcElement || e.target;
+            var maxLength = parseInt(target.attributes["maxlength"].value, 10);
+            var myLength = target.value.length;
+            if (myLength >= maxLength) {
+                var next = target;
+                while (next = next.nextElementSibling) {
+                    if (next == null)
+                        break;
+                    if (next.tagName.toLowerCase() === "input") {
+                        next.focus();
+                        break;
+                    }
+                }
+            }
+            // Move to previous field if empty (user pressed backspace)
+            else if (myLength === 0) {
+                var previous = target;
+                while (previous = previous.previousElementSibling) {
+                    if (previous == null)
+                        break;
+                    if (previous.tagName.toLowerCase() === "input") {
+                        previous.focus();
+                        break;
+                    }
+                }
+            }
+        }
+        var container_1 = document.getElementsByClassName("pass_mac_addressi_id")[0];
+            container_1.onkeyup = function(e) {
+                var target = e.srcElement || e.target;
+                var maxLength = parseInt(target.attributes["maxlength"].value, 10);
+                var myLength = target.value.length;
+                if (myLength >= maxLength) {
+                    var next = target;
+                    while (next = next.nextElementSibling) {
+                        if (next == null)
+                            break;
+                        if (next.tagName.toLowerCase() === "input") {
+                            next.focus();
+                            break;
+                        }
+                    }
+                }
+                // Move to previous field if empty (user pressed backspace)
+                else if (myLength === 0) {
+                    var previous = target;
+                    while (previous = previous.previousElementSibling) {
+                        if (previous == null)
+                            break;
+                        if (previous.tagName.toLowerCase() === "input") {
+                            previous.focus();
+                            break;
+                        }
+                    }
+                }
+            }
+        $("#other_text_result").css({"height": "166px"});
+        $("#othertest2").addClass("w3-disabled").attr("disabled",true);
+        $("#final_other_save").addClass("w3-disabled").attr("disabled",true);
+        $("#final_other_clear").addClass("w3-disabled").attr("disabled",true);
+        $("#final_other_report").addClass("w3-disabled").attr("disabled",true);
+        $(".field1").attr("readonly","readonly");
+        $(".field").attr("readonly","readonly");
+        $(".field1").attr("disabled","disabled");
+        $(".field").attr("disabled","disabled");
+        $(".field_value").attr("disabled","disabled");
+        $("#impression").hide();
+        $("#other_text_result").hide();
+        $("#test_type_select").css({"margin-bottom":"261px"});
+        $("#b_1").attr("disabled","disabled");
+        $("#b_1").css("cursor","not-allowed");
+        $(".close_test_page").removeAttr("href","");
+            $(".close_test_page").click(function(){
+               $("#close_process").show();
+            }); 
+            $(".close_app").removeAttr("href","").css("cursor","pointer");
+            $(".close_app").click(function(){
+                alert()
+                $("#close_app_popup").show();
+            });
+        {% if not medical_test.test_entry_data %}
+        $("#othertest1").click(function(){
+            $("#new_button_1").attr("disabled",false).css("cursor","auto");
+            $("#new_button_1").removeClass("curnot").removeAttr("disabled");
+            $("#b_5,#b_4,#b_3,#b_2").attr("disabled",false).css("cursor","auto");
+            $("#other_edit").addClass("w3-disabled").attr("disabled",true);
+            $(".close_test_page").removeAttr("href","");
+            $(".close_test_page").click(function(){
+               $("#close_process").show();
+            });
+            $(".close_app").removeAttr("href","").css("cursor","pointer");
+            $(".close_app").click(function(){
+               $("#close_app_popup").show();
+            });
+            $(".field1").removeAttr("readonly");
+            $(".field").removeAttr("readonly");
+            $(".field1").removeAttr("disabled");
+            $(".field").removeAttr("disabled");
+            $(".field_value").removeAttr("disabled");
+            $(".field_value").css("cursor","auto");
+            $("#b_1").css("cursor","auto").removeAttr("w3-disabled");
+            $("#b_1").attr("disabled",false);
+            {% if app %}
+                if($("#connection_type").val() == 'USB'){
+                    external.test_mode_change(device_heat_mode_change);
+                }
+                if($("#connection_type").val() == 'BLUETOOTH'){
+                    external.test_mode_change(blu_device_heat_mode_change);
+                }
+            {% endif %}
+            $("#K-01").focus();
+            $("#othertest1").text("Save").attr("onclick","otherwarmhcp()");
+            $("#final_other_clear").removeClass("w3-disabled");
+             $("#final_other_clear").removeAttr("disabled",true);
+             $("#other_Select").find('input').attr("disabled",true).parent().css({"cursor":"not-allowed"});
+             $("#page_foot  input").attr("disabled",true).css({"cursor":"not-allowed"});
+             $("#page_other input").attr("disabled",true).css({"cursor":"not-allowed"});
+             $("#page_hand input").attr("disabled",true).css({"cursor":"not-allowed"});
+             $("#page_foot").css({"cursor":"not-allowed"});
+             $("#page_other").css({"cursor":"not-allowed"});
+             $("#page_hand").css({"cursor":"not-allowed"});   
+             $(".device_configure").removeAttr("onclick").css("cursor","not-allowed");    
+        });
+        {% endif %}
+        {% if test_code == "TM-16" %}
+         
+        {% endif %}
+    {% if test_code == "TM-17" %}
+    $(".close_test_page").removeAttr("href","");
+    $(".close_test_page").click(function(){
+        $("#close_process").show();
+     });
+    $(".close_app").removeAttr("href","").css("cursor","pointer");
+     $(".close_app").click(function(){
+        $("#close_app_popup").show();
+     });
+     $("#other_Select").find('input').attr("disabled",true).parent().css({"cursor":"not-allowed"});
+     $("#page_foot  input").attr("disabled",true).css({"cursor":"not-allowed"});
+     $("#page_hand input").attr("disabled",true).css({"cursor":"not-allowed"});
+    $("#page_other input").attr("disabled",true).css({"cursor":"not-allowed"});
+    $("#page_foot").css({"cursor":"not-allowed"});
+    $("#page_other").css({"cursor":"not-allowed"});
+    $("#page_hand").css({"cursor":"not-allowed"});
+    $("#page_foot  input").attr("disabled",true).css({"cursor":"not-allowed"});
+    $("#page_other input").attr("disabled",true).css({"cursor":"not-allowed"});
+    $("#other_edit").addClass("w3-disabled").attr("disabled",true);
+    $("#othertest1").text("Re-test").addClass("w3-disabled").attr("disabled",true);
+    $("#othertest2").removeClass("w3-disabled");
+    $("#othertest2").text("Save").attr("disabled",false);
+    $(".field1").removeAttr("disabled");
+    $(".field").removeAttr("disabled");
+    $(".field_value").css("cursor","auto");
+    $(".field_value").attr("disabled",false);
+    $(".b_all").css("cursor","auto");
+    $(".b_all").attr("disabled",false);
+    $("#othertest1").after('<span class="w3-right" style="margin-right:5px;margin-top:4px;" id="id_warm_other_completed"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 status_width"></span>');
+    $(".field1").removeAttr("readonly");
+    $(".field").removeAttr("readonly");
+        {% if app %}
+            if($("#connection_type").val() == 'USB'){
+                external.test_mode_change(device_cool_mode_change);
+            }
+            if($("#connection_type").val() == 'BLUETOOTH'){
+                external.test_mode_change(blu_device_cool_mode_change);
+            }
+        {% endif %}
+        $("#K-01").focus();
+        $("#othertest2").text("Save").attr("onclick","othercoolhcp()");
+        $("#final_other_clear").removeClass("w3-disabled");
+        $("#final_other_clear").removeAttr("disabled",true);
+        $(".device_configure").removeAttr("onclick").css("cursor","not-allowed");
+    {% endif %}
+     $(".close_test").css("cursor","pointer");
+     $(".close_test").click(function(){
+            $("#close_process").show();
+     });
+    $(".modal_text_cancel").click(function(){
+                $("#close_process").hide();
+                {% if app %}
+                    if($("#connection_type").val() == 'USB'){
+                        external.connection_close(redirect_connect_close);
+                    }
+                    if($("#connection_type").val() == 'BLUETOOTH'){
+                        external.connection_close(redirect_blu_connect_close);
+                    }
+                    if (!$("#connection_type").val())
+                    {
+                        window.location.href = "{% url 'home' %}";
+                    }
+                {% else %}
+                     window.location.href = "{% url 'home' %}";
+                {% endif %}
+                
+            });
+            $("#modal_text_cancel_app").click(function(){
+                $("#close_app_popup").hide();
+                {% if app %}
+                    if($("#connection_type").val() == 'USB'){
+                        external.connection_close(redirect_connect_close_1);
+                    }
+                    if($("#connection_type").val() == 'BLUETOOTH'){
+                        external.connection_close(redirect_blu_connect_close_1);
+                    }
+                    if (!$("#connection_type").val())
+                    {
+                        window.location.href = "{% url 'home' %}";
+                    }
+                {% else %}
+                     window.location.href = "{% url 'signout' %}";
+                {% endif %}
+            });
+    var url = window.location.href.split("/");
+        var da_url = url[url.length - 2];
+        if (da_url == "TM-17"){
+            $("#othertest2").text("Completed").attr("disabled",true).addClass("w3-disabled"); 
+            $(".field1").attr("disabled",true);
+            $(".field").attr("disabled",true);
+            $(".left_ankle").attr("disabled",true);
+            $(".right_ankle").attr("disabled",true);
+            $("#final_other_save").removeClass("w3-disabled").attr("disabled",false);
+            $("#final_other_clear").addClass("w3-disabled");
+            $("#final_other_report").removeClass("w3-disabled").attr("disabled",false);
+          }
+});
+    $("#final_other_clear").click(function(){
+        // $(".field1").val("");
+        $(".field").val("");
+        $("#V-01").focus();
+        $(".field_value").val("");
+        $(".field").removeAttr("lock");
+        $(".field").attr("recorded","0");
+        // $("#row_1 input,#row_11 input,#row_2 input,#row_12 input,#row_3 input,#row_13 input").hide();
+        // $("#row_4 input,#row_14 input,#row_5 input,#row_15 input,#row_6 input,#row_16 input").hide();
+        // $("#row_7 input,#row_17 input,#row_8 input,#row_18 input,#row_9 input,#row_19 input").hide();
+        // $("#row_10 input,#row_20 input,.button_clear").hide();
+    })
+$('#other_Select input').on('change', function() {
+    var data_change = $('input[name=radio]:checked', '#other_Select').attr('id');
+    if (data_change == 'foot') {
+        window.location.href = '/' + '{{option.app_code}}' + '/' + '{{patient_uid}}' + '/' + '{{doctor_uid}}' + '/' + '{{examiner_uid}}' + '/';
+    } else if(data_change == 'hand'){
+       window.location.href = '/hand/'+"{{option.app_code}}"+'/{{option.patient_uid}}/'+'{{option.doctor_uid}}'+'/'+'{{option.examiner_uid}}'+'/TM-11/';
+    }
+
+});
+        {% if medical_test.test_entry_data  and test_code == "TM-16"%}
+            $(document).ready(function(){
+                $("#other_edit").addClass("w3-disabled").attr("disabled",true);
+                // $(".field1").show();
+                // $(".field").show();
+
+                $(".b_all").attr("disabled",true);
+                $(".b_all").css("cursor","not-allowed");
+                $(".field_value").attr("disabled",true);
+                $(".field").attr("disabled",true);
+                $("#othertest1").text("Re-test");
+                $("#othertest2").attr("disabled",false).removeClass("w3-disabled");
+                $("#othertest1").after('<span class="w3-right" style="margin-right:5px;margin-top:4px;" id="id_warm_other_completed"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 status_width"></span>');
+                $("#other_Select").find('input').attr("disabled",true).parent().css({"cursor":"not-allowed"});
+                $("#page_foot  input").attr("disabled",true).css({"cursor":"not-allowed"});
+                $("#page_hand input").attr("disabled",true).css({"cursor":"not-allowed"});
+                $("#page_other input").attr("disabled",true).css({"cursor":"not-allowed"});
+                $("#page_foot").css({"cursor":"not-allowed"});
+                $("#page_other").css({"cursor":"not-allowed"});
+                $("#page_hand").css({"cursor":"not-allowed"});
+                $("#othertest1").attr("onclick","otherwarm_reset()");
+                $(".device_configure").removeAttr("onclick").css("cursor","not-allowed");
+                $(".close_test_page").removeAttr("href","");
+                 $(".close_test_page").click(function(){
+                      $("#close_process").show();
+                 });
+                 $(".close_app").removeAttr("href","").css("cursor","pointer");
+                 $(".close_app").click(function(){
+                   $("#close_app_popup").show();
+                 });
+            });
+            function otherwarm_reset(){
+                $(".b_all").attr("disabled",false);
+                $(".b_all").css("cursor","auto");
+                $(".field_value").attr("disabled",false);
+                $(".field1").attr("disabled",false);
+                $(".field1").removeAttr("readonly");
+                $(".field").removeAttr("readonly");
+                $(".field").attr("disabled",false);
+                $("#othertest1").text("Save");
+                $("#id_warm_other_completed").remove();
+                $("#othertest1").removeAttr("onclick","otherwarm_reset()");
+                $("#othertest1").attr("onclick","otherwarmhcp()");
+                $("#othertest2").attr("disabled",true).addClass("w3-disabled");
+                $("#final_other_clear").removeAttr("disabled",true).removeClass("w3-disabled");  
+                $("#other_Select").find('input').attr("disabled",true).parent().css({"cursor":"not-allowed"});
+                $("#page_foot  input").attr("disabled",true).css({"cursor":"not-allowed"});
+                $("#page_hand input").attr("disabled",true).css({"cursor":"not-allowed"});
+                $("#page_other input").attr("disabled",true).css({"cursor":"not-allowed"});
+                $("#page_foot").css({"cursor":"not-allowed"});
+                $("#page_other").css({"cursor":"not-allowed"});
+                $("#page_hand").css({"cursor":"not-allowed"});
+                $(".device_configure").removeAttr("onclick").css("cursor","not-allowed");
+            }
+            $("#othertest2").click(function(){
+                 window.location.href = "/other/{{option.app_code}}/{{option.patient_uid}}/{{option.doctor_uid}}/{{option.examiner_uid}}/TM-17/{{option.test_entry}}"
+            });
+            {% endif %}
+         {% if medical_test.test_entry_data  and test_code == "TM-17"%}
+             $(document).ready(function(){
+                // $(".field_value").css("cursor","auto");
+                // $(".field_value").attr("disabled",false);
+                $(".b_all").css("cursor","auto");
+                $(".b_all").attr('disabled',final_other_save);
+                $(".field").show();
+                $(".field").attr("disabled",true);
+                $(".field1").show();
+                $(".field1").attr("disabled",true);
+                $("#othertest2").text("Re-test");
+                $("#othertest1").attr("disabled",false).removeClass("w3-disabled");
+                $("#othertest2").attr("disabled",false).removeClass("w3-disabled");
+                $("#othertest2").after('<span class="w3-right" style="margin-right:5px;margin-top:4px;" id="id_cool_other_completed"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 status_width"></span>');
+                $("#othertest1").attr("onclick","otherwarm_reset()");
+                $("#othertest2").removeAttr("onclick","othercoolhcp()");
+                $("#othertest1").removeAttr("onclick","otherwarm_reset()");
+                $("#other_Select").find('input').attr("disabled",true).parent().css({"cursor":"not-allowed"});
+                $("#page_foot  input").attr("disabled",true).css({"cursor":"not-allowed"});
+                $("#page_hand input").attr("disabled",true).css({"cursor":"not-allowed"});
+                $("#page_other input").attr("disabled",true).css({"cursor":"not-allowed"});
+                $("#page_foot").css({"cursor":"not-allowed"});
+                $("#page_other").css({"cursor":"not-allowed"});
+                $("#page_hand").css({"cursor":"not-allowed"});
+                $(".b_all").attr("disabled",true);
+                $(".b_all").css("cursor","not-allowed");
+                $(".device_configure").removeAttr("onclick").css("cursor","not-allowed");
+             });
+               $("#othertest1").click(function(){
+                 window.location.href = "/other/{{option.app_code}}/{{option.patient_uid}}/{{option.doctor_uid}}/{{option.examiner_uid}}/TM-16/{{option.test_entry}}"
+            });
+
+            {% endif %}
+
+
+             {% if medical_test.test_completed_list %}
+                $(document).ready(function(){
+                    var data = "{{medical_test.test_completed_list_length}}";
+                    console.log(data);
+              {% if test_code == "TM-16" %}
+                    if(data == 2){
+                        $(".b_all").attr("disabled",true);
+                        $(".b_all").css("cursor","not-allowed");
+                        $(".b_all").removeAttr("disabled").css("cursor","auto");
+                        $(".field_value").removeAttr("disabled").css("cursor","auto");
+                        $("#id_warm_other_completed").remove();
+                        $("#othertest2").text("Re-test").addClass("w3-disabled").attr("disabled",true);
+                         $("#othertest2").after('<span class="w3-right" style="margin-right:5px;margin-top:4px;" id="id_cool_other_completed"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 status_width"></span>');
+                         $("#othertest1").text("Save");
+                         $(".field1").show();
+                        $(".field").show();
+                        $(".field1").removeAttr("readonly");
+                        $(".field").removeAttr("readonly");
+                        $(".field").attr("disabled",false);
+                        $(".field1").attr("disabled",false);
+                        $(".right_dorsum").attr("disabled",false);
+                        $(".left_dorsum").attr("disabled",false);
+                        $("#othertest1").removeAttr("onclick","otherwarm_reset()");
+                        $("#othertest1").attr("onclick","otherwarmhcp()");
+                        $("#final_other_clear").removeAttr("disabled").removeClass("w3-disabled");
+                        $("#other_Select").find('input').attr("disabled",true).parent().css({"cursor":"not-allowed"});
+                        $("#page_foot  input").attr("disabled",true).css({"cursor":"not-allowed"});
+                        $("#page_hand input").attr("disabled",true).css({"cursor":"not-allowed"});
+                        $("#page_other input").attr("disabled",true).css({"cursor":"not-allowed"});
+                        $("#page_foot").css({"cursor":"not-allowed"});
+                        $("#page_other").css({"cursor":"not-allowed"});
+                        $("#page_hand").css({"cursor":"not-allowed"});
+                        $(".device_configure").removeAttr("onclick").css("cursor","not-allowed");
+                    }
+                    {% endif %}
+                    {% if test_code == "TM-17" %}
+                     if(data == 2){
+
+                         $("#othertest2").click(function(){
+                            $(".b_all").attr("disabled",false).css("cursor","auto");
+                            $("#othertest1").text("Re-test").addClass("w3-disabled").attr("disabled",true);
+                            $("#id_cool_other_completed").remove();
+                                $("#othertest2").text("Save").attr("onclick","othercoolhcp()");
+                                $(".field_value").removeAttr("disabled").css("cursor","auto");
+                                $(".field1").show();
+                                 $(".field").show();
+                                $(".field").attr("disabled",false);
+                                $(".field1").attr("disabled",false);
+                                $("#final_other_save").attr("disabled",true).addClass("w3-disabled");
+                                $("#final_other_report").attr("disabled",true).addClass("w3-disabled");
+                                $("#final_other_clear").removeAttr("disabled",true).removeClass("w3-disabled");
+                                $("#test_type_select").css({"margin-bottom":"261px"});
+                                $("#other_text_result").hide();
+                                $("#impression").hide();
+                                $(".device_configure").removeAttr("onclick").css("cursor","not-allowed");
+                               });
+                        $("#final_other_save").attr("disabled",false).removeClass("w3-disabled");
+                        $("#final_other_report").attr("disabled",false).removeClass("w3-disabled");
+                        $("#final_other_clear").attr("disabled",true).addClass("w3-disabled");
+                        $("#impression").show();
+                        $("#other_text_result").show();
+                        $("#test_type_select").css({"margin-bottom":"0px"});
+                        $("#other_Select").find('input').attr("disabled",true).parent().css({"cursor":"not-allowed"});
+                        $("#page_foot  input").attr("disabled",true).css({"cursor":"not-allowed"});
+                        $("#page_hand input").attr("disabled",true).css({"cursor":"not-allowed"});
+                        $("#page_other input").attr("disabled",true).css({"cursor":"not-allowed"});
+                        $("#page_foot").css({"cursor":"not-allowed"});
+                        $("#page_other").css({"cursor":"not-allowed"});
+                        $("#page_hand").css({"cursor":"not-allowed"});
+                       $(".b_all").attr("disabled",true).css("cursor","not-allowed");
+                       $(".device_configure").removeAttr("onclick").css("cursor","not-allowed");
+                     }
+                    {% endif %}
+                });
+                {% endif %}
+
+    function close_test(){
+          $("#close_process").show();
+    }
+    $("#close_process").click(function(){
+        $("#close_process").hide();
+    });
+    $("#close_app_popup").click(function(){
+        $("#close_app_popup").hide();
+    });
+   function request_process(){
+       $("#request_process").remove();
+    }
+    function error_modal(){
+           $("#error_modal").hide();
+         }
+function hcp_save()
+{
+    var cur_connection_type = $("#connection_type").val();
+    {% if app %}
+        if(cur_connection_type == 'USB'){
+            external.connection_close(connect_close);
+        }
+        if(cur_connection_type == 'BLUETOOTH'){
+            external.connection_close(blu_connect_close);
+        }
+    {% endif %}
+    impression = $("#impression_notes").val();
+            console.log(impression);
+        var data = {
+                    "notes":impression,
+                    "test_entry": '{{option.test_entry}}',
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    }
+               $.ajax({
+                data: data,
+                type : 'POST',                            
+                url :"{% url 'test_impression' %}",
+                dataType : "application/json; charset=utf-8",
+                complete : function(data){
+                        window.location.href = "{% url 'reports' %}";
+                }
+                });
+}
+
+function hcp_report()
+{
+    var cur_connection_type = $("#connection_type").val();
+    {% if app %}
+        if(cur_connection_type == 'USB'){
+            external.connection_close(connect_close);
+        }
+        if(cur_connection_type == 'BLUETOOTH'){
+            external.connection_close(blu_connect_close);
+        }
+    {% endif %}
+    impression = $("#impression_notes").val();
+            console.log(impression);
+                var data = {
+                    "notes":impression,
+                    "test_entry": '{{option.test_entry}}',
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    }
+               $.ajax({
+                data: data,
+                type : 'POST',                            
+                url :"{% url 'test_impression' %}",
+                dataType : "application/json; charset=utf-8",
+                complete : function(data){
+                    window.location.href = "{% url 'report_view' test_entry %}";
+                }
+                });
+}
+
+function reconnect()
+{
+    pleasewait_loader_start();
+    setTimeout(reconnect_process,1000);
+    
+}
+function reconnect_process()
+{
+    var connected = $("#device_status").attr("connected");
+    var cur_connection_type = $("#connection_type").val();
+    if (connected == 0)
+    {
+
+        var key = $("input[name='key1']").val()+$("input[name='key2']").val()+$("input[name='key3']").val();
+        var mac_address_id = $("input[name='ID_1']").val()+$("input[name='ID_2']").val()+$("input[name='ID_3']").val()+$("input[name='ID_4']").val()+$("input[name='ID_5']").val()+$("input[name='ID_6']").val();
+        if(key)
+        {
+            {% if app %}
+                if(cur_connection_type == 'USB'){
+                    external.connection(device_connect);
+                }
+                if(cur_connection_type == 'BLUETOOTH'){
+                    external.connection(blu_device_connect);
+                }
+            {% else %}
+                pleasewait_loader_end();
+            {% endif %}
+        }
+            else
+        {
+            pleasewait_loader_end();
+            $(".overflow-hidden").append(`<div id="device_alert" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please Enter Device Key in Device Configuration.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="device_alert_close();">OK</button>
+                    </div></div></div></div>`);
+            $("#device_alert").show();
+        }
+    }
+    else
+    {
+        pleasewait_loader_end();
+    }
+}
+function device_alert_close(){
+    $("#device_alert").hide();   
+   }
+function device_config() {
+    var cur_connection_type = $("#connection_type").val();
+    if (connection_type != cur_connection_type)
+    {
+        {% if app %}
+            if(connection_type == 'USB'){
+                external.connection_close(connect_close);
+            }
+            if(connection_type == 'BLUETOOTH'){
+                external.connection_close(blu_connect_close);
+            }
+        {% endif %}
+    }
+    var key = $("input[name='key1']").val()+$("input[name='key2']").val()+$("input[name='key3']").val();
+    var mac_address_id = $("input[name='ID_1']").val()+$("input[name='ID_2']").val()+$("input[name='ID_3']").val()+$("input[name='ID_4']").val()+$("input[name='ID_5']").val()+$("input[name='ID_6']").val();
+    var mac_address_id_length = mac_address_id.length;
+    var data = {
+                connection_type:cur_connection_type,
+                key:key,
+                mac_address_id:mac_address_id,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+                }
+    if(mac_address_id_length == 12){
+    $.ajax({
+        data: data,
+        type : 'POST',                            
+        url :"{% url 'device_config_save' option.app_code %}",
+        dataType : "application/json; charset=utf-8",
+        complete : function(data) 
+        {
+            document.getElementById('settingsdev').style.display='none';
+            connection_type = $("#connection_type").val();
+            if(connection_type == 'USB'){
+                $('#bluetooth').removeClass("bgclr4 w3-text-white").addClass("fclr1 bgclr5");
+                $('#usb').removeClass("fclr1 bgclr5").addClass("bgclr4 w3-text-white");
+            }
+             if(connection_type == 'BLUETOOTH'){
+                $('#usb').removeClass("bgclr4 w3-text-white").addClass("fclr1 bgclr5");
+                $('#bluetooth').removeClass("fclr1 bgclr5").addClass("bgclr4 w3-text-white");
+            }
+        }
+    });
+ }
+ else{
+        $("#settingsdev").hide();
+        $(".overflow-hidden").append(`<div id="mac_address_validate" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter a valid Mac Address ID.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" id="alert_pdf_confirm" onclick="opensettingdev()">OK</button>
+                        </div></div></div></div>`);
+        $("#mac_address_validate").show();
+        }
+}
+function opensettingdev(){
+   $("#settingsdev").show();  
+   $("#mac_address_validate").hide(); 
+}
+function device_status(value)
+{
+    if(value=="ON")
+    {
+        $("#device_status").removeClass("bred");
+        $("#device_status").addClass("bgclr4");
+        $("#device_status").attr("connected","1");
+    }
+    else
+    {
+        $("#device_status").removeClass("bgclr4");
+        $("#device_status").addClass("bred");
+        $("#device_status").attr("connected","0");
+    }
+}
+function js_print(value) {
+    var test_field = $(".test-field:focus").attr("id");
+    var field_order = $(".test-field:focus").attr("field-order");
+    var recorded = $(".test-field:focus").attr("recorded"); 
+    if (value.includes("RECORD"))
+    {
+        $(".test-field:focus").attr("recorded","1");
+        var current_id = parseInt(field_order)+1;
+        if(current_id > 24)
+        {
+            current_id = 1;
+        }
+        var next_id = $("[field-order='"+current_id+"']").attr("id");
+        $("#"+next_id).focus();
+    }
+    else if(value.includes("DEL"))
+    {    
+        $(".test-field:focus").attr("recorded","0");
+        $("#"+test_field).val("");
+    }
+    else if(value.includes("PREV"))
+    {   
+        if (recorded == "0")
+        {
+            $("#"+test_field).val("");
+        }
+        var current_id = parseInt(field_order)-1;
+        if(current_id == 0)
+        {
+            current_id = 24;
+        }
+        var next_id = $("[field-order='"+current_id+"']").attr("id");
+        $("#"+next_id).focus();
+    }
+    else if(value.includes("NEXT"))
+    {   
+        if (recorded == "0")
+        {
+            $("#"+test_field).val("");
+        }
+        var current_id = parseInt(field_order)+1;
+        if(current_id > 24)
+        {
+            current_id = 1;
+        }
+        var next_id = $("[field-order='"+current_id+"']").attr("id");
+        $("#"+next_id).focus();
+    }
+    else if(value.includes("RES1"))
+    {   
+        
+    }
+    else if(value.includes("RES05"))
+    {   
+        
+    }
+    else if(value.includes("HEAT"))
+    {   
+        
+    }
+    else if(value.includes("COOL"))
+    {   
+        
+    }
+    else if(value.includes("USB"))
+    {   
+        
+    }
+    else if(value.includes("BLU"))
+    {   
+        
+    }
+    else
+    {   
+        var lock = $("#"+test_field).attr('lock');
+        if (lock) 
+        {
+            
+        }
+        else
+        {
+            if (recorded == "0")
+            {
+                if(value)
+                {    
+                    value = value.substring(0, value.length - 1);
+                    var num1 = ('{{medical_test.normal}}').replace("-", "");
+                    var first = parseFloat(num1.slice(0,2));
+                    var second = parseFloat(num1.slice(2,4));
+                      if (value >= first && value <= second ) {
+                       $("#"+test_field).css("color","green");
+                      }
+                      else if(value > second){
+                         $("#"+test_field).css("color","red");
+                      }
+                      if(value < first){
+                         $("#"+test_field).css("color","red");
+                      }
+                    $("#"+test_field).val(value);
+                }
+            }
+        }
+    }
+}
+function device_heat_mode_change(msg, mode_change) {
+     mode_change("HEAT","USB");
+}
+function device_cool_mode_change(msg, mode_change) {
+     mode_change("COOL","USB");
+}
+function blu_device_heat_mode_change(msg, mode_change) {
+     mode_change("HEAT","BLU");
+}
+function blu_device_cool_mode_change(msg, mode_change) {
+     mode_change("COOL","BLU");
+}
+function device_connect(msg, connect) {
+    var key = $("input[name='key1']").val()+$("input[name='key2']").val()+$("input[name='key3']").val();
+    connect("HCP",key,"USB");
+}
+function blu_device_connect(msg, connect) {
+        var key = $("input[name='key1']").val()+$("input[name='key2']").val()+$("input[name='key3']").val();
+        var mac_address_id = $("input[name='ID_1']").val()+$("input[name='ID_2']").val()+$("input[name='ID_3']").val()+$("input[name='ID_4']").val()+$("input[name='ID_5']").val()+$("input[name='ID_6']").val();
+        if(key)
+        {
+            connect("HCP",key+":"+mac_address_id,"BLU");
+        }
+    }
+    function connect_close(msg,close_device)
+    {
+        close_device("HCP","USB");
+    }
+    function redirect_connect_close(msg,close_device)
+    {
+        close_device("HCP","USB");
+        setTimeout(function(){ 
+            window.location.href = "{% url 'home' %}";
+        }, 2000);
+    }
+    function redirect_connect_close_1(msg,close_device)
+    {
+        close_device("HCP","USB");
+        setTimeout(function(){ 
+            window.location.href = "{% url 'signout' %}";
+        }, 2000);
+    }
+    function blu_connect_close(msg,close_device)
+    {
+        close_device("HCP","BLU");
+    }
+    function redirect_blu_connect_close(msg,close_device)
+    {
+        close_device("HCP","BLU");
+        setTimeout(function(){ 
+            window.location.href = "{% url 'home' %}";
+        }, 2000);
+    }
+    function redirect_blu_connect_close_1(msg,close_device)
+    {
+        close_device("HCP","BLU");
+        setTimeout(function(){ 
+            window.location.href = "{% url 'signout' %}";
+        }, 2000);
+    }
+function otherwarmhcp(){
+        var arr = [];
+        var title = [];
+        $(".data-check-val").each(function() {
+            var value = $(this).val();
+            if (value) {
+                arr.push(value);
+            }
+        });
+        $(".input_check_data").each(function(){
+         title.push($(this).val());
+         });
+        console.log(title);
+    if (arr.length > 0 && !title.includes("")) {
+    var code = $("#other_warm").attr("data-id");
+    var test_type = $("#other_Select input:checked").val();
+    $("#test_type").val(test_type);
+    $("#test_code").val(code)
+    var otherdata = $("#thermocool_other_form").serialize();
+     $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+        $("#wait_process").show(); 
+    console.log(otherdata);
+      $.ajax({
+            data: otherdata,
+             type : 'POST',                            
+             url :"/other/"+"{{option.app_code}}" + "/" + "{{option.patient_uid}}" + "/" + "{{option.doctor_uid}}" + "/" + "{{option.examiner_uid}}" + "/" + "TM-16/",
+             dataType : "application/json; charset=utf-8",
+             complete : function(data) {
+                  var jdata = data.responseText;
+                var jsonstr = jQuery.parseJSON(jdata);
+                if((jsonstr.test_entry_id)){
+                  text_entery_code = jsonstr.test_entry_id;
+                  previous_code = jsonstr.current_test_code;
+                    console.log(jsonstr.test_entry_id);
+                  window.location.href = "/other/{{option.app_code}}/{{option.patient_uid}}/{{option.doctor_uid}}/{{option.examiner_uid}}/"+previous_code+"/"+text_entery_code;
+                }
+            }
+            });
+          }
+           else{
+            $(".overflow-hidden").append(`<div id="request_process" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter valid test site or HCP values  to save the changes.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="request_process();">Ok</button>
+                        </div></div></div></div>`);
+                    $("#request_process").show(); 
+             }
+}
+function othercoolhcp(){
+    var arr = [];
+     var title = [];
+                $(".data-check-val").each(function() {
+                    var value = $(this).val();
+                    if (value) {
+                        arr.push(value);
+                    }
+                });
+        $(".input_check_data").each(function(){
+         title.push($(this).val());
+         });
+                if (arr.length > 0 && !title.includes("")) {
+     var code = $("#other_cool").attr("data-id");
+    var test_type = $("#other_Select input:checked").val();
+    $("#test_type").val(test_type);
+    $("#test_code").val(code)
+    var otherdata = $("#thermocool_other_form").serialize();
+     $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+        $("#wait_process").show(); 
+    console.log(otherdata);
+      $.ajax({
+            data: otherdata,
+             type : 'POST',                            
+             url :"/other/"+"{{option.app_code}}" + "/" + "{{option.patient_uid}}" + "/" + "{{option.doctor_uid}}" + "/" + "{{option.examiner_uid}}" + "/" + "TM-17/",
+             dataType : "application/json; charset=utf-8",
+             complete : function(data) {
+                  var jdata = data.responseText;
+                var jsonstr = jQuery.parseJSON(jdata);
+                if((jsonstr.test_entry_id)){
+                  text_entery_code = jsonstr.test_entry_id;
+                  previous_code = jsonstr.current_test_code;
+                    console.log(jsonstr.test_entry_id);
+                  window.location.href = "/other/{{option.app_code}}/{{option.patient_uid}}/{{option.doctor_uid}}/{{option.examiner_uid}}/TM-17/"+text_entery_code+"/"+previous_code;
+                }
+            }
+            });
+     }
+      else{
+      $(".overflow-hidden").append(`<div id="request_process" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter valid test site or HCP values  to save the changes.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="request_process();">Ok</button></div></div></div></div>`);
+        $("#request_process").show(); 
+
+     }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends "page_layout.html" %}
+{% block content_body %}
+<div class="w3-display-container bgclr3 brclr1">
+      <div class="w3-center f-16 ff-r ft-b fclr1 pt8 pb1 ">
+        Settings
+      </div>
+    </div>
+     <div class="w3-row ">
+      <div class="w3-col w174">
+        <div class="w3-sidebar  w3-bar-block w174 gclr bgclr7">
+        <a href="{% url 'hospital_profile' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 fclr1 f-14 ff-r ft-b ">Hospital Profile</a>
+        <a href="{% url 'doctors' %}" class="w3-bar-item w3-button ft-b pt16  brclr1 f-14 ff-r bakclr sbrclr fclr1 ">HCP</a>
+        <a href="{% url 'patients' %}" class="w3-bar-item w3-button  ft-b pt16   brclr1 f-14 ff-r fclr1">Patients</a>
+        <a href="{% url 'app_configuration' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r fclr1">App Configuration</a>
+      </div>
+      </div>
+       <div class="w3-col w1106 ml174 bgclr3 h645 scroll">
+               <div class="w3-display-container bgclr3">
+           <div class="w3-display-container">
+            <div class="f-18 ft-b fclr1 ff-r w3-container pt16">HCP(Health Care Professional)
+            </div>
+         <table id="myTable"><thead>
+  <tr class="ff-r-b">
+    <th>HCP ID</th>
+    <th style="width: 124px;">HCP Name</th>
+    <th>HCP Role</th>
+    <th style="width: 340px;">Speciality</th>
+    <th>Contact Number</th>
+      {% if COMMON_INFO.ACCOUNTUSERROLE != "MEMBER" %}
+    <th class="sort_remove">Actions</th>
+      {% endif %}
+  </tr></thead><tbody>
+  {% for hcp in hcp_users %}
+  <tr>
+    <td class="ft-b">{{hcp.FRIENDLY_UID}}</td>
+    <td style="width: 115px;">{{hcp.PREFIX}} {{hcp.NAME}}</td>
+    <td>{{hcp.TYPE}}</td>
+    <td style="width: 340px;">{% for data in hcp.SPECIALIZATION %}{{data}}{%if not forloop.last %}, {%endif%} {% endfor %}</td>
+    <td>{{hcp.MOBILE_NUMBER}}</td>
+      {% if COMMON_INFO.ACCOUNTUSERROLE != "MEMBER" %}
+    <td>
+      <a href="{% url 'hcp_edit' hcp.UID %}" class="tdecor tclr f-14 ff-r">Edit</a>
+       <a  class="tdecor tclr f-14 ff-r pl8 cp" onclick="delete_popup2(this)" data-attr="{{hcp.UID}}">Delete</a>
+    </td>
+      {% endif %}
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+         </div>
+      </div>
+      </div>
+<div class="w3-modal bgclr18" id="delete_popup1">
+        <div class="w3-modal-content w3-round mt15p" style="width: 300px;height: 150px;">
+          <div class="bgclr11 w3-center">
+            <i class="fa fa-exclamation delete_popup mt5p" aria-hidden="true"></i><br>
+            <p class="f-14 fclr1">Are you sure want to delete?</p>
+            <button class="h30 w80 bgclr15 brclr11 w3-text-white w3-round f-14" onclick="document.getElementById('delete_popup1').style.display='none';"> No</button>
+           <a href="" class="delete_yes"><button class="h30 w80 bgclr8 brclr3 w3-text-white w3-round ml16 f-14">Yes</button></a>
+          </div>
+        </div>
+      </div>
+{% endblock %}
+{% block js_script %}
+<script>
+         $(document).ready(function () {
+    $('#myTable').DataTable( {dom: 'Bfrtip',
+    lengthMenu: [
+        [ 10, 25, 50, -1 ],
+        [ '10 rows', '25 rows', '50 rows', 'Show all' ]
+    ],
+          scrollY: '40vh',
+        scrollCollapse: true,
+    buttons: [
+        'pageLength'
+    ],responsive: true,"dom": '<"top"f>rt<"bottom"<"row"<"w3-col l1"l><"w3-col l9",i><"w3-col l2 ",p> >><"clear">',
+     language: {"sLengthMenu": "_MENU_ ","sSearch": "",searchPlaceholder: "Search by Name/ID" },pagingType: 'simple_numbers',
+   "iDisplayLength": 10 });
+     $('<div class="dropdown">' +
+        '<select class="form-control " id="specialization_opt">'+
+        '<option value="0" {% if speciality == 0 %} selected{% endif %}>All Speciality</option>'+
+        {% for speciality_obj in specialization %}
+        '<option value="{{speciality_obj.id}}" {% if speciality == speciality_obj.id %} selected{% endif %}>{{speciality_obj.NAME}}</option>'+
+        {% endfor %}
+        // '<option value="Biothezi-VPT">Biothezi-VPT Test</option>'+
+        // '<option value="Biothezi-VPT Ultra">Biothezi-VPT Ultra</option>'+
+        // '<option value="Thermocool_HCP">Thermocool-HCP Elite</option>'+
+        // '<option value="Podi i Mat">Podi i Mat Test</option>'+
+        // '<option value="Podi T Map">Podi T Map Test</option>'+
+        // '<option value="Canyscope">Canyscope Test</option>'+
+        '</select>' + 
+        '</div>').appendTo("#myTable_wrapper .dataTables_filter label");
+    $('<div class="buttondoc">' +
+       '{% if COMMON_INFO.ACCOUNTUSERROLE != "MEMBER" %}<a href="/hcp/add/"><button class="h30 w118 bgclr8 brclr3 w3-text-white f-14 ft-b ff-r  cp"><span class="xz pl16 vamidddle" id="add_doctor"><img src="{{MEDIA_URL}}img/png/add.png" class="add_icons"> Add HCP</span></button>{% endif %}' +
+       '</div>').appendTo("#myTable_wrapper .dataTables_filter");
+
+    $(".dataTables_filter label").addClass("filterleft");
+     $(".dataTables_length select").addClass("position");
+    // $("#add_doctor").click(function(){
+    //   $("#id01").show();
+    // });
+      $("#myTable_wrapper .bottom .row .l2").css("cssText","position:absolute!important;width:100%!important;");
+    $("#myTable_wrapper .bottom .row .l1").css("cssText","position:relative!important;z-index:9999!important;");
+    $("#myTable th:first-child").css("width","10%");
+    $("#myTable_wrapper th:first-child").css("width","10%");
+    $("#specialization_opt").on("change input",function(){
+      window.location.href = '/doctors/'+$(this).val();
+    });
+} );
+ function delete_popup2(current1){
+console.log($(current1).attr("data-attr"));
+var uid =$(current1).attr("data-attr");
+      document.getElementById('delete_popup1').style.display='block';
+      $(".delete_yes").attr("href","/hcp/delete/"+uid);
+     }
+</script>
+{% endblock %}

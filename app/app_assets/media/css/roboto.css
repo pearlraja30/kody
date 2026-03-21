@@ -1,0 +1,49 @@
+/* Roboto regular */
+
+@font-face {
+    font-family: "Roboto";
+    src: url("fonts/Roboto-Regular.ttf") format('truetype');
+}
+
+/* Roboto italic */
+
+@font-face {
+    font-family: "Roboto-Italic";
+    src:url('fonts/Roboto-Italic.ttf') format('truetype');
+}
+
+/* Roboto italic */
+
+@font-face {
+    font-family: "Roboto-Bold";
+    src:url('fonts/Roboto-Bold.ttf') format('truetype');
+}
+
+/* Roboto bold */
+
+/* specialfont */
+@font-face {
+    font-family: "arial";
+    src: url('fonts/special_fonts/arial.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "calibri";
+    src: url('fonts/special_fonts/calibri/Calibri.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+@font-face {
+    font-family: "comic";
+    src: url('fonts/special_fonts/comic/ComicSansMS3.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Times_New_Roman";
+    src: url('fonts/special_fonts/Times_New_Roman/times_new_roman_bold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}

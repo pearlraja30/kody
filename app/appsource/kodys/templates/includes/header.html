@@ -1,0 +1,42 @@
+<div class="w3-bar bgclr1 ff-r w3-display-container">
+			<a href="{% url 'home' %}" class="w3-bar-item ft-b f-14 fclr tdecor close_test_page">Apps</a>
+			<a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'patients' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item ft-b f-14 tdecor fclr close_test_page">Patients</a>
+            <a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'reports' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item  ft-b f-14 tdecor fclr close_test_page">Reports</a>
+            <a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'about' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item ft-b f-14 tdecor fclr close_test_page">About</a>
+            <a href="{% url 'hospital_profile' %}" class="w3-bar-item ft-b f-14 tdecor fclr close_test_page">Settings</a>
+            <a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'customer_support' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item ft-b f-14 tdecor fclr close_test_page">Customer Support</a>
+           
+            <div class="w3-right">
+            	
+                 <span class="w3-bar-item f-14 ff-r fclr1"><span class="pr24"><span class="ft-b">{% if request.user.username %}{{request.user.username}}{% else %}{{request.user.first_name}} {{request.user.last_name}}{% endif %}</span></span> {% if COMMON_INFO.LAST_LOGIN %}<span><span class="ft-b">Last Login: {{ COMMON_INFO.LAST_LOGIN|date:"F d, Y, h:i A"}}</span></span>{% endif %}</span>
+            	<a href="{% url 'signout' %}" class="w3-bar-item br-l fclr tdecor ft-b f-14 close_app">Logout</a>
+            		 
+            	
+           </div>
+		</div>
+
+		<div class="w3-display-container h84 w100p bgclr2" style="height: 60px;">
+			<div class="w3-display-left w174  bgclr11"  {% if COMMON_INFO.HOSPITAL_LOGO %} style="background-image: url({{COMMON_INFO.HOSPITAL_LOGO|safe}});background-size: contain;background-repeat: no-repeat;background-position: center;height: 60px;" {% else %}style="background-image: url({{MEDIA_URL}}img/default_hospital_logo.png);background-size: contain;background-repeat: no-repeat;background-position: center;"{% endif %}>
+			</div>
+			<div class="w3-display-left h84 w39 bgclr12 ml174" style="height: 60px;"></div>
+			<div class="w3-display-left ml232 lh12 ff-r w820 w3-center">
+				<span class=" f-20 ft_light_white">{{COMMON_INFO.HOSPITAL_NAME|safe}}</span><br>
+					<span class="ft_light_white f-16">{{COMMON_INFO.HOSPITAL_ADDRESS1|safe}}{% if COMMON_INFO.HOSPITAL_ADDRESS2 %} , {{COMMON_INFO.HOSPITAL_ADDRESS2|safe}} {% endif %}{% if COMMON_INFO.HOSPITAL_ADDRESS3 %}, {{COMMON_INFO.HOSPITAL_ADDRESS3|safe}} {% endif %}{% if COMMON_INFO.CITY %}, {{COMMON_INFO.CITY|safe}} {% endif %}{% if COMMON_INFO.ZIPCODE %} - {{COMMON_INFO.ZIPCODE}} {% endif %}</span>
+			</div>
+
+			<div class="w3-display-right pr15">
+				<img src="{{COMMON_INFO.KODYS_LOGO|safe}}" alt="brand_image" style="width: 150px;">
+			</div>
+		</div>
+        {% block js_script %}
+        <script>
+        	function  licensekey(){
+        		 $(".overflow-hidden").append(`<div id="licensekey_alert" class="w3-modal  bgclr18" "><div class="w3-modal-content  mt11p" style="width:445px;"><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please upload license key file in app configuration .</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="licensekey_alert_close();">OK</button>
+                         </div></div></div></div>`);
+                 $("#licensekey_alert").show();  
+        	}
+        	function licensekey_alert_close(){
+        	     $("#licensekey_alert").hide();	
+        	}
+        </script>
+		{% endblock %}

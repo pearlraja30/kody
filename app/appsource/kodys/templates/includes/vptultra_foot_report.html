@@ -1,0 +1,555 @@
+{% block header_script %}
+{% load kodystags %}
+<style type="text/css">
+  tbody tr:nth-child(even) {
+      background-color: white!important;
+  }
+  tbody tr:nth-child(odd) {
+      background-color: white!important;
+  }
+  thead tr {
+    background-color: white!important;
+}
+</style>
+  <script type="text/javascript" src="{{MEDIA_URL}}gstatic/loader.js"></script>
+  {% if report.report_result %}
+   <script type="text/javascript">
+    $("document").ready(function(){
+       $(".bmi_se").hide();
+       $(".right_abi").hide();
+       $(".left_abi").hide();
+    });
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawVisualization);
+
+      function drawVisualization() {
+        // Some raw data (not necessarily accurate)
+        var data = google.visualization.arrayToDataTable([
+          ['Foot', 'R'],
+          ['Great Toe',  
+          parseFloat('{{report.TM05.0.KEY_VALUE}}')],
+          ['1st MTH',  
+          parseFloat('{{report.TM05.1.KEY_VALUE}}')],
+          ['3rd MTH',  
+          parseFloat('{{report.TM05.2.KEY_VALUE}}')],
+          ['5th MTH',  
+          parseFloat('{{report.TM05.3.KEY_VALUE}}')],
+          ['Medial Arch',  
+          parseFloat('{{report.TM05.4.KEY_VALUE}}')],
+          ['Heel',  
+          parseFloat('{{report.TM05.5.KEY_VALUE}}')]
+        ]);
+
+        var options = {
+          title : 'Right Foot',
+          titleTextStyle: {
+            fontSize: 14,
+            fontName: 'sans-serif'
+          },
+          legend: { position: 'none',},
+          chartArea: {'width': '76%', 'height': '68%', backgroundColor: {
+        stroke: 'black',
+        strokeWidth: 2
+         }},
+          vAxis: {title: '',textStyle: {
+          fontSize : 8,
+          fontName: 'sans-serif',
+          bold:true
+        },viewWindow: {
+              max:55,
+              min:0
+            },gridlines: {
+          color: 'transparent',
+          count: 15,
+        }},
+          hAxis: {title: '',showTextEvery:1, slantedText:true,textStyle: {
+          fontSize : 8,
+          fontName: 'sans-serif',
+          bold:true
+        }},
+          lineWidth: 1,
+          seriesType: 'bars',
+          series: {1: {type: 'line'}},
+          height:300,
+          enableInteractivity: false,
+
+        };
+        var data1 = google.visualization.arrayToDataTable([
+          ['Foot', 'L'],
+          ['Great Toe',
+          parseFloat('{{report.TM05.8.KEY_VALUE}}')],
+          ['1st MTH',  
+          parseFloat('{{report.TM05.9.KEY_VALUE}}')],
+          ['3rd MTH',   
+          parseFloat('{{report.TM05.10.KEY_VALUE}}')],
+          ['5th MTH',   
+          parseFloat('{{report.TM05.11.KEY_VALUE}}')],
+          ['Medial Arch',   
+          parseFloat('{{report.TM05.12.KEY_VALUE}}')],
+          ['Heel', 
+          parseFloat('{{report.TM05.13.KEY_VALUE}}')]
+        ]);
+
+        var options1 = {
+          title : 'Left Foot',
+          titleTextStyle: {
+        fontSize: 14,
+        fontName: 'sans-serif'
+      },
+          legend: { position: 'none',},
+          chartArea: {'width': '76%', 'height': '68%', backgroundColor: {
+        stroke: 'black',
+        strokeWidth: 2
+         }},
+          vAxis: {title: '',textStyle: {
+          fontSize : 8,
+          fontName: 'sans-serif',
+          bold:true
+        },viewWindow: {
+              max:55,
+              min:0
+            },gridlines: {
+          color: 'transparent',
+          count: 15,
+        }},
+          hAxis: {title: '',showTextEvery:1, slantedText:true,textStyle: {
+          fontSize : 8,
+          fontName: 'sans-serif',
+          bold:true
+        }},
+          lineWidth: 1, 
+          lineDashStyle: [5, 1, 3],
+          colors: ['#77b300','yellow'],
+          seriesType: 'bars',
+          series: {1: {type: 'line'}},
+          height:300,
+          enableInteractivity: false,
+        };
+
+
+        {% for key,value in report.report_result.items %}
+                  {% if key == "right_foot_result" %}
+                     var right_foot_result = parseFloat('{{value.0}}');
+                     $("#right_vpt_avg").html('{{value.0}}');
+                      {% if value.0 == "No Data" %}
+                   $("#right_vpt_avg").next().hide();
+                   {% endif %}
+                    {% if value.1 == "Normal" %}
+                    $("#right_vpt_status").html('<span class="normal">{{value.1}}</span>');
+                    {% elif value.1 == "Severe" %}
+                    $("#right_vpt_status").html('<span class="severe">{{value.1}}</span>');
+                     {% elif value.1 == "Mild" %}
+                    $("#right_vpt_status").html('<span class="Mild">{{value.1}}</span>');
+                     {% elif value.1 == "Moderate" %}
+                    $("#right_vpt_status").html('<span class="Moderate">{{value.1}}</span>');
+                 {% else %}
+                    $("#right_vpt_status").html('<span class="Risk">{{value.1}}</span>');
+                 {% endif %}
+                  {% endif %}
+                  {% if key == "left_foot_result" %}
+                     var left_foot_result = parseFloat('{{value.0}}');
+                     $("#left_vpt_avg").html('{{value.0}}');
+                    {% if value.0 == "No Data" %}
+                   $("#left_vpt_avg").next().hide();
+                   {% endif %}
+                   {% if value.1 == "Normal" %}
+                    $("#left_vpt_status").html('<span class="normal">{{value.1}}</span>');
+                    {% elif value.1 == "Severe" %}
+                    $("#left_vpt_status").html('<span class="severe">{{value.1}}</span>');
+                     {% elif value.1 == "Mild" %}
+                    $("#left_vpt_status").html('<span class="Mild">{{value.1}}</span>');
+                     {% elif value.1 == "Moderate" %}
+                    $("#left_vpt_status").html('<span class="Moderate">{{value.1}}</span>');
+                 {% else %}
+                    $("#left_vpt_status").html('<span class="Risk">{{value.1}}</span>');
+                 {% endif %}
+                  {% endif %}
+                  {% if key == "left_abi_result" %}
+                   $(".left_abi").show();
+                     var left_abi_result = parseFloat('{{value.0}}');
+                     $("#left_abi_avg").html('{{value.0}}');
+                      {% if value.0 == "No Data" %}
+                 $("#left_abi_avg").hide().next().hide();
+                 $("#left_abi_status").hide();
+                 {% endif %}
+                 {% if value.1 == "Normal" %}
+                    $("#left_abi_status").html('<span class="normal">{{value.1}}</span>');
+                  {% elif value.1 == "Severe" %}
+                    $("#left_abi_status").html('<span class="Severe">{{value.1}}</span>');
+                  {% elif value.1 == "Moderate" %}
+                    $("#left_abi_status").html('<span class="Moderate">{{value.1}}</span>');
+                  {% elif value.1 == "Mild" %}
+                    $("#left_abi_status").html('<span class="Mild">{{value.1}}</span>');
+                  {% elif value.1 == "Calcified" %}
+                    $("#left_abi_status").html('<span class="Calcified">{{value.1}}</span>');
+                  {% elif value.1 == "Gangrene" %}
+                    $("#left_abi_status").html('<span class="Gangrene">{{value.1}}</span>');
+                 {% else %}                                   
+                    $("#left_abi_status").html('<span class="color_red">{{value.1}}</span>');
+                 {% endif %}
+                  {% endif %}
+                  {% if key == "right_abi_result" %}
+                  $(".right_abi").show();
+                     var right_abi_result = parseFloat('{{value.0}}');
+                     $("#right_abi_avg").html('{{value.0}}');
+                      {% if value.0 == "No Data" %}
+                     $("#right_abi_avg").hide();
+                     $(".right_abi").hide();
+                     {% endif %}
+                      {% if value.1 == "Normal" %}
+                    $("#right_abi_status").html('<span class="normal">{{value.1}}</span>');
+                    {% elif value.1 == "Severe" %}
+                    $("#right_abi_status").html('<span class="Severe">{{value.1}}</span>');
+                  {% elif value.1 == "Moderate" %}
+                    $("#right_abi_status").html('<span class="Moderate">{{value.1}}</span>');
+                  {% elif value.1 == "Mild" %}
+                    $("#right_abi_status").html('<span class="Mild">{{value.1}}</span>');
+                  {% elif value.1 == "Calcified" %}
+                    $("#right_abi_status").html('<span class="Calcified">{{value.1}}</span>');
+                  {% elif value.1 == "Gangrene" %}
+                    $("#right_abi_status").html('<span class="Gangrene">{{value.1}}</span>');
+                 {% else %}
+                    $("#right_abi_status").html('<span class="color_red">{{value.1}}</span>');
+                 {% endif %}
+                  {% endif %}
+                  {% if key == "bmi_result" %}
+                  $(".bmi_se").show();
+                     var bmi_result = parseFloat('{{value.0}}');
+                     $("#bmi_vpt_avg").html('{{value.0}}');
+                      {% if value.0 == "No Data" %}
+                     $("#bmi_vpt_avg").next().hide();
+                       $(".bmi_avg").hide()
+                     {% endif %}
+                      {% if value.1 == "Normal" %}
+                    $("#bmi_vpt_status").html('<span class="color_green">{{value.1}}</span>');
+                    {% elif value.1 == "Over Weight" %}
+                    $("#bmi_vpt_status").html('<span class="Overweight">{{value.1}}</span>');
+                    {% elif value.1 == "Obese" %}
+                    $("#bmi_vpt_status").html('<span class="Obese">{{value.1}}</span>');
+                    {% elif value.1 == "Under Weight" %}
+                    $("#bmi_vpt_status").html('<span class="Underweight">{{value.1}}</span>');
+                 {% else %}
+                    $("#bmi_vpt_status").html('<span class="color_red">{{value.1}}</span>');
+                 {% endif %}
+                  {% endif %}
+                   
+
+    {% endfor %}
+        var data2 = google.visualization.arrayToDataTable([
+          ['Right Foot','Left Foot',{ role: 'style' }],
+          ['Right Foot',  right_foot_result , "#3366cc"],
+          ['Left Foot',  left_foot_result, "#77b300"]
+        ]);
+
+        var options2 = {
+          title : 'Result Average',
+          titleTextStyle: {
+        fontSize: 14,
+        fontName: 'sans-serif'
+      },
+          legend: { position: 'none',},
+          chartArea: {'width': '76%', 'height': '68%', backgroundColor: {
+        stroke: 'black',
+        strokeWidth: 2
+         }},
+          vAxis: {title: '',textStyle: {
+          fontSize : 8,
+          fontName: 'sans-serif',
+          bold:true
+        },viewWindow: {
+              max:55,
+              min:0
+            },gridlines: {
+          color: 'transparent',
+          count: 14,
+        }},
+          hAxis: {title: '',showTextEvery:1, slantedText:true,textStyle: {
+          fontSize : 8,
+          fontName: 'sans-serif',
+          bold:true
+        }},
+        bar: { groupWidth: '20%' },
+          lineWidth: 1, 
+          lineDashStyle: [5, 1, 3],
+          colors: ['#77b300','yellow'],
+          seriesType: 'bars',
+          series: {1: {type: 'line'}},
+          height:300,
+          enableInteractivity: false,
+
+        };
+
+        var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+        var chart1 = new google.visualization.ComboChart(document.getElementById('chart_div1'));
+        chart1.draw(data1, options1);
+        var chart2 = new google.visualization.ComboChart(document.getElementById('chart_div2'));
+        chart2.draw(data2, options2);
+      }
+    </script>
+    {% endif %}
+{% endblock %}
+<div class="brclr_row_black   mr26 ml26" style="height: 16.5cm;">
+{% if not mode %}
+        <div class="w95p m_auto mt8">
+          <div class="w48p d-inline_block"><div  class="text_center f-18  ft_tm">RIGHT</div></div>
+           <div class="w48p d-inline_block"><div  class="text_center f-18  ft_tm">LEFT</div></div>
+          <div class="m_auto" style="width:85%;">
+            <div  class="text_center f-15  color_brown ft_tm"></div>
+            <div class="pr ft_tm mb14">
+              <img {% if report.TM05.6.KEY_VALUE or report.TM05.14.KEY_VALUE or report.TM05.15.KEY_VALUE or report.TM05.7.KEY_VALUE %} src="{{MEDIA_URL}}img/png/vpt_report_foot.png" {% else %} src="{{MEDIA_URL}}img/png/vpt_report_foot_1.png" {% endif %}  class="mt20 ml18 report_img_overal_width_vpt_form">
+              <span class="pa {{report.TM05.0.KEY_VALUE|vpt_font_size}}" style="left: 228px;top: 49px;text-align: center;width:46px;">{{report.TM05.0.KEY_VALUE}}</span>
+              <span class="pa f-16 ft_tm {% if report.TM05.24.KEY_VALUE %}vpt_circle{% endif %}" style="left: 242px;top: 90px;color:{{report.TM05.24.KEY_VALUE|color}}">{{report.TM05.24.KEY_VALUE}}</span>
+            <span class="pa {{report.TM05.1.KEY_VALUE|vpt_font_size}}" style="top: 136px;left: 209px;text-align: center;width:46px;">{{report.TM05.1.KEY_VALUE}}</span>
+             <span class="pa f-16 ft_tm {% if report.TM05.25.KEY_VALUE %}vpt_circle{% endif %}" style="left: 222px;top: 177px;color:{{report.TM05.25.KEY_VALUE|color}}">{{report.TM05.25.KEY_VALUE}}</span>
+            <span class="pa {{report.TM05.3.KEY_VALUE|vpt_font_size}}"  style="top: 131px;left: 138px;text-align: center;width:46px;">{{report.TM05.2.KEY_VALUE}}</span>
+            <span class="pa f-16 ft_tm {% if report.TM05.26.KEY_VALUE %}vpt_circle{% endif %}"  style="left: 149px;top: 173px;color:{{report.TM05.26.KEY_VALUE|color}}">{{report.TM05.26.KEY_VALUE}}</span>
+            <span class="pa {{report.TM05.2.KEY_VALUE|vpt_font_size}}"  style="left: 90px;top:192px;text-align: center;width:46px;" >{{report.TM05.3.KEY_VALUE}}</span>
+             <span class="pa f-16 ft_tm {% if report.TM05.27.KEY_VALUE %}vpt_circle{% endif %}" style="left: 102px;top: 233px;color:{{report.TM05.27.KEY_VALUE|color}}" >{{report.TM05.27.KEY_VALUE}}</span>
+            <span class="pa {{report.TM05.4.KEY_VALUE|vpt_font_size}}" style="top: 288px;left: 179px;text-align: center;width:46px;">{{report.TM05.4.KEY_VALUE}}</span>
+             <span class="pa f-16 ft_tm {% if report.TM05.28.KEY_VALUE %}vpt_circle{% endif %}" style="left: 192px;top: 330px;color:{{report.TM05.28.KEY_VALUE|color}}">{{report.TM05.28.KEY_VALUE}}</span>
+            <span class="pa {{report.TM05.5.KEY_VALUE|vpt_font_size}}" style="bottom: 51px;left: 172px;text-align: center;width:46px;">{{report.TM05.5.KEY_VALUE}}</span>
+                <span class="pa f-16 ft_tm {% if report.TM05.29.KEY_VALUE %}vpt_circle{% endif %}" style="left: 185px;bottom: 17px;color:{{report.TM05.29.KEY_VALUE|color}}">{{report.TM05.29.KEY_VALUE}}</span>
+            <span class="pa {{report.TM05.8.KEY_VALUE|vpt_font_size}}" style="top: 49px;left: 324px;text-align: center;width:46px;">{{report.TM05.8.KEY_VALUE}}</span>
+              <span class="pa f-16 ft_tm {% if report.TM05.32.KEY_VALUE %}vpt_circle{% endif %}" style="left: 336px;top: 90px;color:{{report.TM05.32.KEY_VALUE|color}}">{{report.TM05.32.KEY_VALUE}}</span>
+            <span class="pa {{report.TM05.9.KEY_VALUE|vpt_font_size}}" style="left: 342px;top: 137px;text-align: center;width:46px;">{{report.TM05.9.KEY_VALUE}}</span>
+             <span class="pa f-16 ft_tm {% if report.TM05.33.KEY_VALUE %}vpt_circle{% endif %}" style="left: 355px;top: 177px;color:{{report.TM05.33.KEY_VALUE|color}}">{{report.TM05.33.KEY_VALUE}}</span>
+            <span class="pa {{report.TM05.11.KEY_VALUE|vpt_font_size}}" style="top: 192px;left: 462px;text-align: center;width:46px;">{{report.TM05.11.KEY_VALUE}}</span>
+             <span class="pa f-16 ft_tm {% if report.TM05.34.KEY_VALUE %}vpt_circle{% endif %}" style="left: 425px;top: 173px;color:{{report.TM05.34.KEY_VALUE|color}}">{{report.TM05.34.KEY_VALUE}}</span>
+            <span class="pa {{report.TM05.10.KEY_VALUE|vpt_font_size}}" style="top: 131px;left: 413px;text-align: center;width:46px;">{{report.TM05.10.KEY_VALUE}}</span>
+              <span class="pa f-16 ft_tm {% if report.TM05.35.KEY_VALUE %}vpt_circle{% endif %}" style="left: 475px;top: 233px;color:{{report.TM05.35.KEY_VALUE|color}}">{{report.TM05.35.KEY_VALUE}}</span>
+            <span class="pa {{report.TM05.12.KEY_VALUE|vpt_font_size}}" style="top: 288px;right: 176px;text-align: center;width:46px;">{{report.TM05.12.KEY_VALUE}}</span>
+              <span class="pa f-16 ft_tm {% if report.TM05.36.KEY_VALUE %}vpt_circle{% endif %}" style="right: 188px;top: 330px;color:{{report.TM05.36.KEY_VALUE|color}}">{{report.TM05.36.KEY_VALUE}}</span>
+            <span class="pa {{report.TM05.13.KEY_VALUE|vpt_font_size}}" style="left: 381px;bottom: 51px;text-align: center;width:46px;">{{report.TM05.13.KEY_VALUE}}</span>
+              <span class="pa f-16 ft_tm {% if report.TM05.37.KEY_VALUE %}vpt_circle{% endif %}" style="left: 393px;bottom: 17px;color:{{report.TM05.37.KEY_VALUE|color}}">{{report.TM05.37.KEY_VALUE}}</span>
+              <span class="pa f-13" style="left: 80px;bottom: 45px;text-align: center;width:46px;">{{report.TM05.6.KEY_VALUE}}</span>
+              <span class="pa f-16 ft_tm {% if report.TM05.30.KEY_VALUE %}vpt_circle{% endif %}" style="left: 93px;bottom: 14px;color:{{report.TM05.30.KEY_VALUE|color}}">{{report.TM05.30.KEY_VALUE}}</span>
+              <span class="pa f-13" style="left: 34px;bottom: 21px;text-align: center;width:46px;">{{report.TM05.7.KEY_VALUE}}</span>
+              <span class="pa f-16 ft_tm {% if report.TM05.31.KEY_VALUE %}vpt_circle{% endif %}" style="left: 49px;bottom: -9px;color:{{report.TM05.31.KEY_VALUE|color}}">{{report.TM05.31.KEY_VALUE}}</span>
+              <span class="pa f-13" style="right: 72px;bottom: 44px;text-align: center;width:46px;">{{report.TM05.14.KEY_VALUE}}</span>
+              <span class="pa f-16 ft_tm {% if report.TM05.38.KEY_VALUE %}vpt_circle{% endif %}" style="right: 85px;bottom: 14px;color:{{report.TM05.38.KEY_VALUE|color}}">{{report.TM05.38.KEY_VALUE}}</span>
+              <span class="pa f-13" style="right: 27px;bottom: 22px;text-align: center;width:46px;">{{report.TM05.15.KEY_VALUE}}</span>
+              <span class="pa f-16 ft_tm {% if report.TM05.39.KEY_VALUE %}vpt_circle{% endif %}" style="right: 39px;bottom: -9px;color:{{report.TM05.39.KEY_VALUE|color}}">{{report.TM05.39.KEY_VALUE}}</span>
+              {% if report.TM05.6.KEY_VALUE or report.TM05.14.KEY_VALUE or report.TM05.15.KEY_VALUE or report.TM05.7.KEY_VALUE %}
+              <div style="position: absolute;bottom: 58px;left: -18px;text-align: center;"><span>Dorsalis Pedis <br>&<br>Ankle</span></div>
+              <div style="position: absolute;bottom: 58px;right: -27px;text-align: center;"><span>Dorsalis Pedis <br>&<br>Ankle</span></div>
+              {% endif %}
+          </div>
+          </div>
+
+        </div>
+        {% else %}
+        <div class="w95p m_auto mt4 ">
+          <div class="w95p mt16 m_auto" style="height: 315px !important">
+        <div>
+          <table class="f-12 w100p h368 tab_report_pa ft_tm mb30" cellspacing="0" cellpadding="0">
+            <thead>
+              <tr>
+                <th rowspan="2" class="text_center ">Test Site</th>
+                  <th colspan="2" class="text_center">Right Foot</th>
+                  <th colspan="2" class="text_center">Left Foot</th>
+              </tr>
+              <tr>
+                  <td class="text_center ">VPT in Volts</td>
+                  <td class="text_center ">Monofilament Response</td>
+                  <td class="text_center ">VPT in Volts</td>
+                  <td class="text_center">Monofilament Response</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="">
+                <td class="pl8 w170">Great Toe</td>
+                <td class="text_center">{{report.TM05.0.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.24.KEY_VALUE %} {{report.TM05.24.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{{report.TM05.8.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.32.KEY_VALUE %} {{report.TM05.32.KEY_VALUE}}{% else %} - {% endif %}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w170">1st MTH</td>
+                <td class="text_center">{{report.TM05.1.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.25.KEY_VALUE %} {{report.TM05.25.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{{report.TM05.9.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.33.KEY_VALUE %} {{report.TM05.33.KEY_VALUE}}{% else %} - {% endif %}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w170">3rd MTH</td>
+                <td class="text_center">{{report.TM05.2.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.26.KEY_VALUE %} {{report.TM05.26.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{{report.TM05.10.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.34.KEY_VALUE %} {{report.TM05.34.KEY_VALUE}}{% else %} - {% endif %}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w170">5th MTH</td>
+                <td class="text_center">{{report.TM05.3.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.27.KEY_VALUE %} {{report.TM05.27.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{{report.TM05.11.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.35.KEY_VALUE %} {{report.TM05.35.KEY_VALUE}}{% else %} - {% endif %}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w170">Medial Arch</td>
+                <td class="text_center">{{report.TM05.4.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.28.KEY_VALUE %} {{report.TM05.28.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{{report.TM05.12.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.36.KEY_VALUE %} {{report.TM05.36.KEY_VALUE}}{% else %} - {% endif %}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w170">Heel</td>
+                <td class="text_center">{{report.TM05.5.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.29.KEY_VALUE %}{{report.TM05.29.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{{report.TM05.13.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.37.KEY_VALUE %} {{report.TM05.37.KEY_VALUE}}{% else %} - {% endif %}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w170">Dorsum</td>
+                <td class="text_center">{% if report.TM05.6.KEY_VALUE %} {{report.TM05.6.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM05.30.KEY_VALUE %} {{report.TM05.30.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM05.14.KEY_VALUE %} {{report.TM05.14.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM05.38.KEY_VALUE %} {{report.TM05.38.KEY_VALUE}}{% else %} - {% endif %}</td>
+              </tr>
+              <tr class="">
+                <td class="pl8 w170">Ankle</td>
+                <td class="text_center">{% if report.TM05.7.KEY_VALUE %} {{report.TM05.7.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM05.31.KEY_VALUE %} {{report.TM05.31.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM05.15.KEY_VALUE %} {{report.TM05.15.KEY_VALUE}}{% else %} - {% endif %}</td>
+                <td class="text_center">{% if report.TM05.39.KEY_VALUE %} {{report.TM05.39.KEY_VALUE}}{% else %} - {% endif %}</td>
+              </tr>   
+              {% if report.TM05.16.KEY_NAME or report.TM05.16.KEY_VALUE or report.TM05.18.KEY_VALUE %}  
+               <tr>
+                <td class="pl8 w170">{{report.TM05.16.KEY_NAME}}</td>
+                <td class="text_center">{{report.TM05.16.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.40.KEY_VALUE %}{{report.TM05.40.KEY_VALUE}} {% else %} - {% endif %}</td>
+                <td class="text_center">{{report.TM05.18.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.42.KEY_VALUE %}{{report.TM05.42.KEY_VALUE}} {% else %} - {% endif %}</td>
+              </tr>
+              {% endif %}
+              {% if report.TM05.17.KEY_NAME or report.TM05.17.KEY_VALUE or report.TM05.19.KEY_VALUE %}  
+              <tr>
+                <td class="pl8 w170">{{report.TM05.17.KEY_NAME}}</td>
+                <td class="text_center">{{report.TM05.17.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.41.KEY_VALUE %}{{report.TM05.41.KEY_VALUE}} {% else %} - {% endif %}</td>
+                <td class="text_center">{{report.TM05.19.KEY_VALUE}}</td>
+                <td class="text_center">{% if report.TM05.43.KEY_VALUE %}{{report.TM05.43.KEY_VALUE}} {% else %} - {% endif %}</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+      {% endif %}
+      {% if mode %}
+      {% if report.report_result %}
+        <div class="m_auto mt4" style="width: 95%;position: relative;top: -15px;z-index: -1">
+          <div class="chartWithOverlay w32p d-inline_block">
+          <div class="average_line" style="width: 76%;bottom: 105px;"></div>
+          <div id="chart_div" class=""></div>
+                <div class="overlay_warm" style="left: 130px;top: 46px;">
+                      <div>
+                        <div class="d-inline_block label" style="background-color: #3366cc;"></div>
+                        <div class="d-inline_block f-10  ml4 ft_tm">Right Foot</div>
+                      </div>
+                      <div>
+                        <div class="d-inline_block label average_line_label"></div>
+                        <div class="d-inline_block f-10  ml4 ft_tm">Threshold</div>
+                      </div>
+                 </div>
+             </div>
+             <div class="chartWithOverlay1 w32p d-inline_block">
+          <div class="average_line" style="width: 76%;bottom: 105px;"></div>
+          <div id="chart_div1" class=""></div>
+          <div class="overlay_warm1" style="left: 130px;top: 46px;">
+                      <div>
+                       <div class="d-inline_block label" style="background-color: #77b300;"></div>
+                        <div class="d-inline_block f-10 ml4 ft_tm">Left Foot</div>
+                      </div>
+                      <div>
+                        <div class="d-inline_block label average_line_label"></div>
+                        <div class="d-inline_block f-10  ml4 ft_tm">Threshold</div>
+                      </div>
+                 </div>
+        </div>
+        <div class="chartWithOverlay2  w32p d-inline_block">
+          <div class="average_line" style="width: 76%;bottom: 104px;"></div>
+          <div id="chart_div2" class=""></div>
+          <div class="overlay_warm2" style="left: 130px;top: 50px;">
+                      <div>
+                        <div class="d-inline_block label " style="background-color: #3366cc;" ></div>
+                        <div class="d-inline_block f-10  ml4 ft_tm">Right Foot</div>
+                      </div>
+                      <div>
+                        <div class="d-inline_block  label " style="background: #77b300;"></div>
+                        <div class="d-inline_block f-10 ml4 ft_tm">Left Foot</div>
+                      </div>
+                      <div>
+                        <div class="d-inline_block label average_line_label"></div>
+                        <div class="d-inline_block f-10  ml4 ft_tm">Threshold</div>
+                      </div>
+                 </div>
+        </div>
+        </div>
+        {% endif %}
+        {% endif %}
+     {% if not mode %}
+        <div class="f-9 text_center" >
+        <span>**AMP - Amputated OVR - Over Range WND - Wound TNR - Test Not Required RSC - Reason Specified in Comments</span> <span class="ml4">**All Values are in Volts</span><span class="ml4">*Monofilament Response <span style="color: green;">Y</span>-Yes <span style="color: red;">N</span>-No</span>
+      </div>
+      {% else %}
+      <div class="f-9 text_center" style="margin-top: -4%" >
+        <span>**AMP - Amputated OVR - Over Range WND - Wound TNR - Test Not Required RSC - Reason Specified in Comments</span> <span class="ml4">**All Values are in Volts</span><span class="ml4">*Monofilament Response <span style="color: green;">Y</span>-Yes <span style="color: red;">N</span>-No</span>
+      </div>
+      {% endif %}
+    </div>
+    <div style="margin-left: 3.5%;margin-top: 10px;"><span style="font-size:15px;font-weight: bold;font-family: 'Times_New_Roman' !important;">Interpretation</span></div>
+    <div class="w91p margin_auto">
+    <div class=" d-inline_block w27p lh15 ft_tm f-14">
+      <div>
+        Right Foot VPT Average<span></span>
+      </div>
+          <div class="right_abi">
+       Right ABI <span></span>
+      </div>
+
+         <div class="bmi_avg bmi_se">
+        BMI  <span></span>
+      </div>
+    </div>
+    <div class="d-inline_block w18_5p lh15 ft_tm f-14">
+          <div>
+        :&nbsp;<span id="right_vpt_avg"></span>
+         <span>-</span>
+        <span id="right_vpt_status"></span>
+      </div>
+      <div class="right_abi">
+        :&nbsp;<span id="right_abi_avg"></span>
+        <span>-</span>
+        <span id="right_abi_status"></span>
+      </div>
+         <div class="bmi_se">
+        :&nbsp;<span id="bmi_vpt_avg"></span>
+        <span>-</span>
+        <span id="bmi_vpt_status"></span>
+      </div>
+    </div>
+    <div class="d-inline_block w18_5p f-r lh15 ft_tm f-14">
+     
+        <div>
+        :&nbsp;<span id="left_vpt_avg"></span>
+        <span>-</span>
+        <span id="left_vpt_status"></span>
+      </div>
+      <div class="left_abi">
+        :&nbsp;<span id="left_abi_avg"></span>
+        <span>-</span>
+        <span id="left_abi_status"></span>
+      </div>
+    </div>
+    <div class="w27p d-inline_block f-r lh15 ft_tm f-14">
+        <div>
+        Left Foot VPT Average<span></span>
+      </div>
+  
+        <div class="left_abi">
+        Left ABI<span></span>
+      </div>
+    </div>
+    </div>

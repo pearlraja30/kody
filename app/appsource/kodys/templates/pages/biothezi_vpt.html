@@ -1,0 +1,541 @@
+{% extends "page_layout.html" %}
+    {% block content_body %}
+    <div class="w3-display-container bgclr3 brclr1 close_test">
+            <div class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">{{medical_test.medical_test_type}} 
+                <span class="w3-right mr16 "><img src="{{MEDIA_URL}}img/png/cancel.png" class="pb4"></span>
+            </div>  
+        </div>
+        <div class="w3-display-container bgclr3">
+            <div class="w3-row">
+                <div class="w3-col l8 ">
+                    <form id="thermocool_form" class="user_data_form" method="POST">
+                            {% csrf_token %}
+                    <div class="w3-row pt8">
+                        <div class="w3-row w80p ml12p">
+                            <div class="w3-col l6 w3-center ff-r f-16 ft-b">
+                                    <span class=" pr16 mt4 fclr1">RIGHT</span>
+                            </div>
+                            <div class="w3-col l6 w3-center ff-r f-16 ft-b">
+                                    <span class=" pr16 mt4 fclr1">LEFT</span>
+                            </div>
+                        </div>
+                    <div class="w3-row h510">
+                        <div class="w3-display-container h510">
+                            <img src="{{MEDIA_URL}}{{medical_test.medical_test_type.ORGAN_IMAGE}}" class="pr w100 pt20">
+                            
+                            <input type="text"  id="F-01" class="test-field field h20 w32pi t53  border_none l312 pa {{medical_test.test_entry_data.0.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.0.KEY_VALUE %}value = "{{medical_test.test_entry_data.0.KEY_VALUE}}"{% else %}value=""{% endif %} name="F-01" field-order="1" {% if medical_test.test_entry_data.0.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %} maxlength="5" tabIndex="1"/>
+                            <span class="t55 l350 pa">&#8451;</span>
+                            <input type="text"  id="F-03" class="test-field field h20 w32pi t131   l296 border_none  pa {{medical_test.test_entry_data.1.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.1.KEY_VALUE %}value = "{{medical_test.test_entry_data.1.KEY_VALUE}}"{% else %}value=""{% endif %} name="F-03" field-order="2" {% if medical_test.test_entry_data.1.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="2"/>
+                            <span class="t134 l335 pa">&#8451;</span>
+                            <input type="text"  id="F-05" class="test-field field h20 w32pi t128  l231 border_none  pa {{medical_test.test_entry_data.2.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.2.KEY_VALUE %}value = "{{medical_test.test_entry_data.2.KEY_VALUE}}"{% else %}value=""{% endif %} name="F-05" field-order="3" {% if medical_test.test_entry_data.2.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}   maxlength="5" tabIndex="3"/>
+                            <span class="t128 l270 pa">&#8451;</span>
+                            <input type="text"  id="F-07" class="test-field field h20 w32pi t183  l187 border_none  pa {{medical_test.test_entry_data.3.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.3.KEY_VALUE %}value = "{{medical_test.test_entry_data.3.KEY_VALUE}}"{% else %}value=""{% endif %} name="F-07" field-order="4" {% if medical_test.test_entry_data.3.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}  maxlength="5" tabIndex="4"/>
+                            <span class="t183 l225 pa">&#8451;</span>
+                            <input type="text"  id="F-09" class="test-field field h20 w32pi border_none  pa l268 t53p {{medical_test.test_entry_data.4.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.4.KEY_VALUE %}value = "{{medical_test.test_entry_data.4.KEY_VALUE}}"{% else %}value=""{% endif %} name="F-09" field-order="5" {% if medical_test.test_entry_data.4.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}  maxlength="5" tabIndex="5"/>
+                            <span class="t53p l305 pa">&#8451;</span>
+                            <input type="text"  id="F-11" class="test-field field h20 w32pi border_none  pa l262 b63 {{medical_test.test_entry_data.5.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.5.KEY_VALUE %}value = "{{medical_test.test_entry_data.5.KEY_VALUE}}"{% else %}value=""{% endif %} name="F-11" field-order="6" {% if medical_test.test_entry_data.5.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}  maxlength="5" tabIndex="6" />
+                            <span class="b65 l300 pa">&#8451;</span>
+                       
+                            <input type="text"  id="F-15" class="test-field field h20 w32pi t53  border_none r313 pa {{medical_test.test_entry_data.8.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.8.KEY_VALUE %}value = "{{medical_test.test_entry_data.8.KEY_VALUE}}"{% else %}value=""{% endif %} name="F-15"  field-order="7" {% if medical_test.test_entry_data.8.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}  maxlength="5" tabIndex="7"/>
+                            <span class="t53 r295 pa">&#8451;</span>
+                            <input type="text"  id="F-17" class="test-field field h20 w32pi t131   r296 border_none  pa {{medical_test.test_entry_data.9.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.9.KEY_VALUE %}value = "{{medical_test.test_entry_data.9.KEY_VALUE}}"{% else %}value=""{% endif %} name="F-17" field-order="8" {% if medical_test.test_entry_data.9.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}  maxlength="5" tabIndex="8"/>
+                            <span class="t131 r277 pa">&#8451;</span>
+                            <input type="text" id="F-19" class="test-field field h20 w32pi t128  r231 border_none  pa {{medical_test.test_entry_data.10.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.10.KEY_VALUE %}value = "{{medical_test.test_entry_data.10.KEY_VALUE}}"{% else %}value=""{% endif %} name="F-19" field-order="9" {% if medical_test.test_entry_data.10.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}  maxlength="5" tabIndex="9"/>
+                            <span class="t128 r213 pa">&#8451;</span>
+                            <input type="text"  id="F-21" class="test-field field h20 w32pi t183  r187 border_none  pa {{medical_test.test_entry_data.11.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.11.KEY_VALUE %}value = "{{medical_test.test_entry_data.11.KEY_VALUE}}"{% else %}value=""{% endif %} name="F-21" field-order="10" {% if medical_test.test_entry_data.11.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}  maxlength="5" tabIndex="10"/>
+                            <span class="t183 r169 pa">&#8451;</span>
+                            <input type="text"  id="F-23" class="test-field field h20 w32pi border_none  pa r268 t53p {{medical_test.test_entry_data.12.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.12.KEY_VALUE %}value = "{{medical_test.test_entry_data.12.KEY_VALUE}}"{% else %}value=""{% endif %} name="F-23" field-order="11" {% if medical_test.test_entry_data.112.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}  maxlength="5" tabIndex="11" />
+                            <span class="t53p r250 pa">&#8451;</span>
+                            <input type="text"  id="F-25" class="test-field field h20 w32pi border_none  pa r262 b63 {{medical_test.test_entry_data.13.KEY_VALUE_STATUS}}" {% if medical_test.test_entry_data.13.KEY_VALUE %}value = "{{medical_test.test_entry_data.13.KEY_VALUE}}"{% else %}value=""{% endif %} name="F-25" field-order="12" {% if medical_test.test_entry_data.13.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %}  maxlength="5" tabIndex="12" />
+                            <span class="r242 b68 pa">&#8451;</span>
+                            <input type="text" id="F-13" class="test-field b95 l74 h20 w32pi  right_ankle border_none field pa {{medical_test.test_entry_data.6.KEY_VALUE_STATUS}}" name="F-13" field-order="13"  {% if medical_test.test_entry_data.6.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %} autocomplete="off" {% if medical_test.test_entry_data.6.KEY_VALUE %}value = "{{medical_test.test_entry_data.6.KEY_VALUE}}"{% else %} maxlength="5" value=""{% endif %} tabIndex="13">
+                              <span class="b95 l113 pa">&#8451;</span>
+                             <input type="text" id="F-14" class="test-field  h20 w32pi  b50 l28 right_ankle border_none field pa {{medical_test.test_entry_data.7.KEY_VALUE_STATUS}}" name="F-14" field-order="14"  {% if medical_test.test_entry_data.7.KEY_VALUE %}recorded="1"{% else %}recorded="0"{% endif %} autocomplete="off" {% if medical_test.test_entry_data.7.KEY_VALUE %}value = "{{medical_test.test_entry_data.7.KEY_VALUE}}"{% else %} maxlength="5" value=""{% endif %} tabIndex="14"> 
+                             <span class="l65 b50 pa">&#8451;</span>
+                             <input type="text" id="F-27" class="test-field  h20 w32pi r86 b98 left_ankle border_none field pa {{medical_test.test_entry_data.14.KEY_VALUE_STATUS}}" name="F-27" field-order="15" recorded="0" autocomplete="off" {% if medical_test.test_entry_data.14.KEY_VALUE %}value = "{{medical_test.test_entry_data.14.KEY_VALUE}}"{% else %} maxlength="5" value=""{% endif %} tabIndex="15">
+                             <span class="r68 b98 pa">&#8451;</span>
+                            <input type="text" id="F-28" class="test-field  h20 w32pi r42 b50 left_ankle border_none field pa {{medical_test.test_entry_data.15.KEY_VALUE_STATUS}}" name="F-28" field-order="16" recorded="0" autocomplete="off" {% if medical_test.test_entry_data.15.KEY_VALUE %}value = "{{medical_test.test_entry_data.15.KEY_VALUE}}"{% else %} maxlength="5" value=""{% endif %} tabIndex="16">
+                            <span class="r24 b50 pa">&#8451;</span>
+                        </div>
+                    </div>
+                    </div>
+                    <input type="hidden"  name="app_code" value="{{option.app_code}}">
+                    <input type="hidden"   name="patient_uid" value="{{option.patient_uid}}">
+                    <input type="hidden"   name="doctor_uid" value="{{option.doctor_uid}}">
+                    <input type="hidden"   name="examiner_uid" value="{{option.examiner_uid}}">
+                    <input type="hidden"   name="test_code" value="" id="test_code">
+                    <input type="hidden"   name="test_type" id="test_type" value="">
+                    <input type="hidden"   name="test_for" id="test_for" value="">
+                    {% if test_entry %}
+                    <input type="hidden"   name="test_entry" id="test_for" value="{{option.test_entry}}">
+                    {% endif %}
+                                </form>
+
+                    <div class="w3-row w3-container pt40 fclr1">
+                <span class="f-10 ff-r mr16"><span class="ft-b">**AMP</span> - Amputated</span>
+                <span class="f-10 ff-r mr16"><span class="ft-b">OVR</span> - Over Range</span>
+                <span class="f-10 ff-r mr16"><span class="ft-b">WND</span> - Wound</span>
+                <span class="f-10 ff-r mr16"><span class="ft-b">TNR</span> - Test Not Required</span>
+                <span class="f-10 ff-r "><span class="ft-b">RSC</span> - Reason specified in comments</span>
+            </div>
+                </div>
+                <div class="w3-col l4 bgclr16">
+                    <div class="w3-row">
+                        <div class="w3-row brclr4 pb8">
+                            <div class="w3-container pt15">
+                                <div class="w3-row">
+                                    <div class="w3-col l9 ft-b ff-r f-12 fclr1">
+                                        Patient Details
+                                    </div>
+                                    <div class="w3-col l3">
+                                            <button class="w42 f-r h30 w3-text-white bgclr8 brclr3 f-12 edit_btn" onclick="document.getElementById('id01').style.display='block'" id="edit_test">Edit</button>
+                                    </div>
+                                </div>
+                                <div class="ff-r f-12 fclr1">
+                                    <span>{{medical_test.patient.PREFIX|title}} {{medical_test.patient.NAME}} {{medical_test.patient.LAST_NAME}} ({{medical_test.patient.FRIENDLY_UID}})</span><br>
+                                    <span><label class="ft-b">Age:</label> {{medical_test.patient.AGE}} Years,<label class="ft-b"> Sex:</label> {{medical_test.patient.GENDER}}</span><br>
+                                    <span><label class="ft-b">Doctor:</label>{% if medical_test.doctor %} Dr. {{medical_test.doctor.NAME}}{% endif %}</span><br>
+                                    <span><label class="ft-b">Examiner:</label> {% if medical_test.examiner %}{{medical_test.examiner.PREFIX|title}}{{medical_test.examiner.NAME}}{% endif %}</span><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w3-row brclr4 pt12 pb12">
+                            <div class="w3-container w3-padding-8">
+                                <div class="w3-row" id="hand_Select">
+                                    <div class="w3-col l3">
+                                        <span class="f-12 fclr1 ff-r ft-b">Test For</span>
+                                    </div>
+                                    <div class="w3-col l2">
+                                      <label class="container f-12 ff-r fclr1">Foot
+                                        <input type="radio" checked="checked" name="radio" id="foot" value="Foot">
+                                        <span class="checkmark"></span>
+                                      </label>
+                                    </div>
+                                    <div class="w3-col l2">
+                                      <label class="container f-12 ff-r fclr1" >Hand
+                                        <input type="radio" name="radio" id="hand" value="Hand">
+                                        <span class="checkmark"></span>
+                                      </label>
+                                    </div>
+                                    <div class="w3-col l2">
+                                      <label class="container f-12 ff-r fclr1" >Others
+                                        <input type="radio" name="radio" id="others" value="Others">
+                                        <span class="checkmark"></span>
+                                      </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="w3-row   mt4 brclr4">
+                            <div class="w3-container w3-padding-8">
+                                <div class="w3-row brclr1 pt8 pb4" id="warm_test" data-id="TM-07">
+                                    <div class="w3-col l8 f-12 ff-r fclr1 mt5 ">Warm Perception Test
+                                    </div>
+                                    <div class="w3-col l4">
+                                        <div class="f-r">
+                                            <button class="w70 f-r h30 w3-text-white bgclr8 brclr3 f-12  almi1 cp" id="test1" tabIndex="-1" >Start Test</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w3-row   mt4 brclr4">
+                            <div class="w3-container w3-padding-8">
+                                <div class="w3-row">
+                                    <div class="w3-col l5">Right Ankle Pressure
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w3-row h90" id="test_result">
+                            <div class="w3-row brclr4 pb12 mt4">
+                            <div class="w3-container">
+                                <span class="f-12 ff-r ft-b fclr1">Test Results</span>
+                                <ul>
+                                {% for key,value in medical_test.hcp_test_values.items %}
+                                    {% if key == "TM-07" %}
+                                        {% for k, v in value.items %}
+                                            {% if k == "right_foot_result" %}
+                                                <li>RF Warm PT Avg : {{v.0}} {% if v.1 == "Normal" %}- <span class="normal">{{v.1}}</span>{% else %}{% if v.1 == "Not in Range" %}-{% endif %}<span class="abnormal">{{v.1}}</span>{% endif %}</li>
+                                            {% endif %}
+                                            {% if k == "left_foot_result" %}
+                                                <li>LF Warm PT Avg : {{v.0}} {% if v.1 == "Normal" %}- <span class="normal">{{v.1}}</span>{% else %}{% if v.1 == "Not in Range" %}-{% endif %} <span class="abnormal">{{v.1}}</span>{% endif %}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if key == "TM-08" %}
+                                        {% for k, v in value.items %}
+                                            {% if k == "right_foot_result" %}
+                                                <li>RF Cool PT Avg : {{v.0}} {% if v.1 == "Normal" %}- <span class="normal">{{v.1}}</span>{% else %}{% if v.1 == "Not in Range" %}-{% endif %} <span class="abnormal">{{v.1}}</span>{% endif %}</li>
+                                            {% endif %}
+                                            {% if k == "left_foot_result" %}
+                                                <li>LF Cool PT Avg : {{v.0}} {% if v.1 == "Normal" %}- <span class="normal">{{v.1}}</span>{% else %}{% if v.1 == "Not in Range" %}-{% endif %} <span class="abnormal">{{v.1}}</span>{% endif %}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if key == "TM-09" %}
+                                        {% for k, v in value.items %}
+                                            {% if k == "right_foot_result" %}
+                                                <li>RF Hot Pain PT Avg : {{v.0}} {% if v.1 == "Normal" %}- <span class="normal">{{v.1}}</span>{% else %}{% if v.1 == "Not in Range" %}-{% endif %} <span class="abnormal">{{v.1}}</span>{% endif %}</li>
+                                            {% endif %}
+                                            {% if k == "left_foot_result" %}
+                                                <li>LF Hot Pain PT Avg : {{v.0}} {% if v.1 == "Normal" %}- <span class="normal">{{v.1}}</span>{% else %}{% if v.1 == "Not in Range" %}-{% endif %} <span class="abnormal">{{v.1}}</span>{% endif %}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if key == "TM-10" %}
+                                        {% for k, v in value.items %}
+                                            {% if k == "right_foot_result" %}
+                                                <li>RF Cold Pain PT Avg : {{v.0}} {% if v.1 == "Normal" %}- <span class="normal">{{v.1}}</span>{% else %}{% if v.1 == "Not in Range" %}-{% endif %} <span class="abnormal">{{v.1}}</span>{% endif %}</li>
+                                            {% endif %}
+                                            {% if k == "left_foot_result" %}
+                                                <li>LF Cold Pain PT Avg : {{v.0}} {% if v.1 == "Normal" %}- <span class="normal">{{v.1}}</span>{% else %}{% if v.1 == "Not in Range" %}-{% endif %} <span class="abnormal">{{v.1}}</span>{% endif %}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                               </ul>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="w3-row" id="impression">
+                            <div class="w3-container ">
+                                <div class="ff-r f-12 fclr1 ft-b pb4 pt4">Impression / Notes
+                                </div>
+                                <div class="w3-row">
+                                    <div class="w3-col l12">
+                                       <textarea rows="3" class="pl8 w99p  ml2  brclr8 " id="impression_notes" style="height: 46px;"></textarea>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="w3-row  mb8 mt7">
+                            <div class="w3-container w3-row">
+                                <div class="w3-col l12">
+                                    <div class="f-l">
+                                   <a href="javascript:void(0);" onclick="hcp_save()"><button class="w80 mr8  h30 w3-text-white bgclr8 brclr3 f-12 ff-r w3-disabled" id="final_save">Save</button></a>
+                                        <button class="w80  h30 w3-text-white bgclr9 brclr6 f-12 w3-disabled" id="final_clear">Clear</button>
+                                    </div>
+                                    <div class="f-r">
+                                       <button class="w133 h30 bgclr8 brclr3  ff-r ta w3-text-white w3-disabled" id="final_report" onclick="hcp_report()"> <i class="fa fa-file-text f-11" aria-hidden="true"></i>
+                                            <span class="f-12">Generate Report</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fg -->
+                    </div>
+                </div>
+            </div>
+           <div id="close_process" class="w3-modal  bgclr18">
+            <div class="w3-modal-content w376 mt11p">
+                <div class="w3-container bgclr8 ">
+                    <p class="ff-r f-18 ft-b w3-text-white">{{medical_test.medical_test_type}} </p>
+                </div>
+                <div class="bgclr3 brclr1">
+                    <h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Are you sure want to Close Test process</h3>
+                </div>
+                <div class="w3-row pt8  pb16 bgclr3">
+                    <div class="ta">
+                        <button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6 modal_text_cancel">Yes</button>
+                        <button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6">No</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        </div>
+        <div class="w3-display-bottom bgclr3 brclr5">
+            <div class="w3-container">
+                <div class="w3-left mt4">
+                    <div class="mt2">
+                    <span class="f-10 ff-r fclr1">Device Status</span>
+                    <span class="bgclr4 w16 h16 ta pt1 br bgclr5 device_icon" id="bluetooth">
+                    <i class="f-10 fa fa-bluetooth-b " aria-hidden="true" ></i></span>
+                    <span class="device_icon bgclr5 br w14 h14 ta  pt1 fclr1" id="usb">
+                    <i class="f-8 fa fa-usb fa-rotate-270 " aria-hidden="true" style="position: relative;top: -1px;"></i></span>
+                    <span class="device_icon  bred br w14 h14 ta pt1 w3-text-white"  id="device_status" connected="0" onclick="reconnect()">
+                    <i class="f-10 fa fa-plug" aria-hidden="true"></i></span>
+                    <span class="cp" onclick="document.getElementById('settingsdev').style.display='block'">
+                        <span class="ml8 device_icon  br ta bgclr6 fclr3"><i class="f-10 fa fa-cog" aria-hidden="true"></i></span>
+                       <span class="f-10 ff-r fclr1">Device Configuration</span>
+                    </span>
+                   </div>
+                </div>
+                <div class="w3-right f-10 ff-r fclr2 pt10 pb8">
+                    Kodys Foot Clinik Software 2.0
+                </div>
+            </div>
+        </div>
+       <div id="settingsdev" class="w3-modal  bgclr18">
+            <div class="w3-modal-content w376 mt11p">
+                <div class="w3-container bgclr8 ">
+                    <p class="ff-r f-18 ft-b w3-text-white">Device Config(Thermocool HCP Elite)</p>
+                </div>
+                <div class="bgclr3 brclr1">
+                    <div class="w3-row pt16 ml24">
+                        <div class="w3-row mb16">
+                            <div class="w3-col l2 mt3 mr16">
+                               <label class="f-12 ff-r f-r fclr1">Key</label>
+                            </div>
+                            <div class="passkey 12 ml16">
+                                <input type="text" class="h30 w80 brclr8 pl8" name="key1" maxlength="4">
+                                <input type="text" class="h30 w80 brclr8 pl8" name="key2" maxlength="4">
+                                <input type="text" class="l3 h30 w80 brclr8 pl8" name="key3" maxlength="4">
+                            </div>
+
+                        </div>
+                        <div class="w3-row mb16">
+                            <div class="w3-col l2 mt3">
+                                <label class="f-12 ff-r f-r fclr1 tar">Connection Type</label>
+                            </div>
+                            <div class="w3-col l8 ml16">
+                                <label class="select">
+                                   <select name="connection_type" id="connection_type">
+                                        <option selected="selected" disabled>Select connection type</option>
+                                       <option value="USB">USB</option>
+                                       <option value="BLUETOOTH">BLUETOOTH</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="w3-row pt8  pb16 bgclr3">
+                    <div class="ml48p">
+                        <a href="javascript:void(0);" onclick="document.getElementById('settingsdev').style.display='none'"><button class="f-15 ff-r w3-text-white w80 h30 mr8 bgclr9 brclr6">Close</button></a>
+                        <button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="device_config()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="id01" class="w3-modal bgclr18">
+      <div class="w3-modal-content w80p h80p w3-round">
+         <header class="w3-container w3-padding-16 bkgclr lh12"> 
+          <span class="ff-r f-18 ft-b w3-text-white pl16">Patient Details</span><br>
+          <!-- <span class="f-12 ff-r w3-text-white">Capture Patient Details</span> -->
+        </header>
+        <div class="w3-padding-16 w3-container scroll h525">
+           <form class="mt38" method="POST" action="{% url 'test_patient_edit' medical_test.patient.UID option.app_code option.doctor_uid option.examiner_uid %}" id="thermocool_form_edit">
+                    {% csrf_token %}
+                    <div class="w3-row-padding">
+                        <div class="w3-col l6">
+                                 <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Prefix <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <label class="select-add">
+                        <select name="prefix" class="select-1add fclr1 f-12 ff-r w100" id="prefix">
+                            <option class="f-12 ff-r" disabled selected>Please Select Prefix</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.PREFIX == "Mr." %} selected="selected" {% endif %} value="Mr.">Mr.</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.PREFIX == "Mrs." %} selected="selected" {% endif %} value="Mrs.">Mrs.</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.PREFIX == "Miss." %} selected="selected" {% endif %} value="Miss.">Miss.</option>
+                        </select>
+                      </label>
+                      <span id="message_prefix"></span>
+                    </div>
+                 </div>
+                <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient Name <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class=" brbclr1  h30 w100p fclr1 pl8 h30" name="name" type="text" value="{{medical_test.patient.NAME}}" id="name">
+                    <span id="message_name"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Last Name</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class=" brbclr1  h30  fclr1 pl8 h30 w100p" name="last_name" type="text" id="last_name" value="{{medical_test.patient.LAST_NAME}}">
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Sur Name</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class=" brbclr1  h30  fclr1 pl8 h30 w100p" name="sur_name" type="text" id="sur_name" value="{{medical_test.patient.SUR_NAME}}"><span id="message_name"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient Contact Number <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" id="mobile_number" name="mobile_number" type="text" placeholder="" value="{{medical_test.patient.PATIENT_MOBILE_NUMBER}}" maxlength="15">
+                    <span id="message"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient E-mail ID </label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" id="emailid" name="email" type="email" placeholder="" value="{{medical_test.patient.PATIENT_EMAIL}}">
+                    <span id="message_email"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Patient Alternate Contact Number </label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30"  name="poc_mobile_number" type="text" placeholder="" value="{{medical_test.patient.POC_MOBILE_NUMBER}}" maxlength="15">
+                    
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class=" pt8 pb8 mr16 f-12 ff-r fclr1 ft-b" >Patient Alternate E-mail ID </label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="poc_email" type="email" placeholder=""  value="{{medical_test.patient.POC_EMAIL}}">
+                    
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                    <div class="w3-col l5 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Gender <span class="mandatory">*</span></label>
+                    </div>
+                   <div class="w3-col l7">
+                      <label class="select-add">
+                        <select name="gender" class="select-1add fclr1 f-12 ff-r w100" id="gender" value="{{medical_test.patient.GENDER}}">
+                          <option class="f-12 ff-r" {% if medical_test.patient.GENDER == "FEMALE" %} selected="selected" {% endif %} value="FEMALE">Female</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.GENDER == "MALE" %} selected="selected" {% endif %} value="MALE">Male</option>
+                          <option class="f-12 ff-r" {% if medical_test.patient.GENDER == "OTHER" %} selected="selected" {% endif %} value="OTHER">Transgender</option>
+                        </select>
+                      </label>
+                    <span id="message_gender"></span>
+                    </div>
+              </div>
+              
+                        </div>
+                        
+                        <div class="w3-col l6">
+               <div class="w3-row pt8 ">
+                    <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Age <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="age" type="text" placeholder="" id="age" value="{{medical_test.patient.AGE}}">
+                    <span id="message_age"></span>
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Address <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="address1" type="text" placeholder="" value="{{medical_test.patient.ADDRESS_LINE_1}}" id="address">
+                    <span id="message_address"></span>
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Street</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="address2" type="text" placeholder="" value="{{medical_test.patient.ADDRESS_LINE_2}}">
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Area</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="address3" type="text" placeholder="" value="{{medical_test.patient.ADDRESS_LINE_3}}">
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">City</label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="city" type="text" placeholder="" value="{{medical_test.patient.CITY}}">
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">State <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                     <label class="select-add">
+                      <select name="state" class="select-1add fclr1 f-12 ff-r w100" id="state">
+                      <option class="f-12 ff-r" disabled selected>Please Select State</option>
+                        {% for state in state_list%}
+                          <option class="f-12 ff-r" {% if medical_test.patient.STATE|safe == state.NAME %} selected="selected" {% endif %} value="{{state.NAME}}">{{state.NAME}}</option>
+                        {% endfor %}
+                    </select>
+                  </label>
+                  <span id="message_state"></span>
+                   <!--  <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="state" id="state" type="text" placeholder="" value="{{medical_test.patient.STATE}}">
+                    <span id="message_state"></span> -->
+                    </div>
+              </div>
+               <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Pincode <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="w3-col l7">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="pincode" id="pincode" maxlength="6" type="text" placeholder="" value="{{medical_test.patient.ZIPCODE}}">
+                    <span id="message_pincode"></span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Height</label>
+                    </div>
+                    <div class="w3-col l7 pr">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="height" type="text" placeholder="" value="{{medical_test.patient.HEIGHT}}">
+                    <span class="f-12 pt6 r10 pa fclr1 t0">cm</span>
+                    </div>
+              </div>
+              <div class="w3-row pt8 ">
+                <div class="w3-col l2"><p></p>
+                                </div>
+                    <div class="w3-col l3 pt6">
+                      <label class="pt8 pb8 mr16 f-12 ff-r fclr1 ft-b">Weight</label>
+                    </div>
+                    <div class="w3-col l7 pr">
+                    <input class="brbclr1 h30 w100p fclr1 pl8 h30" name="weight" type="text" placeholder="" value="{{medical_test.patient.WEIGHT}}">
+                    <span class="f-12 pt6 r10 pa fclr1 t0">kg</span>
+                    </div>
+              </div>
+                        </div>
+                    </div>
+             <div class="w3-row pt8 mt16">
+               <div class="w3-col l12">
+                  <button class=" tdecor h30 f-12 ff-r f-r  bkgclr brclr3  w3-text-white w80 cp mr16" id="save" type="button">Save</button>
+                  <button  type="button" class=" tdecor h30 f-12 ff-r f-r  bgclr9 brclr9  w3-text-white w80 cp mr16"  onclick="javascript:window.location.reload()">Close</button>
+               </div>
+            </div>
+           </form>
+
+         </div>
+      </div>
+      </div>
+    {% endblock%}

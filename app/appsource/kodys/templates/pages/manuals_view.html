@@ -1,0 +1,43 @@
+{% extends "page_layout.html" %}
+{% block content_body %}
+<div class="w3-display-container bgclr3 brclr1">
+	<div class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Manuals
+	</div>  
+</div>
+<div class="w3-row">
+	<div class="w3-col w174">
+		<div class="w3-sidebar  w3-bar-block w174 gclr bgclr7">
+			<a href="{% url 'manuals' %}" class="w3-bar-item w3-button  ft-b pt16 {% if category == 'USERMANUAL' %}bakclr{% endif %} sbrclr brclr1 fclr1 f-14 ff-r ft-b">User Manuals</a>
+			<a href="{% url 'manuals' 'SERVICEMANUAL' %}" class="w3-bar-item w3-button ft-b pt16 {% if category == 'SERVICEMANUAL' %}bakclr{% endif %} brclr1 f-14 ff-r  fclr1">Service Manuals</a>
+			<a href="{% url 'manuals' 'TESTPROCEDURE' %}" class="w3-bar-item w3-button  ft-b pt16 {% if category == 'TESTPROCEDURE' %}bakclr{% endif %} brclr1 f-14 ff-r fclr1">Test Procedure</a>
+			<a href="{% url 'manuals' 'INTERPRETATION' %}" class="w3-bar-item w3-button  ft-b pt16 {% if category == 'INTERPRETATION' %}bakclr{% endif %} brclr1 f-14 ff-r fclr1">Interpretation</a>
+		</div>
+	</div>
+	<div class="w3-col ml174 w1106">
+		{% if manuals %}
+		<div class="pl33p f-16 ff-r ft-b fclr pt8 pb1 ">{{manuals.NAME}}</div>
+		<div class="w1106 h609">
+		    <object data="{{manuals.MANUAL_PATH}}" type="application/pdf" class="w100 h100">
+			  <p>Alt: <a href="{{manuals.MANUAL_PATH}}"></a></p>
+		    </object>
+	    </div>
+		{% else %}
+		<p> {{MANUAL_PATH}} </p>
+		{% endif %}
+	</div>
+</div>
+
+<!-- <div class="w3-row">
+	<div class="w3-col h638 bgclr3">
+		{% if manuals %}
+		<div class="w3-center f-16 ff-r ft-b fclr pt3 ">{{manuals.NAME}}</div>
+		<object data="{{manuals.MANUAL_PATH}}" type="application/pdf" width="100%" height="100%">
+			<p>Alt: <a href="{{manuals.MANUAL_PATH}}"></a></p>
+		</object>
+		{% else %}
+		<p> {{MANUAL_PATH}} </p>
+		{% endif %}
+	</div>
+</div> -->
+{% endblock %}
+

@@ -1,12 +1,13 @@
 # =============================================================================
 # Kodys Application - CI/CD Build Pipeline
 # =============================================================================
-# This workflow builds the Kodys Medical application for multiple platforms:
-#   - Windows Installer (.exe) using Inno Setup
+# Builds the Kodys Medical application for multiple platforms:
+#   - Docker Image for server/web/mobile/tablet deployment
 #   - Windows Portable ZIP Package
-#   - Mac Application (.app) via Docker
-#   - Docker Image for cloud/server deployment
-#   - Web-ready Docker image for tablet/phone access
+#   - Mac Application (.app)
+#
+# Note: Windows Installer (.exe via Inno Setup) requires the bundled py-dist/
+#       folder which is not in git. Build it locally with Inno Setup instead.
 #
 # Triggers: Push to main/release branches, manual dispatch, tags
 # =============================================================================
@@ -21,16 +22,12 @@ on:
     branches: [main]
   workflow_dispatch:
     inputs:
-      build_windows:
-        description: 'Build Windows installer'
+      build_docker:
+        description: 'Build Docker image'
         type: boolean
         default: true
       build_mac:
         description: 'Build Mac package'
-        type: boolean
-        default: true
-      build_docker:
-        description: 'Build Docker image'
         type: boolean
         default: true
       version:
@@ -41,226 +38,13 @@ on:
 env:
   APP_NAME: "Kodys Foot Clinik"
   APP_VERSION: ${{ github.event.inputs.version || '2.0.0' }}
-  PYTHON_VERSION: "2.7.18"
-  DJANGO_VERSION: "1.11.29"
 
-# ─────────────────────────────────────────────────────────────────────────────
-# JOBS
 # ─────────────────────────────────────────────────────────────────────────────
 
 jobs:
 
   # ===========================================================================
-  # JOB 1: Windows Installer (.exe) via Inno Setup
-  # ===========================================================================
-  build-windows-installer:
-    name: 🪟 Windows Installer (.exe)
-    runs-on: windows-latest
-    if: ${{ github.event.inputs.build_windows != 'false' }}
-
-    steps:
-      - name: 📥 Checkout repository
-        uses: actions/checkout@v4
-
-      - name: 📋 Display build info
-        shell: cmd
-        run: |
-          echo Building ${{ env.APP_NAME }} v${{ env.APP_VERSION }}
-          echo Platform: Windows
-          echo Runner: %RUNNER_OS%
-
-      # --- Python 2.7 Setup ---
-      - name: 🐍 Setup Python 2.7
-        shell: cmd
-        run: |
-          echo Verifying bundled Python 2.7 distribution...
-          if exist "py-dist\python-2.7.10\python.exe" (
-            echo Found bundled Python 2.7.10
-            py-dist\python-2.7.10\python.exe --version
-          ) else (
-            echo ERROR: Bundled Python not found at py-dist\python-2.7.10\
-            exit /b 1
-          )
-
-      # --- Install Dependencies ---
-      - name: 📦 Install Python dependencies
-        shell: cmd
-        run: |
-          call py-dist\scripts\env.bat
-          pip install -r app\appsource\requirements_complete.txt
-
-      # --- Run Tests ---
-      - name: 🧪 Run basic smoke tests
-        shell: cmd
-        run: |
-          call py-dist\scripts\env.bat
-          cd app\appsource\app_config
-          python -c "import django; print('Django %s OK' % django.get_version())"
-          python manage.py check --deploy 2>&1 || echo "Deploy check completed"
-
-      # --- Install Inno Setup ---
-      - name: 🔧 Install Inno Setup
-        shell: powershell
-        run: |
-          $url = "https://jrsoftware.org/download.php/is.exe"
-          Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\innosetup.exe"
-          Start-Process "$env:TEMP\innosetup.exe" -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-" -Wait
-          echo "C:\Program Files (x86)\Inno Setup 6" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-      # --- Build Installer ---
-      - name: 🏗️ Build Windows Installer
-        shell: cmd
-        run: |
-          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer_config.iss
-          echo Installer built successfully!
-          dir dist\
-
-      # --- Upload Installer Artifact ---
-      - name: 📤 Upload Windows Installer
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-installer-${{ env.APP_VERSION }}
-          path: dist/*.exe
-          retention-days: 30
-
-  # ===========================================================================
-  # JOB 2: Windows Portable ZIP Package
-  # ===========================================================================
-  build-windows-portable:
-    name: 📦 Windows Portable ZIP
-    runs-on: windows-latest
-    if: ${{ github.event.inputs.build_windows != 'false' }}
-
-    steps:
-      - name: 📥 Checkout repository
-        uses: actions/checkout@v4
-
-      - name: 🐍 Setup Python 3.x (for packaging script)
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: 📦 Create portable package
-        shell: cmd
-        run: python package_for_client.py
-
-      - name: 📤 Upload Portable ZIP
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-portable-${{ env.APP_VERSION }}
-          path: Kodys_Foot_Clinik_Package.zip
-          retention-days: 30
-
-  # ===========================================================================
-  # JOB 3: Mac Application Package
-  # ===========================================================================
-  build-mac-app:
-    name: 🍎 Mac Application
-    runs-on: macos-latest
-    if: ${{ github.event.inputs.build_mac != 'false' }}
-
-    steps:
-      - name: 📥 Checkout repository
-        uses: actions/checkout@v4
-
-      - name: 🐍 Setup Python 2.7 via pyenv
-        run: |
-          brew install pyenv
-          pyenv install 2.7.18 || true
-          pyenv global 2.7.18
-          eval "$(pyenv init -)"
-          python --version
-
-      - name: 📦 Install system dependencies
-        run: |
-          brew install pkg-config
-          brew install freetype
-          brew install libpng
-          brew install wkhtmltopdf
-
-      - name: 📦 Install Python dependencies
-        run: |
-          eval "$(pyenv init -)"
-          pip install --upgrade "pip<21.0"
-          pip install numpy==1.16.6 scipy==1.2.3
-          pip install -r app/appsource/requirements_complete.txt
-
-      - name: 🧪 Run smoke tests
-        run: |
-          eval "$(pyenv init -)"
-          cd app/appsource/app_config
-          python -c "import django; print('Django %s OK' % django.get_version())"
-
-      # --- Create Mac .app bundle ---
-      - name: 🏗️ Create Mac Application Bundle
-        run: |
-          APP_DIR="dist/${APP_NAME}.app"
-          mkdir -p "$APP_DIR/Contents/MacOS"
-          mkdir -p "$APP_DIR/Contents/Resources"
-
-          # Create Info.plist
-          cat > "$APP_DIR/Contents/Info.plist" << 'PLIST'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>CFBundleExecutable</key>
-              <string>launch</string>
-              <key>CFBundleIdentifier</key>
-              <string>com.kodys.footclinik</string>
-              <key>CFBundleName</key>
-              <string>Kodys Foot Clinik</string>
-              <key>CFBundleVersion</key>
-              <string>${{ env.APP_VERSION }}</string>
-              <key>CFBundleShortVersionString</key>
-              <string>${{ env.APP_VERSION }}</string>
-              <key>CFBundlePackageType</key>
-              <string>APPL</string>
-              <key>CFBundleIconFile</key>
-              <string>appicon</string>
-              <key>LSMinimumSystemVersion</key>
-              <string>10.14</string>
-              <key>NSHighResolutionCapable</key>
-              <true/>
-          </dict>
-          </plist>
-          PLIST
-
-          # Create launch script
-          cat > "$APP_DIR/Contents/MacOS/launch" << 'LAUNCH'
-          #!/bin/bash
-          DIR="$(cd "$(dirname "$0")/../Resources" && pwd)"
-          cd "$DIR/app/appsource/app_config"
-          export PYTHONPATH="$DIR/app/appsource:$PYTHONPATH"
-          python manage.py runserver 0.0.0.0:5423 &
-          sleep 2
-          open "http://localhost:5423"
-          wait
-          LAUNCH
-          chmod +x "$APP_DIR/Contents/MacOS/launch"
-
-          # Copy application files
-          cp -R app "$APP_DIR/Contents/Resources/"
-          cp -R config "$APP_DIR/Contents/Resources/" 2>/dev/null || true
-
-          echo "Mac .app bundle created at: $APP_DIR"
-
-      - name: 📦 Create Mac DMG
-        run: |
-          # Create a ZIP of the .app for distribution
-          cd dist
-          zip -r "../Kodys_Foot_Clinik_Mac_${{ env.APP_VERSION }}.zip" "${APP_NAME}.app"
-          cd ..
-
-      - name: 📤 Upload Mac Application
-        uses: actions/upload-artifact@v4
-        with:
-          name: mac-app-${{ env.APP_VERSION }}
-          path: Kodys_Foot_Clinik_Mac_*.zip
-          retention-days: 30
-
-  # ===========================================================================
-  # JOB 4: Docker Image (Server, Tablet, Phone - Web Access)
+  # JOB 1: Docker Image (Server, Tablet, Phone - Web Access)
   # ===========================================================================
   build-docker:
     name: 🐳 Docker Image (Web/Mobile/Tablet)
@@ -307,34 +91,235 @@ jobs:
         run: |
           docker build -t kodys-test .
           docker run -d --name kodys-test-container -p 5423:5423 kodys-test
-          sleep 10
+          sleep 15
           # Health check
-          curl -s -o /dev/null -w "%{http_code}" http://localhost:5423/ || echo "Server started"
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5423/ || echo "000")
+          echo "HTTP Response: $HTTP_CODE"
           docker logs kodys-test-container --tail 20
           docker stop kodys-test-container
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "302" ]; then
+            echo "✅ Health check passed!"
+          else
+            echo "⚠️ Server started but returned $HTTP_CODE (may need login redirect)"
+          fi
 
-      - name: 📤 Export Docker image as artifact
-        if: github.event_name == 'pull_request'
+      - name: 📤 Export Docker image as tar.gz
         run: |
           docker build -t kodys-app .
-          docker save kodys-app | gzip > kodys-docker-image.tar.gz
+          docker save kodys-app | gzip > kodys-docker-image-${{ env.APP_VERSION }}.tar.gz
+          ls -lh kodys-docker-image-*.tar.gz
 
       - name: 📤 Upload Docker image artifact
-        if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: docker-image-${{ env.APP_VERSION }}
-          path: kodys-docker-image.tar.gz
-          retention-days: 7
+          path: kodys-docker-image-*.tar.gz
+          retention-days: 30
 
   # ===========================================================================
-  # JOB 5: Create GitHub Release (on tag push)
+  # JOB 2: Windows Portable Package (Docker-based)
+  # ===========================================================================
+  build-windows-portable:
+    name: 📦 Windows Portable Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 📦 Create portable Docker package
+        run: |
+          mkdir -p portable-package
+
+          # Create a Windows-friendly launch script
+          cat > portable-package/start-kodys.bat << 'BAT'
+          @echo off
+          echo ========================================
+          echo   Kodys Medical Application
+          echo   Starting Docker container...
+          echo ========================================
+          echo.
+          docker-compose up -d
+          timeout /t 5 /nobreak > nul
+          echo.
+          echo Application is running!
+          echo Open your browser to: http://localhost:5423
+          echo.
+          echo Login: admin / admin123
+          echo.
+          echo To stop: docker-compose down
+          start http://localhost:5423
+          pause
+          BAT
+
+          # Create a Mac/Linux launch script
+          cat > portable-package/start-kodys.sh << 'SH'
+          #!/bin/bash
+          echo "========================================"
+          echo "  Kodys Medical Application"
+          echo "  Starting Docker container..."
+          echo "========================================"
+          docker-compose up -d
+          sleep 5
+          echo ""
+          echo "Application is running!"
+          echo "Open your browser to: http://localhost:5423"
+          echo "Login: admin / admin123"
+          echo ""
+          echo "To stop: docker-compose down"
+          open http://localhost:5423 2>/dev/null || xdg-open http://localhost:5423 2>/dev/null
+          SH
+          chmod +x portable-package/start-kodys.sh
+
+          # Copy essential files
+          cp Dockerfile portable-package/
+          cp docker-compose.yml portable-package/
+          cp -r app portable-package/
+          cp -r config portable-package/ 2>/dev/null || true
+          cp TESTING_GUIDE.md portable-package/ 2>/dev/null || true
+          cp README.md portable-package/ 2>/dev/null || true
+
+          # Create README
+          cat > portable-package/README.txt << 'README'
+          Kodys Medical Application - Portable Package
+          ==============================================
+
+          Prerequisites:
+            - Docker Desktop installed (https://www.docker.com/products/docker-desktop)
+
+          To Start:
+            Windows: Double-click start-kodys.bat
+            Mac/Linux: Run ./start-kodys.sh
+
+          To Stop:
+            Run: docker-compose down
+
+          Access:
+            URL: http://localhost:5423
+            Username: admin
+            Password: admin123
+
+          For tablet/phone access:
+            Connect to the same network and open http://YOUR_PC_IP:5423
+          README
+
+          # Create ZIP
+          cd portable-package
+          zip -r ../Kodys_Portable_${{ env.APP_VERSION }}.zip .
+          cd ..
+          ls -lh Kodys_Portable_*.zip
+
+      - name: 📤 Upload Portable Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: portable-package-${{ env.APP_VERSION }}
+          path: Kodys_Portable_*.zip
+          retention-days: 30
+
+  # ===========================================================================
+  # JOB 3: Mac Application Package
+  # ===========================================================================
+  build-mac-app:
+    name: 🍎 Mac Application
+    runs-on: macos-13
+    if: ${{ github.event.inputs.build_mac != 'false' }}
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Create Mac Application Bundle
+        run: |
+          APP_DIR="dist/Kodys Foot Clinik.app"
+          mkdir -p "$APP_DIR/Contents/MacOS"
+          mkdir -p "$APP_DIR/Contents/Resources"
+
+          # Create Info.plist
+          cat > "$APP_DIR/Contents/Info.plist" << PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleExecutable</key>
+              <string>launch</string>
+              <key>CFBundleIdentifier</key>
+              <string>com.kodys.footclinik</string>
+              <key>CFBundleName</key>
+              <string>Kodys Foot Clinik</string>
+              <key>CFBundleVersion</key>
+              <string>${{ env.APP_VERSION }}</string>
+              <key>CFBundleShortVersionString</key>
+              <string>${{ env.APP_VERSION }}</string>
+              <key>CFBundlePackageType</key>
+              <string>APPL</string>
+              <key>CFBundleIconFile</key>
+              <string>appicon</string>
+              <key>LSMinimumSystemVersion</key>
+              <string>10.14</string>
+              <key>NSHighResolutionCapable</key>
+              <true/>
+          </dict>
+          </plist>
+          PLIST
+
+          # Create launch script (Docker-based)
+          cat > "$APP_DIR/Contents/MacOS/launch" << 'LAUNCH'
+          #!/bin/bash
+          DIR="$(cd "$(dirname "$0")/../Resources" && pwd)"
+          cd "$DIR"
+
+          # Check if Docker is running
+          if ! docker info > /dev/null 2>&1; then
+              osascript -e 'display alert "Docker Required" message "Please install and start Docker Desktop first.\n\nDownload: https://www.docker.com/products/docker-desktop" as critical'
+              open "https://www.docker.com/products/docker-desktop"
+              exit 1
+          fi
+
+          # Start the app via Docker
+          docker-compose up -d 2>/dev/null || docker compose up -d
+          sleep 5
+          open "http://localhost:5423"
+
+          # Keep running
+          osascript -e 'display dialog "Kodys is running at http://localhost:5423\n\nClick OK to stop the server." buttons {"OK"} default button "OK"'
+          docker-compose down 2>/dev/null || docker compose down
+          LAUNCH
+          chmod +x "$APP_DIR/Contents/MacOS/launch"
+
+          # Copy application files to Resources
+          cp Dockerfile "$APP_DIR/Contents/Resources/"
+          cp docker-compose.yml "$APP_DIR/Contents/Resources/"
+          cp -R app "$APP_DIR/Contents/Resources/"
+          cp -R config "$APP_DIR/Contents/Resources/" 2>/dev/null || true
+          cp appicon.ico "$APP_DIR/Contents/Resources/" 2>/dev/null || true
+
+          echo "✅ Mac .app bundle created!"
+          ls -la dist/
+
+      - name: 📦 Create Mac ZIP
+        run: |
+          cd dist
+          zip -r "../Kodys_Foot_Clinik_Mac_${{ env.APP_VERSION }}.zip" "Kodys Foot Clinik.app"
+          cd ..
+          ls -lh Kodys_Foot_Clinik_Mac_*.zip
+
+      - name: 📤 Upload Mac Application
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-app-${{ env.APP_VERSION }}
+          path: Kodys_Foot_Clinik_Mac_*.zip
+          retention-days: 30
+
+  # ===========================================================================
+  # JOB 4: Create GitHub Release (on tag push)
   # ===========================================================================
   create-release:
     name: 🚀 Create Release
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: [build-windows-installer, build-windows-portable, build-mac-app, build-docker]
+    needs: [build-docker, build-windows-portable, build-mac-app]
+    permissions:
+      contents: write
 
     steps:
       - name: 📥 Download all artifacts
@@ -343,7 +328,7 @@ jobs:
           path: release-artifacts
 
       - name: 📋 List artifacts
-        run: find release-artifacts -type f | head -50
+        run: find release-artifacts -type f
 
       - name: 🚀 Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -353,26 +338,22 @@ jobs:
             ## ${{ env.APP_NAME }} ${{ github.ref_name }}
 
             ### Downloads
-            - **Windows Installer** (.exe) — Full installer with desktop shortcut
-            - **Windows Portable** (.zip) — Extract and run, no installation needed
-            - **Mac Application** (.app) — macOS bundle
-            - **Docker Image** — For server/cloud deployment (supports tablet & phone via browser)
+            | Platform | File | Notes |
+            |----------|------|-------|
+            | 🐳 Docker | `kodys-docker-image-*.tar.gz` | Server/cloud + phone/tablet via browser |
+            | 📦 Portable | `Kodys_Portable_*.zip` | Cross-platform, requires Docker Desktop |
+            | 🍎 Mac | `Kodys_Foot_Clinik_Mac_*.zip` | macOS app bundle |
 
-            ### System Requirements
-            | Platform | Requirement |
-            |----------|-------------|
-            | Windows | Windows 7+ (64-bit) |
-            | Mac | macOS 10.14+ |
-            | Docker | Docker 20.10+ |
-            | Mobile/Tablet | Modern browser (Chrome, Safari, Firefox) |
-
-            ### Quick Start
+            ### Quick Start (Docker)
             ```bash
-            # Docker (Server/Mobile/Tablet)
-            docker load < kodys-docker-image.tar.gz
+            docker load < kodys-docker-image-${{ env.APP_VERSION }}.tar.gz
             docker run -d -p 5423:5423 kodys-app
-            # Access from any device: http://YOUR_SERVER_IP:5423
+            # Open: http://localhost:5423
+            # Login: admin / admin123
             ```
+
+            ### Access from Phone/Tablet
+            Connect to the same network and open `http://YOUR_PC_IP:5423` in any browser.
           files: |
             release-artifacts/**/*
           draft: false

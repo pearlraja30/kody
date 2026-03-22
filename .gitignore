@@ -84,6 +84,9 @@ dist/
 # Logs
 *.log
 logs/
+!app/appsource/logs/
+!app/appsource/logs/.gitkeep
+*.log
 
 # Generated PDFs (regenerate with scripts)
 # Kodys_Technology_Upgrade_Assessment.pdf

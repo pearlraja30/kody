@@ -2105,7 +2105,17 @@ if __name__ == '__main__':
             max_height = int(window_data["max_height"])
             
     except:
-        print "Failed Reading Config"
+        print("Failed Reading Config")
+    
+    # Ensure logging directory exists for Django
+    log_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "app", "appsource", "logs")
+    if not os.path.exists(log_dir):
+        try:
+            os.makedirs(log_dir)
+            print("Created missing logs directory: %s" % log_dir)
+        except:
+            pass
+
     compileall.compile_dir(project_dir_path, force=True)
     proc = subprocess.Popen(['python','..\\' + project_dir_name + '\manage.pyc','runserver','127.0.0.1:5423'])
     print("[pyqt.py] PyQt version: %s" % QtCore.PYQT_VERSION_STR)

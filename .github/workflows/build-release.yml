@@ -54,36 +54,36 @@ jobs:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🐍 Install Python 2.7 (32-bit) via NuGet
+      - name: 🐍 Install Python 2.7 (32-bit) via Choco
         shell: powershell
         run: |
-          # Install 32-bit Python 2.7 via NuGet
-          # Explicitly request x86 where possible or verify bitness
-          nuget install python2 -Version 2.7.18 -OutputDirectory "${{ github.workspace }}\python-nuget"
-
-          # Find the installed python.exe
-          $nugetPython = Get-ChildItem -Path "${{ github.workspace }}\python-nuget" -Filter "python.exe" -Recurse | Select-Object -First 1
-          Write-Host "Found Python at: $($nugetPython.FullName)"
+          # Install 32-bit Python 2.7 via Choco (guaranteed x86)
+          choco install python2 --x86 --forcex86 -y
           
-          # Verify Bitness (should be 4 for 32-bit, 8 for 64-bit)
-          $bitness = & "$($nugetPython.FullName)" -c "import struct; print(struct.calcsize('P'))"
+          $pyExe = "C:\Python27\python.exe"
+          if (!(Test-Path $pyExe)) {
+             Write-Host "ERROR: Python not found at $pyExe"
+             exit 1
+          }
+
+          # Verify Bitness (MUST be 4 for 32-bit)
+          $bitness = & "$pyExe" -c "import struct; print(struct.calcsize('P'))"
           Write-Host "Python Bitness Check: $bitness bytes"
           if ($bitness -ne 4) {
-             Write-Host "WARNING: Expected 32-bit Python (4 bytes) but got 64-bit. Attempting to force x86..."
-             # If nuget failed to provide 32-bit, we might need an alternative source
+             Write-Host "❌ FATAL ERROR: Expected 32-bit Python (4 bytes) but got $bitness. Stopping build."
+             exit 1
           }
 
           # Setup the py-dist structure but PRESERVE the files already in git
           $targetDir = "${{ github.workspace }}\py-dist\python-2.7.10"
           if (!(Test-Path $targetDir)) { New-Item -ItemType Directory -Force -Path $targetDir | Out-Null }
           
-          $sourceDir = $nugetPython.Directory.FullName
-          # Copy everything from NuGet to target, but don't overwrite existing Lib/site-packages if possible
-          Copy-Item -Path "$sourceDir\*" -Destination $targetDir -Recurse -Force
+          # Copy everything from C:\Python27 to target
+          Copy-Item -Path "C:\Python27\*" -Destination $targetDir -Recurse -Force
           
-          # Verify
+          # Verify the copy
           & "$targetDir\python.exe" --version
-          Write-Host "✅ 32-bit Python 2.7 configured in py-dist\python-2.7.10\"
+          Write-Host "✅ Verified 32-bit Python 2.7 in py-dist\python-2.7.10\"
 
       - name: 📦 Setup py-dist environment
         shell: powershell

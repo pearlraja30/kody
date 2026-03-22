@@ -1,0 +1,5 @@
+resoultion:75
+bright:100
+contrast:960
+gamma:4.0
+scanner:

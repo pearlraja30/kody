@@ -81,9 +81,42 @@ jobs:
           # Copy everything from C:\Python27 to target
           Copy-Item -Path "C:\Python27\*" -Destination $targetDir -Recurse -Force
           
-          # Verify the copy
+          # Robust DLL Discovery: The system sometimes hides python27.dll in SysWOW64
+          $dllPaths = @(
+              "C:\Python27\python27.dll",
+              "C:\Windows\SysWOW64\python27.dll",
+              "C:\Windows\System32\python27.dll"
+          )
+          
+          $dllFound = $false
+          foreach ($path in $dllPaths) {
+              if (Test-Path $path) {
+                  Write-Host "Found python27.dll at: $path"
+                  Copy-Item -Path $path -Destination "$targetDir\python27.dll" -Force
+                  $dllFound = $true
+                  break
+              }
+          }
+
+          if (!$dllFound) {
+              Write-Host "⚠️ WARNING: python27.dll not found in standard paths. Searching C:\..."
+              $searchResult = Get-ChildItem -Path "C:\" -Filter "python27.dll" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+              if ($searchResult) {
+                  Write-Host "Found via search at: $($searchResult.FullName)"
+                  Copy-Item -Path $searchResult.FullName -Destination "$targetDir\python27.dll" -Force
+              } else {
+                  Write-Host "❌ FATAL ERROR: python27.dll NOT FOUND. Build will likely fail at runtime."
+                  exit 1
+              }
+          }
+
+          # Final Listing for verification
+          Write-Host "--- Content of py-dist\python-2.7.10 ---"
+          dir "$targetDir"
+          
+          # Verify
           & "$targetDir\python.exe" --version
-          Write-Host "✅ Verified 32-bit Python 2.7 in py-dist\python-2.7.10\"
+          Write-Host "✅ Verified 32-bit Python 2.7 environment in py-dist\python-2.7.10\"
 
       - name: 📦 Setup py-dist environment
         shell: powershell

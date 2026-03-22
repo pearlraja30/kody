@@ -109,12 +109,38 @@ jobs:
           powershell -Command "Invoke-WebRequest -Uri 'https://bootstrap.pypa.io/pip/2.7/get-pip.py' -OutFile 'get-pip.py'"
           python get-pip.py "pip<21.0" "setuptools<45"
 
-          REM Install numpy from pre-built wheel (avoid compilation)
-          pip install --only-binary=:all: numpy==1.16.6 || pip install numpy==1.16.6
+          REM Stage 1: Core libraries (no build dependencies)
+          echo === Stage 1: Core libraries ===
+          pip install --only-binary=:all: numpy==1.16.6
+          pip install --only-binary=:all: scipy==1.2.3
+          pip install six==1.15.0 pytz==2020.1 python-dateutil==2.8.1
 
-          REM Install remaining dependencies
-          pip install -r app\appsource\requirements_complete.txt
-          echo ✅ Dependencies installed!
+          REM Stage 2: Packages that depend on Stage 1
+          echo === Stage 2: Framework and data libraries ===
+          pip install Django==1.11.29
+          pip install --only-binary=:all: pandas==0.24.2
+          pip install --only-binary=:all: matplotlib==2.2.5
+          pip install biosppy==0.6.1
+
+          REM Stage 3: Packages that need biosppy installed first
+          echo === Stage 3: ECG analysis packages ===
+          pip install heartpy==1.2.7
+          pip install pyhrv==0.4.1
+
+          REM Stage 4: Remaining packages
+          echo === Stage 4: Remaining packages ===
+          pip install jsonfield==2.0.2
+          pip install xlrd==1.2.0
+          pip install --only-binary=:all: opencv-python==4.2.0.32
+          pip install Pillow==6.2.2
+          pip install pdf2image==1.11.0
+          pip install cryptography==2.9.2
+          pip install shortuuid==0.5.0
+          pip install spectrum==0.7.5
+          pip install --only-binary=:all: scikit-learn==0.20.4
+          pip install nolds==0.5.2
+
+          echo ✅ All dependencies installed!
 
       - name: 🧪 Smoke test
         shell: cmd

@@ -208,24 +208,17 @@ jobs:
               Copy-Item "$sp\sip.pyd" "$sp\PyQt4\sip.pyd" -Force
           }
 
-          Write-Host "--- Bitness Verification of Key Binaries ---"
-          $pydFiles = Get-ChildItem -Path "$sp" -Filter "*.pyd" -Recurse
-          foreach ($f in $pydFiles) {
-              $arch = & python -c "import struct; print(struct.calcsize('P'))"
-              # We can also check the file headers directly if 'file' was available, 
-              # but running it via the bundled python is a great test of loadability.
-              Write-Host "Verifying $($f.Name)..."
-          }
-
-          Write-Host "--- Testing PyQt4 Import Diagnostic ---"
+          Write-Host "--- Testing Dependencies Diagnostic ---"
           & python -c "import sys; print('sys.path:'); print(sys.path); import os; print('CWD: ' + os.getcwd())"
+          & python -c "import serial; print('serial OK')"
           & python -c "import PyQt4; print('PyQt4 found at: ' + PyQt4.__file__ if hasattr(PyQt4, '__file__') else 'PyQt4 has no __file__')"
           & python -c "import sip; print('sip found at: ' + sip.__file__)"
           & python -c "from PyQt4 import QtGui; print('PyQt4.QtGui OK')"
+          
           if ($LASTEXITCODE -ne 0) {
-              Write-Host "--- PyQt4 Folder Contents ---"
-              dir "${{ github.workspace }}\py-dist\python-2.7.10\Lib\site-packages\PyQt4"
-              Write-Host "❌ FATAL ERROR: PyQt4.QtGui import failed in CI environment!"
+              Write-Host "--- site-packages Folder Contents ---"
+              dir "${{ github.workspace }}\py-dist\python-2.7.10\Lib\site-packages"
+              Write-Host "❌ FATAL ERROR: Critical dependencies failed to import in CI environment!"
               exit 1
           }
 

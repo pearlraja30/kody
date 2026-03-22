@@ -41,6 +41,9 @@ py-dist/python-2.7.10/Lib/site-packages/*
 !py-dist/python-2.7.10/Lib/site-packages/scipy/
 !py-dist/python-2.7.10/Lib/site-packages/matplotlib/
 !py-dist/python-2.7.10/Lib/site-packages/cefpython3/
+!py-dist/python-2.7.10/Lib/site-packages/pdf2image/
+!py-dist/python-2.7.10/Lib/site-packages/pathlib2/
+!py-dist/python-2.7.10/Lib/site-packages/pathlib.py
 !py-dist/python-2.7.10/Lib/site-packages/jsonfield/
 !py-dist/python-2.7.10/Lib/site-packages/shortuuid/
 !py-dist/python-2.7.10/Lib/site-packages/urllib3/

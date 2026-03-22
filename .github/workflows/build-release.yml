@@ -216,6 +216,8 @@ jobs:
           & python -c "import scipy; print('scipy OK')"
           & python -c "import matplotlib; print('matplotlib OK')"
           & python -c "from cefpython3 import cefpython; print('cefpython3 OK')"
+          & python -c "import pathlib; print('pathlib OK')"
+          & python -c "import pdf2image; print('pdf2image OK')"
           
           if ($LASTEXITCODE -ne 0) {
               Write-Host "--- site-packages Folder Contents ---"

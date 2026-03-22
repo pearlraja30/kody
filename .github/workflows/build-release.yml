@@ -210,9 +210,14 @@ jobs:
               Write-Host "Verifying $($f.Name)..."
           }
 
-          Write-Host "--- Testing PyQt4 Import ---"
+          Write-Host "--- Testing PyQt4 Import Diagnostic ---"
+          & python -c "import sys; print('sys.path:'); print(sys.path); import os; print('CWD: ' + os.getcwd())"
+          & python -c "import PyQt4; print('PyQt4 found at: ' + PyQt4.__file__ if hasattr(PyQt4, '__file__') else 'PyQt4 has no __file__')"
+          & python -c "import sip; print('sip found at: ' + sip.__file__)"
           & python -c "from PyQt4 import QtGui; print('PyQt4.QtGui OK')"
           if ($LASTEXITCODE -ne 0) {
+              Write-Host "--- PyQt4 Folder Contents ---"
+              dir "${{ github.workspace }}\py-dist\python-2.7.10\Lib\site-packages\PyQt4"
               Write-Host "❌ FATAL ERROR: PyQt4.QtGui import failed in CI environment!"
               exit 1
           }

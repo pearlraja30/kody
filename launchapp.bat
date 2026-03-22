@@ -11,9 +11,16 @@ echo Launching GUI...
 python run.py > ..\launch_log.txt 2> ..\launch_error.log
 if %ERRORLEVEL% NEQ 0 (
     echo.
-    echo ERROR: Application failed to start.
-    echo Please check 'launch_error.log' in the installation folder.
+    echo ❌ ERROR: Application failed to start.
+    echo --------------------------------------------------
+    echo Please check these files for details:
+    echo 1. boot_debug.log  (Technical startup log)
+    echo 2. launch_error.log (Python error details)
+    echo --------------------------------------------------
     echo.
-    type ..\launch_error.log
+    if exist boot_debug.log (
+        echo [Recent Boot Log Contents]:
+        type boot_debug.log
+    )
     pause
-)
+)

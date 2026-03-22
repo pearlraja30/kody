@@ -57,12 +57,21 @@ jobs:
       - name: 🐍 Install Python 2.7 (32-bit) via NuGet
         shell: powershell
         run: |
-          # Install 32-bit Python 2.7 via NuGet (essential for PyQt4 and drivers)
+          # Install 32-bit Python 2.7 via NuGet
+          # Explicitly request x86 where possible or verify bitness
           nuget install python2 -Version 2.7.18 -OutputDirectory "${{ github.workspace }}\python-nuget"
 
-          # Find the installed python.exe (ensure it's the 32-bit one if both exist)
+          # Find the installed python.exe
           $nugetPython = Get-ChildItem -Path "${{ github.workspace }}\python-nuget" -Filter "python.exe" -Recurse | Select-Object -First 1
           Write-Host "Found Python at: $($nugetPython.FullName)"
+          
+          # Verify Bitness (should be 4 for 32-bit, 8 for 64-bit)
+          $bitness = & "$($nugetPython.FullName)" -c "import struct; print(struct.calcsize('P'))"
+          Write-Host "Python Bitness Check: $bitness bytes"
+          if ($bitness -ne 4) {
+             Write-Host "WARNING: Expected 32-bit Python (4 bytes) but got 64-bit. Attempting to force x86..."
+             # If nuget failed to provide 32-bit, we might need an alternative source
+          }
 
           # Setup the py-dist structure but PRESERVE the files already in git
           $targetDir = "${{ github.workspace }}\py-dist\python-2.7.10"

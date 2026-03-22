@@ -1,18 +1,65 @@
-# An example of embedding CEF browser in a PyQt4 application.
-# Tested with PyQt 4.10.3 (Qt 4.8.5).
-import os, sys,math
-import subprocess,time,socket
+import os, sys, math
+import datetime
+
+# --- ULTRA EARLY LOGGING ---
+def log_boot(msg):
+    try:
+        with open("boot_debug.log", "a") as f:
+            f.write("[%s] %s\n" % (datetime.datetime.now(), msg))
+    except:
+        pass
+
+log_boot("--- BOOT START ---")
+log_boot("Python Executable: %s" % sys.executable)
+log_boot("Python Version: %s" % sys.version)
+log_boot("Current Dir: %s" % os.getcwd())
+log_boot("Path: %s" % sys.path)
+
+import subprocess, time, socket
+
+log_boot("Importing PyQt4...")
+try:
+    from PyQt4 import QtGui
+    from PyQt4 import QtCore
+    from PyQt4 import QtWebKit
+    log_boot("PyQt4 imported successfully.")
+except Exception as e:
+    log_boot("CRITICAL ERROR: Failed to import PyQt4: %s" % str(e))
+    # Don't re-raise yet, let's see if CEF works
+    pass
+
 import json
 import compileall
 from distutils import util
 import re
-from serial import SerialException,SerialTimeoutException
+from serial import SerialException, SerialTimeoutException
 import winreg
 import datetime
 from dateutil.relativedelta import relativedelta
-from PyQt4 import QtGui
-from PyQt4 import QtCore
-from PyQt4 import QtWebKit
+
+log_boot("Importing CEF...")
+try:
+    # Determine the path for libcef.dll
+    libcef_dll = os.path.join(os.path.dirname(os.path.realpath(__file__)), "python-2.7.10", "Lib", "site-packages", "cefpython3", "libcef.dll")
+    log_boot("Expected libcef.dll path: %s" % libcef_dll)
+    
+    if os.path.exists(libcef_dll):
+        log_boot("libcef.dll EXISTS.")
+    else:
+        log_boot("WARNING: libcef.dll NOT FOUND at expected path.")
+        
+    if (2,7) <= sys.version_info < (2,8):
+        log_boot("Attempting import cefpython_py27...")
+        import cefpython_py27 as cefpython
+    else:
+        log_boot("Attempting import cefpython3...")
+        from cefpython3 import cefpython
+    log_boot("CEF imported successfully.")
+except Exception as e:
+    log_boot("CRITICAL ERROR: Failed to import CEF: %s" % str(e))
+    pass
+
+log_boot("Setup finished. Entering main GUI loop...")
 from scipy import signal
 
 fs = 250.0  # Sample frequency (Hz)

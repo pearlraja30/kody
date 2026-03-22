@@ -77,6 +77,22 @@ denied: installation not allowed to Create organization package
 
 ---
 
+## Issue #5: Python 2.7 MSI Failed, numpy Built on Python 3.12
+
+**Error:**
+```
+NameError: name 'CCompiler' is not defined. Did you mean: 'ccompiler'?
+numpy==1.16.6 metadata-generation-failed
+```
+
+**Root Cause:** The Python 2.7.18 MSI installer (`msiexec`) failed silently on the GitHub Actions `windows-latest` runner. The workflow didn't detect the failure and fell back to the system Python 3.12. `numpy==1.16.6` is incompatible with Python 3.12 — it tries to compile from source and fails because its `distutils` code references removed Python 3.12 APIs.
+
+**Fix:** Replaced MSI-based install with NuGet: `nuget install python2 -Version 2.7.18`. Added explicit PATH isolation (`set PATH=py-dist\python-2.7.10;...;%PATH%`) and a Python version check (`findstr "2.7"`) to fail fast if wrong Python is used.
+
+**Commit:** `280875f` – *Fix Windows build: use NuGet for Python 2.7 (MSI failed on GH Actions)*
+
+---
+
 ## Current Pipeline Status (After All Fixes)
 
 | Job | Runner | Status | Output |

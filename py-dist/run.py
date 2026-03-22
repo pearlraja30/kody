@@ -17,16 +17,48 @@ log_boot("Path: %s" % sys.path)
 
 import subprocess, time, socket
 
-log_boot("Importing PyQt4...")
+# --- PYQT4 DIAGNOSTIC & ROBUST PATHING ---
+log_boot("Checking PyQt4 environment...")
 try:
+    import imp
+    pyqt4_path = os.path.join(os.getcwd(), "python-2.7.10", "Lib", "site-packages", "PyQt4")
+    if not os.path.exists(pyqt4_path):
+        # Try lowercase lib
+        pyqt4_path = os.path.join(os.getcwd(), "python-2.7.10", "lib", "site-packages", "PyQt4")
+    
+    log_boot("Calculated PyQt4 path: %s (Exists: %s)" % (pyqt4_path, os.path.exists(pyqt4_path)))
+    
+    if os.path.exists(pyqt4_path):
+        # Force PyQt4 directory into PATH before anything else
+        os.environ['PATH'] = pyqt4_path + os.pathsep + os.environ['PATH']
+        log_boot("Added PyQt4 to system PATH.")
+        
+        # List contents for debug
+        log_boot("PyQt4 contents: %s" % (os.listdir(pyqt4_path)))
+
+    log_boot("Attempting PyQt4 import...")
+    import PyQt4
+    log_boot("PyQt4 base package loaded from: %s" % PyQt4.__file__)
+    
+    log_boot("Importing QtGui...")
     from PyQt4 import QtGui
+    log_boot("QtGui loaded successfully.")
+    
     from PyQt4 import QtCore
     from PyQt4 import QtWebKit
-    log_boot("PyQt4 imported successfully.")
+    log_boot("PyQt4 all modules imported successfully.")
 except Exception as e:
+    import traceback
     log_boot("CRITICAL ERROR: Failed to import PyQt4: %s" % str(e))
-    # Don't re-raise yet, let's see if CEF works
-    pass
+    log_boot("Traceback: %s" % traceback.format_exc())
+    # Try one more fallback: direct import from the folder
+    try:
+        if os.path.exists(pyqt4_path) and pyqt4_path not in sys.path:
+            sys.path.insert(0, os.path.dirname(pyqt4_path))
+            from PyQt4 import QtGui
+            log_boot("RECOVERY SUCCESS: PyQt4 imported via sys.path injection.")
+    except Exception as e2:
+        log_boot("RECOVERY FAILED: %s" % str(e2))
 
 import json
 import compileall

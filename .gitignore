@@ -22,7 +22,25 @@ Thumbs.db
 *.tar.gz
 
 # Large bundled distributions (too large for git)
-py-dist/
+# Large bundled distributions (too large for git)
+# We exclude the massive binaries but keep the critical launcher scripts
+py-dist/python-2.7.10/*
+!py-dist/python-2.7.10/Lib/
+py-dist/python-2.7.10/Lib/*
+!py-dist/python-2.7.10/Lib/site-packages/
+py-dist/python-2.7.10/Lib/site-packages/*
+!py-dist/python-2.7.10/Lib/site-packages/PyQt4/
+# Exclude the massive libcef.dll separately
+py-dist/python-2.7.10/Lib/site-packages/cefpython3/libcef.dll
+py-dist/wkhtmltopdf/
+py-dist/poppler-0.68.0/
+py-dist/*.log
+!py-dist/run.py
+!py-dist/scripts/
+!py-dist/settings/
+!py-dist/splash_screen.png
+!py-dist/ScannerConfig.txt
+!py-dist/WIAScanner/
 dist_package/
 Kodys_Foot_Clinik_Package.zip
 

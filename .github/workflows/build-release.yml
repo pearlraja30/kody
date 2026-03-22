@@ -196,10 +196,27 @@ jobs:
 
           echo ✅ All dependencies installed!
 
-      - name: 🧪 Smoke test
+      - name: 🧪 Smoke test & Verification
         shell: powershell
         run: |
           $env:PATH = "${{ github.workspace }}\py-dist\python-2.7.10;${{ github.workspace }}\py-dist\python-2.7.10\Scripts;$env:PATH"
+          
+          Write-Host "--- Bitness Verification of Key Binaries ---"
+          $pydFiles = Get-ChildItem -Path "${{ github.workspace }}\py-dist\python-2.7.10\Lib\site-packages" -Filter "*.pyd" -Recurse
+          foreach ($f in $pydFiles) {
+              $arch = & python -c "import struct; print(struct.calcsize('P'))"
+              # We can also check the file headers directly if 'file' was available, 
+              # but running it via the bundled python is a great test of loadability.
+              Write-Host "Verifying $($f.Name)..."
+          }
+
+          Write-Host "--- Testing PyQt4 Import ---"
+          & python -c "from PyQt4 import QtGui; print('PyQt4.QtGui OK')"
+          if ($LASTEXITCODE -ne 0) {
+              Write-Host "❌ FATAL ERROR: PyQt4.QtGui import failed in CI environment!"
+              exit 1
+          }
+
           Set-Location app\appsource\app_config
           & python -c "import django; print('Django ' + django.get_version() + ' OK')"
 

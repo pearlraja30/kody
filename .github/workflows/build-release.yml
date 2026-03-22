@@ -143,11 +143,11 @@ jobs:
           echo ✅ All dependencies installed!
 
       - name: 🧪 Smoke test
-        shell: cmd
+        shell: powershell
         run: |
-          set "PATH=${{ github.workspace }}\py-dist\python-2.7.10;${{ github.workspace }}\py-dist\python-2.7.10\Scripts;%PATH%"
-          cd app\appsource\app_config
-          python -c "import django; print('Django %s OK' % django.get_version())"
+          $env:PATH = "${{ github.workspace }}\py-dist\python-2.7.10;${{ github.workspace }}\py-dist\python-2.7.10\Scripts;$env:PATH"
+          Set-Location app\appsource\app_config
+          & python -c "import django; print('Django ' + django.get_version() + ' OK')"
 
       - name: 🔧 Install Inno Setup
         shell: powershell

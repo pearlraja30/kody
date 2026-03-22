@@ -54,76 +54,72 @@ jobs:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🐍 Download & Setup Portable Python 2.7
+      - name: 🐍 Install Python 2.7 via NuGet
         shell: powershell
         run: |
-          # Download Python 2.7.18 embedded/portable for Windows
-          $pythonUrl = "https://www.python.org/ftp/python/2.7.18/python-2.7.18.amd64.msi"
-          Write-Host "Downloading Python 2.7.18..."
-          Invoke-WebRequest -Uri $pythonUrl -OutFile "$env:TEMP\python2718.msi"
+          # Install Python 2.7  via NuGet (pre-built, reliable on GH Actions)
+          nuget install python2 -Version 2.7.18 -OutputDirectory "${{ github.workspace }}\python-nuget"
 
-          # Install Python 2.7 to a local directory
-          $installDir = "${{ github.workspace }}\py-dist\python-2.7.10"
-          Write-Host "Installing Python 2.7.18 to $installDir..."
-          Start-Process msiexec.exe -ArgumentList "/i `"$env:TEMP\python2718.msi`" /qn TARGETDIR=`"$installDir`" ALLUSERS=0" -Wait -NoNewWindow
+          # Find the installed python.exe
+          $nugetPython = Get-ChildItem -Path "${{ github.workspace }}\python-nuget" -Filter "python.exe" -Recurse | Select-Object -First 1
+          Write-Host "Found Python at: $($nugetPython.FullName)"
 
-          # Verify installation
-          if (Test-Path "$installDir\python.exe") {
-            & "$installDir\python.exe" --version
-            Write-Host "Python installed successfully!"
-          } else {
-            Write-Host "Trying alternative install path..."
-            # MSI may install to default location, copy it
-            $defaultPath = "C:\Python27"
-            if (Test-Path "$defaultPath\python.exe") {
-              New-Item -ItemType Directory -Force -Path $installDir | Out-Null
-              Copy-Item -Recurse "$defaultPath\*" "$installDir\" -Force
-              & "$installDir\python.exe" --version
-              Write-Host "Python copied successfully!"
-            } else {
-              Write-Host "ERROR: Python not found. Listing possible locations..."
-              Get-ChildItem -Path "C:\" -Filter "python.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
-              exit 1
-            }
-          }
+          # Create the py-dist structure matching the app's expected layout
+          $targetDir = "${{ github.workspace }}\py-dist\python-2.7.10"
+          New-Item -ItemType Directory -Force -Path $targetDir | Out-Null
+          $sourceDir = $nugetPython.Directory.FullName
+          Copy-Item -Path "$sourceDir\*" -Destination $targetDir -Recurse -Force
 
-      - name: 📦 Setup py-dist scripts directory
-        shell: cmd
+          # Verify
+          & "$targetDir\python.exe" --version
+          Write-Host "✅ Python 2.7 installed to py-dist\python-2.7.10\"
+
+      - name: 📦 Setup py-dist scripts and PATH
+        shell: powershell
         run: |
-          mkdir py-dist\scripts 2>nul
+          $pyDir = "${{ github.workspace }}\py-dist\python-2.7.10"
+          $scriptsDir = "${{ github.workspace }}\py-dist\scripts"
 
-          echo @echo off> py-dist\scripts\env.bat
-          echo set PATH=%~dp0..\python-2.7.10;%~dp0..\python-2.7.10\Scripts;%PATH%>> py-dist\scripts\env.bat
+          # Create scripts directory
+          New-Item -ItemType Directory -Force -Path $scriptsDir | Out-Null
 
-          echo @echo off> py-dist\scripts\python.bat
-          echo call "%~dp0env.bat">> py-dist\scripts\python.bat
-          echo python %*>> py-dist\scripts\python.bat
+          # Create env.bat
+          @"
+          @echo off
+          set PATH=$pyDir;$pyDir\Scripts;%PATH%
+          "@ | Out-File -FilePath "$scriptsDir\env.bat" -Encoding ascii
 
-          echo Verifying env setup...
-          call py-dist\scripts\env.bat
-          python --version
+          # Add Python 2.7 to PATH FIRST (before system Python 3.x)
+          echo "$pyDir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "$pyDir\Scripts" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+          # Verify correct Python is on PATH
+          & "$pyDir\python.exe" --version
 
       - name: 📦 Install pip and dependencies
         shell: cmd
         run: |
-          call py-dist\scripts\env.bat
+          set "PATH=${{ github.workspace }}\py-dist\python-2.7.10;${{ github.workspace }}\py-dist\python-2.7.10\Scripts;%PATH%"
 
-          REM Download and install pip if not present
-          if not exist "py-dist\python-2.7.10\Scripts\pip.exe" (
-            echo Downloading get-pip.py...
-            powershell -Command "Invoke-WebRequest -Uri 'https://bootstrap.pypa.io/pip/2.7/get-pip.py' -OutFile 'get-pip.py'"
-            python get-pip.py "pip<21.0"
-          )
+          REM Verify we're using Python 2.7, NOT 3.x
+          python --version 2>&1 | findstr "2.7" || (echo ERROR: Wrong Python version! & exit /b 1)
 
-          REM Install dependencies
-          pip install --no-cache-dir numpy==1.16.6
-          pip install --no-cache-dir -r app\appsource\requirements_complete.txt
-          echo Dependencies installed!
+          REM Install pip for Python 2.7
+          echo Downloading get-pip.py for Python 2.7...
+          powershell -Command "Invoke-WebRequest -Uri 'https://bootstrap.pypa.io/pip/2.7/get-pip.py' -OutFile 'get-pip.py'"
+          python get-pip.py "pip<21.0" "setuptools<45"
+
+          REM Install numpy from pre-built wheel (avoid compilation)
+          pip install --only-binary=:all: numpy==1.16.6 || pip install numpy==1.16.6
+
+          REM Install remaining dependencies
+          pip install -r app\appsource\requirements_complete.txt
+          echo ✅ Dependencies installed!
 
       - name: 🧪 Smoke test
         shell: cmd
         run: |
-          call py-dist\scripts\env.bat
+          set "PATH=${{ github.workspace }}\py-dist\python-2.7.10;${{ github.workspace }}\py-dist\python-2.7.10\Scripts;%PATH%"
           cd app\appsource\app_config
           python -c "import django; print('Django %s OK' % django.get_version())"
 

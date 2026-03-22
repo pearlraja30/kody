@@ -454,9 +454,10 @@ jobs:
             ### Downloads
             | Platform | File | Notes |
             |----------|------|-------|
-            | 🐳 Docker | `kodys-docker-image-*.tar.gz` | Server/cloud + phone/tablet via browser |
+            | **🪟 Windows** | `Kodys.Foot.Clinik.Installer.exe` | **Standalone Installer** (No Docker required) |
+            | 🐳 Docker | `kodys-docker-image-*.tar.gz` | Server/cloud distribution |
             | 📦 Portable | `Kodys_Portable_*.zip` | Cross-platform, requires Docker Desktop |
-            | 🍎 Mac | `Kodys_Foot_Clinik_Mac_*.zip` | macOS app bundle |
+            | 🍎 Mac | `Kodys_Foot_Clinik_Mac_*.zip` | macOS app bundle, requires Docker |
 
             ### Quick Start (Docker)
             ```bash

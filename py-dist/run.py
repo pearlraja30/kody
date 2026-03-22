@@ -77,28 +77,7 @@ import winreg
 import datetime
 from dateutil.relativedelta import relativedelta
 
-log_boot("Importing CEF...")
-try:
-    # Determine the path for libcef.dll
-    libcef_dll = os.path.join(os.path.dirname(os.path.realpath(__file__)), "python-2.7.10", "Lib", "site-packages", "cefpython3", "libcef.dll")
-    log_boot("Expected libcef.dll path: %s" % libcef_dll)
-    
-    if os.path.exists(libcef_dll):
-        log_boot("libcef.dll EXISTS.")
-    else:
-        log_boot("WARNING: libcef.dll NOT FOUND at expected path.")
-        
-    if (2,7) <= sys.version_info < (2,8):
-        log_boot("Attempting import cefpython_py27...")
-        import cefpython_py27 as cefpython
-    else:
-        log_boot("Attempting import cefpython3...")
-        from cefpython3 import cefpython
-    log_boot("CEF imported successfully.")
-except Exception as e:
-    log_boot("CRITICAL ERROR: Failed to import CEF: %s" % str(e))
-    pass
-
+# --- Setup finished ---
 log_boot("Setup finished. Entering main GUI loop...")
 from scipy import signal
 

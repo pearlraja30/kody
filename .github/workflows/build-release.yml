@@ -211,9 +211,11 @@ jobs:
           Write-Host "--- Testing Dependencies Diagnostic ---"
           & python -c "import sys; print('sys.path:'); print(sys.path); import os; print('CWD: ' + os.getcwd())"
           & python -c "import serial; print('serial OK')"
-          & python -c "import PyQt4; print('PyQt4 found at: ' + PyQt4.__file__ if hasattr(PyQt4, '__file__') else 'PyQt4 has no __file__')"
-          & python -c "import sip; print('sip found at: ' + sip.__file__)"
           & python -c "from PyQt4 import QtGui; print('PyQt4.QtGui OK')"
+          & python -c "import numpy; print('numpy OK')"
+          & python -c "import scipy; print('scipy OK')"
+          & python -c "import matplotlib; print('matplotlib OK')"
+          & python -c "from cefpython3 import cefpython; print('cefpython3 OK')"
           
           if ($LASTEXITCODE -ne 0) {
               Write-Host "--- site-packages Folder Contents ---"

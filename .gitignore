@@ -30,6 +30,9 @@ py-dist/python-2.7.10/Lib/*
 !py-dist/python-2.7.10/Lib/site-packages/
 py-dist/python-2.7.10/Lib/site-packages/*
 !py-dist/python-2.7.10/Lib/site-packages/PyQt4/
+!py-dist/python-2.7.10/Lib/site-packages/sip.pyd
+!py-dist/python-2.7.10/Lib/site-packages/sipconfig.py
+!py-dist/python-2.7.10/Lib/site-packages/sipdistutils.py
 # Exclude the massive libcef.dll separately
 py-dist/python-2.7.10/Lib/site-packages/cefpython3/libcef.dll
 py-dist/wkhtmltopdf/

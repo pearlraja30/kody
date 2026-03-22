@@ -21,20 +21,36 @@ import subprocess, time, socket
 log_boot("Checking PyQt4 environment...")
 try:
     import imp
-    pyqt4_path = os.path.join(os.getcwd(), "python-2.7.10", "Lib", "site-packages", "PyQt4")
-    if not os.path.exists(pyqt4_path):
-        # Try lowercase lib
-        pyqt4_path = os.path.join(os.getcwd(), "python-2.7.10", "lib", "site-packages", "PyQt4")
+    sp_path = os.path.join(os.getcwd(), "python-2.7.10", "Lib", "site-packages")
+    if not os.path.exists(sp_path):
+        sp_path = os.path.join(os.getcwd(), "python-2.7.10", "lib", "site-packages")
     
-    log_boot("Calculated PyQt4 path: %s (Exists: %s)" % (pyqt4_path, os.path.exists(pyqt4_path)))
+    pyqt4_path = os.path.join(sp_path, "PyQt4")
+    sip_pyd_path = os.path.join(sp_path, "sip.pyd")
     
+    log_boot("Site-packages: %s" % sp_path)
+    log_boot("PyQt4 path: %s" % pyqt4_path)
+    
+    # 1. Force PATH for DLLs
     if os.path.exists(pyqt4_path):
-        # Force PyQt4 directory into PATH before anything else
         os.environ['PATH'] = pyqt4_path + os.pathsep + os.environ['PATH']
-        log_boot("Added PyQt4 to system PATH.")
-        
-        # List contents for debug
-        log_boot("PyQt4 contents: %s" % (os.listdir(pyqt4_path)))
+    
+    # 2. Force sys.path
+    if sp_path not in sys.path:
+        sys.path.insert(0, sp_path)
+
+    # 3. FORCE sip LOAD (The critical fix)
+    try:
+        import sip
+        log_boot("Found existing sip: %s" % sip.__file__)
+    except ImportError:
+        log_boot("Standard sip import failed. Attempting manual load from %s" % sip_pyd_path)
+        if os.path.exists(sip_pyd_path):
+            sip = imp.load_dynamic('sip', sip_pyd_path)
+            sys.modules['sip'] = sip
+            log_boot("Successfully force-loaded sip.")
+        else:
+            log_boot("ERROR: sip.pyd NOT FOUND at %s" % sip_pyd_path)
 
     log_boot("Attempting PyQt4 import...")
     import PyQt4
@@ -51,14 +67,6 @@ except Exception as e:
     import traceback
     log_boot("CRITICAL ERROR: Failed to import PyQt4: %s" % str(e))
     log_boot("Traceback: %s" % traceback.format_exc())
-    # Try one more fallback: direct import from the folder
-    try:
-        if os.path.exists(pyqt4_path) and pyqt4_path not in sys.path:
-            sys.path.insert(0, os.path.dirname(pyqt4_path))
-            from PyQt4 import QtGui
-            log_boot("RECOVERY SUCCESS: PyQt4 imported via sys.path injection.")
-    except Exception as e2:
-        log_boot("RECOVERY FAILED: %s" % str(e2))
 
 import json
 import compileall
@@ -1002,7 +1010,7 @@ def data_handler_can(data):
                         browser_func.ExecuteFunction('js_bp_error',message_code)
                 else:
                     browser_func.ExecuteFunction('js_print',str(data[2:5]))     
-    except Exception,e:
+    except Exception as e:
         print(e)
         pass
 
@@ -1310,8 +1318,8 @@ def monitor_scanner(side):
                 browser_func.ExecuteFunction("pleasewait_loader_end")
                 break
             time.sleep(0.2)
-        except Exception,e:
-            print e
+        except Exception as e:
+            print(e)
 
 
 def convertIt():

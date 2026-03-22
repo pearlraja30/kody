@@ -201,8 +201,15 @@ jobs:
         run: |
           $env:PATH = "${{ github.workspace }}\py-dist\python-2.7.10;${{ github.workspace }}\py-dist\python-2.7.10\Scripts;$env:PATH"
           
+          # --- ENSURE sip REDUNDANCY for v2.0.7 ---
+          $sp = "${{ github.workspace }}\py-dist\python-2.7.10\Lib\site-packages"
+          if (Test-Path "$sp\sip.pyd") {
+              Write-Host "Copying sip.pyd to PyQt4 for redundancy..."
+              Copy-Item "$sp\sip.pyd" "$sp\PyQt4\sip.pyd" -Force
+          }
+
           Write-Host "--- Bitness Verification of Key Binaries ---"
-          $pydFiles = Get-ChildItem -Path "${{ github.workspace }}\py-dist\python-2.7.10\Lib\site-packages" -Filter "*.pyd" -Recurse
+          $pydFiles = Get-ChildItem -Path "$sp" -Filter "*.pyd" -Recurse
           foreach ($f in $pydFiles) {
               $arch = & python -c "import struct; print(struct.calcsize('P'))"
               # We can also check the file headers directly if 'file' was available, 

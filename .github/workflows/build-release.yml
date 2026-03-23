@@ -220,6 +220,7 @@ jobs:
           & python -c "import pdf2image; print('pdf2image OK')"
           & python -c "import pyhrv; print('pyhrv OK')"
           & python -c "import biosppy; print('biosppy OK')"
+          & python -c "import pandas; print('pandas OK')"
           
           if ($LASTEXITCODE -ne 0) {
               Write-Host "--- site-packages Folder Contents ---"

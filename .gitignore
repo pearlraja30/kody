@@ -1,6 +1,6 @@
 # Python
 __pycache__/
-*.py[cod]
+*.py[co]
 *.pyc
 *.pyo
 
@@ -28,13 +28,13 @@ py-dist/python-2.7.10/*
 !py-dist/python-2.7.10/Lib/
 py-dist/python-2.7.10/Lib/*
 !py-dist/python-2.7.10/Lib/site-packages/
-# Comprehensive whitelist for site-packages
 # Comprehensive inclusion for site-packages
 !py-dist/python-2.7.10/Lib/site-packages/
-py-dist/python-2.7.10/Lib/site-packages/*.dll
-py-dist/python-2.7.10/Lib/site-packages/*.exe
 # Exclude only the truly massive binaries
 py-dist/python-2.7.10/Lib/site-packages/cefpython3/libcef.dll
+# Ensure .pyd files are whitelisted even if inside Lib/
+!py-dist/python-2.7.10/Lib/site-packages/**/*.pyd
+!py-dist/python-2.7.10/Lib/site-packages/**/*.dll
 py-dist/wkhtmltopdf/
 py-dist/poppler-0.68.0/
 py-dist/*.log

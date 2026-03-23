@@ -178,6 +178,28 @@ def GetApplicationPath(file=None):
     return str(file)
 
 
+def GetWritableAppDataPath(folder=None):
+    """Returns a writable path in the user's TEMP directory to avoid permission issues."""
+    import os
+    # Use TEMP/KodysV2 as a guaranteed writable base
+    base = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.getcwd())), "KodysFootClinikV2")
+    if not os.path.exists(base):
+        try:
+            os.makedirs(base)
+        except:
+            pass
+    
+    if folder:
+        path = os.path.join(base, folder)
+        if not os.path.exists(path):
+            try:
+                os.makedirs(path)
+            except:
+                pass
+        return path
+    return base
+
+
 def ExceptHook(excType, excValue, traceObject):
     import traceback, os, time, codecs
     errorMsg = "\n".join(traceback.format_exception(excType, excValue,
@@ -2129,6 +2151,8 @@ if __name__ == '__main__':
         "log_severity": cefpython.LOGSEVERITY_INFO,
         "log_file": GetApplicationPath("debug.log"),
         "release_dcheck_enabled": True,
+        "cache_path": GetWritableAppDataPath("cache"),
+        "user_data_path": GetWritableAppDataPath("user_data"),
         "locales_dir_path": cefpython.GetModuleDirectory()+"/locales",
         "resources_dir_path": cefpython.GetModuleDirectory(),
         "browser_subprocess_path": "%s/%s" % (
@@ -2140,7 +2164,7 @@ if __name__ == '__main__':
 
     # Command line switches set programmatically
     switches = {
-    "remote_debugging_port":"http://127.0.0.1:5423"
+    "remote-debugging-port": "5423"
     }
 
     cefpython.Initialize(settings, switches)

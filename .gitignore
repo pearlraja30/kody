@@ -51,7 +51,10 @@ Kodys_Foot_Clinik_Package.zip
 dist/
 
 # Database (contains patient data - do not commit)
+# Database (Bundled template must be included, patient data ignored)
 *.sqlite3
+!app/appsource/db.sqlite3
+!app/app_assets/DATA/initial_database/db.sqlite3
 
 # Logs
 *.log

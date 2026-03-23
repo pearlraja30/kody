@@ -1,5 +1,5 @@
 #define MyAppName "Kodys Foot Clinik V2"
-#define MyAppVersion "V2"
+#define MyAppVersion "2.0.0 (Official Stable)"
 #define MyAppPublisher "Kodys Foot Clinik"
 #define MyAppExeName "Kodys Foot Clinik.exe"
 

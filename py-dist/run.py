@@ -307,15 +307,15 @@ class LoadHandler():
     def __init__(self):
         self.initial_app_loading = True
 
-    def OnLoadStart(self, browser, **_):
+    def OnLoadStart(self, browser, frame, *args, **kwargs):
         if self.initial_app_loading:
             self.initial_app_loading = False
-    def OnLoadingStateChange(self, browser, is_loading, **_):
+    def OnLoadingStateChange(self, browser, is_loading, *args, **kwargs):
         if not is_loading:
-            pass  
-    def OnLoadEnd(self, browser, **_):
+            pass
+    def OnLoadEnd(self, browser, frame, *args, **kwargs):
         pass
-    def OnLoadError(self, browser, **_):
+    def OnLoadError(self, browser, frame, error_code, error_text_str, failed_url, *args, **kwargs):
         pass
 
 
@@ -2163,7 +2163,10 @@ if __name__ == '__main__':
 
     # Command line switches set programmatically
     switches = {
-    "remote-debugging-port": "5423"
+    "remote-debugging-port": "5423",
+    "no-proxy-server": "",
+    "disable-gpu": "",
+    "no-sandbox": ""
     }
 
     cefpython.Initialize(settings, switches)

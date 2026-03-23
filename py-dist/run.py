@@ -2152,7 +2152,6 @@ if __name__ == '__main__':
         "log_file": GetApplicationPath("debug.log"),
         "release_dcheck_enabled": True,
         "cache_path": GetWritableAppDataPath("cache"),
-        "user_data_path": GetWritableAppDataPath("user_data"),
         "locales_dir_path": cefpython.GetModuleDirectory()+"/locales",
         "resources_dir_path": cefpython.GetModuleDirectory(),
         "browser_subprocess_path": "%s/%s" % (

@@ -30,11 +30,15 @@ py-dist/python-2.7.10/Lib/*
 !py-dist/python-2.7.10/Lib/site-packages/
 # Comprehensive inclusion for site-packages
 !py-dist/python-2.7.10/Lib/site-packages/
-# Exclude only the truly massive binaries
-py-dist/python-2.7.10/Lib/site-packages/cefpython3/libcef.dll
-# Ensure .pyd files are whitelisted even if inside Lib/
+# Exclude only truly non-essential massive binaries (if any)
+# !py-dist/python-2.7.10/Lib/site-packages/cefpython3/libcef.dll <-- REMOVED IGNORE
+# Ensure all browser and dependency binaries are whitelisted
 !py-dist/python-2.7.10/Lib/site-packages/**/*.pyd
 !py-dist/python-2.7.10/Lib/site-packages/**/*.dll
+!py-dist/python-2.7.10/Lib/site-packages/**/*.pak
+!py-dist/python-2.7.10/Lib/site-packages/**/*.dat
+!py-dist/python-2.7.10/Lib/site-packages/**/*.bin
+!py-dist/python-2.7.10/Lib/site-packages/**/*.exe
 py-dist/wkhtmltopdf/
 py-dist/poppler-0.68.0/
 py-dist/*.log

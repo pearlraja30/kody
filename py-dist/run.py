@@ -306,6 +306,9 @@ class MainFrame(QtGui.QWidget):
                 browserSettings={},
                 navigateUrl=GetApplicationPath("http://127.0.0.1:5423"))
 
+        global browser_count
+        browser_count += 1
+        
         self.browser.SetClientHandler(LoadHandler())
         self.set_javascript_bindings()
 
@@ -351,10 +354,6 @@ class LoadHandler():
     def OnLoadError(self, browser, frame, error_code, error_text_str, failed_url, *args, **kwargs):
         pass
     
-    def OnAfterCreated(self, browser, **kwargs):
-        global browser_count
-        browser_count += 1
-        
     def OnBeforeClose(self, browser, **kwargs):
         global browser_count, is_running_loop
         browser_count -= 1

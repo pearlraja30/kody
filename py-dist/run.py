@@ -2209,7 +2209,6 @@ if __name__ == '__main__':
     "disable-gpu": ""
     }
 
-    global is_running_loop, mw, splash
     app = QtGui.QApplication(sys.argv)
     
     # Show Professional Splash Screen
@@ -2229,6 +2228,11 @@ if __name__ == '__main__':
     is_running_loop = True
     cefpython.MessageLoop()
     is_running_loop = False
+    
+    # CRITICAL: Explicitly destroy window before shutdown to release browser handles
+    if mw:
+        mw.setParent(None)
+        del mw
     
     # Graceful Shutdown
     if not is_shutting_down:

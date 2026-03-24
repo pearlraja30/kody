@@ -2152,21 +2152,20 @@ if __name__ == '__main__':
         "log_file": GetApplicationPath("debug.log"),
         "release_dcheck_enabled": True,
         "cache_path": GetWritableAppDataPath("cache"),
-        "locales_dir_path": cefpython.GetModuleDirectory()+"/locales",
+        "locales_dir_path": os.path.join(cefpython.GetModuleDirectory(), "locales"),
         "resources_dir_path": cefpython.GetModuleDirectory(),
-        "browser_subprocess_path": "%s/%s" % (
-            cefpython.GetModuleDirectory(), "subprocess"),
+        "browser_subprocess_path": os.path.join(cefpython.GetModuleDirectory(), "subprocess.exe"),
         "context_menu":{
             "enabled" : dev_tools_menu_enabled
         },
     }
 
     # Command line switches set programmatically
+    # Note: remote-debugging-port is moved to 5424 to avoid conflict with Django on 5423
     switches = {
-    "remote-debugging-port": "5423",
+    "remote-debugging-port": "5424",
     "no-proxy-server": "",
-    "disable-gpu": "",
-    "no-sandbox": ""
+    "disable-gpu": ""
     }
 
     cefpython.Initialize(settings, switches)

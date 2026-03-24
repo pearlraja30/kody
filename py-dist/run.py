@@ -313,9 +313,6 @@ class MainFrame(QtGui.QWidget):
         self.set_javascript_bindings()
 
 
-    def moveEvent(self, event):
-        if self.browser:
-            self.browser.NotifyMoveOrResizeStarted()
 
     def resizeEvent(self, event):
         if self.browser:

@@ -140,7 +140,8 @@ ecg_level_1 = list()
 ecg_level_2 = list()
 ecg_level_3 = list()
 
-# Lifecycle flags
+# Lifecycle flags & counters
+browser_count = 0
 is_running_loop = False
 is_shutting_down = False
 splash = None
@@ -275,11 +276,13 @@ class MainWindow(QtGui.QMainWindow):
         else:
             reply = QtGui.QMessageBox.question(self, 'Alert',"Are you sure to quit?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
             if reply == QtGui.QMessageBox.Yes:
+                # Stop backend immediately
+                subprocess.call(['taskkill', '/F', '/T', '/PID', str(proc.pid)])
+                # Mark shutting down
                 if not is_shutting_down:
                     is_shutting_down = True
-                    if is_running_loop:
-                        cefpython.QuitMessageLoop()
-                subprocess.call(['taskkill', '/F', '/T', '/PID', str(proc.pid)])
+                # Tell CEF to close. OnBeforeClose will call QuitMessageLoop.
+                self.mainFrame.browser.CloseBrowser(True)
                 event.accept()
             else:
                 event.ignore()
@@ -335,7 +338,6 @@ class LoadHandler():
             pass
     def OnLoadEnd(self, browser, frame, *args, **kwargs):
         if frame.IsMain():
-            global splash, mw
             def show_main():
                 global splash, mw
                 if splash:
@@ -348,6 +350,17 @@ class LoadHandler():
             QtCore.QTimer.singleShot(0, show_main)
     def OnLoadError(self, browser, frame, error_code, error_text_str, failed_url, *args, **kwargs):
         pass
+    
+    def OnAfterCreated(self, browser, **kwargs):
+        global browser_count
+        browser_count += 1
+        
+    def OnBeforeClose(self, browser, **kwargs):
+        global browser_count, is_running_loop
+        browser_count -= 1
+        if browser_count == 0:
+            if is_running_loop:
+                cefpython.QuitMessageLoop()
 
 
 def ToByteArray(hex_string):
@@ -2135,7 +2148,6 @@ class CefApplication(QtGui.QApplication):
 if __name__ == '__main__':
     # --- STEP 1: INSTANT SPLASH ---
     app = QtGui.QApplication(sys.argv)
-    global is_running_loop, mw, splash
     
     splash_path = GetApplicationPath("../config/splash.png")
     if os.path.exists(splash_path):

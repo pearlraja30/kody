@@ -140,6 +140,12 @@ ecg_level_1 = list()
 ecg_level_2 = list()
 ecg_level_3 = list()
 
+# Lifecycle flags
+is_running_loop = False
+is_shutting_down = False
+splash = None
+mw = None
+
 libcef_dll = os.path.join(os.path.dirname(os.path.abspath(__file__)),
         'libcef.dll')
 
@@ -201,6 +207,7 @@ def GetWritableAppDataPath(folder=None):
 
 
 def ExceptHook(excType, excValue, traceObject):
+    global is_shutting_down, is_running_loop
     import traceback, os, time, codecs
     errorMsg = "\n".join(traceback.format_exception(excType, excValue,
             traceObject))
@@ -221,8 +228,15 @@ def ExceptHook(excType, excValue, traceObject):
     errorMsg = errorMsg.encode("ascii", errors="replace")
     errorMsg = errorMsg.decode("ascii", errors="replace")
     print("\n"+errorMsg+"\n")
-    cefpython.QuitMessageLoop()
-    cefpython.Shutdown()
+
+    if not is_shutting_down:
+        is_shutting_down = True
+        try:
+            if is_running_loop:
+                cefpython.QuitMessageLoop()
+            cefpython.Shutdown()
+        except:
+            pass
     os._exit(1)
 
 
@@ -238,10 +252,8 @@ class MainWindow(QtGui.QMainWindow):
         self.setWindowTitle(window_title)
         self.setWindowIcon(QtGui.QIcon(icon_name))
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
-        if fullscreen_allowed:
-            self.showMaximized()
-        else:
-            self.center()
+        # Initial position
+        self.center()
 
     def center(self):
         frameGm = self.frameGeometry()
@@ -254,6 +266,7 @@ class MainWindow(QtGui.QMainWindow):
         cefpython.WindowUtils.OnSetFocus(int(self.centralWidget().winId()), 0, 0, 0)
 
     def closeEvent(self, event):
+        global is_shutting_down, is_running_loop
         url = self.mainFrame.browser.GetUrl()
         if url.startswith("http://127.0.0.1:5423/APP"):
             reply = QtGui.QMessageBox.question(self, 'Alert',"You should Close the test window first to quit application?", QtGui.QMessageBox.Ok)
@@ -262,6 +275,10 @@ class MainWindow(QtGui.QMainWindow):
         else:
             reply = QtGui.QMessageBox.question(self, 'Alert',"Are you sure to quit?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
             if reply == QtGui.QMessageBox.Yes:
+                if not is_shutting_down:
+                    is_shutting_down = True
+                    if is_running_loop:
+                        cefpython.QuitMessageLoop()
                 subprocess.call(['taskkill', '/F', '/T', '/PID', str(proc.pid)])
                 event.accept()
             else:
@@ -317,7 +334,18 @@ class LoadHandler():
         if not is_loading:
             pass
     def OnLoadEnd(self, browser, frame, *args, **kwargs):
-        pass
+        if frame.IsMain():
+            global splash, mw
+            def show_main():
+                global splash, mw
+                if splash:
+                    splash.finish(mw)
+                    splash = None
+                if fullscreen_allowed:
+                    mw.showMaximized()
+                else:
+                    mw.show()
+            QtCore.QTimer.singleShot(0, show_main)
     def OnLoadError(self, browser, frame, error_code, error_text_str, failed_url, *args, **kwargs):
         pass
 
@@ -2181,34 +2209,28 @@ if __name__ == '__main__':
     "disable-gpu": ""
     }
 
-    cefpython.Initialize(settings, switches)
-
-    app = CefApplication(sys.argv)
+    global is_running_loop, mw, splash
+    app = QtGui.QApplication(sys.argv)
     
+    # Show Professional Splash Screen
+    splash_path = GetApplicationPath("../config/splash.png")
+    if os.path.exists(splash_path):
+        splash = QtGui.QSplashScreen(QtGui.QPixmap(splash_path))
+        splash.show()
+        app.processEvents()
 
-    # Create and display the splash screen
-    app_dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ )))
-    splash_pix = QtGui.QPixmap(app_dir_path+'\\splash_screen.png')
-    splash = QtGui.QSplashScreen(splash_pix, QtCore.Qt.WindowStaysOnTopHint)
-    splash.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.FramelessWindowHint)
-    splash.setEnabled(False)
-    progressBar = QtGui.QProgressBar(splash)
-    progressBar.setMaximum(10)
-    progressBar.setGeometry(0, splash_pix.height()-50, splash_pix.width(), 20)
-    progressBar.setStyleSheet(" QProgressBar { border: 1px solid black; border-radius: 0px; text-align: center;font-size:16px;color:black; } QProgressBar::chunk {background-color: #3add36; width: 1px;}")
-    splash.show()
-
-    mainWindow = MainWindow()
-    mainWindow.show()
-    for i in range(1, 11):
-        progressBar.setValue(i)
-        t = time.time()
-        while time.time() < t + 0.1:
-           app.processEvents()
-    splash.finish(mainWindow)
-    sys.exit(app.exec_())
-    app.stopTimer()
-    del mainWindow
-    del app
-
-    cefpython.Shutdown()
+    # Initialize CEF
+    cefpython.Initialize(settings, switches)
+    
+    # Create Main Window (it will stay hidden until LoadHandler.OnLoadEnd)
+    mw = MainWindow()
+    
+    # Run CEF Message Loop
+    is_running_loop = True
+    cefpython.MessageLoop()
+    is_running_loop = False
+    
+    # Graceful Shutdown
+    if not is_shutting_down:
+        is_shutting_down = True
+        cefpython.Shutdown()

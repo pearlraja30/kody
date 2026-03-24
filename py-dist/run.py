@@ -2133,6 +2133,17 @@ class CefApplication(QtGui.QApplication):
         self.timer.stop()
 
 if __name__ == '__main__':
+    # --- STEP 1: INSTANT SPLASH ---
+    app = QtGui.QApplication(sys.argv)
+    global is_running_loop, mw, splash
+    
+    splash_path = GetApplicationPath("../config/splash.png")
+    if os.path.exists(splash_path):
+        splash = QtGui.QSplashScreen(QtGui.QPixmap(splash_path))
+        splash.show()
+        app.processEvents()
+
+    # --- STEP 2: LOAD CONFIG & ENV ---
     config_file_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'config','config.json'))
     try:
         with open(config_file_path) as data_file:    
@@ -2156,9 +2167,9 @@ if __name__ == '__main__':
             fullscreen_allowed =  bool(util.strtobool(window_data["fullscreen_allowed"].lower()))
             max_width = int(window_data["max_width"])
             max_height = int(window_data["max_height"])
-            
     except:
         print("Failed Reading Config")
+    app.processEvents()
     
     # Ensure logging directory exists for Django
     log_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "app", "appsource", "logs")
@@ -2170,6 +2181,7 @@ if __name__ == '__main__':
             pass
 
     compileall.compile_dir(project_dir_path, force=True)
+    app.processEvents()
     
     # Ensure admin credentials are set
     try:
@@ -2179,6 +2191,7 @@ if __name__ == '__main__':
             print("Successfully verified admin credentials.")
     except Exception as e:
         print("Warning: Failed to verify admin credentials: %s" % str(e))
+    app.processEvents()
 
     proc = subprocess.Popen(['python','..\\' + project_dir_name + '\manage.pyc','runserver','127.0.0.1:5423'])
     print("[pyqt.py] PyQt version: %s" % QtCore.PYQT_VERSION_STR)
@@ -2209,15 +2222,6 @@ if __name__ == '__main__':
     "disable-gpu": ""
     }
 
-    app = QtGui.QApplication(sys.argv)
-    
-    # Show Professional Splash Screen
-    splash_path = GetApplicationPath("../config/splash.png")
-    if os.path.exists(splash_path):
-        splash = QtGui.QSplashScreen(QtGui.QPixmap(splash_path))
-        splash.show()
-        app.processEvents()
-
     # Initialize CEF
     cefpython.Initialize(settings, switches)
     
@@ -2229,12 +2233,23 @@ if __name__ == '__main__':
     cefpython.MessageLoop()
     is_running_loop = False
     
-    # CRITICAL: Explicitly destroy window before shutdown to release browser handles
-    if mw:
-        mw.setParent(None)
-        del mw
+    # --- DEFINITIVE SHUTDOWN: Cleanup all browser contexts ---
+    app.closeAllWindows()
+    app.processEvents()
     
-    # Graceful Shutdown
+    if mw:
+        try:
+            mw.mainFrame.browser = None
+            mw.setParent(None)
+            del mw
+        except:
+            pass
+            
+    # Allow some time for browser objects to be released
+    for _ in range(10):
+        app.processEvents()
+        time.sleep(0.01)
+    
     if not is_shutting_down:
         is_shutting_down = True
         cefpython.Shutdown()

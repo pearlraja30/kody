@@ -6,7 +6,7 @@
     	"height": 680,
     	"min_width": 1280,
     	"min_height": 680,
-    	"fullscreen_allowed": "false", 
+    	"fullscreen_allowed": "true", 
     	"max_width": 1280,
     	"max_height": 680,
     	"dev_tools_menu_enabled": "false"

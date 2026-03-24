@@ -234,14 +234,14 @@ class MainWindow(QtGui.QMainWindow):
         self.mainFrame = MainFrame(self)
         self.setCentralWidget(self.mainFrame)
         self.setMinimumSize(min_width,min_height)
-        if fullscreen_allowed == False and max_height != 0 and max_width != 0: 
-            self.setFixedSize(max_width,max_height)
-        self.resize(initial_width, initial_height)
+        self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowMaximizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
         self.setWindowTitle(window_title)
         self.setWindowIcon(QtGui.QIcon(icon_name))
-        self.setWindowFlags(QtCore.Qt.WindowCancelButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
-        self.center()
+        if fullscreen_allowed:
+            self.showMaximized()
+        else:
+            self.center()
 
     def center(self):
         frameGm = self.frameGeometry()
@@ -2139,6 +2139,16 @@ if __name__ == '__main__':
             pass
 
     compileall.compile_dir(project_dir_path, force=True)
+    
+    # Ensure admin credentials are set
+    try:
+        admin_script = os.path.join(project_dir_path, "create_admin.py")
+        if os.path.exists(admin_script):
+            subprocess.check_call(['python', admin_script])
+            print("Successfully verified admin credentials.")
+    except Exception as e:
+        print("Warning: Failed to verify admin credentials: %s" % str(e))
+
     proc = subprocess.Popen(['python','..\\' + project_dir_name + '\manage.pyc','runserver','127.0.0.1:5423'])
     print("[pyqt.py] PyQt version: %s" % QtCore.PYQT_VERSION_STR)
     print("[pyqt.py] QtCore version: %s" % QtCore.qVersion())

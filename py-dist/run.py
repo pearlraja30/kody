@@ -291,10 +291,13 @@ class MainFrame(QtGui.QWidget):
 
 
     def moveEvent(self, event):
-        cefpython.WindowUtils.OnSize(int(self.winId()), 0, 0, 0)
+        if self.browser:
+            self.browser.NotifyMoveOrResizeStarted()
 
     def resizeEvent(self, event):
-        cefpython.WindowUtils.OnSize(int(self.winId()), 0, 0, 0)
+        if self.browser:
+            size = event.size()
+            cefpython.WindowUtils.OnSize(int(self.winId()), size.width(), size.height(), 1)
 
     def set_javascript_bindings(self):
         external = External(self.browser)

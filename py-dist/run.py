@@ -159,6 +159,7 @@ if os.path.exists(libcef_dll):
         raise Exception("Unsupported python version: %s" % sys.version)
 else:
     from cefpython3 import cefpython
+    cefpython.WindowUtils.SetHighDpiSupport(True)
 
 
 def GetApplicationPath(file=None):
@@ -248,11 +249,19 @@ class MainWindow(QtGui.QMainWindow):
         super(MainWindow, self).__init__(None)
         self.mainFrame = MainFrame(self)
         self.setCentralWidget(self.mainFrame)
-        self.setMinimumSize(min_width,min_height)
-        self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowMaximizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
+        self.setContentsMargins(0, 0, 0, 0)
+        self.setMenuBar(None)
+        self.setStatusBar(None)
+        self.setWindowFlags(QtCore.Qt.Window | QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowMaximizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
         self.setWindowTitle(window_title)
         self.setWindowIcon(QtGui.QIcon(icon_name))
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
+        
+        # Ensure we start with the config size but allow resizing
+        self.resize(initial_width, initial_height)
+        if min_width > 0 and min_height > 0:
+            self.setMinimumSize(min_width, min_height)
+        
         # Initial position
         self.center()
 
@@ -264,7 +273,12 @@ class MainWindow(QtGui.QMainWindow):
         self.move(frameGm.topLeft())
 
     def focusInEvent(self, event):
-        cefpython.WindowUtils.OnSetFocus(int(self.centralWidget().winId()), 0, 0, 0)
+        if self.mainFrame and self.mainFrame.browser:
+            cefpython.WindowUtils.OnSetFocus(int(self.mainFrame.winId()), 0, 0, 0)
+
+    def resizeEvent(self, event):
+        if self.mainFrame:
+            self.mainFrame.resize(self.centralWidget().size())
 
     def closeEvent(self, event):
         global is_shutting_down, is_running_loop
@@ -276,8 +290,14 @@ class MainWindow(QtGui.QMainWindow):
         else:
             reply = QtGui.QMessageBox.question(self, 'Alert',"Are you sure to quit?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
             if reply == QtGui.QMessageBox.Yes:
-                # Stop backend immediately
-                subprocess.call(['taskkill', '/F', '/T', '/PID', str(proc.pid)])
+                # Stop timer first
+                app.timer.stop()
+                # Stop backend cleanly if possible
+                try:
+                    subprocess.call(['taskkill', '/F', '/T', '/PID', str(proc.pid)], 
+                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                except:
+                    pass
                 # Mark shutting down
                 if not is_shutting_down:
                     is_shutting_down = True
@@ -294,7 +314,10 @@ class MainFrame(QtGui.QWidget):
     def __init__(self, parent=None):
         super(MainFrame, self).__init__(parent)
         windowInfo = cefpython.WindowInfo()
-        windowInfo.SetAsChild(int(self.winId()))   
+        # Initialize with 0,0,0,0 rect and let resizeEvent handle the actual sizing
+        # This prevents initial white-space offsets on many systems
+        rect = [0, 0, 0, 0]
+        windowInfo.SetAsChild(int(self.winId()), rect)
         self.parent = parent 
         while True:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -316,8 +339,8 @@ class MainFrame(QtGui.QWidget):
 
     def resizeEvent(self, event):
         if self.browser:
-            size = event.size()
-            cefpython.WindowUtils.OnSize(int(self.winId()), size.width(), size.height(), 1)
+            # Explicitly sync CEF size with widget size to eliminate offsets
+            cefpython.WindowUtils.OnSize(int(self.winId()), 0, 0, 0)
 
     def set_javascript_bindings(self):
         external = External(self.browser)
@@ -344,7 +367,8 @@ class LoadHandler():
                     splash.finish(mw)
                     splash = None
                 if fullscreen_allowed:
-                    mw.showMaximized()
+                    mw.setWindowState(QtCore.Qt.WindowMaximized)
+                    mw.show()
                 else:
                     mw.show()
             QtCore.QTimer.singleShot(0, show_main)
@@ -2133,17 +2157,13 @@ class CefApplication(QtGui.QApplication):
     def createTimer(self):
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.onTimer)
-        self.timer.start(10)
+        self.timer.start(1)
 
-    def onTimer(self):
-        cefpython.MessageLoopWork()
-
-    def stopTimer(self):
-        self.timer.stop()
+is_cef_initialized = False
 
 if __name__ == '__main__':
     # --- STEP 1: INSTANT SPLASH ---
-    app = QtGui.QApplication(sys.argv)
+    app = CefApplication(sys.argv)
     
     splash_path = GetApplicationPath("../config/splash.png")
     if os.path.exists(splash_path):
@@ -2157,9 +2177,9 @@ if __name__ == '__main__':
         with open(config_file_path) as data_file:    
             data = json.load(data_file)
             django_app_data = data["application"]
-            project_dir_name = django_app_data["project_dir_name"]
-            assets_dir_name = django_app_data["assets_dir_name"]
-            assets_media_dir_name = django_app_data["assets_media_dir_name"]
+            project_dir_name = django_app_data["project_dir_name"].replace('\\', os.sep)
+            assets_dir_name = django_app_data["assets_dir_name"].replace('\\', os.sep)
+            assets_media_dir_name = django_app_data["assets_media_dir_name"].replace('\\', os.sep)
             project_dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..',project_dir_name))
             assets_dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..',assets_dir_name))
             assets_media_dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..',assets_media_dir_name))
@@ -2191,17 +2211,18 @@ if __name__ == '__main__':
     compileall.compile_dir(project_dir_path, force=True)
     app.processEvents()
     
-    # Ensure admin credentials are set
+    # Ensure admin credentials are set using the current python executable
     try:
         admin_script = os.path.join(project_dir_path, "create_admin.py")
         if os.path.exists(admin_script):
-            subprocess.check_call(['python', admin_script])
+            subprocess.check_call([sys.executable, admin_script])
             print("Successfully verified admin credentials.")
     except Exception as e:
         print("Warning: Failed to verify admin credentials: %s" % str(e))
     app.processEvents()
 
-    proc = subprocess.Popen(['python','..\\' + project_dir_name + '\manage.pyc','runserver','127.0.0.1:5423'])
+    manage_pyc_path = os.path.join(project_dir_path, 'manage.pyc')
+    proc = subprocess.Popen([sys.executable, manage_pyc_path, 'runserver', '127.0.0.1:5423'])
     print("[pyqt.py] PyQt version: %s" % QtCore.PYQT_VERSION_STR)
     print("[pyqt.py] QtCore version: %s" % QtCore.qVersion())
 
@@ -2212,28 +2233,29 @@ if __name__ == '__main__':
         "debug": True,
         "log_severity": cefpython.LOGSEVERITY_INFO,
         "log_file": GetApplicationPath("debug.log"),
+        "auto_zooming": "1",
         "release_dcheck_enabled": True,
         "cache_path": GetWritableAppDataPath("cache"),
         "locales_dir_path": os.path.join(cefpython.GetModuleDirectory(), "locales"),
         "resources_dir_path": cefpython.GetModuleDirectory(),
         "browser_subprocess_path": os.path.join(cefpython.GetModuleDirectory(), "subprocess.exe"),
-        "context_menu":{
-            "enabled" : dev_tools_menu_enabled
-        },
+        "context_menu":{"enabled" : dev_tools_menu_enabled},
     }
 
     # Command line switches set programmatically
     # Note: remote-debugging-port is moved to 5424 to avoid conflict with Django on 5423
     switches = {
-    "remote-debugging-port": "5424",
-    "no-proxy-server": "",
-    "disable-gpu": ""
+        "remote-debugging-port": "5424",
+        "no-proxy-server": "",
+        "disable-gpu": "",
+        "disable-gpu-compositing": "",
+        "enable-begin-frame-scheduling": "",
     }
-
-    # Initialize CEF
+    # --- STEP 4: CEF & Main Window ---
     cefpython.Initialize(settings, switches)
     
-    # Create Main Window (it will stay hidden until LoadHandler.OnLoadEnd)
+    global is_cef_initialized
+    is_cef_initialized = True
     mw = MainWindow()
     
     # Run CEF Message Loop
@@ -2242,6 +2264,7 @@ if __name__ == '__main__':
     is_running_loop = False
     
     # --- DEFINITIVE SHUTDOWN: Cleanup all browser contexts ---
+    app.timer.stop()
     app.closeAllWindows()
     app.processEvents()
     
@@ -2254,10 +2277,13 @@ if __name__ == '__main__':
             pass
             
     # Allow some time for browser objects to be released
-    for _ in range(10):
+    for _ in range(20):
         app.processEvents()
         time.sleep(0.01)
     
     if not is_shutting_down:
         is_shutting_down = True
-        cefpython.Shutdown()
+        try:
+            cefpython.Shutdown()
+        except:
+            pass

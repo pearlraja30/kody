@@ -1,21 +1,19 @@
 {% extends "page_layout.html" %}
 {% block content_body %}
-<div class="w3-display-container bgclr3 brclr1">
-      <div class="w3-center f-16 ff-r ft-b fclr1 pt8 pb1 ">
-        Settings
-      </div>
-    </div>
-     <div class="w3-row ">
-      <div class="w3-col w174">
-        <div class="w3-sidebar  w3-bar-block w174 gclr bgclr7">
-        <a href="{% url 'hospital_profile' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 fclr1 f-14 ff-r ft-b">Hospital Profile</a>
-        <a href="{% url 'doctors' %}" class="w3-bar-item w3-button ft-b pt16  brclr1 f-14 ff-r bakclr sbrclr fclr1">HCP</a>
-        <a href="{% url 'patients' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r fclr1">Patients</a>
-        <a href="{% url 'app_configuration' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r fclr1">App Configuration</a>
-      </div>
-      </div>
-       <div class="w3-col w1106 ml174 bgclr3">
-               <div class="w3-display-container h645 bgclr3 scroll" style="height: 549px !important">
+      <div class="w3-row ">
+       <div class="w3-col w174">
+         <div class="w3-sidebar  w3-bar-block w174 gclr bgclr7">
+         <a href="{% url 'hospital_profile' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 fclr1 f-14 ff-r ft-b">Hospital Profile</a>
+         <a href="{% url 'doctors' %}" class="w3-bar-item w3-button ft-b pt16  brclr1 f-14 ff-r bakclr sbrclr fclr1">HCP</a>
+         <a href="{% url 'patients' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r fclr1">Patients</a>
+         <a href="{% url 'app_configuration' %}" class="w3-bar-item w3-button  ft-b pt16  brclr1 f-14 ff-r fclr1">App Configuration</a>
+       </div>
+       </div>
+        <div class="w3-col w1106 ml174 bgclr3">
+                <div class="w3-center f-16 ff-r ft-b fclr1 pt16 pb1 ">
+                 Settings / Add HCP
+                </div>
+                <div class="w3-display-container h645 bgclr3 scroll">
            <div class="w3-display-container">
         <div class="w3-padding-16">
           <div class="pl16 pb16">

@@ -25,11 +25,13 @@
     top: 140px !important;
     height: calc(100% - 140px) !important;
   }
-  .main-content-wrapper {
+   .main-content-wrapper {
     padding-top: 140px;
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+    overflow-y: auto; /* Ensure scrolling is possible */
   }
   .login-welcome-text {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
@@ -44,8 +46,13 @@
   .pointer_events{pointer-events: none!important;}
 .background{background-image:linear-gradient(to right,  rgba(0, 189, 182, 1),rgba(0, 189, 182, 0.5)), 
     url('/site_media/img/bgimage2.png')!important;}
-.background1{background-image:linear-gradient(to right,  rgba(0, 189, 182, 1),
-    rgba(0, 189, 182, 0.5))}
+.background1 {
+    background-image: linear-gradient(to right, rgba(0, 189, 182, 1), rgba(0, 189, 182, 0.5));
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 140px);
+    padding: 20px 0;
+}
 /*width*/
 .w415{width: 415px!important;}
 .w75{width: 75px!important}

@@ -1,9 +1,5 @@
 {% extends "page_layout.html" %}
 {% block content_body %}
-<div class="w3-display-container bgclr3 brclr1">
-      <div class="w3-center f-16 ff-r ft-b fclr1 pt8 pb1 ">Settings
-      </div>  
-    </div>
     <div class="w3-row">
       <div class="w3-col w174  bgclr3">
         <div class="w3-sidebar  w3-bar-block w174 gclr bgclr7">
@@ -13,7 +9,10 @@
         <a href="{% url 'app_configuration' %}" class="w3-bar-item w3-button  ft-b pt16 bakclr sbrclr  brclr1 f-14 ff-r fclr1">App Configuration</a>
       </div>
       </div>
-      <div class="w3-col w1106 ml174 scroll bgclr3 h645" style="height: 545px !important">
+      <div class="w3-col w1106 ml174 scroll bgclr3 h645">
+        <div class="w3-center f-16 ff-r ft-b fclr1 pt16 pb1 ">
+            Settings / App Configuration
+        </div>
         <div>
         
           <div class="w3-row w3-padding-16 w3-container brclr1">

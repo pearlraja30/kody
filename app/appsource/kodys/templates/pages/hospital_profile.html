@@ -1,9 +1,5 @@
 {% extends "page_layout.html" %}
 {% block content_body %}
-<div class="w3-display-container bgclr3 brclr1">
-      <div class="w3-center f-16 ff-r ft-b fclr1 pt8 pb1 ">Settings
-      </div>  
-    </div>
     <div class="w3-row">
       <div class="w3-col w174">
         <div class="w3-sidebar  w3-bar-block w174 gclr bgclr7">
@@ -14,6 +10,9 @@
       </div>
       </div>
       <div class="w3-col w1106 ml174 bgclr3  {% if COMMON_INFO.ACCOUNTUSERROLE != 'MEMBER' %} scroll  {% endif %}">
+        <div class="w3-center f-16 ff-r ft-b fclr1 pt16 pb1 ">
+            Settings / Hospital Profile
+        </div>
         <div class="w3-row">
           <div class="w3-row pl16 pt16 pb16">
             <span class="f-18 ff-r fclr1 ft-b">Hospital/Clinic Profile</span>

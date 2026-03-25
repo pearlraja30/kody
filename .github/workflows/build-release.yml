@@ -242,11 +242,21 @@ jobs:
           Write-Host "Inno Setup installed!"
 
       - name: 🏗️ Build Windows Installer
-        shell: cmd
+        shell: bash
         run: |
-          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer_config.iss || exit /b 1
-          echo Installer built!
-          dir dist\
+          # Create a detailed version string
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          BUILD_DATE=$(date +'%Y.%m.%d')
+          DETAILED_VERSION="${{ env.APP_VERSION }}-rev-${SHORT_SHA}-${BUILD_DATE}"
+          
+          echo "Building version: $DETAILED_VERSION"
+          
+          # Pass DETAILED_VERSION to ISCC via environment variable
+          export APP_VERSION="$DETAILED_VERSION"
+          "/c/Program Files (x86)/Inno Setup 6/ISCC.exe" installer_config.iss || exit 1
+          
+          echo "Installer built!"
+          ls -R dist/
 
       - name: 📤 Upload Windows Installer
         uses: actions/upload-artifact@v4

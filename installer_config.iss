@@ -1,5 +1,5 @@
 #define MyAppName "Kodys Foot Clinik V2"
-#define MyAppVersion "2.0.0 (Official Stable)"
+#define MyAppVersion GetEnv("APP_VERSION")
 #define MyAppPublisher "Kodys Foot Clinik"
 #define MyAppExeName "Kodys Foot Clinik.exe"
 
@@ -17,7 +17,7 @@ DefaultGroupName={#MyAppName}
 ; Replaced absolute path with relative path
 SetupIconFile=appicon.ico
 OutputDir=dist
-OutputBaseFilename="Kodys_Foot_Clinik_v2.2.5"
+OutputBaseFilename="Kodys_Foot_Clinik_" + MyAppVersion
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern

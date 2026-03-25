@@ -2182,15 +2182,20 @@ if __name__ == '__main__':
     # --- STEP 1: INSTANT SPLASH ---
     app = CefApplication(sys.argv)
     
+    splash = None
     splash_path = GetApplicationPath("../config/splash.png")
     if os.path.exists(splash_path):
         splash = QtGui.QSplashScreen(QtGui.QPixmap(splash_path))
         splash.show()
+        splash.showMessage("Starting KODYS...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
         app.processEvents()
 
     # --- STEP 2: LOAD CONFIG & ENV ---
     config_file_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'config','config.json'))
     try:
+        if splash:
+            splash.showMessage("Loading Configuration...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
+            app.processEvents()
         with open(config_file_path) as data_file:    
             data = json.load(data_file)
             django_app_data = data["application"]
@@ -2225,11 +2230,17 @@ if __name__ == '__main__':
         except:
             pass
 
+    if splash:
+        splash.showMessage("Compiling Assets...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
+        app.processEvents()
     compileall.compile_dir(project_dir_path, force=True)
     app.processEvents()
     
     # Ensure admin credentials are set using the current python executable
     try:
+        if splash:
+            splash.showMessage("Verifying Admin Credentials...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
+            app.processEvents()
         admin_script = os.path.join(project_dir_path, "create_admin.py")
         if os.path.exists(admin_script):
             subprocess.check_call([sys.executable, admin_script])
@@ -2238,6 +2249,9 @@ if __name__ == '__main__':
         print("Warning: Failed to verify admin credentials: %s" % str(e))
     app.processEvents()
 
+    if splash:
+        splash.showMessage("Starting Backend Services...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
+        app.processEvents()
     manage_pyc_path = os.path.join(project_dir_path, 'manage.pyc')
     proc = subprocess.Popen([sys.executable, manage_pyc_path, 'runserver', '127.0.0.1:5423'])
     print("[pyqt.py] PyQt version: %s" % QtCore.PYQT_VERSION_STR)
@@ -2269,10 +2283,18 @@ if __name__ == '__main__':
         "enable-begin-frame-scheduling": "",
     }
     # --- STEP 4: CEF & Main Window ---
+    if splash:
+        splash.showMessage("Initializing Browser Engine...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
+        app.processEvents()
     cefpython.Initialize(settings, switches)
     
     is_cef_initialized = True
+    if splash:
+        splash.showMessage("Launching Application...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
+        app.processEvents()
     mw = MainWindow()
+    if splash:
+        splash.finish(mw)
     
     # Run CEF Message Loop
     is_running_loop = True

@@ -64,6 +64,14 @@ This document provides a technical summary of the UI and backend stabilization f
 - **Fix**:
   - Added a protective `padding-top: 15px` to the main content container in `page_layout.html`.
 - **Benefit**: Predictable vertical spacing between the navigation region and the page content.
+### Issue: Silent/Stale Application Startup
+- **Problem**: The application could take 10-20 seconds to initialize libraries and start the backend, during which the user saw no visual feedback, making it appear as if the launch failed.
+- **Fix**: 
+  - Enhanced the `QSplashScreen` in `run.py` with real-time status updates using `splash.showMessage()`.
+  - Added feedback for: *Loading Configuration*, *Compiling Assets*, *Starting Backend Services*, and *Initializing Browser Engine*.
+  - Ensured the splash screen remains visible until the `MainWindow` is fully initialized and handles process events for responsiveness.
+- **Benefit**: Immediate visual confirmation of application activity, reducing user frustration and "stale" launch perception.
+
 **Version History**: 
 - v2.2.0: Initial Platinum Release
 - v2.2.5: UI Stabilization & Mac Process Fixes

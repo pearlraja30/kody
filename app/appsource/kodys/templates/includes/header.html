@@ -23,17 +23,30 @@
 			});
 		</script>
 
-		<div class="w3-display-container h84 w100p bgclr2" style="height: 60px;">
-			<div class="w3-display-left w174  bgclr11"  {% if COMMON_INFO.HOSPITAL_LOGO %} style="background-image: url({{COMMON_INFO.HOSPITAL_LOGO|safe}});background-size: contain;background-repeat: no-repeat;background-position: center;height: 60px;" {% else %}style="background-image: url({{MEDIA_URL}}img/default_hospital_logo.png);background-size: contain;background-repeat: no-repeat;background-position: center;"{% endif %}>
+		<div class="bgclr2" style="height: 84px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden;">
+			<!-- Hospital Logo Section -->
+			<div style="width: 174px; height: 84px; background-color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+				{% if COMMON_INFO.HOSPITAL_LOGO %}
+                <img src="{{COMMON_INFO.HOSPITAL_LOGO|safe}}" style="max-height: 80px; max-width: 160px; object-fit: contain;">
+                {% else %}
+                <img src="{{MEDIA_URL}}img/default_hospital_logo.png" style="max-height: 80px; max-width: 160px; object-fit: contain;">
+                {% endif %}
 			</div>
-			<div class="w3-display-left h84 w39 bgclr12 ml174" style="height: 60px;"></div>
-			<div class="w3-display-left ml232 lh12 ff-r w820 w3-center">
-				<span class=" f-20 ft_light_white">{{COMMON_INFO.HOSPITAL_NAME|safe}}</span><br>
-					<span class="ft_light_white f-16">{{COMMON_INFO.HOSPITAL_ADDRESS1|safe}}{% if COMMON_INFO.HOSPITAL_ADDRESS2 %} , {{COMMON_INFO.HOSPITAL_ADDRESS2|safe}} {% endif %}{% if COMMON_INFO.HOSPITAL_ADDRESS3 %}, {{COMMON_INFO.HOSPITAL_ADDRESS3|safe}} {% endif %}{% if COMMON_INFO.CITY %}, {{COMMON_INFO.CITY|safe}} {% endif %}{% if COMMON_INFO.ZIPCODE %} - {{COMMON_INFO.ZIPCODE}} {% endif %}</span>
+			
+			<!-- Decorative Space -->
+			<div class="bgclr12" style="width: 39px; height: 84px; flex-shrink: 0;"></div>
+
+			<!-- Hospital Info Section (Centered) -->
+			<div style="flex: 1; text-align: center; color: white; padding: 0-15px; overflow: hidden;">
+				<h1 class="f-20 ft-b" style="margin: 0; line-height: 1.2; color: #fff;">{{COMMON_INFO.HOSPITAL_NAME|safe}}</h1>
+				<p class="f-14" style="margin: 4px 0 0 0; line-height: 1.2; color: #fff; opacity: 0.9;">
+					{{COMMON_INFO.HOSPITAL_ADDRESS1|safe}}{% if COMMON_INFO.HOSPITAL_ADDRESS2 %} , {{COMMON_INFO.HOSPITAL_ADDRESS2|safe}} {% endif %}{% if COMMON_INFO.HOSPITAL_ADDRESS3 %}, {{COMMON_INFO.HOSPITAL_ADDRESS3|safe}} {% endif %}{% if COMMON_INFO.CITY %}, {{COMMON_INFO.CITY|safe}} {% endif %}{% if COMMON_INFO.ZIPCODE %} - {{COMMON_INFO.ZIPCODE}} {% endif %}
+				</p>
 			</div>
 
-			<div class="w3-display-right pr15">
-				<img src="{{COMMON_INFO.KODYS_LOGO|safe}}" alt="brand_image" style="width: 150px;">
+			<!-- Brand Logo Section -->
+			<div style="width: 180px; text-align: right; padding-right: 15px; flex-shrink: 0;">
+				<img src="{{COMMON_INFO.KODYS_LOGO|safe}}" alt="brand_image" style="max-width: 150px; max-height: 60px; object-fit: contain;">
 			</div>
 		</div>
         {% block js_script %}

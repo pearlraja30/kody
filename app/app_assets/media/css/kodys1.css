@@ -19,14 +19,14 @@
     width: 100%;
     z-index: 10000 !important;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    background: #fff; /* Ensure it stays opaque */
+    background: #fff !important; /* Ensure it stays opaque */
   }
   .w3-sidebar {
-    top: 103px !important;
-    height: calc(100% - 103px) !important;
+    top: 140px !important;
+    height: calc(100% - 140px) !important;
   }
   .main-content-wrapper {
-    padding-top: 103px;
+    padding-top: 140px;
     flex: 1;
     display: flex;
     flex-direction: column;

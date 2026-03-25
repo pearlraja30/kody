@@ -2187,14 +2187,19 @@ if __name__ == '__main__':
     if os.path.exists(splash_path):
         splash = QtGui.QSplashScreen(QtGui.QPixmap(splash_path))
         splash.show()
-        splash.showMessage("Starting KODYS...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
+        # Ensure it stays on top and visible
+        splash.raise_()
+        app.processEvents()
+        splash.showMessage("Starting KODYS...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+        app.processEvents()
         app.processEvents()
 
     # --- STEP 2: LOAD CONFIG & ENV ---
     config_file_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'config','config.json'))
     try:
         if splash:
-            splash.showMessage("Loading Configuration...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
+            splash.showMessage("Loading Configuration...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+            app.processEvents()
             app.processEvents()
         with open(config_file_path) as data_file:    
             data = json.load(data_file)
@@ -2231,7 +2236,8 @@ if __name__ == '__main__':
             pass
 
     if splash:
-        splash.showMessage("Compiling Assets...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
+        splash.showMessage("Compiling Assets...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+        app.processEvents()
         app.processEvents()
     compileall.compile_dir(project_dir_path, force=True)
     app.processEvents()
@@ -2239,7 +2245,8 @@ if __name__ == '__main__':
     # Ensure admin credentials are set using the current python executable
     try:
         if splash:
-            splash.showMessage("Verifying Admin Credentials...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
+            splash.showMessage("Verifying Admin Credentials...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+            app.processEvents()
             app.processEvents()
         admin_script = os.path.join(project_dir_path, "create_admin.py")
         if os.path.exists(admin_script):
@@ -2250,7 +2257,8 @@ if __name__ == '__main__':
     app.processEvents()
 
     if splash:
-        splash.showMessage("Starting Backend Services...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
+        splash.showMessage("Starting Backend Services...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+        app.processEvents()
         app.processEvents()
     manage_pyc_path = os.path.join(project_dir_path, 'manage.pyc')
     proc = subprocess.Popen([sys.executable, manage_pyc_path, 'runserver', '127.0.0.1:5423'])
@@ -2284,13 +2292,15 @@ if __name__ == '__main__':
     }
     # --- STEP 4: CEF & Main Window ---
     if splash:
-        splash.showMessage("Initializing Browser Engine...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
+        splash.showMessage("Initializing Browser Engine...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+        app.processEvents()
         app.processEvents()
     cefpython.Initialize(settings, switches)
     
     is_cef_initialized = True
     if splash:
-        splash.showMessage("Launching Application...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtGui.QColor(QtCore.Qt.white))
+        splash.showMessage("Launching Application...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+        app.processEvents()
         app.processEvents()
     mw = MainWindow()
     if splash:

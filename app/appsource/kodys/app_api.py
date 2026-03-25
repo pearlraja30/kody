@@ -1219,14 +1219,21 @@ def report_view(request, test_entry_code):
 		report["TEST_CODE"] = reports.MEDICALTEST.MEDICALTESTMASTER.CODE
 		report["reports"] = reports
 		if reports.IMPRESSION_NOTES:
-			if reports.TEST_TYPE == "All_test":
-				report["test_impression"] = json.loads(reports.IMPRESSION_NOTES)
-			else:
+			try:
+				if reports.TEST_TYPE == "All_test":
+					report["test_impression"] = json.loads(reports.IMPRESSION_NOTES)
+				else:
+					report["test_impression"] = reports.IMPRESSION_NOTES
+			except Exception:
 				report["test_impression"] = reports.IMPRESSION_NOTES
 		else:
 			report["test_impression"] = ""
+		
 		if reports.TEST_RESULT:
-			report["report_result"] = json.loads(reports.TEST_RESULT)
+			try:
+				report["report_result"] = json.loads(reports.TEST_RESULT)
+			except Exception:
+				report["report_result"] = {}
 		else:
 			report["report_result"] = {}
 
@@ -1263,8 +1270,14 @@ def report_view(request, test_entry_code):
 							report["medical_test_interpertation"] = medical_test_interpertation
 					elif medical_test[0].MEDICALTESTMASTER.MEDICAL_APP.CODE == "APP-07":
 						if medical_test_value.MEDICALTESTMASTER.CODE != "TM-25": 
-							raw_data = (report[medical_test_value.MEDICALTESTMASTER.CODE.replace("-","")][2].KEY_VALUE).replace(" ","")
-							raw_data = raw_data.split(",")
+							try:
+								# Safe access to raw data entry
+								raw_data_entry = report[medical_test_value.MEDICALTESTMASTER.CODE.replace("-","")]
+								if len(raw_data_entry) > 2:
+									raw_data = (raw_data_entry[2].KEY_VALUE).replace(" ","")
+									raw_data = raw_data.split(",")
+								else:
+									raw_data = []
 							# First, design the Notch filter for 50Hz (Power Line Interference)
 							fs = 250.0 
 							f0 = 50.0  

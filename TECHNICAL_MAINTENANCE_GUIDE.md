@@ -94,3 +94,26 @@ When modifying UI pages:
 ### Database Maintenance
 - SQLite is stored in `app/appsource/db.sqlite3`.
 - Backups can be triggered via the Maintenance panel (creates a `.db.backup` file).
+
+---
+
+## 5. Sample Data & Robust Reporting
+
+### Generating Sample Reports
+To verify report templates without real hardware, you can inject \"Gold Standard\" sample data into the database.
+1.  Navigate to the project root.
+2.  Run the following command (requires Python 2.7 environment or `sqlite3` driver):
+    ```bash
+    sqlite3 app/appsource/db.sqlite3 < seed_samples_v2.sql
+    ```
+3.  **Search for Patient**: `P-GOLD-001` (John Doe).
+4.  **View Reports**: Look for reports starting with `REP-GOLD-...`.
+
+### Robust Reporting Mechanism
+The reporting engine (`report_view` in `app_api.py`) has been upgraded with **Defensive Coding**:
+- **Partial Data Handling**: If a test was saved but is missing specific readings (e.g., incomplete probe placement), the report will still generate instead of crashing.
+- **Malformed JSON Protection**: Handles legacy data or manual database edits gracefully using `try/except` blocks during JSON parsing.
+- **Safe List Access**: Before accessing raw ECG/CAN data by index, the system now verifies the presence of mandatory peaks to prevent `IndexError`.
+
+> [!TIP]
+> Always use `P-GOLD-001` for client demonstrations to show a fully populated set of reports for all applications (Doppler, VPT, HCP, CAN).

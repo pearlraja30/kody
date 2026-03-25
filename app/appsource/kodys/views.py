@@ -48,6 +48,26 @@ def export_patients_excel(request):
 		logger.error(ulo.error_log(request, sys.exc_traceback.tb_lineno, e))
 		return HttpResponse("Error generating export: %s" % str(e))
 
+@login_required(login_url=login_url)
+def database_backup(request):
+	"""
+	Allows the user to download a backup of the SQLite database.
+	"""
+	fn = ulo._fn()
+	logger.info(ulo.start_log(request, fn))
+	try:
+		db_path = settings.DATABASES['default']['NAME']
+		if os.path.exists(db_path):
+			with open(db_path, 'rb') as f:
+				response = HttpResponse(f.read(), content_type='application/x-sqlite3')
+				response['Content-Disposition'] = 'attachment; filename="KODYS_Backup_%s.sqlite3"' % timezone.now().strftime('%Y%m%d_%H%M%S')
+				return response
+		else:
+			return HttpResponse("Database file not found.")
+	except Exception, e:
+		logger.error(ulo.error_log(request, sys.exc_traceback.tb_lineno, e))
+		return HttpResponse("Error during backup: %s" % str(e))
+
 # Create your views here.
 def about(request):
 	fn = ulo._fn()

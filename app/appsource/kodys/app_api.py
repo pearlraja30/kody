@@ -3044,7 +3044,14 @@ def vpt_ultra_foot(request, option):
 							vpt_ultra_test_values['right_abi_result'] = ["No Data", ""]
 						else:
 							if float(tx_test_entries[20].KEY_VALUE) and float(tx_test_entries[22].KEY_VALUE):
-								right_abi = round(float(float(tx_test_entries[20].KEY_VALUE)/float(tx_test_entries[22].KEY_VALUE)), 2)
+								try:
+									denominator = float(tx_test_entries[22].KEY_VALUE)
+									if denominator != 0:
+										right_abi = round(float(float(tx_test_entries[20].KEY_VALUE)/denominator), 2)
+									else:
+										right_abi = 0.0
+									except:
+										right_abi = 0.0
 								if float(right_abi) >= float(abi_severe[0]) and float(right_abi) <= float(abi_severe[1]):
 									right_abi_result = "Severe"
 								elif float(right_abi) >= float(abi_moderate[0]) and float(right_abi) <= float(abi_moderate[1]):
@@ -3060,7 +3067,7 @@ def vpt_ultra_foot(request, option):
 								else:
 									right_abi_result = "Not in Range"
 							else:
-								right_abi = 0.0
+										right_abi = 0.0
 								right_abi_result = "No Data"
 							vpt_ultra_test_values['right_abi_result'] = ["%.2f"%(right_abi), right_abi_result]
 
@@ -4022,7 +4029,14 @@ def vpt_foot(request, option):
 							vpt_test_values['right_abi_result'] = ["No Data", ""]
 						else:
 							if float(tx_test_entries[20].KEY_VALUE) and float(tx_test_entries[22].KEY_VALUE):
-								right_abi = round(float(float(tx_test_entries[20].KEY_VALUE)/float(tx_test_entries[22].KEY_VALUE)), 2)
+								try:
+									denominator = float(tx_test_entries[22].KEY_VALUE)
+									if denominator != 0:
+										right_abi = round(float(float(tx_test_entries[20].KEY_VALUE)/denominator), 2)
+									else:
+										right_abi = 0.0
+									except:
+										right_abi = 0.0
 								if float(right_abi) >= float(abi_severe[0]) and float(right_abi) <= float(abi_severe[1]):
 									right_abi_result = "Severe"
 								elif float(right_abi) >= float(abi_moderate[0]) and float(right_abi) <= float(abi_moderate[1]):
@@ -4038,7 +4052,7 @@ def vpt_foot(request, option):
 								else:
 									right_abi_result = "Not in Range"
 							else:
-								right_abi = 0.0
+										right_abi = 0.0
 								right_abi_result = "No Data"
 							vpt_test_values['right_abi_result'] = ["%.2f"%(right_abi), right_abi_result]
 					else:
@@ -5115,7 +5129,7 @@ def doppler(request, option):
 				for medical_test_value in medical_tests:
 					tx_test_entries = TX_MEDICALTESTENTRIES.objects.filter(MEDICALTEST__id=medical_test_value.id, DATAMODE="A")
 				 	right_abi_result, left_abi_result, right_tbi_result, left_abi_result = "", "", "", ""
-					left_abi, right_abi = 0.0, 0.0
+										right_abi = 0.0
 					left_tbi, right_tbi = 0.0, 0.0
 					
 					tbi_normal = tbi_normal.replace(">", "")
@@ -5322,7 +5336,7 @@ def doppler_graphical(request, option):
 				for medical_test_value in medical_tests:
 					tx_test_entries = TX_MEDICALTESTENTRIES.objects.filter(MEDICALTEST__id=medical_test_value.id, DATAMODE="A")
 				 	right_abi_result, left_abi_result, right_tbi_result, left_abi_result = "", "", "", ""
-					left_abi, right_abi = 0.0, 0.0
+										right_abi = 0.0
 					left_tbi, right_tbi = 0.0, 0.0
 					
 					tbi_normal = tbi_normal.replace(">", "")

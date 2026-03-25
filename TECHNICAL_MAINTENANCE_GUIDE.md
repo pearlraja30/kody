@@ -1,0 +1,96 @@
+# KODYS Application – Technical Maintenance & Fix Documentation (2026)
+
+This document serves as a comprehensive guide for developers maintained the KODYS Medical Desktop Application. It includes a detailed audit of reported issues, technical implementation details, and architecture overview.
+
+---
+
+## 1. System Architecture Overview
+
+### Stack
+- **Backend**: Python 2.7.18 / Django 1.11.29
+- **Frontend**: HTML5, CSS (W3.CSS), JavaScript (jQuery, D3.js, Chart.js)
+- **Desktop Wrapper**: PyQt4 with CEFPython (Chromium Embedded Framework)
+- **Database**: SQLite3
+- **Installer**: Inno Setup (ISCC)
+
+### Key Files & Responsibilities
+| File | Responsibility |
+|------|----------------|
+| `run.py` | Entry point. Bootstraps Django and initializes the PyQt window. |
+| `app/appsource/kodys/app_api.py` | Core business logic, signal processing (ECG), and database operations. |
+| `app/appsource/kodys/views.py` | Django views handling URL routing and template rendering. |
+| `app/app_assets/media/css/kodys1.css` | Global styling, layout stabilization, and responsive offsets. |
+| `installer_config.iss` | Windows Installer configuration (Inno Setup). |
+| `.github/workflows/build-release.yml` | CI/CD pipeline for automated multi-platform builds. |
+
+---
+
+## 2. Issue Audit & Resolution Status
+
+### Section A: 20 Reported Issues
+
+| # | Issue | Status | Resolution / Details |
+|---|---|---|---|
+| 1 | OS Compatibility | ✅ Fixed | Migrated to relative paths and Docker-ready architecture. |
+| 2 | Startup Speed | ✅ Fixed | Optimized asset loading via relative `MEDIA_URL`. |
+| 3 | CAN Report View Speed | ✅ Fixed | Implemented pre-computation of ECG data at submission. |
+| 4 | CAN Report Generation | ✅ Fixed | Corrected Butterworth bandpass and notch filters. |
+| 5 | PDF Export Problem | 🔧 Applied | Fixed library dependencies (pdf2image); needs `wkhtmltopdf`. |
+| 6 | ECG Graph Plot Issue | ✅ Fixed | Corrected SVG gridline visibility and matplotlib backend. |
+| 7 | Printing Problem | ✅ Fixed | Added centered A4 positioning and print media queries. |
+| 8 | Poincare/Histogram | ✅ Fixed | Corrected mathematical derivation of R-R intervals. |
+| 9 | Baseline Wandering | ✅ Fixed | Applied 0.5Hz high-pass filter to remove DC drift. |
+| 10 | Pan Tompkins Alg | ✅ Fixed | Optimized integration window for 250Hz sampling. |
+| 11 | Diagnose Time Delay | 🔬 Hardware | Potential latency in serial buffer; needs hardware testing. |
+| 12 | Excel Export | ✅ Fixed | Implemented Pandas-based `.xlsx` export for patients. |
+| 13 | DB Backup Option | ✅ Fixed | Added `download_db_backup` view in `views.py`. |
+| 14 | Interpretations | 🔧 Applied | Logic added; clinical text content needs final medical review. |
+| 15 | USB Detection | 🔬 Hardware | Heartbeat logic drafted; needs serial port for verification. |
+| 16 | ABI & TBI Calc | ✅ Fixed | Added zero-division protection and verified ABI logic formulas. |
+| 17 | VPT/HCP Report | 🔧 Applied | Visual structure refined; pending final client design mockups. |
+| 18 | License Update | ⏳ Pending | Code structure ready for appending product license keys. |
+| 19 | Patient Name Search | ✅ Fixed | Verified search across Name, Last Name, Surname, and ID. |
+| 20 | Email Configuration | ✅ Fixed | Added connection timeout handlers and redundant SMTP fallback. |
+
+### Section B: 7 Additional Requirements
+
+| # | Requirement | Status | Resolution / Details |
+|---|---|---|---|
+| 1 | 2 More BP Measurements | 🔧 Applied | Backend fields added; UI inputs extended. |
+| 2 | ECG Grid Background (Red) | ✅ Fixed | Implemented visible pink/red major/minor gridlines. |
+| 3 | Baseline Removal (RT) | ✅ Fixed | Integrated high-pass filter into real-time pipeline. |
+| 4 | Power Line Notch (RT) | ✅ Fixed | Integrated 50Hz IIR notch filter. |
+| 5 | Histogram Code | ✅ Fixed | Corrected BPM binning and distribution plotting. |
+| 6 | Poincare Code | ✅ Fixed | Corrected RRn vs RRn+1 scatter mapping. |
+| 7 | QT Interval | ⏳ Research | Requires complex T-wave end detection algorithm. |
+
+---
+
+## 3. Deployment & CI/CD Guide
+
+### Automated Builds
+Every push to the repository triggers an automated build via GitHub Actions:
+- **Windows**: Compiles the app and generates a `.exe` installer via Inno Setup.
+- **Mac**: Packages the app into a portable `.zip` (Docker recommended for MacOS deployment).
+
+### Versioning Protocol
+Starting from `v2.2.5-Gold-v9`, the system uses **Detailed Versioning**:
+- **Filename**: `Kodys_Foot_Clinik_[VERSION]-rev-[SHA]-[DATE].exe`
+- **Purpose**: Prevents confusion between incremental hotfixes.
+
+---
+
+## 4. Developer Onboarding Tips
+
+### Indentation Convention
+> [!IMPORTANT]
+> The codebase uses **Tabs** for primary indentation. Avoid mixing spaces to prevent Python `IndentationError`.
+
+### CEF Context
+When modifying UI pages:
+- Use `app.processEvents()` in loops if you need the UI to remain responsive during heavy tasks.
+- The `z-index` for the sticky header is set to `10000` to prevent collision with suggestion lists.
+
+### Database Maintenance
+- SQLite is stored in `app/appsource/db.sqlite3`.
+- Backups can be triggered via the Maintenance panel (creates a `.db.backup` file).

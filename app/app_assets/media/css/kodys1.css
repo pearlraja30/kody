@@ -4,6 +4,24 @@
   .w3-button:hover{
     background-color: none!important;
   }
+  .w3-bar-item:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    transition: background-color 0.3s ease;
+  }
+  .nav-active {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border-bottom: 3px solid #ff6600 !important;
+  }
+  .sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 9999 !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background: inherit;
+  }
+  .login-welcome-text {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  }
   .text_indent::placeholder{
     text-indent: 194px;
     color: #B6E1E0!important;
@@ -714,7 +732,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px!important;
+    width: 28px !important;
     height: 30px!important;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -750,7 +768,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box; 
@@ -788,7 +806,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box; 
@@ -827,7 +845,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -864,7 +882,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -901,7 +919,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -938,7 +956,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -975,7 +993,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -1012,7 +1030,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -1049,7 +1067,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -1086,7 +1104,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -1123,7 +1141,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -1160,7 +1178,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -1197,7 +1215,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -1234,7 +1252,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -1271,7 +1289,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -1308,7 +1326,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -1345,7 +1363,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -1382,7 +1400,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;   
@@ -1417,7 +1435,7 @@ select{
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box; 
@@ -1573,7 +1591,7 @@ width: 80px;
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;  
@@ -1607,7 +1625,7 @@ padding-left: 8px;
     
     z-index: 1;
     text-align: center;
-    width: 28px
+    width: 28px;
     height: 30px;      
     pointer-events: none;
     box-sizing: border-box;  
@@ -1699,7 +1717,7 @@ body{font-family: 'Roboto'!important;font-size:12px!important;}
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px!important;
+    width: 28px !important;
     height: 30px!important;      
     pointer-events: none;
     box-sizing: border-box; 
@@ -1737,7 +1755,7 @@ body{font-family: 'Roboto'!important;font-size:12px!important;}
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px!important;
+    width: 28px !important;
     height: 30px!important;      
     pointer-events: none;
     box-sizing: border-box; 
@@ -1775,7 +1793,7 @@ body{font-family: 'Roboto'!important;font-size:12px!important;}
     background:#00BDB6 ;
     z-index: 1;
     text-align: center;
-    width: 28px!important;
+    width: 28px !important;
     height: 30px!important;      
     pointer-events: none;
     box-sizing: border-box; 

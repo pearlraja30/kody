@@ -1,10 +1,10 @@
 <div class="w3-bar bgclr1 ff-r w3-display-container">
-			<a href="{% url 'home' %}" class="w3-bar-item ft-b f-14 fclr tdecor close_test_page">Apps</a>
-			<a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'patients' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item ft-b f-14 tdecor fclr close_test_page">Patients</a>
-            <a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'reports' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item  ft-b f-14 tdecor fclr close_test_page">Reports</a>
-            <a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'about' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item ft-b f-14 tdecor fclr close_test_page">About</a>
-            <a href="{% url 'hospital_profile' %}" class="w3-bar-item ft-b f-14 tdecor fclr close_test_page">Settings</a>
-            <a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'customer_support' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item ft-b f-14 tdecor fclr close_test_page">Customer Support</a>
+			<a href="{% url 'home' %}" class="w3-bar-item ft-b f-14 fclr tdecor close_test_page {% if request.resolver_match.url_name == 'home' %}nav-active{% endif %}">Apps</a>
+			<a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'patients' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item ft-b f-14 tdecor fclr close_test_page {% if request.resolver_match.url_name == 'patients' %}nav-active{% endif %}">Patients</a>
+            <a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'reports' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item  ft-b f-14 tdecor fclr close_test_page {% if request.resolver_match.url_name == 'reports' %}nav-active{% endif %}">Reports</a>
+            <a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'about' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item ft-b f-14 tdecor fclr close_test_page {% if request.resolver_match.url_name == 'about' %}nav-active{% endif %}">About</a>
+            <a href="{% url 'hospital_profile' %}" class="w3-bar-item ft-b f-14 tdecor fclr close_test_page {% if request.resolver_match.url_name == 'hospital_profile' %}nav-active{% endif %}">Settings</a>
+            <a {% if COMMON_INFO.HOSPITAL_NAME %} href="{% url 'customer_support' %}" {% else %} href="#" onclick="licensekey()" {% endif %} class="w3-bar-item ft-b f-14 tdecor fclr close_test_page {% if request.resolver_match.url_name == 'customer_support' %}nav-active{% endif %}">Customer Support</a>
            
             <div class="w3-right">
             	

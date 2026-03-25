@@ -263,6 +263,7 @@ class MainWindow(QtGui.QMainWindow):
         
         # Initial position
         self.center()
+        self.is_closing = False
 
     def center(self):
         frameGm = self.frameGeometry()
@@ -281,6 +282,10 @@ class MainWindow(QtGui.QMainWindow):
 
     def closeEvent(self, event):
         global is_shutting_down, is_running_loop
+        if self.is_closing:
+            event.accept()
+            return
+            
         url = self.mainFrame.browser.GetUrl()
         if url.startswith("http://127.0.0.1:5423/APP"):
             reply = QtGui.QMessageBox.question(self, 'Alert',"You should Close the test window first to quit application?", QtGui.QMessageBox.Ok)
@@ -289,12 +294,21 @@ class MainWindow(QtGui.QMainWindow):
         else:
             reply = QtGui.QMessageBox.question(self, 'Alert',"Are you sure to quit?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
             if reply == QtGui.QMessageBox.Yes:
+                self.is_closing = True
                 # Stop timer first
-                app.timer.stop()
-                # Stop backend cleanly if possible
                 try:
-                    subprocess.call(['taskkill', '/F', '/T', '/PID', str(proc.pid)], 
-                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    app.timer.stop()
+                except:
+                    pass
+                # Stop backend cleanly
+                try:
+                    import platform
+                    if platform.system() == "Windows":
+                        subprocess.call(['taskkill', '/F', '/T', '/PID', str(proc.pid)], 
+                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    else:
+                        proc.terminate()
+                        proc.wait()
                 except:
                     pass
                 # Mark shutting down

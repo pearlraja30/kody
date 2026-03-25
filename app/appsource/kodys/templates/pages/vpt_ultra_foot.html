@@ -1097,7 +1097,7 @@ $(document).ready(function() {
                     external.connection_close(blu_connect_close);
                 }
             {% endif %}
-            window.location.href = "{% url 'home' %}";
+            window.location.href = global_redirect_url;
         });
     $(".modal_text_cancel_app").click(function(){
                 $("#close_app_popup").hide();
@@ -1109,7 +1109,7 @@ $(document).ready(function() {
                         external.connection_close(blu_connect_close);
                     }
                 {% endif %}
-                window.location.href = "{% url 'signout' %}";
+                window.location.href = global_redirect_url;
             });
     });
     $("#final_clear_biothezi").click(function(){

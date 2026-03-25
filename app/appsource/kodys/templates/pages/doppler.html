@@ -558,11 +558,11 @@ $(document).ready(function() {
         });
         $(".modal_text_cancel").click(function(){
             $("#close_process").hide();
-            window.location.href = "{% url 'home' %}";
+            window.location.href = global_redirect_url;
         });
         $("#modal_text_cancel_app").click(function(){
                 $("#close_app_popup").hide();
-                window.location.href = "{% url 'signout' %}";
+                window.location.href = global_redirect_url;
             });
         $("#close_process").click(function(){
             $("#close_process").hide();

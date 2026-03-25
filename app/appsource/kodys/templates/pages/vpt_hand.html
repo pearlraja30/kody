@@ -1018,7 +1018,7 @@ $(document).ready(function() {
                     external.connection_close(connect_close);
                 }
             {% endif %}
-            window.location.href = "{% url 'home' %}";
+            window.location.href = global_redirect_url;
         });
     });
     $(".modal_text_cancel_app").click(function(){
@@ -1028,7 +1028,7 @@ $(document).ready(function() {
                         external.connection_close(connect_close);
                     }
                 {% endif %}
-                window.location.href = "{% url 'signout' %}";
+                window.location.href = global_redirect_url;
             });
     $("#final_clearvpt_biothezihand").click(function(){
         $(".test-field").val("");

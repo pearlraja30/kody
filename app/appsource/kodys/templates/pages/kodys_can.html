@@ -1045,14 +1045,14 @@ doesnotexist:-o-prefocus, #prbar {
         {
             close_device("CAN","USB");
             setTimeout(function(){ 
-                window.location.href = "{% url 'home' %}";
+                window.location.href = global_redirect_url;
             }, 2000);
         }
         function redirect_connect_close_1(msg,close_device)
         {
             close_device("CAN","USB");
             setTimeout(function(){ 
-                window.location.href = "{% url 'signout' %}";
+                window.location.href = global_redirect_url;
             }, 2000);
         }
          function blu_device_connect(msg, connect) {
@@ -1073,14 +1073,14 @@ doesnotexist:-o-prefocus, #prbar {
         {
             close_device("CAN","BLU");
             setTimeout(function(){ 
-                window.location.href = "{% url 'home' %}";
+                window.location.href = global_redirect_url;
             }, 2000);
         }
         function redirect_blu_connect_close_1(msg,close_device)
         {
             close_device("CAN","BLU");
             setTimeout(function(){ 
-                window.location.href = "{% url 'signout' %}";
+                window.location.href = global_redirect_url;
             }, 2000);
         }
         function send_rest_start_command(command_send)
@@ -1697,10 +1697,10 @@ doesnotexist:-o-prefocus, #prbar {
                 }
                 if (!$("#connection_type").val())
                 {
-                    window.location.href = "{% url 'home' %}";
+                    window.location.href = global_redirect_url;
                 }
             {% else %}
-                 window.location.href = "{% url 'home' %}";
+                 window.location.href = global_redirect_url;
             {% endif %}
             
         });
@@ -1715,10 +1715,10 @@ doesnotexist:-o-prefocus, #prbar {
                 }
                 if (!$("#connection_type").val())
                 {
-                    window.location.href = "{% url 'home' %}";
+                    window.location.href = global_redirect_url;
                 }
             {% else %}
-                 window.location.href = "{% url 'signout' %}";
+                 window.location.href = global_redirect_url;
             {% endif %}
         });
         function request_process(){

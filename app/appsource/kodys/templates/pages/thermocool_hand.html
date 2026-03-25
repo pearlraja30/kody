@@ -1089,10 +1089,10 @@ $(document).ready(function() {
                     }
                     if (!$("#connection_type").val())
                     {
-                        window.location.href = "{% url 'home' %}";
+                        window.location.href = global_redirect_url;
                     }
                 {% else %}
-                     window.location.href = "{% url 'home' %}";
+                     window.location.href = global_redirect_url;
                 {% endif %}
                 
             });
@@ -1107,10 +1107,10 @@ $(document).ready(function() {
                     }
                     if (!$("#connection_type").val())
                     {
-                        window.location.href = "{% url 'home' %}";
+                        window.location.href = global_redirect_url;
                     }
                 {% else %}
-                     window.location.href = "{% url 'signout' %}";
+                     window.location.href = global_redirect_url;
                 {% endif %}
             });
     var url = window.location.href.split("/");
@@ -1648,14 +1648,14 @@ function blu_device_connect(msg, connect) {
     {
         close_device("HCP","USB");
         setTimeout(function(){ 
-            window.location.href = "{% url 'home' %}";
+            window.location.href = global_redirect_url;
         }, 2000);
     }
     function redirect_connect_close_1(msg,close_device)
     {
         close_device("HCP","USB");
         setTimeout(function(){ 
-            window.location.href = "{% url 'signout' %}";
+            window.location.href = global_redirect_url;
         }, 2000);
     }
     function blu_connect_close(msg,close_device)
@@ -1666,14 +1666,14 @@ function blu_device_connect(msg, connect) {
     {
         close_device("HCP","BLU");
         setTimeout(function(){ 
-            window.location.href = "{% url 'home' %}";
+            window.location.href = global_redirect_url;
         }, 2000);
     }
     function redirect_blu_connect_close_1(msg,close_device)
     {
         close_device("HCP","BLU");
         setTimeout(function(){ 
-            window.location.href = "{% url 'signout' %}";
+            window.location.href = global_redirect_url;
         }, 2000);
     }
 function handwarmhcp(){

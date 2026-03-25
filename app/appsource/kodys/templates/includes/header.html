@@ -14,6 +14,14 @@
             	
            </div>
 		</div>
+		<script>
+			$(".close_test_page").click(function() {
+				global_redirect_url = $(this).attr("href");
+			});
+			$(".close_app").click(function() {
+				global_redirect_url = $(this).attr("href");
+			});
+		</script>
 
 		<div class="w3-display-container h84 w100p bgclr2" style="height: 60px;">
 			<div class="w3-display-left w174  bgclr11"  {% if COMMON_INFO.HOSPITAL_LOGO %} style="background-image: url({{COMMON_INFO.HOSPITAL_LOGO|safe}});background-size: contain;background-repeat: no-repeat;background-position: center;height: 60px;" {% else %}style="background-image: url({{MEDIA_URL}}img/default_hospital_logo.png);background-size: contain;background-repeat: no-repeat;background-position: center;"{% endif %}>

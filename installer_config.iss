@@ -8,8 +8,8 @@ AppId={{2F7C5CFB-FAD2-427B-85A5-4AEB28544B55}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
-PrivilegesRequired=lowest
-DefaultDirName={userappdata}\{#MyAppName}
+PrivilegesRequired=admin
+DefaultDirName={pf}\{#MyAppName}
 DisableWelcomePage=yes
 DisableDirPage=yes
 DisableProgramGroupPage=yes
@@ -46,3 +46,5 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 
+[UninstallDelete]
+Type: filesandordirs; Name: "{app}"

@@ -37,7 +37,8 @@ on:
 
 env:
   APP_NAME: "Kodys Foot Clinik"
-  APP_VERSION: ${{ github.event.inputs.version || '2.0.0' }}
+  # Dynamic Versioning: Use tag name if available, then input, then default
+  APP_VERSION: ${{ github.ref_name || github.event.inputs.version || '2.0.0' }}
 
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -522,8 +523,11 @@ jobs:
         with:
           path: release-artifacts
 
-      - name: 📋 List artifacts
-        run: find release-artifacts -type f
+      - name: 📋 Prepare artifacts for release
+        run: |
+          mkdir dist_final
+          find release-artifacts -type f -exec cp {} dist_final/ \;
+          ls -l dist_final/
 
       - name: 🚀 Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -551,7 +555,7 @@ jobs:
             ### Access from Phone/Tablet
             Connect to the same network and open `http://YOUR_PC_IP:5423` in any browser.
           files: |
-            release-artifacts/**/*
+            dist_final/*
           draft: false
           prerelease: false
         env:

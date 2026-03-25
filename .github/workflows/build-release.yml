@@ -244,7 +244,7 @@ jobs:
       - name: 🏗️ Build Windows Installer
         shell: cmd
         run: |
-          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer_config.iss
+          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer_config.iss || exit /b 1
           echo Installer built!
           dir dist\
 

@@ -28,7 +28,7 @@ VersionInfoCopyright=Copyright (C) 2026 Kodys Foot Clinik
 VersionInfoProductName=Kodys Foot Clinik
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checked
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Files]
 ; Replaced absolute path with relative path to include everything in the root

@@ -2158,6 +2158,10 @@ class CefApplication(QtGui.QApplication):
         self.timer.timeout.connect(self.onTimer)
         self.timer.start(1)
 
+    def onTimer(self):
+        if is_cef_initialized:
+            cefpython.MessageLoopWork()
+
 is_cef_initialized = False
 
 if __name__ == '__main__':

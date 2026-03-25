@@ -159,7 +159,6 @@ if os.path.exists(libcef_dll):
         raise Exception("Unsupported python version: %s" % sys.version)
 else:
     from cefpython3 import cefpython
-    cefpython.WindowUtils.SetHighDpiSupport(True)
 
 
 def GetApplicationPath(file=None):
@@ -2254,7 +2253,6 @@ if __name__ == '__main__':
     # --- STEP 4: CEF & Main Window ---
     cefpython.Initialize(settings, switches)
     
-    global is_cef_initialized
     is_cef_initialized = True
     mw = MainWindow()
     

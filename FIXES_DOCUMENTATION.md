@@ -86,6 +86,16 @@ This document provides a technical summary of the UI and backend stabilization f
   - As the software is not yet "Digitally Signed" with a paid Certificate Authority (e.g., Sectigo or DigiCert), the Windows SmartScreen blue box will still appear for new users.
   - **Action for Clients**: Click **"More Info"** -> **"Run anyway"**. Once the app builds "reputation" (used by multiple clients), the warning will naturally disappear.
 
+## 5. Home Page Layout & Icon Fixes
+
+### Issue: Footer Message Overlap
+- **Problem**: As more test icons were added to the home screen, the "Software Version" footer would overlap with the bottom row of icons. This was caused by stray HTML tags and a non-dynamic container structure.
+- **Fix**: Refactored `home.html` to remove redundant `</div>` tags and moved the footer into a responsive flex container. The footer now naturally sits below the last icon, regardless of how many icons are added.
+
+### Issue: Broken "Kodys CAN" Icon
+- **Problem**: The "Kodys CAN" icon appeared as a broken image because its database entry contained an absolute path that conflicted with the application's media configuration.
+- **Fix**: Corrected the SQLite database entry for the "Kodys CAN" record to use the proper relative path (`img/png/Kodys_Can.png`).
+
 **Version History**: 
 - v2.2.0: Initial Platinum Release
-- v2.2.5: Final Gold Stabilization (v3) - Includes 140px UI alignment and No-UAC Installer.
+- v2.2.5: Final Gold Stabilization (v4) - Includes Home Page overlap fix and Icon path correction.

@@ -8,7 +8,8 @@ AppId={{2F7C5CFB-FAD2-427B-85A5-4AEB28544B55}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
-DefaultDirName={autopf}\{#MyAppName}
+PrivilegesRequired=lowest
+DefaultDirName={userappdata}\{#MyAppName}
 ; Replaced absolute path with relative path
 SetupIconFile=appicon.ico
 OutputDir=dist
@@ -16,6 +17,11 @@ OutputBaseFilename="Kodys Foot Clinik Installer"
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
+VersionInfoVersion=2.2.5.0
+VersionInfoCompany=Kodys Foot Clinik
+VersionInfoDescription=KODYS Medical Diagnostic Suite
+VersionInfoCopyright=Copyright (C) 2026 Kodys Foot Clinik
+VersionInfoProductName=Kodys Foot Clinik
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
@@ -35,5 +41,4 @@ Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
-[Dirs]
-Name: "{app}"; Permissions: users-full
+

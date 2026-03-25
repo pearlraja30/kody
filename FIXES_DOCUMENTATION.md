@@ -80,6 +80,8 @@ This document provides a technical summary of the UI and backend stabilization f
 - **Problem**: The previous installer required Administrative privileges (UAC prompt) to install to Program Files. Additionally, Windows SmartScreen would show a "Windows protected your PC" blue box because the app was not digitally signed.
 - **Fix**: 
   - Switched to a **Per-User Installation** model (`PrivilegesRequired=lowest`). The app now installs to the user's Local AppData folder by default, which **removes the need for Admin/UAC permission**.
+  - Implemented **Direct-Install (Zero-Wizard)**: Setup now skips almost all wizard pages (Welcome, Folder Select, etc.). It installs in one click to maximize speed and professional feel.
+  - **Auto-Desktop Icon**: The installer now creates the desktop shortcut automatically.
   - Added professional **VersionInfo Metadata** (Company, Copyright, Product Name) to the installer. This populate the "Details" tab of the `.exe`, increasing legitimacy.
   - Removed non-standard directory permission overrides that could trigger antivirus false positives.
 - **Note on SmartScreen (Blue Box)**: 

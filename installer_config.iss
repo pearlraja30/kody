@@ -10,10 +10,14 @@ AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 PrivilegesRequired=lowest
 DefaultDirName={userappdata}\{#MyAppName}
+DisableWelcomePage=yes
+DisableDirPage=yes
+DisableProgramGroupPage=yes
+DefaultGroupName={#MyAppName}
 ; Replaced absolute path with relative path
 SetupIconFile=appicon.ico
 OutputDir=dist
-OutputBaseFilename="Kodys Foot Clinik Installer"
+OutputBaseFilename="Kodys_Foot_Clinik_v2.2.5"
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -24,7 +28,7 @@ VersionInfoCopyright=Copyright (C) 2026 Kodys Foot Clinik
 VersionInfoProductName=Kodys Foot Clinik
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checked
 
 [Files]
 ; Replaced absolute path with relative path to include everything in the root

@@ -33,15 +33,17 @@
 		padding: 0 !important;
 		width: 100% !important;
 		height: 100% !important;
-		overflow: hidden !important;
+		overflow: auto !important;
 	}
 	.w100 { width: 100% !important; }
 	.h100 { height: 100% !important; }
 </style>
 <body ondragstart="return false" ondrop="return false;">
-	<div class="w3-display-container w100 h100 bgclr3" style="min-height: 100vh; position: absolute; top: 0; left: 0;">
+	<div class="w100 h100 bgclr3" style="min-height: 100vh; display: flex; flex-direction: column;">
 	{% block header %}{% include 'includes/header.html' %}{% endblock %}
-	{% block content_body %}{% endblock %}
+	<div style="flex: 1; position: relative;">
+		{% block content_body %}{% endblock %}
+	</div>
 	{% block js_script %}{% endblock %}
 	</div>
 </body>

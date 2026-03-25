@@ -1,15 +1,15 @@
 {% extends "page_layout.html" %}
 {% block content_body %}
-		<div class="background1" style="height:679px!important">
+		<div class="background1" style="min-height: 80vh;">
 			<div class="w3-row  w81p ml10p ">
 			<div class="w3-row-padding mt6p " style="margin-top: 3.4% !important">
                {% for apps in kodys_apps|slice:"0:4" %}
                <div class="w3-quarter ">
-                <div class="pr bgclr19 w230 h220 w3-round {% if apps.DATAMODE == "A" %} cp {% endif %}" {% if COMMON_INFO.HOSPITAL_NAME %} {% if apps.DATAMODE == "A" %} onclick="document.getElementById('{{apps.CODE}}').style.display='block'" {% endif %} {% else %} onclick="licensekey()" {% endif %} >
+                <div class="pr bgclr19 w230 w3-round {% if apps.DATAMODE == "A" %} cp {% endif %}" {% if COMMON_INFO.HOSPITAL_NAME %} {% if apps.DATAMODE == "A" %} onclick="document.getElementById('{{apps.CODE}}').style.display='block'" {% endif %} {% else %} onclick="licensekey()" {% endif %} >
                     <div class="w3-center">
                	        <img class="home_img h150"  src="{{MEDIA_URL}}{{apps.ICON_PATH}}" alt="heart-beat">
                     </div>
-               	    <div class="w3-center img_caption " style="position: absolute;bottom: 0;width: 100%;"><span class="w3-text-white ff-r ft-b f-18">{{apps.APP_NAME}}</span>
+               	    <div class="w3-center img_caption "><span class="w3-text-white ff-r ft-b f-18">{{apps.APP_NAME}}</span>
                	    </div>
                   </div>
                </div>
@@ -31,7 +31,7 @@
 			</div>
 		</div>
 
-        <div class="w3-container w3-display-bottomleft fclr11 ff-r f-20 ft-b w100 pt12 pb12 brclr5 ">
+        <div class="w3-container fclr11 ff-r f-20 ft-b w100 pt12 pb12 brclr5 " style="margin-top: 20px; border-top: 1px solid rgba(0,0,0,0.1);">
 			Kodys Foot Clinik Software Version 2.2.0
 		</div>
 

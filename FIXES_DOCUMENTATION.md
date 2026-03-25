@@ -8,8 +8,8 @@ This document provides a technical summary of the UI and backend stabilization f
 - **Problem**: Header, content, and footer often overlapped due to absolute positioning. App icons were in rigid `w3-quarter` boxes that didn't adapt to screen resolution.
 - **Fix**: 
   - Migrated the base layout (`page_layout.html`) to a **Flexbox** architecture (`display: flex; flex-direction: column;`).
-  - Implemented a dynamic grid for the home page (`home.html`) using Flexbox wrap and gap, allowing icons to auto-align and center based on the available width.
-- **Benefit**: The UI now "auto-fits" any screen resolution without horizontal scrolling or manual layout adjustments.
+  - Implemented a dynamic grid for the home page (`home.html`) using Flexbox wrap and `justify-content: flex-start`, ensuring icons align predictably from the left on all screen sizes.
+- **Benefit**: The UI now "auto-fits" any screen resolution without horizontal scrolling or weirdly centered orphaned icons.
 
 ### Issue: Header Overlap by Sub-menus
 - **Problem**: Search suggestion lists or modal sub-menus would sometimes cover the main navigation header.
@@ -52,8 +52,18 @@ This document provides a technical summary of the UI and backend stabilization f
   - The dialog now only prompts once; subsequent close events (triggered by CEF shutdown) are automatically accepted.
 - **Benefit**: A smoother, less "annoying" exit experience.
 
----
-**Maintained by**: Antigravity AI
+### Issue: Logout Failure for Certain Users
+- **Problem**: Admin or Superuser accounts without a corresponding `TX_ACCOUNTUSER` record were unable to log out properly due to an unhandled exception in the `user_signout` API.
+- **Fix**: 
+  - Refactored `api.user_signout` to gracefully handle missing account records.
+  - Ensured the Django `logout(request)` is always called before redirecting to the sign-in screen.
+- **Benefit**: Consistent logout functionality for all users types (Doctors, Admin, Technicians).
+
+### Issue: Header/Body "Collapsed" Overlap
+- **Problem**: The content body would sometimes appear too close to or under the sticky header on certain resolutions.
+- **Fix**:
+  - Added a protective `padding-top: 15px` to the main content container in `page_layout.html`.
+- **Benefit**: Predictable vertical spacing between the navigation region and the page content.
 **Version History**: 
 - v2.2.0: Initial Platinum Release
 - v2.2.5: UI Stabilization & Mac Process Fixes

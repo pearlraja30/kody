@@ -99,9 +99,11 @@ def user_signout(request):
 	success_msg= 'Success'
 	error_msg ='ERROR'
 	try:
-		accountuser = TX_ACCOUNTUSER.objects.get(USER=request.user)
-		accountuser.LAST_LOGIN = request.user.last_login
-		accountuser.save()
+		if request.user.is_authenticated():
+			accountuser = TX_ACCOUNTUSER.objects.filter(USER=request.user).first()
+			if accountuser:
+				accountuser.LAST_LOGIN = request.user.last_login
+				accountuser.save()
 		logout(request)
 		result, msg = ulo._setmsg(success_msg, error_msg, True)
 	except Exception,e:

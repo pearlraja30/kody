@@ -14,9 +14,10 @@ This document provides a technical summary of the UI and backend stabilization f
 ### Issue: Header Overlap by Sub-menus
 - **Problem**: Search suggestion lists or modal sub-menus would sometimes cover the main navigation header.
 - **Fix**: 
-  - Defined a `.sticky-header` class with `position: sticky; top: 0; z-index: 9999;`.
-  - Wrapped the header in this high-priority layer to ensure it always remains on top of content and modals.
-- **Benefit**: Navigation is always visible and never obscured by page-specific UI elements.
+  - Overhauled the header to use **`position: fixed`** with a high-priority `z-index: 10000`.
+  - Implemented a global **103px offset** for the main content and sidebars to prevent overlap.
+  - Removed competing `z-index` overrides in page templates (Patients/Reports) to restore a clear layering hierarchy.
+- **Benefit**: The navigation menu is now truly persistent ("stays always") and never obscured by page content, regardless of scroll position or screen size.
 
 ## 2. Visibilty & Interaction
 

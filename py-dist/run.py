@@ -202,14 +202,23 @@ def GetApplicationPath(file=None):
 def GetWritableAppDataPath(folder=None):
     """Returns a writable path in the user's TEMP directory to avoid permission issues."""
     import os
-    # Use TEMP/KodysV2 as a guaranteed writable base
-    base = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.getcwd())), "KodysFootClinikV2")
+    # Use TEMP/KodysFootClinikV2 as a guaranteed writable base
+    base = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.path.expanduser('~'))), "KodysFootClinikV2")
     if not os.path.exists(base):
         try:
             os.makedirs(base)
         except:
             pass
     
+    # Pre-create standard subdirectories to avoid "No such file" errors in services
+    for sub in ["logs", "cache", "app_assets", "app_assets/media", "app_assets/DATA"]:
+        sub_path = os.path.join(base, sub)
+        if not os.path.exists(sub_path):
+            try:
+                os.makedirs(sub_path)
+            except:
+                pass
+
     if folder:
         path = os.path.join(base, folder)
         if not os.path.exists(path):
@@ -2295,9 +2304,10 @@ if __name__ == '__main__':
         app.processEvents()
         app.processEvents()
     
-    # Defensive compile - skip if read-only
+    # Defensive compile - skip if read-only, and don't force
     try:
-        compileall.compile_dir(project_dir_path, force=True)
+        # Don't use force=True to avoid permission denied spam for existing files
+        compileall.compile_dir(project_dir_path, quiet=1)
     except:
         log_boot("Info: Skipping asset compilation (directory is read-only)")
     app.processEvents()
@@ -2321,10 +2331,18 @@ if __name__ == '__main__':
         app.processEvents()
         app.processEvents()
     
+    manage_path = os.path.join(project_dir_path, 'manage.pyc')
+    if not os.path.exists(manage_path):
+        manage_path = os.path.join(project_dir_path, 'manage.py')
+    
     try:
-        manage_pyc_path = os.path.join(project_dir_path, 'manage.pyc')
-        log_boot("Starting Django on port 5427 via %s" % manage_pyc_path)
-        proc = subprocess.Popen([sys.executable, manage_pyc_path, 'runserver', '127.0.0.1:5427'])
+        log_boot("Starting Django on port 5427 via %s" % manage_path)
+        # Use CREATE_NO_WINDOW if on Windows to minimize console spam
+        if sys.platform == "win32":
+            import win32process
+            proc = subprocess.Popen([sys.executable, manage_path, 'runserver', '127.0.0.1:5427'], creationflags=win32process.CREATE_NO_WINDOW)
+        else:
+            proc = subprocess.Popen([sys.executable, manage_path, 'runserver', '127.0.0.1:5427'])
     except Exception as e:
         show_fatal_error("Backend Error", "Could not start Django server: %s" % str(e))
         sys.exit(1)
@@ -2338,7 +2356,7 @@ if __name__ == '__main__':
     settings = {
         "debug": True,
         "log_severity": cefpython.LOGSEVERITY_INFO,
-        "log_file": GetApplicationPath("debug.log"),
+        "log_file": os.path.join(GetWritableAppDataPath(), "cef_debug.log"),
         "auto_zooming": "1",
         "release_dcheck_enabled": True,
         "cache_path": GetWritableAppDataPath("cache"),

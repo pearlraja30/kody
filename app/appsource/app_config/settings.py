@@ -25,6 +25,15 @@ if not os.path.exists(DATA_ROOT):
     except:
         pass
 
+# Ensure subdirs for logging/media exist to avoid ValueError in dictConfig
+for sub in ["logs", "app_assets", "app_assets/media", "app_assets/DATA"]:
+    sub_path = os.path.join(DATA_ROOT, sub)
+    if not os.path.exists(sub_path):
+        try:
+            os.makedirs(sub_path)
+        except:
+            pass
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 

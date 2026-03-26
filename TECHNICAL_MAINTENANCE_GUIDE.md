@@ -4,6 +4,11 @@ This document serves as a comprehensive guide for developers maintained the KODY
 
 ---
 
+> [!TIP]
+> **Maintenance Control Protocol (MCP)**: For a detailed guide on finding and fixing field application "breaks" (Diagnostic SOPs), see the [MAINTENANCE_CONTROL_PROTOCOL.md](file:///Users/rajasekaran/Projects/live/kody/MAINTENANCE_CONTROL_PROTOCOL.md).
+
+---
+
 ## 1. System Architecture Overview
 
 ### Stack

@@ -3,17 +3,31 @@ import datetime
 
 # --- ULTRA EARLY LOGGING ---
 def log_boot(msg):
-    try:
-        with open("boot_debug.log", "a") as f:
-            f.write("[%s] %s\n" % (datetime.datetime.now(), msg))
-    except:
-        pass
+    log_paths = ["boot_debug.log", os.path.join(os.environ.get('TEMP', os.environ.get('TMP', '/tmp')), "kodys_boot_debug.log")]
+    for path in log_paths:
+        try:
+            with open(path, "a") as f:
+                f.write("[%s] %s\n" % (datetime.datetime.now(), msg))
+            break
+        except:
+            pass
 
 log_boot("--- BOOT START ---")
 log_boot("Python Executable: %s" % sys.executable)
 log_boot("Python Version: %s" % sys.version)
 log_boot("Current Dir: %s" % os.getcwd())
 log_boot("Path: %s" % sys.path)
+
+def show_fatal_error(title, message):
+    log_boot("FATAL [%s]: %s" % (title, message))
+    try:
+        from PyQt4 import QtGui, QtCore
+        temp_app = QtGui.QApplication.instance()
+        if not temp_app:
+            temp_app = QtGui.QApplication([])
+        QtGui.QMessageBox.critical(None, title, message)
+    except:
+        print("ERROR [%s]: %s" % (title, message))
 
 import subprocess, time, socket
 
@@ -287,7 +301,7 @@ class MainWindow(QtGui.QMainWindow):
             return
             
         url = self.mainFrame.browser.GetUrl()
-        if url.startswith("http://127.0.0.1:5423/APP"):
+        if url.startswith("http://127.0.0.1:5427/APP"):
             reply = QtGui.QMessageBox.question(self, 'Alert',"You should Close the test window first to quit application?", QtGui.QMessageBox.Ok)
             if reply == QtGui.QMessageBox.Ok:
                 event.ignore()
@@ -332,15 +346,30 @@ class MainFrame(QtGui.QWidget):
         rect = [0, 0, 0, 0]
         windowInfo.SetAsChild(int(self.winId()), rect)
         self.parent = parent 
-        while True:
+        
+        # Robust backend health check with timeout
+        start_time = time.time()
+        backend_ready = False
+        log_boot("Waiting for backend on localhost:5427...")
+        while time.time() - start_time < 30:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            result = sock.connect_ex(('127.0.0.1',5423))
+            sock.settimeout(1.0)
+            result = sock.connect_ex(('127.0.0.1', 5427))
             sock.close()
             if result == 0:
+                backend_ready = True
+                log_boot("Backend is online.")
                 break
+            time.sleep(0.5)
+            
+        if not backend_ready:
+            log_boot("CRITICAL: Backend failed to start after 30 seconds.")
+            show_fatal_error("Startup Failure", "The backend server failed to respond on port 5427. Please check the logs.")
+            os._exit(1)
+
         self.browser = cefpython.CreateBrowserSync(windowInfo,
                 browserSettings={},
-                navigateUrl=GetApplicationPath("http://127.0.0.1:5423"))
+                navigateUrl=GetApplicationPath("http://127.0.0.1:5427"))
 
         global browser_count
         browser_count += 1
@@ -2260,8 +2289,15 @@ if __name__ == '__main__':
         splash.showMessage("Starting Backend Services...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
         app.processEvents()
         app.processEvents()
-    manage_pyc_path = os.path.join(project_dir_path, 'manage.pyc')
-    proc = subprocess.Popen([sys.executable, manage_pyc_path, 'runserver', '127.0.0.1:5423'])
+    
+    try:
+        manage_pyc_path = os.path.join(project_dir_path, 'manage.pyc')
+        log_boot("Starting Django on port 5427 via %s" % manage_pyc_path)
+        proc = subprocess.Popen([sys.executable, manage_pyc_path, 'runserver', '127.0.0.1:5427'])
+    except Exception as e:
+        show_fatal_error("Backend Error", "Could not start Django server: %s" % str(e))
+        sys.exit(1)
+
     print("[pyqt.py] PyQt version: %s" % QtCore.PYQT_VERSION_STR)
     print("[pyqt.py] QtCore version: %s" % QtCore.qVersion())
 
@@ -2282,7 +2318,6 @@ if __name__ == '__main__':
     }
 
     # Command line switches set programmatically
-    # Note: remote-debugging-port is moved to 5424 to avoid conflict with Django on 5423
     switches = {
         "remote-debugging-port": "5424",
         "no-proxy-server": "",
@@ -2290,48 +2325,44 @@ if __name__ == '__main__':
         "disable-gpu-compositing": "",
         "enable-begin-frame-scheduling": "",
     }
+
     # --- STEP 4: CEF & Main Window ---
-    if splash:
-        splash.showMessage("Initializing Browser Engine...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
-        app.processEvents()
-        app.processEvents()
-    cefpython.Initialize(settings, switches)
+    try:
+        if splash:
+            splash.showMessage("Initializing Browser Engine...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+            app.processEvents()
+            app.processEvents()
+        log_boot("Initializing CEF...")
+        cefpython.Initialize(settings, switches)
+        is_cef_initialized = True
+    except Exception as e:
+        show_fatal_error("CEF Error", "Could not initialize Browser Engine: %s" % str(e))
+        sys.exit(1)
     
-    is_cef_initialized = True
     if splash:
         splash.showMessage("Launching Application...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
         app.processEvents()
         app.processEvents()
-    mw = MainWindow()
+    
+    try:
+        log_boot("Creating MainWindow...")
+        mw = MainWindow()
+    except Exception as e:
+        import traceback
+        show_fatal_error("UI Error", "Could not create Main Window: %s\n\n%s" % (str(e), traceback.format_exc()))
+        sys.exit(1)
+
     if splash:
         splash.finish(mw)
     
     # Run CEF Message Loop
+    log_boot("Entering MessageLoop")
     is_running_loop = True
     cefpython.MessageLoop()
     is_running_loop = False
     
-    # --- DEFINITIVE SHUTDOWN: Cleanup all browser contexts ---
+    # --- DEFINITIVE SHUTDOWN ---
+    log_boot("Shutting down...")
     app.timer.stop()
     app.closeAllWindows()
     app.processEvents()
-    
-    if mw:
-        try:
-            mw.mainFrame.browser = None
-            mw.setParent(None)
-            del mw
-        except:
-            pass
-            
-    # Allow some time for browser objects to be released
-    for _ in range(20):
-        app.processEvents()
-        time.sleep(0.01)
-    
-    if not is_shutting_down:
-        is_shutting_down = True
-        try:
-            cefpython.Shutdown()
-        except:
-            pass

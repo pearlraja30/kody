@@ -3,14 +3,14 @@ import datetime
 
 # --- ULTRA EARLY LOGGING ---
 def log_boot(msg):
-    log_paths = ["boot_debug.log", os.path.join(os.environ.get('TEMP', os.environ.get('TMP', '/tmp')), "kodys_boot_debug.log")]
-    for path in log_paths:
-        try:
-            with open(path, "a") as f:
-                f.write("[%s] %s\n" % (datetime.datetime.now(), msg))
-            break
-        except:
-            pass
+    # Definitive writable log in AppData/Local/Temp
+    temp_dir = os.environ.get('TEMP', os.environ.get('TMP', '/tmp'))
+    log_path = os.path.join(temp_dir, "kodys_boot_debug.log")
+    try:
+        with open(log_path, "a") as f:
+            f.write("[%s] %s\n" % (datetime.datetime.now(), msg))
+    except:
+        pass
 
 log_boot("--- BOOT START ---")
 log_boot("Python Executable: %s" % sys.executable)
@@ -226,7 +226,7 @@ def ExceptHook(excType, excValue, traceObject):
     import traceback, os, time, codecs
     errorMsg = "\n".join(traceback.format_exception(excType, excValue,
             traceObject))
-    errorFile = GetApplicationPath("error.log")
+    errorFile = os.path.join(GetWritableAppDataPath(), "error.log")
     try:
         appEncoding = cefpython.g_applicationSettings["string_encoding"]
     except:
@@ -2264,11 +2264,42 @@ if __name__ == '__main__':
         except:
             pass
 
+    # --- DATA MIGRATION & WRITE CHECK ---
+    data_root = GetWritableAppDataPath()
+    log_boot("Data Root: %s" % data_root)
+    
+    # Migrate DB if needed
+    src_db = os.path.join(project_dir_path, "db.sqlite3")
+    dest_db = os.path.join(data_root, "db.sqlite3")
+    if os.path.exists(src_db) and not os.path.exists(dest_db):
+        try:
+            import shutil
+            shutil.copy2(src_db, dest_db)
+            log_boot("Migrated database to AppData")
+        except Exception as e:
+            log_boot("Warning: Failed to migrate database: %s" % str(e))
+
+    # Migrate Assets if needed
+    src_assets = os.path.abspath(os.path.join(project_dir_path, "..", "app_assets"))
+    dest_assets = os.path.join(data_root, "app_assets")
+    if os.path.exists(src_assets) and not os.path.exists(dest_assets):
+        try:
+            import shutil
+            shutil.copytree(src_assets, dest_assets)
+            log_boot("Migrated assets to AppData")
+        except Exception as e:
+            log_boot("Warning: Failed to migrate assets: %s" % str(e))
+
     if splash:
         splash.showMessage("Compiling Assets...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
         app.processEvents()
         app.processEvents()
-    compileall.compile_dir(project_dir_path, force=True)
+    
+    # Defensive compile - skip if read-only
+    try:
+        compileall.compile_dir(project_dir_path, force=True)
+    except:
+        log_boot("Info: Skipping asset compilation (directory is read-only)")
     app.processEvents()
     
     # Ensure admin credentials are set using the current python executable

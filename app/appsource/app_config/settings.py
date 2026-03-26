@@ -17,6 +17,14 @@ import sys
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
+# DEFINE WRITABLE DATA ROOT (AppData)
+DATA_ROOT = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.path.expanduser('~'))), 'KodysFootClinikV2')
+if not os.path.exists(DATA_ROOT):
+    try:
+        os.makedirs(DATA_ROOT)
+    except:
+        pass
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -83,7 +91,7 @@ WSGI_APPLICATION = 'wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(DATA_ROOT, 'db.sqlite3'),
     }
 }
 
@@ -126,8 +134,8 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 DATA_URL = '/site_data/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'app_assets','media')
-MEDIA_DATA = os.path.join(os.path.dirname(BASE_DIR), 'app_assets','DATA')
+MEDIA_ROOT = os.path.join(DATA_ROOT, 'app_assets','media')
+MEDIA_DATA = os.path.join(DATA_ROOT, 'app_assets','DATA')
 DATA_UPLOAD_MAX_MEMORY_SIZE = 25000000
 
 #########################################################################
@@ -169,7 +177,7 @@ LOGGING = {
             'level':'DEBUG',
             'class':'logging.handlers.TimedRotatingFileHandler',
             'formatter': 'custom',
-            'filename': os.path.join(BASE_DIR, 'logs', 'app.log'),
+            'filename': os.path.join(DATA_ROOT, 'logs', 'app.log'),
             'when': 'W4',
             'interval': 1,
             'backupCount': 7

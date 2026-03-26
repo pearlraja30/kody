@@ -1278,6 +1278,9 @@ def report_view(request, test_entry_code):
 									raw_data = raw_data.split(",")
 								else:
 									raw_data = []
+							except:
+								raw_data = []
+
 							# First, design the Notch filter for 50Hz (Power Line Interference)
 							fs = 250.0 
 							f0 = 50.0  
@@ -3063,8 +3066,8 @@ def vpt_ultra_foot(request, option):
 										right_abi = round(float(float(tx_test_entries[20].KEY_VALUE)/denominator), 2)
 									else:
 										right_abi = 0.0
-									except:
-										right_abi = 0.0
+								except:
+									right_abi = 0.0
 								if float(right_abi) >= float(abi_severe[0]) and float(right_abi) <= float(abi_severe[1]):
 									right_abi_result = "Severe"
 								elif float(right_abi) >= float(abi_moderate[0]) and float(right_abi) <= float(abi_moderate[1]):
@@ -3080,7 +3083,7 @@ def vpt_ultra_foot(request, option):
 								else:
 									right_abi_result = "Not in Range"
 							else:
-										right_abi = 0.0
+								right_abi = 0.0
 								right_abi_result = "No Data"
 							vpt_ultra_test_values['right_abi_result'] = ["%.2f"%(right_abi), right_abi_result]
 
@@ -4048,8 +4051,8 @@ def vpt_foot(request, option):
 										right_abi = round(float(float(tx_test_entries[20].KEY_VALUE)/denominator), 2)
 									else:
 										right_abi = 0.0
-									except:
-										right_abi = 0.0
+								except:
+									right_abi = 0.0
 								if float(right_abi) >= float(abi_severe[0]) and float(right_abi) <= float(abi_severe[1]):
 									right_abi_result = "Severe"
 								elif float(right_abi) >= float(abi_moderate[0]) and float(right_abi) <= float(abi_moderate[1]):
@@ -4065,7 +4068,7 @@ def vpt_foot(request, option):
 								else:
 									right_abi_result = "Not in Range"
 							else:
-										right_abi = 0.0
+								right_abi = 0.0
 								right_abi_result = "No Data"
 							vpt_test_values['right_abi_result'] = ["%.2f"%(right_abi), right_abi_result]
 					else:

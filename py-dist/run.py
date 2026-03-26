@@ -2340,6 +2340,8 @@ if __name__ == '__main__':
     python_root = os.path.dirname(sys.executable)
     # Add python root and its DLL directories to PATH
     env['PATH'] = python_root + os.pathsep + os.path.join(python_root, "DLLs") + os.pathsep + os.environ.get('PATH', '')
+    # Prevent Permission Denied errors for .pyc files in Program Files
+    env['PYTHONDONTWRITEBYTECODE'] = '1'
     
     try:
         # 1. First, ensure migrations are applied (fixes "no such table: auth_user")

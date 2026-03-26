@@ -3065,7 +3065,7 @@ def vpt_ultra_foot(request, option):
 									if denominator != 0:
 										right_abi = round(float(float(tx_test_entries[20].KEY_VALUE)/denominator), 2)
 									else:
-					right_abi = 0.0
+										right_abi = 0.0
 								except:
 									right_abi = 0.0
 								if float(right_abi) >= float(abi_severe[0]) and float(right_abi) <= float(abi_severe[1]):
@@ -4050,7 +4050,7 @@ def vpt_foot(request, option):
 									if denominator != 0:
 										right_abi = round(float(float(tx_test_entries[20].KEY_VALUE)/denominator), 2)
 									else:
-					right_abi = 0.0
+										right_abi = 0.0
 								except:
 									right_abi = 0.0
 								if float(right_abi) >= float(abi_severe[0]) and float(right_abi) <= float(abi_severe[1]):

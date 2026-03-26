@@ -8,19 +8,21 @@ echo Using Python:
 python --version
 echo.
 echo Launching GUI...
-python run.py > ..\launch_log.txt 2> ..\launch_error.log
+set "LOG_DIR=%TEMP%\KodysFootClinikV2"
+if not exist "%LOG_DIR%" mkdir "%LOG_DIR%"
+python run.py > "%LOG_DIR%\launch_log.txt" 2> "%LOG_DIR%\launch_error.log"
 if %ERRORLEVEL% NEQ 0 (
     echo.
     echo ❌ ERROR: Application failed to start.
     echo --------------------------------------------------
     echo Please check these files for details:
-    echo 1. boot_debug.log  (Technical startup log)
-    echo 2. launch_error.log (Python error details)
+    echo 1. %TEMP%\KodysFootClinikV2\kodys_boot_debug.log  (Technical startup log)
+    echo 2. %TEMP%\KodysFootClinikV2\launch_error.log (Python error details)
     echo --------------------------------------------------
     echo.
-    if exist boot_debug.log (
+    if exist "%TEMP%\KodysFootClinikV2\kodys_boot_debug.log" (
         echo [Recent Boot Log Contents]:
-        type boot_debug.log
+        type "%TEMP%\KodysFootClinikV2\kodys_boot_debug.log"
     )
     pause
 )

@@ -2335,14 +2335,27 @@ if __name__ == '__main__':
     if not os.path.exists(manage_path):
         manage_path = os.path.join(project_dir_path, 'manage.py')
     
+    # Ensure subprocess inherits the correct environment (esp. PATH for DLLs)
+    env = os.environ.copy()
+    python_root = os.path.dirname(sys.executable)
+    # Add python root and its DLL directories to PATH
+    env['PATH'] = python_root + os.pathsep + os.path.join(python_root, "DLLs") + os.pathsep + os.environ.get('PATH', '')
+    
     try:
+        # 1. First, ensure migrations are applied (fixes "no such table: auth_user")
+        log_boot("Running database migrations...")
+        subprocess.check_call([sys.executable, manage_path, 'migrate', '--noinput'], env=env)
+        
+        # 2. Start the actual server
         log_boot("Starting Django on port 5427 via %s" % manage_path)
-        # Use CREATE_NO_WINDOW if on Windows to minimize console spam
+        # Use --noreload to avoid issues in packaged environments
         if sys.platform == "win32":
             import win32process
-            proc = subprocess.Popen([sys.executable, manage_path, 'runserver', '127.0.0.1:5427'], creationflags=win32process.CREATE_NO_WINDOW)
+            proc = subprocess.Popen([sys.executable, manage_path, 'runserver', '127.0.0.1:5427', '--noreload'], 
+                                   env=env,
+                                   creationflags=win32process.CREATE_NO_WINDOW)
         else:
-            proc = subprocess.Popen([sys.executable, manage_path, 'runserver', '127.0.0.1:5427'])
+            proc = subprocess.Popen([sys.executable, manage_path, 'runserver', '127.0.0.1:5427', '--noreload'], env=env)
     except Exception as e:
         show_fatal_error("Backend Error", "Could not start Django server: %s" % str(e))
         sys.exit(1)

@@ -17,7 +17,7 @@ DefaultGroupName={#MyAppName}
 ; Replaced absolute path with relative path
 SetupIconFile=appicon.ico
 OutputDir=dist
-OutputBaseFilename="Kodys_Foot_Clinik_" + MyAppVersion
+OutputBaseFilename=Kodys_Foot_Clinik_{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern

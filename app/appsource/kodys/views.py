@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import sys
+import os
 import logging
 import json
 from django.shortcuts import render
@@ -13,7 +14,6 @@ import app_api as api
 import app_logger as ulo
 from forms import *
 import ast 
-import pandas as pd
 from django.utils import timezone
 
 login_url = "/signin/"
@@ -27,6 +27,7 @@ def export_patients_excel(request):
 	fn = ulo._fn()
 	logger.info(ulo.start_log(request, fn))
 	try:
+		import pandas as pd
 		patients = TX_PATIENTS.objects.filter(DATAMODE="A")
 		data = []
 		for p in patients:

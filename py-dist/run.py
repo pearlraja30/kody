@@ -2344,7 +2344,17 @@ if __name__ == '__main__':
     try:
         # 1. First, ensure migrations are applied (fixes "no such table: auth_user")
         log_boot("Running database migrations...")
-        subprocess.check_call([sys.executable, manage_path, 'migrate', '--noinput'], env=env)
+        # Capture output to show in popup if it fails
+        p = subprocess.Popen([sys.executable, manage_path, 'migrate', '--noinput'], 
+                             env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        if p.returncode != 0:
+            error_details = (out + "\n" + err).strip()
+            # Show last 10 lines of error for relevance
+            error_msg = "\n".join(error_details.splitlines()[-10:])
+            log_boot("CRITICAL: Migration failed:\n%s" % error_details)
+            show_fatal_error("Database Error", "Migrations failed. This usually means the environment is not ready or the DB is locked.\n\nError Summary:\n%s" % error_msg)
+            # We continue anyway as the DB might already be ready
         
         # 2. Start the actual server
         log_boot("Starting Django on port 5427 via %s" % manage_path)

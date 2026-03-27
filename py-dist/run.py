@@ -2267,6 +2267,10 @@ if __name__ == '__main__':
         print("Failed Reading Config")
     app.processEvents()
     
+    # --- DATA MIGRATION & WRITE CHECK ---
+    data_root = GetWritableAppDataPath()
+    log_boot("Data Root: %s" % data_root)
+
     # Ensure logging directory exists for Django (Fixes Permission Denied in Program Files)
     log_dir = os.path.join(data_root, "logs")
     if not os.path.exists(log_dir):
@@ -2275,10 +2279,6 @@ if __name__ == '__main__':
             print("Created missing logs directory: %s" % log_dir)
         except:
             pass
-
-    # --- DATA MIGRATION & WRITE CHECK ---
-    data_root = GetWritableAppDataPath()
-    log_boot("Data Root: %s" % data_root)
     
     # Migrate DB if needed
     src_db = os.path.join(project_dir_path, "db.sqlite3")

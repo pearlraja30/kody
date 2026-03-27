@@ -2263,8 +2263,10 @@ if __name__ == '__main__':
             fullscreen_allowed =  bool(util.strtobool(window_data["fullscreen_allowed"].lower()))
             max_width = int(window_data["max_width"])
             max_height = int(window_data["max_height"])
-    except:
-        print("Failed Reading Config")
+    except Exception as e:
+        import traceback
+        print("Failed Reading Config: %s" % str(e))
+        traceback.print_exc()
     app.processEvents()
     
     # --- DATA MIGRATION & WRITE CHECK ---

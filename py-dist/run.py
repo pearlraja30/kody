@@ -2348,6 +2348,22 @@ if __name__ == '__main__':
         os.makedirs(mpl_config_dir)
     env['MPLCONFIGDIR'] = mpl_config_dir
     
+    # 0. Preliminary DB Integrity Scrub (Fixes ValueError: invalid literal for int() with base 10: '')
+    db_path = os.path.join(data_root, 'db.sqlite3')
+    if os.path.exists(db_path):
+        import sqlite3
+        try:
+            log_boot("Integrity check: scrubbing legacy data formats...")
+            conn = sqlite3.connect(db_path)
+            # Ensure AGE and DISPLAY_ORDER don't contain empty strings which crash Django
+            conn.execute("UPDATE TX_PATIENTS SET AGE=NULL WHERE AGE=''")
+            conn.execute("UPDATE MA_APPLICATION_CONTACTS SET DISPLAY_ORDER=NULL WHERE DISPLAY_ORDER=''")
+            conn.commit()
+            conn.close()
+            log_boot("Integrity check complete.")
+        except Exception as scrub_err:
+            log_boot("Integrity check skipped: %s" % str(scrub_err))
+
     try:
         # 1. First, ensure migrations are applied (fixes "no such table: auth_user")
         log_boot("Running database migrations...")

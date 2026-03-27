@@ -2412,6 +2412,19 @@ if __name__ == '__main__':
     except Exception as e:
         print("Warning: Failed to verify admin credentials: %s" % str(e))
     app.processEvents()
+
+    # D. Ensure initial metadata (seeding)
+    try:
+        if splash:
+            splash.showMessage("Initializing Application Data...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+            app.processEvents()
+        seed_script = os.path.join(project_dir_path, "populate_data.py")
+        if os.path.exists(seed_script):
+            subprocess.check_call([sys.executable, '-B', seed_script], env=env)
+            print("Successfully initialized application metadata.")
+    except Exception as e:
+        print("Warning: Failed to initialize metadata: %s" % str(e))
+    app.processEvents()
     
     manage_path = os.path.join(project_dir_path, 'manage.pyc')
     if not os.path.exists(manage_path):

@@ -4,12 +4,16 @@ from django.conf import settings
 from kodys.models import *
 
 def app_config(request):
-	kodys_info = MA_APPLICATION.objects.get(DATAMODE="A")
-
 	COMMON_INFO = dict()
-	COMMON_INFO['KODYS_LOGO'] = kodys_info.LOGO
-	COMMON_INFO['KODYS_NAME'] = kodys_info.NAME
-	COMMON_INFO['KODYS_VERSION'] = kodys_info.VERSION
+	try:
+		kodys_info = MA_APPLICATION.objects.get(DATAMODE="A")
+		COMMON_INFO['KODYS_LOGO'] = kodys_info.LOGO
+		COMMON_INFO['KODYS_NAME'] = kodys_info.NAME
+		COMMON_INFO['KODYS_VERSION'] = kodys_info.VERSION
+	except:
+		COMMON_INFO['KODYS_LOGO'] = "/site_media/img/png/kodys_logo.png"
+		COMMON_INFO['KODYS_NAME'] = "Kodys Medical"
+		COMMON_INFO['KODYS_VERSION'] = "1.0"
 	
 	if request.user.is_authenticated() and TX_ACCOUNTUSER.objects.filter(USER=request.user).exists():
 		accountuser = TX_ACCOUNTUSER.objects.get(USER=request.user)
@@ -70,34 +74,44 @@ def app_config(request):
 		COMMON_INFO['EMAIL'] = ""
 		COMMON_INFO['IS_REPORT_HEADER'] = True
 	
-	hospital_name_font_settings = MA_APPLICATION_SETTINGS.objects.get(KEY_CODE="SET-09", DATAMODE="A")
-	hospital_address_font_settings = MA_APPLICATION_SETTINGS.objects.get(KEY_CODE="SET-10", DATAMODE="A")
-	hospital_number_font_settings = MA_APPLICATION_SETTINGS.objects.get(KEY_CODE="SET-11", DATAMODE="A")
-	
-	if hospital_name_font_settings.KEY_VALUE:
-		name_font_settings = json.loads(hospital_name_font_settings.KEY_VALUE)
-		COMMON_INFO['HOSPITAL_NAME_FONT_STYLE'] = name_font_settings["style"]
-		COMMON_INFO['HOSPITAL_NAME_FONT_SIZE'] = name_font_settings["size"]
-		COMMON_INFO['HOSPITAL_NAME_FONT_COLOR'] = name_font_settings["color"]
-	else:
+	try:
+		hospital_name_font_settings = MA_APPLICATION_SETTINGS.objects.get(KEY_CODE="SET-09", DATAMODE="A")
+		if hospital_name_font_settings.KEY_VALUE:
+			name_font_settings = json.loads(hospital_name_font_settings.KEY_VALUE)
+			COMMON_INFO['HOSPITAL_NAME_FONT_STYLE'] = name_font_settings["style"]
+			COMMON_INFO['HOSPITAL_NAME_FONT_SIZE'] = name_font_settings["size"]
+			COMMON_INFO['HOSPITAL_NAME_FONT_COLOR'] = name_font_settings["color"]
+		else:
+			raise Exception("Empty value")
+	except:
 		COMMON_INFO['HOSPITAL_NAME_FONT_STYLE'] = "Times_New_Roman"
 		COMMON_INFO['HOSPITAL_NAME_FONT_SIZE'] = 23
 		COMMON_INFO['HOSPITAL_NAME_FONT_COLOR'] = "rgb(0, 0, 0)"
-	if hospital_address_font_settings.KEY_VALUE:
-		address_font_settings = json.loads(hospital_address_font_settings.KEY_VALUE)
-		COMMON_INFO['HOSPITAL_ADDRESS_FONT_STYLE'] = address_font_settings["style"]
-		COMMON_INFO['HOSPITAL_ADDRESS_FONT_SIZE'] = address_font_settings["size"]
-		COMMON_INFO['HOSPITAL_ADDRESS_FONT_COLOR'] = address_font_settings["color"]
-	else:
+
+	try:
+		hospital_address_font_settings = MA_APPLICATION_SETTINGS.objects.get(KEY_CODE="SET-10", DATAMODE="A")
+		if hospital_address_font_settings.KEY_VALUE:
+			address_font_settings = json.loads(hospital_address_font_settings.KEY_VALUE)
+			COMMON_INFO['HOSPITAL_ADDRESS_FONT_STYLE'] = address_font_settings["style"]
+			COMMON_INFO['HOSPITAL_ADDRESS_FONT_SIZE'] = address_font_settings["size"]
+			COMMON_INFO['HOSPITAL_ADDRESS_FONT_COLOR'] = address_font_settings["color"]
+		else:
+			raise Exception("Empty value")
+	except:
 		COMMON_INFO['HOSPITAL_ADDRESS_FONT_STYLE'] = "Times_New_Roman"
 		COMMON_INFO['HOSPITAL_ADDRESS_FONT_SIZE'] = 14
 		COMMON_INFO['HOSPITAL_ADDRESS_FONT_COLOR'] = "rgb(0, 0, 0)"
-	if hospital_number_font_settings.KEY_VALUE:
-		number_font_settings = json.loads(hospital_number_font_settings.KEY_VALUE)
-		COMMON_INFO['HOSPITAL_NUMBER_FONT_STYLE'] = number_font_settings["style"]
-		COMMON_INFO['HOSPITAL_NUMBER_FONT_SIZE'] = number_font_settings["size"]
-		COMMON_INFO['HOSPITAL_NUMBER_FONT_COLOR'] = number_font_settings["color"]
-	else:
+
+	try:
+		hospital_number_font_settings = MA_APPLICATION_SETTINGS.objects.get(KEY_CODE="SET-11", DATAMODE="A")
+		if hospital_number_font_settings.KEY_VALUE:
+			number_font_settings = json.loads(hospital_number_font_settings.KEY_VALUE)
+			COMMON_INFO['HOSPITAL_NUMBER_FONT_STYLE'] = number_font_settings["style"]
+			COMMON_INFO['HOSPITAL_NUMBER_FONT_SIZE'] = number_font_settings["size"]
+			COMMON_INFO['HOSPITAL_NUMBER_FONT_COLOR'] = number_font_settings["color"]
+		else:
+			raise Exception("Empty value")
+	except:
 		COMMON_INFO['HOSPITAL_NUMBER_FONT_STYLE'] = "Times_New_Roman"
 		COMMON_INFO['HOSPITAL_NUMBER_FONT_SIZE'] = 14
 		COMMON_INFO['HOSPITAL_NUMBER_FONT_COLOR'] = "rgb(0, 0, 0)"

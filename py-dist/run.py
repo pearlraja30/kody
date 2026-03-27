@@ -1,6 +1,9 @@
 import os, sys, math
 import datetime
 
+# --- GLOBAL SETTINGS TO PREVENT PERMISSION ERRORS ---
+os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+
 # --- ULTRA EARLY LOGGING ---
 def log_boot(msg):
     # Definitive writable log in AppData/Local/Temp
@@ -2264,8 +2267,8 @@ if __name__ == '__main__':
         print("Failed Reading Config")
     app.processEvents()
     
-    # Ensure logging directory exists for Django
-    log_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "app", "appsource", "logs")
+    # Ensure logging directory exists for Django (Fixes Permission Denied in Program Files)
+    log_dir = os.path.join(data_root, "logs")
     if not os.path.exists(log_dir):
         try:
             os.makedirs(log_dir)
@@ -2401,7 +2404,8 @@ if __name__ == '__main__':
             app.processEvents()
         admin_script = os.path.join(project_dir_path, "create_admin.py")
         if os.path.exists(admin_script):
-            subprocess.check_call([sys.executable, admin_script], env=env)
+            # Use -B to prevent bytecode writing
+            subprocess.check_call([sys.executable, '-B', admin_script], env=env)
             print("Successfully verified admin credentials.")
     except Exception as e:
         print("Warning: Failed to verify admin credentials: %s" % str(e))
@@ -2414,7 +2418,8 @@ if __name__ == '__main__':
     try:
         # D. Run migrations
         log_boot("Running database migrations...")
-        p = subprocess.Popen([sys.executable, manage_path, 'migrate', '--noinput'], 
+        # Use -B to prevent bytecode writing
+        p = subprocess.Popen([sys.executable, '-B', manage_path, 'migrate', '--noinput'], 
                              env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
         if p.returncode != 0:
@@ -2426,14 +2431,15 @@ if __name__ == '__main__':
         
         # E. Start the actual server
         log_boot("Starting Django on port 5427 via %s" % manage_path)
-        # Use --noreload to avoid issues in packaged environments
+        # Use --noreload and -B to avoid issues in packaged environments
+        runserver_args = [sys.executable, '-B', manage_path, 'runserver', '127.0.0.1:5427', '--noreload']
         if sys.platform == "win32":
             import win32process
-            proc = subprocess.Popen([sys.executable, manage_path, 'runserver', '127.0.0.1:5427', '--noreload'], 
+            proc = subprocess.Popen(runserver_args, 
                                    env=env,
                                    creationflags=win32process.CREATE_NO_WINDOW)
         else:
-            proc = subprocess.Popen([sys.executable, manage_path, 'runserver', '127.0.0.1:5427', '--noreload'], env=env)
+            proc = subprocess.Popen(runserver_args, env=env)
     except Exception as e:
         import traceback
         log_boot("CRITICAL: Failed to launch backend: %s" % traceback.format_exc())

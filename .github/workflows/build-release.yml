@@ -522,41 +522,29 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: release-artifacts
+          pattern: '*'
+          merge-multiple: true
 
       - name: 📋 Prepare artifacts for release
         run: |
-          mkdir dist_final
-          find release-artifacts -type f -exec cp {} dist_final/ \;
+          mkdir -p dist_final
+          # Cleanly collect all artifacts from the download dir
+          cp -v release-artifacts/* dist_final/ || true
           ls -l dist_final/
 
-      - name: 🚀 Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: "${{ env.APP_NAME }} ${{ github.ref_name }}"
-          body: |
-            ## ${{ env.APP_NAME }} ${{ github.ref_name }}
-
-            ### Downloads
-            | Platform | File | Notes |
-            |----------|------|-------|
-            | **🪟 Windows** | `Kodys.Foot.Clinik.Installer.exe` | **Standalone Installer** (No Docker required) |
-            | 🐳 Docker | `kodys-docker-image-*.tar.gz` | Server/cloud distribution |
-            | 📦 Portable | `Kodys_Portable_*.zip` | Cross-platform, requires Docker Desktop |
-            | 🍎 Mac | `Kodys_Foot_Clinik_Mac_*.zip` | macOS app bundle, requires Docker |
-
-            ### Quick Start (Docker)
-            ```bash
-            docker load < kodys-docker-image-${{ env.APP_VERSION }}.tar.gz
-            docker run -d -p 5423:5423 kodys-app
-            # Open: http://localhost:5423
-            # Login: admin / admin123
-            ```
-
-            ### Access from Phone/Tablet
-            Connect to the same network and open `http://YOUR_PC_IP:5423` in any browser.
-          files: |
-            dist_final/*
-          draft: false
-          prerelease: false
+      - name: 🚀 Create/Update GitHub Release
+        run: |
+          # Use GH CLI for better reliability with assets
+          # Attempt to create a new release. If it already exists (e.g., re-run),
+          # it will fail, and we then attempt to upload/clobber assets to the existing release.
+          # The --notes are kept short as the full body is complex and better managed by a dedicated action or template.
+          gh release create "${{ github.ref_name }}" dist_final/* \
+            --title "${{ env.APP_NAME }} ${{ github.ref_name }}" \
+            --notes "### Downloads available for version ${{ github.ref_name }}" \
+            --repo ${{ github.repository }} \
+            --draft=false \
+            --prerelease=false \
+            --latest \
+            || gh release upload "${{ github.ref_name }}" dist_final/* --clobber --repo ${{ github.repository }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

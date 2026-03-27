@@ -2326,60 +2326,105 @@ if __name__ == '__main__':
         print("Warning: Failed to verify admin credentials: %s" % str(e))
     app.processEvents()
 
+    # --- STEP 3: Backend Services ---
     if splash:
         splash.showMessage("Starting Backend Services...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
         app.processEvents()
         app.processEvents()
-    
-    manage_path = os.path.join(project_dir_path, 'manage.pyc')
-    if not os.path.exists(manage_path):
-        manage_path = os.path.join(project_dir_path, 'manage.py')
-    
-    # Ensure subprocess inherits the correct environment (esp. PATH for DLLs)
+
+    # A. Define environment for all subprocesses (Fixes DLL load failed)
     env = os.environ.copy()
-    python_root = os.path.dirname(sys.executable)
-    # Add python root and its DLL directories to PATH
-    env['PATH'] = python_root + os.pathsep + os.path.join(python_root, "DLLs") + os.pathsep + os.environ.get('PATH', '')
+    python_root = os.path.dirname(os.path.abspath(sys.executable))
+    
+    # SYSTEM PATHS: On Windows, some system DLLs are needed even if bundled
+    system_paths = []
+    if sys.platform == "win32":
+        windir = os.environ.get('WINDIR', 'C:\\Windows')
+        system_paths = [
+            os.path.join(windir, 'System32'),
+            os.path.join(windir, 'SysWOW64')
+        ]
+    
+    # Add python root, DLLs, and site-packages/PyQt4 to PATH for the subprocess
+    sp_path = os.path.join(python_root, "Lib", "site-packages")
+    pyqt4_path = os.path.join(sp_path, "PyQt4")
+    
+    env_paths = [python_root, os.path.join(python_root, "DLLs"), pyqt4_path] + system_paths
+    current_path = os.environ.get('PATH', '')
+    for p in env_paths:
+        if os.path.exists(p) and p not in current_path:
+            current_path = p + os.pathsep + current_path
+    env['PATH'] = current_path
+    
     # Prevent Permission Denied errors for .pyc files in Program Files
     env['PYTHONDONTWRITEBYTECODE'] = '1'
     # Redirect Matplotlib cache/config to a writable location
+    if 'data_root' not in locals():
+        data_root = GetWritableAppDataPath()
     mpl_config_dir = os.path.join(data_root, 'mpl_config')
     if not os.path.exists(mpl_config_dir):
         os.makedirs(mpl_config_dir)
     env['MPLCONFIGDIR'] = mpl_config_dir
-    
-    # 0. Preliminary DB Integrity Scrub (Fixes ValueError: invalid literal for int() with base 10: '')
+
+    # B. Preliminary DB Integrity Scrub (Fixes ValueError: invalid literal for int() with base 10: '')
     db_path = os.path.join(data_root, 'db.sqlite3')
     if os.path.exists(db_path):
         import sqlite3
         try:
             log_boot("Integrity check: scrubbing legacy data formats...")
             conn = sqlite3.connect(db_path)
-            # Ensure AGE and DISPLAY_ORDER don't contain empty strings which crash Django
-            conn.execute("UPDATE TX_PATIENTS SET AGE=NULL WHERE AGE=''")
-            conn.execute("UPDATE MA_APPLICATION_CONTACTS SET DISPLAY_ORDER=NULL WHERE DISPLAY_ORDER=''")
+            # Universal scrub for common problematic tables/fields
+            scrub_ops = [
+                "UPDATE TX_PATIENTS SET AGE=NULL WHERE AGE=''",
+                "UPDATE TX_PATIENTS SET STATE_id=NULL WHERE STATE_id=''",
+                "UPDATE TX_PATIENTS SET COUNTRY_id=NULL WHERE COUNTRY_id=''",
+                "UPDATE MA_APPLICATION_CONTACTS SET DISPLAY_ORDER=1000 WHERE DISPLAY_ORDER=''",
+                "UPDATE TX_MEDICALTESTS SET DOCTOR_id=NULL WHERE DOCTOR_id=''",
+                "UPDATE TX_MEDICALTESTS SET EXAMINER_id=NULL WHERE EXAMINER_id=''",
+                "UPDATE MA_HCP_SPECIALIZATION SET MEDICAL_APP_id=NULL WHERE MEDICAL_APP_id=''"
+            ]
+            for op in scrub_ops:
+                try:
+                    conn.execute(op)
+                except:
+                    pass
             conn.commit()
             conn.close()
             log_boot("Integrity check complete.")
         except Exception as scrub_err:
-            log_boot("Integrity check skipped: %s" % str(scrub_err))
+            log_boot("Integrity check skipped/failed: %s" % str(scrub_err))
 
+    # C. Ensure admin credentials are set
     try:
-        # 1. First, ensure migrations are applied (fixes "no such table: auth_user")
+        if splash:
+            splash.showMessage("Verifying Admin Credentials...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+            app.processEvents()
+        admin_script = os.path.join(project_dir_path, "create_admin.py")
+        if os.path.exists(admin_script):
+            subprocess.check_call([sys.executable, admin_script], env=env)
+            print("Successfully verified admin credentials.")
+    except Exception as e:
+        print("Warning: Failed to verify admin credentials: %s" % str(e))
+    app.processEvents()
+    
+    manage_path = os.path.join(project_dir_path, 'manage.pyc')
+    if not os.path.exists(manage_path):
+        manage_path = os.path.join(project_dir_path, 'manage.py')
+    
+    try:
+        # D. Run migrations
         log_boot("Running database migrations...")
-        # Capture output to show in popup if it fails
         p = subprocess.Popen([sys.executable, manage_path, 'migrate', '--noinput'], 
                              env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
         if p.returncode != 0:
             error_details = (out + "\n" + err).strip()
             # Show last 10 lines of error for relevance
-            error_msg = "\n".join(error_details.splitlines()[-10:])
+            error_msg = "\n".join(error_details.splitlines()[-15:])
             log_boot("CRITICAL: Migration failed:\n%s" % error_details)
-            show_fatal_error("Database Error", "Migrations failed. This usually means the environment is not ready or the DB is locked.\n\nError Summary:\n%s" % error_msg)
-            # We continue anyway as the DB might already be ready
+            show_fatal_error("Database Error", "Migrations failed. Environment or DB issue.\n\nError Summary:\n%s" % error_msg)
         
-        # 2. Start the actual server
+        # E. Start the actual server
         log_boot("Starting Django on port 5427 via %s" % manage_path)
         # Use --noreload to avoid issues in packaged environments
         if sys.platform == "win32":
@@ -2390,6 +2435,8 @@ if __name__ == '__main__':
         else:
             proc = subprocess.Popen([sys.executable, manage_path, 'runserver', '127.0.0.1:5427', '--noreload'], env=env)
     except Exception as e:
+        import traceback
+        log_boot("CRITICAL: Failed to launch backend: %s" % traceback.format_exc())
         show_fatal_error("Backend Error", "Could not start Django server: %s" % str(e))
         sys.exit(1)
 

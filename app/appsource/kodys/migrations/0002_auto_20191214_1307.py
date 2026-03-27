@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='ma_hcp_specialization',
             name='MEDICAL_APP',
-            field=models.ForeignKey(default=' ', on_delete=django.db.models.deletion.CASCADE, to='kodys.MA_MEDICALAPPS'),
+            field=models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='kodys.MA_MEDICALAPPS'),
             preserve_default=False,
         ),
         migrations.AddField(

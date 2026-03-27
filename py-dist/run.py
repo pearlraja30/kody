@@ -2342,6 +2342,11 @@ if __name__ == '__main__':
     env['PATH'] = python_root + os.pathsep + os.path.join(python_root, "DLLs") + os.pathsep + os.environ.get('PATH', '')
     # Prevent Permission Denied errors for .pyc files in Program Files
     env['PYTHONDONTWRITEBYTECODE'] = '1'
+    # Redirect Matplotlib cache/config to a writable location
+    mpl_config_dir = os.path.join(data_root, 'mpl_config')
+    if not os.path.exists(mpl_config_dir):
+        os.makedirs(mpl_config_dir)
+    env['MPLCONFIGDIR'] = mpl_config_dir
     
     try:
         # 1. First, ensure migrations are applied (fixes "no such table: auth_user")

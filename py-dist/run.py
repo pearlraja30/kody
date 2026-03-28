@@ -2138,28 +2138,33 @@ def start_application():
             os.path.join(windir, 'SysWOW64')
         ]
     
-    # Add python root, DLLs, site-packages, and NumPy/SciPy core paths (Fixes mydpss)
+    # --- PATH ENRICHMENT (Recursive DLL Discovery) ---
     sp_path = os.path.join(python_root, "Lib", "site-packages")
-    pyqt4_path = os.path.join(sp_path, "PyQt4")
-    numpy_core = os.path.join(sp_path, "numpy", "core")
-    scipy_special = os.path.join(sp_path, "scipy", "special")
+    dll_extra_paths = set()
+    if os.path.exists(sp_path):
+        log_boot("Scanning for binary dependencies in site-packages...")
+        for root, ds, fs in os.walk(sp_path):
+            if any(f.lower().endswith(".dll") for f in fs):
+                dll_extra_paths.add(root)
     
-    env_paths = [
-        python_root, 
-        os.path.join(python_root, "DLLs"), 
-        pyqt4_path,
-        numpy_core,
-        scipy_special
-    ] + system_paths
+    search_paths = [
+        python_root,
+        os.path.join(python_root, "DLLs"),
+        os.path.join(python_root, "Scripts"),
+        sp_path,
+    ] + list(dll_extra_paths) + system_paths
     
     current_path = os.environ.get('PATH', '')
-    for p in env_paths:
-        if os.path.exists(p) and p not in current_path:
+    for p in search_paths:
+        if p and p not in current_path:
             current_path = p + os.pathsep + current_path
-    env['PATH'] = current_path
-    
-    # Prevent Permission Denied errors for .pyc files in Program Files
+
+    env = os.environ.copy()
+    env['PATH'] = current_path.encode('ascii', 'ignore') if isinstance(current_path, unicode) else current_path
+    env['PYTHONPATH'] = project_dir_path.encode('ascii', 'ignore') if isinstance(project_dir_path, unicode) else project_dir_path
     env['PYTHONDONTWRITEBYTECODE'] = '1'
+    
+    log_boot("Effective PATH: %s" % env['PATH'][:200] + "...")
     # Redirect Matplotlib cache/config to a writable location
     if 'data_root' not in locals():
         data_root = GetWritableAppDataPath()

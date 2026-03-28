@@ -1,8 +1,27 @@
 import os, sys, math
 import datetime
 
-# --- GLOBAL SETTINGS TO PREVENT PERMISSION ERRORS ---
+# --- DEFENSIVE ENVIRONMENT SETUP (FIRST LINE) ---
 os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+
+# Global placeholders for deferred imports
+# (Avoids 'NameError' until main() is called)
+QtGui = None
+QtCore = None
+QtWebKit = None
+cefpython = None
+signal = None
+util = None
+imp = None
+subprocess = None
+json = None
+compileall = None
+winreg = None
+SerialException = None
+SerialTimeoutException = None
+relativedelta = None
+B = None
+A = None
 
 # --- ULTRA EARLY LOGGING ---
 def log_boot(msg):
@@ -32,12 +51,14 @@ def show_fatal_error(title, message):
     except:
         print("ERROR [%s]: %s" % (title, message))
 
-import subprocess, time, socket
+# Minimal standard imports for setup
+import time, socket
 
 # --- PYQT4 DIAGNOSTIC & ROBUST PATHING ---
 log_boot("Checking PyQt4 environment...")
 try:
-    import imp
+    # defer imp
+    pass
     sp_path = os.path.join(os.getcwd(), "python-2.7.10", "Lib", "site-packages")
     if not os.path.exists(sp_path):
         sp_path = os.path.join(os.getcwd(), "python-2.7.10", "lib", "site-packages")
@@ -70,41 +91,23 @@ try:
             log_boot("ERROR: sip.pyd NOT FOUND at %s" % sip_pyd_path)
 
     log_boot("Attempting PyQt4 import...")
-    import PyQt4
-    log_boot("PyQt4 base package loaded from: %s" % PyQt4.__file__)
-    
-    log_boot("Importing QtGui...")
-    from PyQt4 import QtGui
-    log_boot("QtGui loaded successfully.")
-    
-    from PyQt4 import QtCore
-    from PyQt4 import QtWebKit
-    log_boot("PyQt4 all modules imported successfully.")
+    # (PyQt4 imports handled in main)
+    pass
 except Exception as e:
     import traceback
     log_boot("CRITICAL ERROR: Failed to import PyQt4: %s" % str(e))
     log_boot("Traceback: %s" % traceback.format_exc())
 
-import json
-import compileall
-from distutils import util
-import re
-from serial import SerialException, SerialTimeoutException
-import winreg
-import datetime
-from dateutil.relativedelta import relativedelta
+# (Serial & dateutil imports handled in main)
+pass
 
 # --- Setup finished ---
 log_boot("Setup finished. Entering main GUI loop...")
 from scipy import signal
 
-fs = 250.0  # Sample frequency (Hz)
-f0 = 50.0  # Frequency to be removed from signal (Hz)
-N = 2 #order
-wn = f0/fs  # Normalized Frequency
-# Design notch filter
-# B, A = signal.iirnotch(w0, Q)
-B, A = signal.butter(N,wn)
+# Global filter coefficients (Initialized in Startup)
+B = None
+A = None
 device = None
 thread_connection = None
 browser_func = None
@@ -164,22 +167,14 @@ is_shutting_down = False
 splash = None
 mw = None
 
-libcef_dll = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-        'libcef.dll')
+# libcef detection deferred to main
+pass
 
-if os.path.exists(libcef_dll):
-    if (2,7) <= sys.version_info < (2,8):
-        import cefpython_py27 as cefpython
-    elif (3,4) <= sys.version_info < (3,4):
-        import cefpython_py34 as cefpython
-    else:
-        raise Exception("Unsupported python version: %s" % sys.version)
-else:
-    from cefpython3 import cefpython
-
+# (CefPython imports handled in main)
+pass
 
 def GetApplicationPath(file=None):
-    import re, os, platform
+    import re, platform
     if not hasattr(GetApplicationPath, "dir"):
         if hasattr(sys, "frozen"):
             dir = os.path.dirname(sys.executable)
@@ -204,7 +199,6 @@ def GetApplicationPath(file=None):
 
 def GetWritableAppDataPath(folder=None):
     """Returns a writable path in the user's TEMP directory to avoid permission issues."""
-    import os
     # Use TEMP/KodysFootClinikV2 as a guaranteed writable base
     base = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.path.expanduser('~'))), "KodysFootClinikV2")
     if not os.path.exists(base):
@@ -235,7 +229,7 @@ def GetWritableAppDataPath(folder=None):
 
 def ExceptHook(excType, excValue, traceObject):
     global is_shutting_down, is_running_loop
-    import traceback, os, time, codecs
+    import traceback, time, codecs
     errorMsg = "\n".join(traceback.format_exception(excType, excValue,
             traceObject))
     errorFile = os.path.join(GetWritableAppDataPath(), "error.log")
@@ -2201,6 +2195,7 @@ class External(object):
         js_callback.Call(preview_file)
 
 
+
 class CefApplication(QtGui.QApplication):
     timer = None
 
@@ -2213,15 +2208,48 @@ class CefApplication(QtGui.QApplication):
         self.timer.timeout.connect(self.onTimer)
         self.timer.start(1)
 
-    def onTimer(self):
-        if is_cef_initialized:
-            cefpython.MessageLoopWork()
-
 is_cef_initialized = False
 
 if __name__ == '__main__':
+    # --- STEP 0: DEFERRED IMPORTS & ENV HARDENING ---
+    global QtGui, QtCore, QtWebKit, cefpython, signal, util, imp, subprocess, json, compileall, winreg, SerialException, SerialTimeoutException, relativedelta, B, A
+    try:
+        import imp
+        import json
+        import subprocess
+        import compileall
+        import re
+        import winreg
+        import codecs
+        import shutil
+        from distutils import util
+        from serial import SerialException, SerialTimeoutException
+        from dateutil.relativedelta import relativedelta
+        from scipy import signal
+        from PyQt4 import QtGui, QtCore, QtWebKit
+        
+        # CefPython initialization block
+        libcef_dll = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'libcef.dll')
+        if os.path.exists(libcef_dll):
+            import cefpython_py27 as cefpython
+        else:
+            from cefpython3 import cefpython
+            
+        # Initialize filter coefficients
+        fs = 250.0; f0 = 50.0; N = 2; wn = f0/fs
+        B, A = signal.butter(N, wn)
+        
+    except Exception as e:
+        log_boot("CRITICAL: Failed to load dependencies in main: %s" % str(e))
+        import traceback
+        log_boot(traceback.format_exc())
+        sys.exit(1)
+
     # --- STEP 1: INSTANT SPLASH ---
     app = CefApplication(sys.argv)
+    
+    splash = None
+    splash_path = GetApplicationPath("../config/splash.png")
     
     splash = None
     splash_path = GetApplicationPath("../config/splash.png")

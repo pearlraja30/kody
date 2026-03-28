@@ -1,13 +1,82 @@
 import os, sys, math, datetime, time, socket
 os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
-def log_boot(msg):
-    temp_dir = os.environ.get('TEMP', os.environ.get('TMP', '/tmp'))
-    log_path = os.path.join(temp_dir, 'kodys_boot_debug.log')
+def log_boot(msg, level="INFO"):
+    """
+    Enhanced Diagnostic Logger (v2.2.39):
+    Writes to a persistent startup_trace.log in the user's writable AppData.
+    """
     try:
+        # Determine writable log path early
+        base = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.path.expanduser('~'))), "KodysFootClinikV2")
+        log_dir = os.path.join(base, "logs")
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        log_path = os.path.join(log_dir, 'startup_trace.log')
+        
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with open(log_path, 'a') as f:
-            f.write('[%s] %s\n' % (datetime.datetime.now(), msg))
-    except: pass
+            f.write('[%s] %s: %s\n' % (timestamp, level, msg))
+    except:
+        # Fallback to stdout if file logging fails
+        print("[%s] %s" % (level, msg))
+
+def AuditEnvironment():
+    """Logs a complete snapshot of the runtime environment."""
+    log_boot("--- ENVIRONMENT SNAPSHOT ---")
+    log_boot("CWD: %s" % os.getcwd())
+    log_boot("Executable: %s" % sys.executable)
+    log_boot("Platform: %s" % sys.platform)
+    log_boot("Python Version: %s" % sys.version)
+    
+    log_boot("--- sys.path ---")
+    for p in sys.path:
+        log_boot("  %s" % p)
+        
+    log_boot("--- os.environ (Strings Only?) ---")
+    for k in sorted(os.environ.keys()):
+        v = os.environ[k]
+        is_str = isinstance(v, str)
+        log_boot("  %s: %s (Type: %s, OK: %s)" % (k, v if "PASS" not in k.upper() else "****", type(v), is_str))
+    log_boot("--- END SNAPSHOT ---")
+
+def AuditBinaries():
+    """Verifies existence of critical binary dependencies."""
+    log_boot("--- BINARY AUDIT ---")
+    python_dir = os.path.dirname(sys.executable)
+    py_dist = os.path.dirname(python_dir)
+    app_root = os.path.dirname(py_dist)
+    
+    critical_files = [
+        os.path.join(python_dir, "python27.dll"),
+        os.path.join(python_dir, "msvcr90.dll"),
+        os.path.join(py_dist, "libcef.dll"),
+        os.path.join(python_dir, "Lib/site-packages/PyQt4/QtCore4.dll"),
+        os.path.join(python_dir, "Lib/site-packages/win32/win32process.pyd"),
+        os.path.join(python_dir, "Lib/site-packages/pywin32_system32/pywintypes27.dll"),
+    ]
+    
+    for f in critical_files:
+        exists = os.path.exists(f)
+        log_boot("Check: %s -> %s" % (f, "FOUND" if exists else "MISSING"), "AUDIT" if exists else "ERROR")
+    log_boot("--- END AUDIT ---")
+
+def TraceModuleImport(module_name, from_path=None):
+    """
+    Attempts to import a module and logs full traceback on failure.
+    """
+    import traceback
+    log_boot("Tracing import: %s" % module_name, "TRACE")
+    try:
+        if from_path:
+            import imp
+            return imp.load_module(module_name, *imp.find_module(module_name, [from_path]))
+        else:
+            return __import__(module_name, globals(), locals(), [], -1)
+    except Exception as e:
+        log_boot("FAILED to import %s: %s" % (module_name, str(e)), "ERROR")
+        log_boot(traceback.format_exc(), "TRACEBACK")
+        return None
 
 def force_str(v):
     """
@@ -74,6 +143,8 @@ def EnrichRuntimeEnvironment():
 
 # CALL IMMEDIATELY
 EnrichRuntimeEnvironment()
+AuditEnvironment()
+AuditBinaries()
 
 def show_fatal_error(title, message):
     log_boot("FATAL [%s]: %s" % (title, message))
@@ -126,22 +197,35 @@ is_cef_initialized = False
 def start_application():
     global QtGui, QtCore, QtWebKit, cefpython, signal, util, imp, subprocess, json, compileall, winreg, SerialException, SerialTimeoutException, relativedelta, B, A, is_cef_initialized, mw, splash
     
-    # 1. Environment Hardening
+    # Instrumented Imports
+    log_boot("Initializing Core Components...", "INFO")
+    
+    TraceModuleImport("imp")
+    TraceModuleImport("json")
+    TraceModuleImport("subprocess")
+    
     import imp, json, subprocess, compileall, re, winreg, codecs, shutil, threading
     from distutils import util
     from serial import SerialException, SerialTimeoutException
     from dateutil.relativedelta import relativedelta
     from scipy import signal
+    
+    # PyQt4 Trace
+    TraceModuleImport("PyQt4.QtCore")
+    TraceModuleImport("PyQt4.QtGui")
     from PyQt4 import QtGui, QtCore, QtWebKit
     
     sp_path = os.path.join(os.getcwd(), "python-2.7.10", "Lib", "site-packages")
     if sp_path not in sys.path: sys.path.insert(0, sp_path)
-    pyqt4_path = os.path.join(sp_path, "PyQt4")
-    # Note: Global PATH is already enriched by EnrichRuntimeEnvironment()
     
+    # CEF Trace
     libcef_dll = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'libcef.dll')
-    if os.path.exists(libcef_dll): import cefpython_py27 as cefpython
-    else: from cefpython3 import cefpython
+    if os.path.exists(libcef_dll): 
+        TraceModuleImport("cefpython_py27")
+        import cefpython_py27 as cefpython
+    else: 
+        TraceModuleImport("cefpython3")
+        from cefpython3 import cefpython
     
     fs = 250.0; f0 = 50.0; N = 2; wn = f0/fs
     B, A = signal.butter(N, wn)
@@ -2292,10 +2376,19 @@ def start_application():
             pass
 
         if sys.platform == "win32":
-            import win32process
-            proc = subprocess.Popen(runserver_args, 
-                                   env=env,
-                                   creationflags=win32process.CREATE_NO_WINDOW)
+            log_boot("Tracing win32process import for windowless launch...", "TRACE")
+            try:
+                import win32process
+                log_boot("win32process loaded successfully.")
+                proc = subprocess.Popen(runserver_args, 
+                                       env=env,
+                                       creationflags=win32process.CREATE_NO_WINDOW)
+            except Exception as import_err:
+                log_boot("Late Import Failure: %s" % str(import_err), "ERROR")
+                import traceback
+                log_boot(traceback.format_exc(), "TRACEBACK")
+                # Fallback to standard Popen if win32process is missing
+                proc = subprocess.Popen(runserver_args, env=env)
         else:
             proc = subprocess.Popen(runserver_args, env=env)
     except Exception as e:

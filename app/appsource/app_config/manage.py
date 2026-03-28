@@ -39,7 +39,11 @@ if __name__ == "__main__":
                         final_paths.append(p)
                         added_paths.add(p)
                 
-                os.environ['PATH'] = os.pathsep.join(final_paths)
+                # Final stringification for os.environ (Python 2.7 requires byte-strings)
+                try:
+                    os.environ['PATH'] = os.pathsep.join(final_paths).encode('mbcs')
+                except:
+                    os.environ['PATH'] = os.pathsep.join(final_paths).encode('utf-8', 'ignore')
         except Exception as e:
             sys.stderr.write("DLL Pre-flight Error: %s\n" % str(e))
 

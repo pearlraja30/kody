@@ -9,6 +9,23 @@ def log_boot(msg):
             f.write('[%s] %s\n' % (datetime.datetime.now(), msg))
     except: pass
 
+def force_str(v):
+    """
+    Python 2.7 (Windows) strictly requires byte-strings (str) for environment variables.
+    This recursively converts any unicode/non-string values to byte-strings.
+    """
+    if v is None: return ""
+    if isinstance(v, unicode):
+        try:
+            return v.encode('mbcs') # Use system encoding for paths on Windows
+        except:
+            return v.encode('utf-8', 'ignore')
+    if isinstance(v, dict):
+        return {force_str(k): force_str(val) for k, val in v.iteritems()}
+    if isinstance(v, list):
+        return [force_str(i) for i in v]
+    return str(v)
+
 def show_fatal_error(title, message):
     log_boot("FATAL [%s]: %s" % (title, message))
     try:
@@ -71,7 +88,9 @@ def start_application():
     sp_path = os.path.join(os.getcwd(), "python-2.7.10", "Lib", "site-packages")
     if sp_path not in sys.path: sys.path.insert(0, sp_path)
     pyqt4_path = os.path.join(sp_path, "PyQt4")
-    if os.path.exists(pyqt4_path): os.environ['PATH'] = pyqt4_path + os.pathsep + os.environ['PATH']
+    if os.path.exists(pyqt4_path): 
+        # CRITICAL: Force str for os.environ on Python 2.7
+        os.environ['PATH'] = force_str(pyqt4_path + os.pathsep + os.environ.get('PATH', ''))
     
     libcef_dll = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'libcef.dll')
     if os.path.exists(libcef_dll): import cefpython_py27 as cefpython
@@ -2175,10 +2194,15 @@ def start_application():
             
     final_path_str = os.pathsep.join(final_paths)
     
-    # CRITICAL: Do NOT use .encode('ascii', 'ignore') - it breaks localized paths
+    # CRITICAL: Sanitize the entire environment dictionary for Python 2.7 on Windows.
+    # This prevents the "environment can only contain strings" error during Popen/check_call.
+    # We use 'mbcs' to preserve localized paths (like non-English user profiles).
     env['PATH'] = final_path_str
     env['PYTHONPATH'] = project_dir_path
     env['PYTHONDONTWRITEBYTECODE'] = '1'
+    
+    # Deep-cast all keys and values to byte-strings
+    env = force_str(env)
     
     log_boot("Effective PATH built successfully.")
     # Redirect Matplotlib cache/config to a writable location
@@ -2187,7 +2211,7 @@ def start_application():
     mpl_config_dir = os.path.join(data_root, 'mpl_config')
     if not os.path.exists(mpl_config_dir):
         os.makedirs(mpl_config_dir)
-    env['MPLCONFIGDIR'] = mpl_config_dir
+    env['MPLCONFIGDIR'] = force_str(mpl_config_dir)
 
     # B. Preliminary DB Integrity Scrub (Fixes ValueError: invalid literal for int() with base 10: '')
     db_path = os.path.join(data_root, 'db.sqlite3')

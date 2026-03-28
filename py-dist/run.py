@@ -2126,8 +2126,10 @@ def start_application():
         app.processEvents()
 
     # A. Define environment for all subprocesses (Fixes DLL load failed)
+    # ----------------------------------------------------------------------------------
     env = os.environ.copy()
     python_root = os.path.dirname(os.path.abspath(sys.executable))
+    py_dist_root = os.path.dirname(python_root) # py-dist is parent of python-2.7.10
     
     # SYSTEM PATHS: On Windows, some system DLLs are needed even if bundled
     system_paths = []
@@ -2138,33 +2140,47 @@ def start_application():
             os.path.join(windir, 'SysWOW64')
         ]
     
-    # --- PATH ENRICHMENT (Recursive DLL Discovery) ---
-    sp_path = os.path.join(python_root, "Lib", "site-packages")
+    # --- ROBUST PATH ENRICHMENT (Recursive DLL Discovery) ---
+    # We scan py-dist recursively for any folder containing .dll or .pyd files
     dll_extra_paths = set()
-    if os.path.exists(sp_path):
-        log_boot("Scanning for binary dependencies in site-packages...")
-        for root, ds, fs in os.walk(sp_path):
-            if any(f.lower().endswith(".dll") for f in fs):
-                dll_extra_paths.add(root)
+    log_boot("Scanning for binary dependencies in py-dist...")
+    for root, ds, fs in os.walk(py_dist_root):
+        if any(f.lower().endswith((".dll", ".pyd")) for f in fs):
+            dll_extra_paths.add(root)
     
+    # Priority paths for Python 2.7.10
     search_paths = [
         python_root,
         os.path.join(python_root, "DLLs"),
         os.path.join(python_root, "Scripts"),
-        sp_path,
+        os.path.join(python_root, "Lib", "site-packages"),
     ] + list(dll_extra_paths) + system_paths
     
-    current_path = os.environ.get('PATH', '')
+    # Deduplicate and build PATH string without breaking unicode
+    current_path_list = [p.strip() for p in os.environ.get('PATH', '').split(os.pathsep) if p.strip()]
+    final_paths = []
+    added_paths = set()
+    
+    # Prepend our bundled paths for priority
     for p in search_paths:
-        if p and p not in current_path:
-            current_path = p + os.pathsep + current_path
-
-    env = os.environ.copy()
-    env['PATH'] = current_path.encode('ascii', 'ignore') if isinstance(current_path, unicode) else current_path
-    env['PYTHONPATH'] = project_dir_path.encode('ascii', 'ignore') if isinstance(project_dir_path, unicode) else project_dir_path
+        if p and os.path.isdir(p) and p not in added_paths:
+            final_paths.append(p)
+            added_paths.add(p)
+            
+    # Append existing system paths
+    for p in current_path_list:
+        if p and p not in added_paths:
+            final_paths.append(p)
+            added_paths.add(p)
+            
+    final_path_str = os.pathsep.join(final_paths)
+    
+    # CRITICAL: Do NOT use .encode('ascii', 'ignore') - it breaks localized paths
+    env['PATH'] = final_path_str
+    env['PYTHONPATH'] = project_dir_path
     env['PYTHONDONTWRITEBYTECODE'] = '1'
     
-    log_boot("Effective PATH: %s" % env['PATH'][:200] + "...")
+    log_boot("Effective PATH built successfully.")
     # Redirect Matplotlib cache/config to a writable location
     if 'data_root' not in locals():
         data_root = GetWritableAppDataPath()

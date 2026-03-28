@@ -139,18 +139,23 @@ USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
-
+# ----------------------------------------------------------------------------------
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(DATA_ROOT, 'static')
+
+# We search in multiple probable locations to handle flattened installer structures
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "kodys/templates/gstatic"),
+    os.path.join(BASE_DIR, "kodys", "templates", "gstatic"),             # Source Structure
+    os.path.join(os.path.dirname(BASE_DIR), "kodys", "templates", "gstatic"), # Installer Flattened Structure
 ]
+
+# Ensure they exist or remove to avoid Django 1.11 warnings
+STATICFILES_DIRS = [d for d in STATICFILES_DIRS if os.path.exists(d)]
 
 DATA_URL = '/site_data/'
 MEDIA_URL = '/site_media/'
-MEDIA_ROOT = os.path.join(DATA_ROOT, 'app_assets','media')
-MEDIA_DATA = os.path.join(DATA_ROOT, 'app_assets','DATA')
+MEDIA_ROOT = os.path.join(DATA_ROOT, 'app_assets', 'media')
+MEDIA_DATA = os.path.join(DATA_ROOT, 'app_assets', 'DATA')
 DATA_UPLOAD_MAX_MEMORY_SIZE = 25000000
 
 #########################################################################

@@ -13,19 +13,33 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+import os
 from django.conf.urls import url
 from django.contrib import admin
 import django.views.static as django_static_view
 from django.conf import settings
 from kodys.views import *
 
+# --- HARDENED STATIC/MEDIA ROUTING (v2.2.36) ---
+# Find the real physical location of gstatic (handles source vs dist flattening)
+_source_gstatic = os.path.join(settings.BASE_DIR, "kodys", "templates", "gstatic")
+_dist_gstatic = os.path.join(os.path.dirname(settings.BASE_DIR), "kodys", "templates", "gstatic")
+GSTATIC_PATH = _source_gstatic if os.path.exists(_source_gstatic) else _dist_gstatic
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    # Hardened Static/Media Routes for Production Desktop Bundle
-    url(r'^site_media/(?P<path>.*)$', django_static_view.serve, {'document_root': os.path.join(settings.BASE_DIR, "kodys/templates/gstatic") }),
-    url(r'^static/(?P<path>.*)$', django_static_view.serve, {'document_root': os.path.join(settings.BASE_DIR, "kodys/templates/gstatic") }),
-	url(r'^site_data/(?P<path>.*)$', django_static_view.serve, {'document_root': settings.MEDIA_DATA }),
-    url(r'^static/admin/(?P<path>.*)$', django_static_view.serve,{'document_root': settings.STATIC_ROOT }),
+
+    # 1. Bundled Static Assets (CSS, JS, Fonts)
+    url(r'^static/(?P<path>.*)$', django_static_view.serve, {'document_root': GSTATIC_PATH}),
+    
+    # 2. User Media / Uploaded Files (from Writable AppData)
+    url(r'^site_media/(?P<path>.*)$', django_static_view.serve, {'document_root': settings.MEDIA_ROOT}),
+    
+    # 3. Application Data / JSON (from Writable AppData)
+    url(r'^site_data/(?P<path>.*)$', django_static_view.serve, {'document_root': settings.MEDIA_DATA}),
+    
+    # 4. Django Admin Static Files
+    url(r'^static/admin/(?P<path>.*)$', django_static_view.serve,{'document_root': settings.STATIC_ROOT}),
     url(r'^about/$', about, name="about"),
     url(r'^signin/$', signin, name="signin"),
     url(r'^signout/$', signout, name="signout"),

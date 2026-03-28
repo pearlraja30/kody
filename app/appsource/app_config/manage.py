@@ -3,37 +3,43 @@ import os
 import sys
 
 if __name__ == "__main__":
-    # --- FORENSIC DLL PRE-FLIGHT (v2.2.35) ---
+    # --- ROBUST DLL PRE-FLIGHT (v2.2.36) ---
     if os.name == 'nt':
         import ctypes
-        from ctypes import wintypes
         try:
-            # Find py-dist by walking up from appsource/app_config/manage.py
-            # appsource (parent) -> kody (grandparent) -> py-dist
+            # Find py-dist accurately
             base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            py_dist = os.path.join(os.path.dirname(os.path.dirname(base)), 'py-dist')
+            py_dist = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(base)), 'py-dist'))
             
             if os.path.exists(py_dist):
                 # 1. Recursive Search for Binary Fragments
-                dll_dirs = [py_dist]
+                dll_dirs = set([py_dist])
                 for root, dirs, files in os.walk(py_dist):
                     if any(f.lower().endswith(('.dll', '.pyd')) for f in files):
-                        dll_dirs.append(root)
+                        dll_dirs.add(root)
                 
-                # 2. Path Injection
-                current_path = os.environ.get('PATH', '')
-                for d in dll_dirs:
-                    if d not in current_path:
-                        current_path = d + os.pathsep + current_path
-                os.environ['PATH'] = current_path.encode('ascii', 'ignore') if isinstance(current_path, unicode) else current_path
+                # 2. Path Injection (Safe Unicode Handling)
+                current_path_list = [p.strip() for p in os.environ.get('PATH', '').split(os.pathsep) if p.strip()]
+                final_paths = []
+                added_paths = set()
                 
-                # 3. Kernel Search Mode Override
-                kernel32 = ctypes.windll.kernel32
-                for d in dll_dirs:
-                    try:
-                        kernel32.SetDllDirectoryW(unicode(d))
-                    except:
-                        pass
+                # Priority: py-dist binaries
+                for d in sorted(list(dll_dirs)):
+                    if d not in added_paths:
+                        final_paths.append(d)
+                        added_paths.add(d)
+                        # Also register with Kernel32 for deep resolution
+                        try:
+                            ctypes.windll.kernel32.SetDllDirectoryW(unicode(d))
+                        except: pass
+                
+                # Append original paths
+                for p in current_path_list:
+                    if p not in added_paths:
+                        final_paths.append(p)
+                        added_paths.add(p)
+                
+                os.environ['PATH'] = os.pathsep.join(final_paths)
         except Exception as e:
             sys.stderr.write("DLL Pre-flight Error: %s\n" % str(e))
 

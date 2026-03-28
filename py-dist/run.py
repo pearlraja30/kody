@@ -203,6 +203,8 @@ A = None
 mw = None
 splash = None
 is_cef_initialized = False
+browser_count = 0
+is_shutting_down = False
 
 def start_application():
     global QtGui, QtCore, QtWebKit, cefpython, signal, util, imp, subprocess, json, compileall, winreg, SerialException, SerialTimeoutException, relativedelta, B, A, is_cef_initialized, mw, splash

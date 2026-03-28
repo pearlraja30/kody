@@ -20,11 +20,27 @@ import django.views.static as django_static_view
 from django.conf import settings
 from kodys.views import *
 
-# --- HARDENED STATIC/MEDIA ROUTING (v2.2.36) ---
+# --- HARDENED STATIC/MEDIA ROUTING (v2.2.41) ---
+# 1. Bundled Assets Root (Read-Only Installation Directory)
+INSTALL_DIR = os.path.dirname(settings.BASE_DIR)
+BUNDLED_MEDIA_ROOT = os.path.join(INSTALL_DIR, "app", "app_assets", "media")
+BUNDLED_DATA_ROOT = os.path.join(INSTALL_DIR, "app", "app_assets", "DATA")
+
 # Find the real physical location of gstatic (handles source vs dist flattening)
 _source_gstatic = os.path.join(settings.BASE_DIR, "kodys", "templates", "gstatic")
-_dist_gstatic = os.path.join(os.path.dirname(settings.BASE_DIR), "kodys", "templates", "gstatic")
+_dist_gstatic = os.path.join(INSTALL_DIR, "kodys", "templates", "gstatic")
 GSTATIC_PATH = _source_gstatic if os.path.exists(_source_gstatic) else _dist_gstatic
+
+def flexible_serve(request, path, document_root=None, fallback_root=None, **kwargs):
+    """Attempt to serve from primary document_root, fall back to fallback_root."""
+    try:
+        # Try primary (usually writable AppData)
+        return django_static_view.serve(request, path, document_root=document_root, **kwargs)
+    except:
+        # Fall back to bundled (usually read-only Program Files)
+        if fallback_root:
+            return django_static_view.serve(request, path, document_root=fallback_root, **kwargs)
+        raise
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -32,14 +48,20 @@ urlpatterns = [
     # 1. Bundled Static Assets (CSS, JS, Fonts)
     url(r'^static/(?P<path>.*)$', django_static_view.serve, {'document_root': GSTATIC_PATH}),
     
-    # 2. User Media / Uploaded Files (from Writable AppData)
-    url(r'^site_media/(?P<path>.*)$', django_static_view.serve, {'document_root': settings.MEDIA_ROOT}),
+    # 2. User Media / Bundled Media Fallback (v2.2.41)
+    url(r'^site_media/(?P<path>.*)$', flexible_serve, {
+        'document_root': settings.MEDIA_ROOT, 
+        'fallback_root': BUNDLED_MEDIA_ROOT
+    }),
     
-    # 3. Application Data / JSON (from Writable AppData)
-    url(r'^site_data/(?P<path>.*)$', django_static_view.serve, {'document_root': settings.MEDIA_DATA}),
+    # 3. Application Data / Bundled Data Fallback (v2.2.41)
+    url(r'^site_data/(?P<path>.*)$', flexible_serve, {
+        'document_root': settings.MEDIA_DATA, 
+        'fallback_root': BUNDLED_DATA_ROOT
+    }),
     
     # 4. Django Admin Static Files
-    url(r'^static/admin/(?P<path>.*)$', django_static_view.serve,{'document_root': settings.STATIC_ROOT}),
+    url(r'^static/admin/(?P<path>.*)$', django_static_view.serve, {'document_root': settings.STATIC_ROOT}),
     url(r'^about/$', about, name="about"),
     url(r'^signin/$', signin, name="signin"),
     url(r'^signout/$', signout, name="signout"),

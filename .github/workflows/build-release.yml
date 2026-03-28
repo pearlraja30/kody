@@ -513,7 +513,8 @@ jobs:
     name: 🚀 Create Release
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: [build-windows-installer, build-windows-portable, build-mac-app]
+    # Removed strict 'needs' to allow faster uploads as jobs finish
+    needs: [build-windows-installer] 
     permissions:
       contents: write
 

@@ -26,6 +26,55 @@ def force_str(v):
         return [force_str(i) for i in v]
     return str(v)
 
+def EnrichRuntimeEnvironment():
+    """
+    ROBUST PATH ENRICHMENT (v2.2.38):
+    Unifies the runtime search path for BOTH the launcher and workers.
+    Ensures systemic DLLs (pywin32, PyQt4, msvcrt) are globally visible.
+    """
+    python_root = os.path.dirname(os.path.abspath(sys.executable))
+    py_dist_root = os.path.dirname(python_root)
+    
+    # 1. Recursive Scan for Binary Folders
+    dll_extra_paths = set()
+    for root, ds, fs in os.walk(py_dist_root):
+        if any(f.lower().endswith((".dll", ".pyd")) for f in fs):
+            dll_extra_paths.add(root)
+            
+    # 2. System Fallbacks
+    system_paths = []
+    if sys.platform == "win32":
+        windir = os.environ.get('WINDIR', 'C:\\Windows')
+        system_paths = [os.path.join(windir, 'System32'), os.path.join(windir, 'SysWOW64')]
+        
+    # 3. Construct Priority Path List
+    search_paths = [
+        python_root,
+        os.path.join(python_root, "DLLs"),
+        os.path.join(python_root, "Scripts"),
+        os.path.join(python_root, "Lib", "site-packages"),
+    ] + list(dll_extra_paths) + system_paths
+    
+    current_path_list = [p.strip() for p in os.environ.get('PATH', '').split(os.pathsep) if p.strip()]
+    final_paths = []
+    added_paths = set()
+    
+    for p in search_paths:
+        if p and os.path.isdir(p) and p not in added_paths:
+            final_paths.append(p)
+            added_paths.add(p)
+    for p in current_path_list:
+        if p and p not in added_paths:
+            final_paths.append(p)
+            added_paths.add(p)
+            
+    # 4. Global Injection (Ensures Launcher itself can load .pyd dependencies)
+    os.environ['PATH'] = force_str(os.pathsep.join(final_paths))
+    log_boot("Global Runtime PATH stabilized for v2.2.38")
+
+# CALL IMMEDIATELY
+EnrichRuntimeEnvironment()
+
 def show_fatal_error(title, message):
     log_boot("FATAL [%s]: %s" % (title, message))
     try:
@@ -88,9 +137,7 @@ def start_application():
     sp_path = os.path.join(os.getcwd(), "python-2.7.10", "Lib", "site-packages")
     if sp_path not in sys.path: sys.path.insert(0, sp_path)
     pyqt4_path = os.path.join(sp_path, "PyQt4")
-    if os.path.exists(pyqt4_path): 
-        # CRITICAL: Force str for os.environ on Python 2.7
-        os.environ['PATH'] = force_str(pyqt4_path + os.pathsep + os.environ.get('PATH', ''))
+    # Note: Global PATH is already enriched by EnrichRuntimeEnvironment()
     
     libcef_dll = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'libcef.dll')
     if os.path.exists(libcef_dll): import cefpython_py27 as cefpython
@@ -2144,65 +2191,10 @@ def start_application():
         app.processEvents()
         app.processEvents()
 
-    # A. Define environment for all subprocesses (Fixes DLL load failed)
-    # ----------------------------------------------------------------------------------
-    env = os.environ.copy()
-    python_root = os.path.dirname(os.path.abspath(sys.executable))
-    py_dist_root = os.path.dirname(python_root) # py-dist is parent of python-2.7.10
-    
-    # SYSTEM PATHS: On Windows, some system DLLs are needed even if bundled
-    system_paths = []
-    if sys.platform == "win32":
-        windir = os.environ.get('WINDIR', 'C:\\Windows')
-        system_paths = [
-            os.path.join(windir, 'System32'),
-            os.path.join(windir, 'SysWOW64')
-        ]
-    
-    # --- ROBUST PATH ENRICHMENT (Recursive DLL Discovery) ---
-    # We scan py-dist recursively for any folder containing .dll or .pyd files
-    dll_extra_paths = set()
-    log_boot("Scanning for binary dependencies in py-dist...")
-    for root, ds, fs in os.walk(py_dist_root):
-        if any(f.lower().endswith((".dll", ".pyd")) for f in fs):
-            dll_extra_paths.add(root)
-    
-    # Priority paths for Python 2.7.10
-    search_paths = [
-        python_root,
-        os.path.join(python_root, "DLLs"),
-        os.path.join(python_root, "Scripts"),
-        os.path.join(python_root, "Lib", "site-packages"),
-    ] + list(dll_extra_paths) + system_paths
-    
-    # Deduplicate and build PATH string without breaking unicode
-    current_path_list = [p.strip() for p in os.environ.get('PATH', '').split(os.pathsep) if p.strip()]
-    final_paths = []
-    added_paths = set()
-    
-    # Prepend our bundled paths for priority
-    for p in search_paths:
-        if p and os.path.isdir(p) and p not in added_paths:
-            final_paths.append(p)
-            added_paths.add(p)
-            
-    # Append existing system paths
-    for p in current_path_list:
-        if p and p not in added_paths:
-            final_paths.append(p)
-            added_paths.add(p)
-            
-    final_path_str = os.pathsep.join(final_paths)
-    
-    # CRITICAL: Sanitize the entire environment dictionary for Python 2.7 on Windows.
-    # This prevents the "environment can only contain strings" error during Popen/check_call.
-    # We use 'mbcs' to preserve localized paths (like non-English user profiles).
-    env['PATH'] = final_path_str
-    env['PYTHONPATH'] = project_dir_path
+    # CRITICAL: Sanitize environment for subprocesses (using global enriched PATH)
+    env = force_str(os.environ.copy())
     env['PYTHONDONTWRITEBYTECODE'] = '1'
-    
-    # Deep-cast all keys and values to byte-strings
-    env = force_str(env)
+    env['PYTHONPATH'] = force_str(project_dir_path)
     
     log_boot("Effective PATH built successfully.")
     # Redirect Matplotlib cache/config to a writable location

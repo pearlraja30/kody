@@ -18,32 +18,38 @@ if __name__ == "__main__":
                     if any(f.lower().endswith(('.dll', '.pyd')) for f in files):
                         dll_dirs.add(root)
                 
-                # 2. Path Injection (Safe Unicode Handling)
-                current_path_list = [p.strip() for p in os.environ.get('PATH', '').split(os.pathsep) if p.strip()]
+                # 2. Path Injection
+                # We prioritize py-dist and python-root for binary stability
+                python_root = os.path.dirname(sys.executable)
+                priority_paths = [
+                    python_root,
+                    os.path.join(python_root, "DLLs"),
+                    os.path.join(python_root, "Lib", "site-packages"),
+                ] + sorted(list(dll_dirs))
+                
+                current_paths = [p.strip() for p in os.environ.get('PATH', '').split(os.pathsep) if p.strip()]
                 final_paths = []
-                added_paths = set()
+                added = set()
                 
-                # Priority: py-dist binaries
-                for d in sorted(list(dll_dirs)):
-                    if d not in added_paths:
-                        final_paths.append(d)
-                        added_paths.add(d)
-                        # Also register with Kernel32 for deep resolution
-                        try:
-                            ctypes.windll.kernel32.SetDllDirectoryW(unicode(d))
-                        except: pass
-                
-                # Append original paths
-                for p in current_path_list:
-                    if p not in added_paths:
+                for p in priority_paths:
+                    if p and os.path.isdir(p) and p not in added:
                         final_paths.append(p)
-                        added_paths.add(p)
+                        added.add(p)
+                        try:
+                            ctypes.windll.kernel32.SetDllDirectoryW(unicode(p))
+                        except: pass
+                        
+                for p in current_paths:
+                    if p and p not in added:
+                        final_paths.append(p)
+                        added.add(p)
                 
-                # Final stringification for os.environ (Python 2.7 requires byte-strings)
+                # 3. Final stringification (Python 2.7 requires byte-strings)
+                path_str = os.pathsep.join(final_paths)
                 try:
-                    os.environ['PATH'] = os.pathsep.join(final_paths).encode('mbcs')
+                    os.environ['PATH'] = path_str.encode('mbcs')
                 except:
-                    os.environ['PATH'] = os.pathsep.join(final_paths).encode('utf-8', 'ignore')
+                    os.environ['PATH'] = path_str.encode('utf-8', 'ignore')
         except Exception as e:
             sys.stderr.write("DLL Pre-flight Error: %s\n" % str(e))
 

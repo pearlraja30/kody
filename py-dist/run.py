@@ -166,12 +166,22 @@ def GetApplicationPath(file=None):
         GetApplicationPath.dir = dir
     if file is None:
         file = ""
-    if not file.startswith("/") and not file.startswith("\\") and (not re.search(r"^[\\w-]+:", file)):
+        
+    # v2.2.40: PROTOCOL AWARENESS
+    # Short-circuit if the input is already a URL or a remote scheme
+    if file.startswith(("http://", "https://", "file://")):
+        return file
+        
+    # Corrected regex: detect schemes (http:, file:) and Windows drive letters (C:)
+    # Using r'^[\w-]+:' ensures word characters and hyphens match the protocol name
+    if not file.startswith("/") and not file.startswith("\\") and (not re.search(r'^[\w-]+:', file)):
         path = GetApplicationPath.dir + os.sep + file
         if platform.system() == "Windows":
+            # Normalize path but preserve colons for drive letters
             path = re.sub(r"[\\/]+", re.escape(os.sep), path)
         path = re.sub(r"[\\/]+$", "", path)
         return path
+        
     return str(file)
 def GetWritableAppDataPath(folder=None):
     base = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.path.expanduser('~'))), "KodysFootClinikV2")

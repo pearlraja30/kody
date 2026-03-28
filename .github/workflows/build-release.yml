@@ -16,7 +16,7 @@ name: Kodys Build & Release Pipeline
 
 on:
   push:
-    branches: [main, release/*]
+    branches: [main, "release/*", "release-*"]
     tags: ['v*']
   pull_request:
     branches: [main]

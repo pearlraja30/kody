@@ -2251,18 +2251,18 @@ if __name__ == '__main__':
             project_dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..',project_dir_name))
             assets_dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..',assets_dir_name))
             assets_media_dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..',assets_media_dir_name))
-            window_data= data["window"]
-            dev_tools_menu_enabled = bool(util.strtobool(window_data["dev_tools_menu_enabled"].lower()))
-            initial_width = int(window_data["width"])
-            initial_height = int(window_data["height"])
-            min_width = int(window_data["min_width"])
-            min_height = int(window_data["min_height"])
-            window_title = window_data["title"]
-            icon_name = window_data["icon"]
-            icon_name = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'config',icon_name))
-            fullscreen_allowed =  bool(util.strtobool(window_data["fullscreen_allowed"].lower()))
-            max_width = int(window_data["max_width"])
-            max_height = int(window_data["max_height"])
+            window_data = data.get("window", {})
+            dev_tools_menu_enabled = bool(util.strtobool(str(window_data.get("dev_tools_menu_enabled", "false")).lower()))
+            initial_width = int(window_data.get("width", 1280))
+            initial_height = int(window_data.get("height", 680))
+            min_width = int(window_data.get("min_width", 1024))
+            min_height = int(window_data.get("min_height", 600))
+            window_title = window_data.get("title", "Kodys Foot Clinik")
+            icon_name = window_data.get("icon", "appicon.png")
+            icon_name = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'config', icon_name))
+            fullscreen_allowed = bool(util.strtobool(str(window_data.get("fullscreen_allowed", "true")).lower()))
+            max_width = int(window_data.get("max_width", 1920))
+            max_height = int(window_data.get("max_height", 1080))
     except Exception as e:
         import traceback
         print("Failed Reading Config: %s" % str(e))
@@ -2293,8 +2293,10 @@ if __name__ == '__main__':
         except Exception as e:
             log_boot("Warning: Failed to migrate database: %s" % str(e))
 
-    # Migrate Assets if needed
-    src_assets = os.path.abspath(os.path.join(project_dir_path, "..", "app_assets"))
+    # Migrate Assets if needed (Fixes 404 Static Files in Program Files)
+    # project_dir_path is app/appsource/app_config. 
+    # app_assets is in app/app_assets.
+    src_assets = os.path.abspath(os.path.join(project_dir_path, "..", "..", "app_assets"))
     dest_assets = os.path.join(data_root, "app_assets")
     if os.path.exists(src_assets) and not os.path.exists(dest_assets):
         try:
@@ -2331,6 +2333,19 @@ if __name__ == '__main__':
         print("Warning: Failed to verify admin credentials: %s" % str(e))
     app.processEvents()
 
+    # Ensure initial metadata (seeding) using the current python executable
+    try:
+        if splash:
+            splash.showMessage("Initializing Application Data...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+            app.processEvents()
+        seed_script = os.path.join(project_dir_path, "populate_data.py")
+        if os.path.exists(seed_script):
+            subprocess.check_call([sys.executable, seed_script])
+            print("Successfully initialized application metadata.")
+    except Exception as e:
+        print("Warning: Failed to initialize metadata: %s" % str(e))
+    app.processEvents()
+
     # --- STEP 3: Backend Services ---
     if splash:
         splash.showMessage("Starting Backend Services...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
@@ -2350,11 +2365,20 @@ if __name__ == '__main__':
             os.path.join(windir, 'SysWOW64')
         ]
     
-    # Add python root, DLLs, and site-packages/PyQt4 to PATH for the subprocess
+    # Add python root, DLLs, site-packages, and NumPy/SciPy core paths (Fixes mydpss)
     sp_path = os.path.join(python_root, "Lib", "site-packages")
     pyqt4_path = os.path.join(sp_path, "PyQt4")
+    numpy_core = os.path.join(sp_path, "numpy", "core")
+    scipy_special = os.path.join(sp_path, "scipy", "special")
     
-    env_paths = [python_root, os.path.join(python_root, "DLLs"), pyqt4_path] + system_paths
+    env_paths = [
+        python_root, 
+        os.path.join(python_root, "DLLs"), 
+        pyqt4_path,
+        numpy_core,
+        scipy_special
+    ] + system_paths
+    
     current_path = os.environ.get('PATH', '')
     for p in env_paths:
         if os.path.exists(p) and p not in current_path:

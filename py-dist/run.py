@@ -2250,6 +2250,15 @@ def start_application():
         log_boot("Starting Django on port 5427 via %s" % manage_path)
         # Use --noreload and -B to avoid issues in packaged environments
         runserver_args = [sys.executable, '-B', manage_path, 'runserver', '127.0.0.1:5427', '--noreload']
+        
+        # Diagnostic Path Log (v2.2.35)
+        try:
+            with open(os.path.join(GetWritableAppDataPath(), "env_debug.txt"), "w") as f:
+                f.write("PATH: %s\n" % env.get('PATH', ''))
+                f.write("CWD: %s\n" % os.getcwd())
+        except:
+            pass
+
         if sys.platform == "win32":
             import win32process
             proc = subprocess.Popen(runserver_args, 

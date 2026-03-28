@@ -21,7 +21,9 @@ from kodys.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^site_media/(?P<path>.*)$', django_static_view.serve, {'document_root': settings.MEDIA_ROOT }),
+    # Hardened Static/Media Routes for Production Desktop Bundle
+    url(r'^site_media/(?P<path>.*)$', django_static_view.serve, {'document_root': os.path.join(settings.BASE_DIR, "kodys/templates/gstatic") }),
+    url(r'^static/(?P<path>.*)$', django_static_view.serve, {'document_root': os.path.join(settings.BASE_DIR, "kodys/templates/gstatic") }),
 	url(r'^site_data/(?P<path>.*)$', django_static_view.serve, {'document_root': settings.MEDIA_DATA }),
     url(r'^static/admin/(?P<path>.*)$', django_static_view.serve,{'document_root': settings.STATIC_ROOT }),
     url(r'^about/$', about, name="about"),

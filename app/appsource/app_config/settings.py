@@ -142,7 +142,13 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(DATA_ROOT, 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "kodys/templates/gstatic"),
+]
+
 DATA_URL = '/site_data/'
+MEDIA_URL = '/site_media/'
 MEDIA_ROOT = os.path.join(DATA_ROOT, 'app_assets','media')
 MEDIA_DATA = os.path.join(DATA_ROOT, 'app_assets','DATA')
 DATA_UPLOAD_MAX_MEMORY_SIZE = 25000000

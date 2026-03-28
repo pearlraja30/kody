@@ -2119,46 +2119,6 @@ def start_application():
         except Exception as e:
             log_boot("Warning: Failed to migrate assets: %s" % str(e))
 
-    if splash:
-        splash.showMessage("Compiling Assets...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
-        app.processEvents()
-        app.processEvents()
-    
-    # Defensive compile - skip if read-only, and don't force
-    try:
-        # Don't use force=True to avoid permission denied spam for existing files
-        compileall.compile_dir(project_dir_path, quiet=1)
-    except:
-        log_boot("Info: Skipping asset compilation (directory is read-only)")
-    app.processEvents()
-    
-    # Ensure admin credentials are set using the current python executable
-    try:
-        if splash:
-            splash.showMessage("Verifying Admin Credentials...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
-            app.processEvents()
-            app.processEvents()
-        admin_script = os.path.join(project_dir_path, "create_admin.py")
-        if os.path.exists(admin_script):
-            subprocess.check_call([sys.executable, admin_script])
-            print("Successfully verified admin credentials.")
-    except Exception as e:
-        print("Warning: Failed to verify admin credentials: %s" % str(e))
-    app.processEvents()
-
-    # Ensure initial metadata (seeding) using the current python executable
-    try:
-        if splash:
-            splash.showMessage("Initializing Application Data...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
-            app.processEvents()
-        seed_script = os.path.join(project_dir_path, "populate_data.py")
-        if os.path.exists(seed_script):
-            subprocess.check_call([sys.executable, seed_script])
-            print("Successfully initialized application metadata.")
-    except Exception as e:
-        print("Warning: Failed to initialize metadata: %s" % str(e))
-    app.processEvents()
-
     # --- STEP 3: Backend Services ---
     if splash:
         splash.showMessage("Starting Backend Services...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))

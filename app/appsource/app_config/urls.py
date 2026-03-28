@@ -23,8 +23,8 @@ from kodys.views import *
 # --- HARDENED STATIC/MEDIA ROUTING (v2.2.41) ---
 # 1. Bundled Assets Root (Read-Only Installation Directory)
 INSTALL_DIR = os.path.dirname(settings.BASE_DIR)
-BUNDLED_MEDIA_ROOT = os.path.join(INSTALL_DIR, "app", "app_assets", "media")
-BUNDLED_DATA_ROOT = os.path.join(INSTALL_DIR, "app", "app_assets", "DATA")
+BUNDLED_MEDIA_ROOT = os.path.join(INSTALL_DIR, "app_assets", "media")
+BUNDLED_DATA_ROOT = os.path.join(INSTALL_DIR, "app_assets", "DATA")
 
 # Find the real physical location of gstatic (handles source vs dist flattening)
 _source_gstatic = os.path.join(settings.BASE_DIR, "kodys", "templates", "gstatic")

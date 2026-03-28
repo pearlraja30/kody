@@ -141,10 +141,18 @@ def EnrichRuntimeEnvironment():
     os.environ['PATH'] = force_str(os.pathsep.join(final_paths))
     log_boot("Global Runtime PATH stabilized for v2.2.38")
 
-# CALL IMMEDIATELY
 EnrichRuntimeEnvironment()
 AuditEnvironment()
 AuditBinaries()
+
+# v2.2.43: SELF-HEALING ASSET AUDIT
+# Locate the bundled media folder relative to the py-dist launcher
+_py_dist = os.path.dirname(os.path.abspath(__file__))
+_app_root = os.path.dirname(_py_dist)
+_media_root = os.path.join(_app_root, "app", "app_assets", "media")
+
+LogAssetAudit(_media_root)
+StripUtf8BomRecursively(_media_root)
 
 def show_fatal_error(title, message):
     log_boot("FATAL [%s]: %s" % (title, message))
@@ -183,6 +191,48 @@ def GetApplicationPath(file=None):
         return path
         
     return str(file)
+
+def StripUtf8BomRecursively(directory):
+    """
+    Scans for .js and .css files and removes UTF-8 BOM (\xef\xbb\xbf).
+    This prevents 'ILLEGAL token' SyntaxErrors in older browser engines.
+    """
+    log_boot("Starting BOM-stripping audit in: %s" % directory)
+    if not os.path.exists(directory):
+        log_boot("Directory missing: %s" % directory, "WARNING")
+        return
+        
+    bom = '\xef\xbb\xbf'
+    count = 0
+    for root, ds, fs in os.walk(directory):
+        for f in fs:
+            if f.lower().endswith(('.js', '.css')):
+                path = os.path.join(root, f)
+                try:
+                    with open(path, 'rb') as fp:
+                        content = fp.read()
+                    if content.startswith(bom):
+                        log_boot("Stripping BOM from: %s" % path, "REPAIR")
+                        with open(path, 'wb') as fp:
+                            fp.write(content[3:])
+                        count += 1
+                except Exception as e:
+                    log_boot("Failed to process %s: %s" % (path, str(e)), "ERROR")
+    log_boot("BOM-stripping audit complete. Repaired %d files." % count)
+
+def LogAssetAudit(base_dir):
+    """Logs the presence of critical UI assets to debug 404s."""
+    log_boot("--- ASSET AUDIT ---")
+    critical_js = [
+        "js/jquery.min.js",
+        "js/bootstrap.min.js",
+        "css/bootstrap.min.css"
+    ]
+    for rel in critical_js:
+        abs_path = os.path.join(base_dir, rel)
+        exists = os.path.exists(abs_path)
+        log_boot("Asset: %s -> %s" % (rel, "FOUND" if exists else "MISSING"), "AUDIT" if exists else "ERROR")
+    log_boot("--- END ASSET AUDIT ---")
 def GetWritableAppDataPath(folder=None):
     base = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.path.expanduser('~'))), "KodysFootClinikV2")
     if not os.path.exists(base):
@@ -2421,7 +2471,7 @@ def start_application():
         "log_file": os.path.join(GetWritableAppDataPath(), "cef_debug.log"),
         "auto_zooming": "1",
         "release_dcheck_enabled": True,
-        "cache_path": GetWritableAppDataPath("cache"),
+        "cache_path": GetWritableAppDataPath("cache/session_" + str(int(time.time()))),
         "locales_dir_path": os.path.join(cefpython.GetModuleDirectory(), "locales"),
         "resources_dir_path": cefpython.GetModuleDirectory(),
         "browser_subprocess_path": os.path.join(cefpython.GetModuleDirectory(), "subprocess.exe"),

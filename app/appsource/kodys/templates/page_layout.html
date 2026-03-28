@@ -6,6 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kodys</title>
 
+<!-- UI SAFETY-NET (v2.2.43) -->
+<!-- 1. CSS Fallbacks -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEUpDQ9Qu3O9H936s3f6A67LCC6LPU8iYJc8UvpWAnRXMNo8J79HEE4KuqzP21ITQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link href="{{MEDIA_URL}}css/kodys1.css" rel="stylesheet">
 <link href='{{MEDIA_URL}}css/roboto.css' rel='stylesheet'>
 <link href="{{MEDIA_URL}}css/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -15,7 +18,15 @@
 <link rel="stylesheet" href="{{MEDIA_URL}}DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css">
 <link href="{{MEDIA_URL}}fontselect-jquery-plugin-master/styles/fontselect-default.css" rel="stylesheet">
 <link href="{{MEDIA_URL}}Color-Picker-bcPicker/resources/css/bcPicker.css" rel="stylesheet">
-<script type="text/javascript" src="{{MEDIA_URL}}js/jquery.min.js"></script>
+
+<!-- 2. JS Fallbacks (jQuery Must Load Early) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha512-jGsY1i/8rBInY8vVAnG5SndfFfX32uP0YmK0X+EpfXp5q/i6iW+VpD79w42+R2S2y1n6i79+K+mD6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript">
+    if (typeof jQuery == 'undefined') {
+        document.write(unescape("%3Cscript src='{{MEDIA_URL}}js/jquery.min.js' type='text/javascript'%3E%3C/script%3E"));
+    }
+</script>
+
 <script type="text/javascript" src="{{MEDIA_URL}}js/moment.min.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/daterangepicker-master/daterangepicker.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>

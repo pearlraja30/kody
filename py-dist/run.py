@@ -2015,357 +2015,359 @@ def start_application():
     
     class CefApplication(QtGui.QApplication):
         timer = None
-    
+
         def __init__(self, args):
             super(CefApplication, self).__init__(args)
             self.createTimer()
-    
+
         def createTimer(self):
             self.timer = QtCore.QTimer()
             self.timer.timeout.connect(self.onTimer)
             self.timer.start(1)
-    
-        # --- APPLICATION STARTUP SEQUENCE ---
-        global mw, splash
-        app = CefApplication(sys.argv)
+
+        def onTimer(self):
+            cefpython.MessageLoopWork()
+
+        def stopTimer(self):
+            if self.timer:
+                self.timer.stop()
+
+    # --- APPLICATION STARTUP SEQUENCE ---
+    global mw, splash
+    app = CefApplication(sys.argv)
         
-        splash = None
-        splash_path = GetApplicationPath("../config/splash.png")
-        if os.path.exists(splash_path):
-            splash = QtGui.QSplashScreen(QtGui.QPixmap(splash_path))
-            splash.show()
-            # Ensure it stays on top and visible
-            splash.raise_()
-            app.processEvents()
-            splash.showMessage("Starting KODYS...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
-            app.processEvents()
-            app.processEvents()
-    
-        # --- STEP 2: LOAD CONFIG & ENV ---
-        config_file_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'config','config.json'))
-        try:
-            if splash:
-                splash.showMessage("Loading Configuration...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
-                app.processEvents()
-                app.processEvents()
-            with open(config_file_path) as data_file:    
-                data = json.load(data_file)
-                django_app_data = data["application"]
-                project_dir_name = django_app_data["project_dir_name"].replace('\\', os.sep)
-                assets_dir_name = django_app_data["assets_dir_name"].replace('\\', os.sep)
-                assets_media_dir_name = django_app_data["assets_media_dir_name"].replace('\\', os.sep)
-                project_dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..',project_dir_name))
-                assets_dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..',assets_dir_name))
-                assets_media_dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..',assets_media_dir_name))
-                window_data = data.get("window", {})
-                dev_tools_menu_enabled = bool(util.strtobool(str(window_data.get("dev_tools_menu_enabled", "false")).lower()))
-                initial_width = int(window_data.get("width", 1280))
-                initial_height = int(window_data.get("height", 680))
-                min_width = int(window_data.get("min_width", 1024))
-                min_height = int(window_data.get("min_height", 600))
-                window_title = window_data.get("title", "Kodys Foot Clinik")
-                icon_name = window_data.get("icon", "appicon.png")
-                icon_name = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'config', icon_name))
-                fullscreen_allowed = bool(util.strtobool(str(window_data.get("fullscreen_allowed", "true")).lower()))
-                max_width = int(window_data.get("max_width", 1920))
-                max_height = int(window_data.get("max_height", 1080))
-        except Exception as e:
-            import traceback
-            print("Failed Reading Config: %s" % str(e))
-            traceback.print_exc()
+    splash = None
+    splash_path = GetApplicationPath("../config/splash.png")
+    if os.path.exists(splash_path):
+        splash = QtGui.QSplashScreen(QtGui.QPixmap(splash_path))
+        splash.show()
+        # Ensure it stays on top and visible
+        splash.raise_()
         app.processEvents()
-        
-        # --- DATA MIGRATION & WRITE CHECK ---
-        data_root = GetWritableAppDataPath()
-        log_boot("Data Root: %s" % data_root)
-    
-        # Ensure logging directory exists for Django (Fixes Permission Denied in Program Files)
-        log_dir = os.path.join(data_root, "logs")
-        if not os.path.exists(log_dir):
-            try:
-                os.makedirs(log_dir)
-                print("Created missing logs directory: %s" % log_dir)
-            except:
-                pass
-        
-        # Migrate DB if needed
-        src_db = os.path.join(project_dir_path, "db.sqlite3")
-        dest_db = os.path.join(data_root, "db.sqlite3")
-        if os.path.exists(src_db) and not os.path.exists(dest_db):
-            try:
-                import shutil
-                shutil.copy2(src_db, dest_db)
-                log_boot("Migrated database to AppData")
-            except Exception as e:
-                log_boot("Warning: Failed to migrate database: %s" % str(e))
-    
-        # Migrate Assets if needed (Fixes 404 Static Files in Program Files)
-        # project_dir_path is app/appsource/app_config. 
-        # app_assets is in app/app_assets.
-        src_assets = os.path.abspath(os.path.join(project_dir_path, "..", "..", "app_assets"))
-        dest_assets = os.path.join(data_root, "app_assets")
-        if os.path.exists(src_assets) and not os.path.exists(dest_assets):
-            try:
-                import shutil
-                shutil.copytree(src_assets, dest_assets)
-                log_boot("Migrated assets to AppData")
-            except Exception as e:
-                log_boot("Warning: Failed to migrate assets: %s" % str(e))
-    
+        splash.showMessage("Starting KODYS...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+        app.processEvents()
+        app.processEvents()
+
+    # --- STEP 2: LOAD CONFIG & ENV ---
+    config_file_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'config','config.json'))
+    try:
         if splash:
-            splash.showMessage("Compiling Assets...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+            splash.showMessage("Loading Configuration...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
             app.processEvents()
             app.processEvents()
-        
-        # Defensive compile - skip if read-only, and don't force
+        with open(config_file_path) as data_file:    
+            data = json.load(data_file)
+            django_app_data = data["application"]
+            project_dir_name = django_app_data["project_dir_name"].replace('\\', os.sep)
+            assets_dir_name = django_app_data["assets_dir_name"].replace('\\', os.sep)
+            assets_media_dir_name = django_app_data["assets_media_dir_name"].replace('\\', os.sep)
+            project_dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..',project_dir_name))
+            assets_dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..',assets_dir_name))
+            assets_media_dir_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..',assets_media_dir_name))
+            window_data = data.get("window", {})
+            dev_tools_menu_enabled = bool(util.strtobool(str(window_data.get("dev_tools_menu_enabled", "false")).lower()))
+            initial_width = int(window_data.get("width", 1280))
+            initial_height = int(window_data.get("height", 680))
+            min_width = int(window_data.get("min_width", 1024))
+            min_height = int(window_data.get("min_height", 600))
+            window_title = window_data.get("title", "Kodys Foot Clinik")
+            icon_name = window_data.get("icon", "appicon.png")
+            icon_name = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'config', icon_name))
+            fullscreen_allowed = bool(util.strtobool(str(window_data.get("fullscreen_allowed", "true")).lower()))
+            max_width = int(window_data.get("max_width", 1920))
+            max_height = int(window_data.get("max_height", 1080))
+    except Exception as e:
+        import traceback
+        print("Failed Reading Config: %s" % str(e))
+        traceback.print_exc()
+    app.processEvents()
+    
+    # --- DATA MIGRATION & WRITE CHECK ---
+    data_root = GetWritableAppDataPath()
+    log_boot("Data Root: %s" % data_root)
+
+    # Ensure logging directory exists for Django (Fixes Permission Denied in Program Files)
+    log_dir = os.path.join(data_root, "logs")
+    if not os.path.exists(log_dir):
         try:
-            # Don't use force=True to avoid permission denied spam for existing files
-            compileall.compile_dir(project_dir_path, quiet=1)
+            os.makedirs(log_dir)
+            print("Created missing logs directory: %s" % log_dir)
         except:
-            log_boot("Info: Skipping asset compilation (directory is read-only)")
-        app.processEvents()
-        
-        # Ensure admin credentials are set using the current python executable
+            pass
+    
+    # Migrate DB if needed
+    src_db = os.path.join(project_dir_path, "db.sqlite3")
+    dest_db = os.path.join(data_root, "db.sqlite3")
+    if os.path.exists(src_db) and not os.path.exists(dest_db):
         try:
-            if splash:
-                splash.showMessage("Verifying Admin Credentials...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
-                app.processEvents()
-                app.processEvents()
-            admin_script = os.path.join(project_dir_path, "create_admin.py")
-            if os.path.exists(admin_script):
-                subprocess.check_call([sys.executable, admin_script])
-                print("Successfully verified admin credentials.")
+            import shutil
+            shutil.copy2(src_db, dest_db)
+            log_boot("Migrated database to AppData")
         except Exception as e:
-            print("Warning: Failed to verify admin credentials: %s" % str(e))
+            log_boot("Warning: Failed to migrate database: %s" % str(e))
+
+    # Migrate Assets if needed (Fixes 404 Static Files in Program Files)
+    # project_dir_path is app/appsource/app_config. 
+    # app_assets is in app/app_assets.
+    src_assets = os.path.abspath(os.path.join(project_dir_path, "..", "..", "app_assets"))
+    dest_assets = os.path.join(data_root, "app_assets")
+    if os.path.exists(src_assets) and not os.path.exists(dest_assets):
+        try:
+            import shutil
+            shutil.copytree(src_assets, dest_assets)
+            log_boot("Migrated assets to AppData")
+        except Exception as e:
+            log_boot("Warning: Failed to migrate assets: %s" % str(e))
+
+    if splash:
+        splash.showMessage("Compiling Assets...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+        app.processEvents()
         app.processEvents()
     
-        # Ensure initial metadata (seeding) using the current python executable
-        try:
-            if splash:
-                splash.showMessage("Initializing Application Data...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
-                app.processEvents()
-            seed_script = os.path.join(project_dir_path, "populate_data.py")
-            if os.path.exists(seed_script):
-                subprocess.check_call([sys.executable, seed_script])
-                print("Successfully initialized application metadata.")
-        except Exception as e:
-            print("Warning: Failed to initialize metadata: %s" % str(e))
-        app.processEvents()
+    # Defensive compile - skip if read-only, and don't force
+    try:
+        # Don't use force=True to avoid permission denied spam for existing files
+        compileall.compile_dir(project_dir_path, quiet=1)
+    except:
+        log_boot("Info: Skipping asset compilation (directory is read-only)")
+    app.processEvents()
     
-        # --- STEP 3: Backend Services ---
+    # Ensure admin credentials are set using the current python executable
+    try:
         if splash:
-            splash.showMessage("Starting Backend Services...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+            splash.showMessage("Verifying Admin Credentials...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
             app.processEvents()
             app.processEvents()
+        admin_script = os.path.join(project_dir_path, "create_admin.py")
+        if os.path.exists(admin_script):
+            subprocess.check_call([sys.executable, admin_script])
+            print("Successfully verified admin credentials.")
+    except Exception as e:
+        print("Warning: Failed to verify admin credentials: %s" % str(e))
+    app.processEvents()
+
+    # Ensure initial metadata (seeding) using the current python executable
+    try:
+        if splash:
+            splash.showMessage("Initializing Application Data...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+            app.processEvents()
+        seed_script = os.path.join(project_dir_path, "populate_data.py")
+        if os.path.exists(seed_script):
+            subprocess.check_call([sys.executable, seed_script])
+            print("Successfully initialized application metadata.")
+    except Exception as e:
+        print("Warning: Failed to initialize metadata: %s" % str(e))
+    app.processEvents()
+
+    # --- STEP 3: Backend Services ---
+    if splash:
+        splash.showMessage("Starting Backend Services...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+        app.processEvents()
+        app.processEvents()
+
+    # A. Define environment for all subprocesses (Fixes DLL load failed)
+    env = os.environ.copy()
+    python_root = os.path.dirname(os.path.abspath(sys.executable))
     
-        # A. Define environment for all subprocesses (Fixes DLL load failed)
-        env = os.environ.copy()
-        python_root = os.path.dirname(os.path.abspath(sys.executable))
-        
-        # SYSTEM PATHS: On Windows, some system DLLs are needed even if bundled
-        system_paths = []
-        if sys.platform == "win32":
-            windir = os.environ.get('WINDIR', 'C:\\Windows')
-            system_paths = [
-                os.path.join(windir, 'System32'),
-                os.path.join(windir, 'SysWOW64')
+    # SYSTEM PATHS: On Windows, some system DLLs are needed even if bundled
+    system_paths = []
+    if sys.platform == "win32":
+        windir = os.environ.get('WINDIR', 'C:\\Windows')
+        system_paths = [
+            os.path.join(windir, 'System32'),
+            os.path.join(windir, 'SysWOW64')
+        ]
+    
+    # Add python root, DLLs, site-packages, and NumPy/SciPy core paths (Fixes mydpss)
+    sp_path = os.path.join(python_root, "Lib", "site-packages")
+    pyqt4_path = os.path.join(sp_path, "PyQt4")
+    numpy_core = os.path.join(sp_path, "numpy", "core")
+    scipy_special = os.path.join(sp_path, "scipy", "special")
+    
+    env_paths = [
+        python_root, 
+        os.path.join(python_root, "DLLs"), 
+        pyqt4_path,
+        numpy_core,
+        scipy_special
+    ] + system_paths
+    
+    current_path = os.environ.get('PATH', '')
+    for p in env_paths:
+        if os.path.exists(p) and p not in current_path:
+            current_path = p + os.pathsep + current_path
+    env['PATH'] = current_path
+    
+    # Prevent Permission Denied errors for .pyc files in Program Files
+    env['PYTHONDONTWRITEBYTECODE'] = '1'
+    # Redirect Matplotlib cache/config to a writable location
+    if 'data_root' not in locals():
+        data_root = GetWritableAppDataPath()
+    mpl_config_dir = os.path.join(data_root, 'mpl_config')
+    if not os.path.exists(mpl_config_dir):
+        os.makedirs(mpl_config_dir)
+    env['MPLCONFIGDIR'] = mpl_config_dir
+
+    # B. Preliminary DB Integrity Scrub (Fixes ValueError: invalid literal for int() with base 10: '')
+    db_path = os.path.join(data_root, 'db.sqlite3')
+    if os.path.exists(db_path):
+        import sqlite3
+        try:
+            log_boot("Integrity check: scrubbing legacy data formats...")
+            conn = sqlite3.connect(db_path)
+            # Universal scrub for common problematic tables/fields
+            scrub_ops = [
+                "UPDATE TX_PATIENTS SET AGE=NULL WHERE AGE=''",
+                "UPDATE TX_PATIENTS SET STATE_id=NULL WHERE STATE_id=''",
+                "UPDATE TX_PATIENTS SET COUNTRY_id=NULL WHERE COUNTRY_id=''",
+                "UPDATE MA_APPLICATION_CONTACTS SET DISPLAY_ORDER=1000 WHERE DISPLAY_ORDER=''",
+                "UPDATE TX_MEDICALTESTS SET DOCTOR_id=NULL WHERE DOCTOR_id=''",
+                "UPDATE TX_MEDICALTESTS SET EXAMINER_id=NULL WHERE EXAMINER_id=''",
+                "UPDATE MA_HCP_SPECIALIZATION SET MEDICAL_APP_id=NULL WHERE MEDICAL_APP_id=''"
             ]
-        
-        # Add python root, DLLs, site-packages, and NumPy/SciPy core paths (Fixes mydpss)
-        sp_path = os.path.join(python_root, "Lib", "site-packages")
-        pyqt4_path = os.path.join(sp_path, "PyQt4")
-        numpy_core = os.path.join(sp_path, "numpy", "core")
-        scipy_special = os.path.join(sp_path, "scipy", "special")
-        
-        env_paths = [
-            python_root, 
-            os.path.join(python_root, "DLLs"), 
-            pyqt4_path,
-            numpy_core,
-            scipy_special
-        ] + system_paths
-        
-        current_path = os.environ.get('PATH', '')
-        for p in env_paths:
-            if os.path.exists(p) and p not in current_path:
-                current_path = p + os.pathsep + current_path
-        env['PATH'] = current_path
-        
-        # Prevent Permission Denied errors for .pyc files in Program Files
-        env['PYTHONDONTWRITEBYTECODE'] = '1'
-        # Redirect Matplotlib cache/config to a writable location
-        if 'data_root' not in locals():
-            data_root = GetWritableAppDataPath()
-        mpl_config_dir = os.path.join(data_root, 'mpl_config')
-        if not os.path.exists(mpl_config_dir):
-            os.makedirs(mpl_config_dir)
-        env['MPLCONFIGDIR'] = mpl_config_dir
-    
-        # B. Preliminary DB Integrity Scrub (Fixes ValueError: invalid literal for int() with base 10: '')
-        db_path = os.path.join(data_root, 'db.sqlite3')
-        if os.path.exists(db_path):
-            import sqlite3
-            try:
-                log_boot("Integrity check: scrubbing legacy data formats...")
-                conn = sqlite3.connect(db_path)
-                # Universal scrub for common problematic tables/fields
-                scrub_ops = [
-                    "UPDATE TX_PATIENTS SET AGE=NULL WHERE AGE=''",
-                    "UPDATE TX_PATIENTS SET STATE_id=NULL WHERE STATE_id=''",
-                    "UPDATE TX_PATIENTS SET COUNTRY_id=NULL WHERE COUNTRY_id=''",
-                    "UPDATE MA_APPLICATION_CONTACTS SET DISPLAY_ORDER=1000 WHERE DISPLAY_ORDER=''",
-                    "UPDATE TX_MEDICALTESTS SET DOCTOR_id=NULL WHERE DOCTOR_id=''",
-                    "UPDATE TX_MEDICALTESTS SET EXAMINER_id=NULL WHERE EXAMINER_id=''",
-                    "UPDATE MA_HCP_SPECIALIZATION SET MEDICAL_APP_id=NULL WHERE MEDICAL_APP_id=''"
-                ]
-                for op in scrub_ops:
-                    try:
-                        conn.execute(op)
-                    except:
-                        pass
-                conn.commit()
-                conn.close()
-                log_boot("Integrity check complete.")
-            except Exception as scrub_err:
-                log_boot("Integrity check skipped/failed: %s" % str(scrub_err))
-    
-        # C. Ensure admin credentials are set
-        try:
-            if splash:
-                splash.showMessage("Verifying Admin Credentials...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
-                app.processEvents()
-            admin_script = os.path.join(project_dir_path, "create_admin.py")
-            if os.path.exists(admin_script):
-                # Use -B to prevent bytecode writing
-                subprocess.check_call([sys.executable, '-B', admin_script], env=env)
-                print("Successfully verified admin credentials.")
-        except Exception as e:
-            print("Warning: Failed to verify admin credentials: %s" % str(e))
-        app.processEvents()
-    
-        # D. Ensure initial metadata (seeding)
-        try:
-            if splash:
-                splash.showMessage("Initializing Application Data...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
-                app.processEvents()
-            seed_script = os.path.join(project_dir_path, "populate_data.py")
-            if os.path.exists(seed_script):
-                subprocess.check_call([sys.executable, '-B', seed_script], env=env)
-                print("Successfully initialized application metadata.")
-        except Exception as e:
-            print("Warning: Failed to initialize metadata: %s" % str(e))
-        app.processEvents()
-        
-        manage_path = os.path.join(project_dir_path, 'manage.pyc')
-        if not os.path.exists(manage_path):
-            manage_path = os.path.join(project_dir_path, 'manage.py')
-        
-        try:
-            # D. Run migrations
-            log_boot("Running database migrations...")
+            for op in scrub_ops:
+                try:
+                    conn.execute(op)
+                except:
+                    pass
+            conn.commit()
+            conn.close()
+            log_boot("Integrity check complete.")
+        except Exception as scrub_err:
+            log_boot("Integrity check skipped/failed: %s" % str(scrub_err))
+
+    # C. Ensure admin credentials are set
+    try:
+        if splash:
+            splash.showMessage("Verifying Admin Credentials...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+            app.processEvents()
+        admin_script = os.path.join(project_dir_path, "create_admin.py")
+        if os.path.exists(admin_script):
             # Use -B to prevent bytecode writing
-            p = subprocess.Popen([sys.executable, '-B', manage_path, 'migrate', '--noinput'], 
-                                 env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            out, err = p.communicate()
-            if p.returncode != 0:
-                error_details = (out + "\n" + err).strip()
-                # Show last 10 lines of error for relevance
-                error_msg = "\n".join(error_details.splitlines()[-15:])
-                log_boot("CRITICAL: Migration failed:\n%s" % error_details)
-                show_fatal_error("Database Error", "Migrations failed. Environment or DB issue.\n\nError Summary:\n%s" % error_msg)
-            
-            # E. Start the actual server
-            log_boot("Starting Django on port 5427 via %s" % manage_path)
-            # Use --noreload and -B to avoid issues in packaged environments
-            runserver_args = [sys.executable, '-B', manage_path, 'runserver', '127.0.0.1:5427', '--noreload']
-            if sys.platform == "win32":
-                import win32process
-                proc = subprocess.Popen(runserver_args, 
-                                       env=env,
-                                       creationflags=win32process.CREATE_NO_WINDOW)
-            else:
-                proc = subprocess.Popen(runserver_args, env=env)
-        except Exception as e:
-            import traceback
-            log_boot("CRITICAL: Failed to launch backend: %s" % traceback.format_exc())
-            show_fatal_error("Backend Error", "Could not start Django server: %s" % str(e))
-            sys.exit(1)
-    
-        print("[pyqt.py] PyQt version: %s" % QtCore.PYQT_VERSION_STR)
-        print("[pyqt.py] QtCore version: %s" % QtCore.qVersion())
-    
-        sys.excepthook = ExceptHook
-    
-        # Application settings
-        settings = {
-            "debug": True,
-            "log_severity": cefpython.LOGSEVERITY_INFO,
-            "log_file": os.path.join(GetWritableAppDataPath(), "cef_debug.log"),
-            "auto_zooming": "1",
-            "release_dcheck_enabled": True,
-            "cache_path": GetWritableAppDataPath("cache"),
-            "locales_dir_path": os.path.join(cefpython.GetModuleDirectory(), "locales"),
-            "resources_dir_path": cefpython.GetModuleDirectory(),
-            "browser_subprocess_path": os.path.join(cefpython.GetModuleDirectory(), "subprocess.exe"),
-            "context_menu":{"enabled" : dev_tools_menu_enabled},
-        }
-    
-        # Command line switches set programmatically
-        switches = {
-            "remote-debugging-port": "5424",
-            "no-proxy-server": "",
-            "disable-gpu": "",
-            "disable-gpu-compositing": "",
-            "enable-begin-frame-scheduling": "",
-        }
-    
-        # --- STEP 4: CEF & Main Window ---
-        try:
-            if splash:
-                splash.showMessage("Initializing Browser Engine...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
-                app.processEvents()
-                app.processEvents()
-            log_boot("Initializing CEF...")
-            cefpython.Initialize(settings, switches)
-            is_cef_initialized = True
-        except Exception as e:
-            show_fatal_error("CEF Error", "Could not initialize Browser Engine: %s" % str(e))
-            sys.exit(1)
-        
+            subprocess.check_call([sys.executable, '-B', admin_script], env=env)
+            print("Successfully verified admin credentials.")
+    except Exception as e:
+        print("Warning: Failed to verify admin credentials: %s" % str(e))
+    app.processEvents()
+
+    # D. Ensure initial metadata (seeding)
+    try:
         if splash:
-            splash.showMessage("Launching Application...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+            splash.showMessage("Initializing Application Data...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
+            app.processEvents()
+        seed_script = os.path.join(project_dir_path, "populate_data.py")
+        if os.path.exists(seed_script):
+            subprocess.check_call([sys.executable, '-B', seed_script], env=env)
+            print("Successfully initialized application metadata.")
+    except Exception as e:
+        print("Warning: Failed to initialize metadata: %s" % str(e))
+    app.processEvents()
+    
+    manage_path = os.path.join(project_dir_path, 'manage.pyc')
+    if not os.path.exists(manage_path):
+        manage_path = os.path.join(project_dir_path, 'manage.py')
+    
+    try:
+        # D. Run migrations
+        log_boot("Running database migrations...")
+        # Use -B to prevent bytecode writing
+        p = subprocess.Popen([sys.executable, '-B', manage_path, 'migrate', '--noinput'], 
+                             env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        if p.returncode != 0:
+            error_details = (out + "\n" + err).strip()
+            # Show last 10 lines of error for relevance
+            error_msg = "\n".join(error_details.splitlines()[-15:])
+            log_boot("CRITICAL: Migration failed:\n%s" % error_details)
+            show_fatal_error("Database Error", "Migrations failed. Environment or DB issue.\n\nError Summary:\n%s" % error_msg)
+        
+        # E. Start the actual server
+        log_boot("Starting Django on port 5427 via %s" % manage_path)
+        # Use --noreload and -B to avoid issues in packaged environments
+        runserver_args = [sys.executable, '-B', manage_path, 'runserver', '127.0.0.1:5427', '--noreload']
+        if sys.platform == "win32":
+            import win32process
+            proc = subprocess.Popen(runserver_args, 
+                                   env=env,
+                                   creationflags=win32process.CREATE_NO_WINDOW)
+        else:
+            proc = subprocess.Popen(runserver_args, env=env)
+    except Exception as e:
+        import traceback
+        log_boot("CRITICAL: Failed to launch backend: %s" % traceback.format_exc())
+        show_fatal_error("Backend Error", "Could not start Django server: %s" % str(e))
+        sys.exit(1)
+
+    print("[pyqt.py] PyQt version: %s" % QtCore.PYQT_VERSION_STR)
+    print("[pyqt.py] QtCore version: %s" % QtCore.qVersion())
+
+    sys.excepthook = ExceptHook
+
+    # Application settings
+    settings = {
+        "debug": True,
+        "log_severity": cefpython.LOGSEVERITY_INFO,
+        "log_file": os.path.join(GetWritableAppDataPath(), "cef_debug.log"),
+        "auto_zooming": "1",
+        "release_dcheck_enabled": True,
+        "cache_path": GetWritableAppDataPath("cache"),
+        "locales_dir_path": os.path.join(cefpython.GetModuleDirectory(), "locales"),
+        "resources_dir_path": cefpython.GetModuleDirectory(),
+        "browser_subprocess_path": os.path.join(cefpython.GetModuleDirectory(), "subprocess.exe"),
+        "context_menu":{"enabled" : dev_tools_menu_enabled},
+    }
+
+    # Command line switches set programmatically
+    switches = {
+        "remote-debugging-port": "5424",
+        "no-proxy-server": "",
+        "disable-gpu": "",
+        "disable-gpu-compositing": "",
+        "enable-begin-frame-scheduling": "",
+    }
+
+    # --- STEP 4: CEF & Main Window ---
+    try:
+        if splash:
+            splash.showMessage("Initializing Browser Engine...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
             app.processEvents()
             app.processEvents()
-        
-        try:
-            log_boot("Creating MainWindow...")
-            mw = MainWindow()
-        except Exception as e:
-            import traceback
-            show_fatal_error("UI Error", "Could not create Main Window: %s\n\n%s" % (str(e), traceback.format_exc()))
-            sys.exit(1)
+        log_boot("Initializing CEF...")
+        cefpython.Initialize(settings, switches)
+        is_cef_initialized = True
+    except Exception as e:
+        show_fatal_error("CEF Error", "Could not initialize Browser Engine: %s" % str(e))
+        sys.exit(1)
     
-        if splash:
-            splash.finish(mw)
-        
-        # Run CEF Message Loop
-        log_boot("Entering MessageLoop")
-        is_running_loop = True
-        cefpython.MessageLoop()
-        is_running_loop = False
-        
-        # --- DEFINITIVE SHUTDOWN ---
-        log_boot("Shutting down...")
-        app.timer.stop()
-        app.closeAllWindows()
+    if splash:
+        splash.showMessage("Launching Application...", QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter, QtGui.QColor(QtCore.Qt.white))
         app.processEvents()
+        app.processEvents()
+    
+    try:
+        log_boot("Creating MainWindow...")
+        mw = MainWindow()
+    except Exception as e:
+        import traceback
+        show_fatal_error("UI Error", "Could not create Main Window: %s\n\n%s" % (str(e), traceback.format_exc()))
+        sys.exit(1)
+
+    if splash:
+        splash.finish(mw)
+    
+    # Run CEF Message Loop
+    log_boot("Entering MessageLoop")
+    is_running_loop = True
+    cefpython.MessageLoop()
+    is_running_loop = False
+    
+    # --- DEFINITIVE SHUTDOWN ---
+    log_boot("Shutting down...")
+    app.stopTimer()
+    app.closeAllWindows()
+    app.processEvents()
     
 
-    # --- APP STARTUP ---
-    app = CefApplication(sys.argv)
-    sys.excepthook = ExceptHook
-    mw = MainWindow()
-    app.exec_()
     os._exit(0)
 
 if __name__ == '__main__':

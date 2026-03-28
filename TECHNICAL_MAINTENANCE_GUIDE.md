@@ -1,4 +1,4 @@
-# KODYS Application – Technical Maintenance & Fix Documentation (2026)
+# KODYS Application – Technical Maintenance & Fix Documentation (2026/v2.2.30)
 
 This document serves as a comprehensive guide for developers maintained the KODYS Medical Desktop Application. It includes a detailed audit of reported issues, technical implementation details, and architecture overview.
 
@@ -21,7 +21,7 @@ This document serves as a comprehensive guide for developers maintained the KODY
 ### Key Files & Responsibilities
 | File | Responsibility |
 |------|----------------|
-| `run.py` | Entry point. Bootstraps Django and initializes the PyQt window. |
+| `run.py` | Entry point. Encapsulated `start_application()` loop for deferred PyQt/CEF initialization. |
 | `app/appsource/kodys/app_api.py` | Core business logic, signal processing (ECG), and database operations. |
 | `app/appsource/kodys/views.py` | Django views handling URL routing and template rendering. |
 | `app/app_assets/media/css/kodys1.css` | Global styling, layout stabilization, and responsive offsets. |
@@ -81,7 +81,14 @@ Every push to the repository triggers an automated build via GitHub Actions:
 ### Versioning Protocol
 Starting from `v2.2.5-Gold-v9`, the system uses **Detailed Versioning**:
 - **Filename**: `Kodys_Foot_Clinik_[VERSION]-rev-[SHA]-[DATE].exe`
+- **Current Stable**: `v2.2.30` (Zero-Write Architecture)
 - **Purpose**: Prevents confusion between incremental hotfixes.
+
+### Zero-Write Enforcement
+To support read-only environments (Program Files), the deployment strategy enforces:
+1. **Bytecode Suppression**: `PYTHONDONTWRITEBYTECODE=1` set at launch.
+2. **Path Hardening**: Absolute path resolution in `launchapp.bat` to bypass system Python pollution.
+3. **AppData Redirection**: All writable assets (DB, Logs, Media) are redirected to `%LOCALAPPDATA%\KodysFootClinikV2`.
 
 ---
 

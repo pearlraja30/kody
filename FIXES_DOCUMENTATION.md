@@ -1,6 +1,6 @@
-# KODYS Application Fixes & UI Refined Documentation (v2.2.5)
+# KODYS Application Fixes & UI Refined Documentation (v2.2.30)
 
-This document provides a technical summary of the UI and backend stabilization fixes implemented to address persistent alignment, navigation, and process-management issues in the KODYS application.
+This document provides a technical summary of the UI, backend stabilization, and production-environment fixes implemented to address alignment, navigation, and permission-related issues in the KODYS application.
 
 ## 1. UI Layout & Responsiveness
 
@@ -98,6 +98,23 @@ This document provides a technical summary of the UI and backend stabilization f
 - **Problem**: The "Kodys CAN" icon appeared as a broken image because its database entry contained an absolute path that conflicted with the application's media configuration.
 - **Fix**: Corrected the SQLite database entry for the "Kodys CAN" record to use the proper relative path (`img/png/Kodys_Can.png`).
 
+## 6. Zero-Write Production Stabilization (v2.2.30)
+
+### Issue: Permission Denied (`Errno 13`) in Program Files
+- **Problem**: When installed in `C:\Program Files (x86)`, Python 2.7 attempted to write `.pyc` files and SQLite updates to the read-only installation directory, causing frequent crashes.
+- **Fix**: 
+  - Enforced `PYTHONDONTWRITEBYTECODE=1` at the launcher level (`launchapp.bat`).
+  - Redirected all writable assets (Media, Logs, Data) to the user's `%LOCALAPPDATA%\KodysFootClinikV2` via definitive absolute path resolution in `settings.py`.
+- **Benefit**: The application is now fully compatible with standard Windows User Account Control (UAC) and does not require administrative privileges for runtime operation.
+
+### Issue: `NoneType` AttributeError on Launch
+- **Problem**: In high-latency environments, top-level GUI classes in `run.py` were being defined before the `PyQt4` module was fully imported, leading to `AttributeError: 'NoneType' object has no attribute 'QMainWindow'`.
+- **Fix**: 
+  - Restructured `run.py` into a single `start_application()` wrapper.
+  - Deferred all third-party imports and class definitions until the environment is confirmed clean and isolated.
+- **Benefit**: Guaranteed deterministic startup regardless of system load or installation directory.
+
 **Version History**: 
 - v2.2.0: Initial Platinum Release
-- v2.2.5: Final Gold Stabilization (v4) - Includes Home Page overlap fix and Icon path correction.
+- v2.2.5: Final Gold Stabilization
+- v2.2.30: Definitive Production Release (Zero-Write Architecture)

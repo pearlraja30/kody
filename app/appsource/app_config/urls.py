@@ -33,14 +33,26 @@ GSTATIC_PATH = _source_gstatic if os.path.exists(_source_gstatic) else _dist_gst
 
 def flexible_serve(request, path, document_root=None, fallback_root=None, **kwargs):
     """Attempt to serve from primary document_root, fall back to fallback_root."""
-    try:
-        # Try primary (usually writable AppData)
+    from kodys.utils import log_boot # Use the same log as run.py if possible
+    
+    # 1. Try Primary (Writable AppData)
+    primary_file = os.path.join(document_root, path)
+    if os.path.exists(primary_file):
         return django_static_view.serve(request, path, document_root=document_root, **kwargs)
+    
+    # 2. Try Fallback (Bundled Program Files)
+    fallback_file = os.path.join(fallback_root, path)
+    if os.path.exists(fallback_file):
+        return django_static_view.serve(request, path, document_root=fallback_root, **kwargs)
+    
+    # 3. Final Fallback with Logging
+    try:
+        from kodys.views import log_boot
+        log_boot("404 Asset: %s (Tried: %s and %s)" % (path, primary_file, fallback_file), "ERROR")
     except:
-        # Fall back to bundled (usually read-only Program Files)
-        if fallback_root:
-            return django_static_view.serve(request, path, document_root=fallback_root, **kwargs)
-        raise
+        pass
+        
+    return django_static_view.serve(request, path, document_root=document_root, **kwargs)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

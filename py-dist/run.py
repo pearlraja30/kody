@@ -141,18 +141,6 @@ def EnrichRuntimeEnvironment():
     os.environ['PATH'] = force_str(os.pathsep.join(final_paths))
     log_boot("Global Runtime PATH stabilized for v2.2.38")
 
-EnrichRuntimeEnvironment()
-AuditEnvironment()
-AuditBinaries()
-
-# v2.2.43: SELF-HEALING ASSET AUDIT
-# Locate the bundled media folder relative to the py-dist launcher
-_py_dist = os.path.dirname(os.path.abspath(__file__))
-_app_root = os.path.dirname(_py_dist)
-_media_root = os.path.join(_app_root, "app", "app_assets", "media")
-
-LogAssetAudit(_media_root)
-StripUtf8BomRecursively(_media_root)
 
 def show_fatal_error(title, message):
     log_boot("FATAL [%s]: %s" % (title, message))
@@ -2532,4 +2520,20 @@ def start_application():
     os._exit(0)
 
 if __name__ == '__main__':
+    # --- PHASE 1: ENVIRONMENT & SELF-HEALING ---
+    # Call enrichment utilities after all functions are defined
+    EnrichRuntimeEnvironment()
+    AuditEnvironment()
+    AuditBinaries()
+
+    # v2.2.44: ROBUST ASSET RECOVERY
+    # Realpath calculation to ensure we hit INSTALL_DIR/app_assets/media
+    _py_dist = os.path.dirname(os.path.abspath(__file__))
+    _install_dir = os.path.dirname(_py_dist)
+    _media_root = os.path.join(_install_dir, "app_assets", "media")
+
+    LogAssetAudit(_media_root)
+    StripUtf8BomRecursively(_media_root)
+
+    # --- PHASE 2: LAUNCH ---
     start_application()

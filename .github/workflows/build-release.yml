@@ -38,7 +38,8 @@ on:
 env:
   APP_NAME: "Kodys Foot Clinik"
   # Dynamic Versioning: Use tag name if available, then input, then default
-  APP_VERSION: ${{ github.ref_name || github.event.inputs.version || '2.0.0' }}
+  # Sanitize: replace slashes with dashes to avoid Docker and Artifact naming errors
+  APP_VERSION: ${{ contains(github.ref_name, '/') && replace(github.ref_name, '/', '-') || github.ref_name || github.event.inputs.version || '2.0.0' }}
 
 # ─────────────────────────────────────────────────────────────────────────────
 

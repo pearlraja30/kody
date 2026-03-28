@@ -38,8 +38,7 @@ on:
 env:
   APP_NAME: "Kodys Foot Clinik"
   # Dynamic Versioning: Use tag name if available, then input, then default
-  # Sanitize: replace slashes with dashes to avoid Docker and Artifact naming errors
-  APP_VERSION: ${{ contains(github.ref_name, '/') && replace(github.ref_name, '/', '-') || github.ref_name || github.event.inputs.version || '2.0.0' }}
+  APP_VERSION: ${{ github.ref_name || github.event.inputs.version || '2.0.0' }}
 
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -55,6 +54,14 @@ jobs:
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
+
+      - name: 🏷️ Set App Version (Sanitized)
+        shell: bash
+        run: |
+          VERSION="${{ github.ref_name || github.event.inputs.version || '2.0.0' }}"
+          CLEAN_VERSION=$(echo "$VERSION" | sed 's/\//-/g')
+          echo "APP_VERSION=$CLEAN_VERSION" >> $GITHUB_ENV
+          echo "Using sanitized version: $CLEAN_VERSION"
 
       - name: 🐍 Install Python 2.7 (32-bit) via Choco
         shell: powershell
@@ -279,6 +286,13 @@ jobs:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
+      - name: 🏷️ Set App Version (Sanitized)
+        run: |
+          VERSION="${{ github.ref_name || github.event.inputs.version || '2.0.0' }}"
+          CLEAN_VERSION=$(echo "$VERSION" | sed 's/\//-/g')
+          echo "APP_VERSION=$CLEAN_VERSION" >> $GITHUB_ENV
+          echo "Using sanitized version: $CLEAN_VERSION"
+
       - name: 🏗️ Build Docker image
         run: |
           docker build -t kodys-app:${{ env.APP_VERSION }} .
@@ -323,6 +337,13 @@ jobs:
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
+
+      - name: 🏷️ Set App Version (Sanitized)
+        run: |
+          VERSION="${{ github.ref_name || github.event.inputs.version || '2.0.0' }}"
+          CLEAN_VERSION=$(echo "$VERSION" | sed 's/\//-/g')
+          echo "APP_VERSION=$CLEAN_VERSION" >> $GITHUB_ENV
+          echo "Using sanitized version: $CLEAN_VERSION"
 
       - name: 📦 Create portable Docker package
         run: |
@@ -424,6 +445,13 @@ jobs:
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
+
+      - name: 🏷️ Set App Version (Sanitized)
+        run: |
+          VERSION="${{ github.ref_name || github.event.inputs.version || '2.0.0' }}"
+          CLEAN_VERSION=$(echo "$VERSION" | sed 's/\//-/g')
+          echo "APP_VERSION=$CLEAN_VERSION" >> $GITHUB_ENV
+          echo "Using sanitized version: $CLEAN_VERSION"
 
       - name: 🏗️ Create Mac Application Bundle
         run: |

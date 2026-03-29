@@ -6,12 +6,25 @@ import time
 import socket
 import random
 import string
+import subprocess
 
 os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
-# v2.2.45: ENTERPRISE TRACING GLOBALS
+# v3.0.0: ENTERPRISE TRACING GLOBALS
 TRACE_ID = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 SPAN_ID = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(4))
+
+django_port = 5427 # Global default, will be randomized if busy
+
+def is_port_in_use(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(('127.0.0.1', port)) == 0
+
+def find_free_port(start_port, max_attempts=50):
+    for port in range(start_port, start_port + max_attempts):
+        if not is_port_in_use(port):
+            return port
+    return start_port # Fallback
 
 def log_boot(msg, level="INFO"):
     """
@@ -21,7 +34,7 @@ def log_boot(msg, level="INFO"):
     try:
         # 1. Use LocalAppData for persistence (Temp is volatile)
         local_app_data = os.environ.get('LOCALAPPDATA', os.environ.get('APPDATA', os.getcwd()))
-        base = os.path.join(local_app_data, "KodysFootClinikV2")
+        base = os.path.join(local_app_data, "KodysFootClinikV3")
         log_dir = os.path.join(base, "logs")
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
@@ -37,8 +50,8 @@ def log_boot(msg, level="INFO"):
             f_info = "[%s:%d]" % (os.path.basename(frame.f_code.co_filename), frame.f_lineno)
         except: pass
         
-        log_entry = "%s | [%s] | Trace:%s | Span:%s | %s | %s\n" % (
-            timestamp, level.ljust(5), TRACE_ID, SPAN_ID, f_info.ljust(20), msg
+        log_entry = "%s, %s, %s, %s, %s | %s\n" % (
+            timestamp, TRACE_ID, SPAN_ID, level.ljust(5), f_info, msg
         )
         
         with open(log_path, 'a') as f:
@@ -357,7 +370,7 @@ def start_application():
                 return
                 
             url = self.mainFrame.browser.GetUrl()
-            if url.startswith("http://127.0.0.1:5427/APP"):
+            if url.startswith("http://127.0.0.1:%d/APP" % django_port):
                 reply = QtGui.QMessageBox.question(self, 'Alert',"You should Close the test window first to quit application?", QtGui.QMessageBox.Ok)
                 if reply == QtGui.QMessageBox.Ok:
                     event.ignore()
@@ -406,11 +419,11 @@ def start_application():
             # Robust backend health check with timeout
             start_time = time.time()
             backend_ready = False
-            log_boot("Waiting for backend on localhost:5427...")
+            log_boot("Waiting for backend on localhost:%d..." % django_port)
             while time.time() - start_time < 30:
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.settimeout(1.0)
-                result = sock.connect_ex(('127.0.0.1', 5427))
+                result = sock.connect_ex(('127.0.0.1', django_port))
                 sock.close()
                 if result == 0:
                     backend_ready = True
@@ -420,12 +433,12 @@ def start_application():
                 
             if not backend_ready:
                 log_boot("CRITICAL: Backend failed to start after 30 seconds.")
-                show_fatal_error("Startup Failure", "The backend server failed to respond on port 5427. Please check the logs.")
+                show_fatal_error("Startup Failure", "The backend server failed to respond on port %d. Please check the logs." % django_port)
                 os._exit(1)
     
             self.browser = cefpython.CreateBrowserSync(windowInfo,
                     browserSettings={},
-                    navigateUrl=GetApplicationPath("http://127.0.0.1:5427"))
+                    navigateUrl=GetApplicationPath("http://127.0.0.1:%d" % django_port))
     
             global browser_count
             browser_count += 1
@@ -2370,7 +2383,30 @@ def start_application():
         os.makedirs(mpl_config_dir)
     env['MPLCONFIGDIR'] = force_str(mpl_config_dir)
 
-    # B. Preliminary DB Integrity Scrub (Fixes ValueError: invalid literal for int() with base 10: '')
+    manage_path = os.path.join(project_dir_path, 'manage.pyc')
+    if not os.path.exists(manage_path):
+        manage_path = os.path.join(project_dir_path, 'manage.py')
+
+    # A. Run migrations FIRST (v2.2.48 Correction)
+    try:
+        log_boot("Running database migrations...")
+        # Use -B to prevent bytecode writing
+        p = subprocess.Popen([sys.executable, '-B', manage_path, 'migrate', '--noinput'], 
+                             env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        if p.returncode != 0:
+            error_details = (out + "\n" + err).strip()
+            # Show last 10 lines of error for relevance
+            error_msg = "\n".join(error_details.splitlines()[-15:])
+            log_boot("CRITICAL: Migration failed:\n%s" % error_details)
+            show_fatal_error("Database Error", "Migrations failed. Environment or DB issue.\n\nError Summary:\n%s" % error_msg)
+            sys.exit(1)
+    except Exception as e:
+        log_boot("CRITICAL: Failed to run migrations: %s" % str(e))
+        show_fatal_error("Migration Error", "Could not create database tables: %s" % str(e))
+        sys.exit(1)
+
+    # B. Preliminary DB Integrity Scrub
     db_path = os.path.join(data_root, 'db.sqlite3')
     if os.path.exists(db_path):
         import sqlite3
@@ -2424,29 +2460,14 @@ def start_application():
     except Exception as e:
         print("Warning: Failed to initialize metadata: %s" % str(e))
     app.processEvents()
-    
-    manage_path = os.path.join(project_dir_path, 'manage.pyc')
-    if not os.path.exists(manage_path):
-        manage_path = os.path.join(project_dir_path, 'manage.py')
-    
+
+    # E. Start the actual server
+    global django_port
+    django_port = find_free_port(5427)
     try:
-        # D. Run migrations
-        log_boot("Running database migrations...")
-        # Use -B to prevent bytecode writing
-        p = subprocess.Popen([sys.executable, '-B', manage_path, 'migrate', '--noinput'], 
-                             env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = p.communicate()
-        if p.returncode != 0:
-            error_details = (out + "\n" + err).strip()
-            # Show last 10 lines of error for relevance
-            error_msg = "\n".join(error_details.splitlines()[-15:])
-            log_boot("CRITICAL: Migration failed:\n%s" % error_details)
-            show_fatal_error("Database Error", "Migrations failed. Environment or DB issue.\n\nError Summary:\n%s" % error_msg)
-        
-        # E. Start the actual server
-        log_boot("Starting Django on port 5427 via %s" % manage_path)
+        log_boot("Starting Django on port %d via %s" % (django_port, manage_path))
         # Use --noreload and -B to avoid issues in packaged environments
-        runserver_args = [sys.executable, '-B', manage_path, 'runserver', '127.0.0.1:5427', '--noreload']
+        runserver_args = [sys.executable, '-B', manage_path, 'runserver', '127.0.0.1:%d' % django_port, '--noreload']
         
         # Diagnostic Path Log (v2.2.35)
         try:
@@ -2498,8 +2519,9 @@ def start_application():
     }
 
     # Command line switches set programmatically
+    cef_debug_port = find_free_port(5424) # Solve the binding error reported by user
     switches = {
-        "remote-debugging-port": str(random.randint(50000, 60000)), # Fix port conflicts
+        "remote-debugging-port": str(cef_debug_port), 
         "no-proxy-server": "",
         "disable-gpu": "",
         "disable-gpu-compositing": "",
@@ -2556,7 +2578,7 @@ if __name__ == '__main__':
     AuditEnvironment()
     AuditBinaries()
 
-    # v2.2.46: ROBUST INSTALL_DIR DETECTION
+    # v2.2.49: ROBUST INSTALL_DIR DETECTION (Includes Migration Reorder Fix)
     # In packaged EXE, sys.executable is the launcher. 
     # In development, it's the python interpreter.
     if getattr(sys, 'frozen', False):
@@ -2566,6 +2588,9 @@ if __name__ == '__main__':
         _install_dir = os.path.dirname(_py_dist)
     
     _media_root = os.path.join(_install_dir, "app", "app_assets", "media")
+
+    # AppData isolation for V3
+    os.environ['KODYS_APPDATA_NAME'] = "KodysFootClinikV3"
 
     LogAssetAudit(_media_root)
     StripUtf8BomRecursively(_media_root)

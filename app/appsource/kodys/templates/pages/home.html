@@ -27,7 +27,7 @@
 				</div>
 			</div>
 			<div class="w3-container fclr11 ff-r f-16 ft-b w100 pt8 pb8 brclr5" style="border-top: 1px solid rgba(0,0,0,0.1); text-align: center; background: rgba(0,0,0,0.05);">
-				Kodys Foot Clinik Software Version 2.2.49
+				Kodys Foot Clinik V3
 			</div>
 		</div>
     <!-- m1 -->
@@ -277,7 +277,7 @@ function redirect_url(app_code){
      reft = $(this).val();
       referred.push(reft);
     });
-    var dat = { referred ,  "csrfmiddlewaretoken": '{{ csrf_token }}', "app_code":app_code};
+    var dat = { "referred": referred ,  "csrfmiddlewaretoken": '{{ csrf_token }}', "app_code":app_code};
      $.ajax({
                 data: dat,
                  type : 'POST',                            

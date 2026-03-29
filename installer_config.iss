@@ -1,4 +1,4 @@
-#define MyAppName "Kodys Foot Clinik V2"
+#define MyAppName "Kodys Foot Clinik V3"
 #define MyAppVersion GetEnv("APP_VERSION")
 #define MyAppPublisher "Kodys Foot Clinik"
 #define MyAppExeName "Kodys Foot Clinik.exe"
@@ -25,7 +25,7 @@ VersionInfoVersion=2.2.5.0
 VersionInfoCompany=Kodys Foot Clinik
 VersionInfoDescription=KODYS Medical Diagnostic Suite
 VersionInfoCopyright=Copyright (C) 2026 Kodys Foot Clinik
-VersionInfoProductName=Kodys Foot Clinik
+VersionInfoProductName=Kodys Foot Clinik V3
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"

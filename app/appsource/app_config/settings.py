@@ -18,10 +18,23 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
 # DEFINE WRITABLE DATA ROOT (AppData)
+import logging
+from app_config.middleware import get_current_trace_id, get_current_span_id
+
+class TracingFilter(logging.Filter):
+    """
+    Filter that injects traceid and spanid into log records.
+    """
+    def filter(self, record):
+        record.traceid = get_current_trace_id()
+        record.spanid = get_current_span_id()
+        return True
 if sys.platform == "darwin":
-    DATA_ROOT = os.path.expanduser('~/Library/Application Support/KodysFootClinikV2')
+    DATA_ROOT = os.path.expanduser('~/Library/Application Support/KodysFootClinikV3')
 else:
-    DATA_ROOT = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.path.expanduser('~'))), 'KodysFootClinikV2')
+    # Use environment variable if set by run.py, otherwise default to V3
+    _appdata_name = os.environ.get('KODYS_APPDATA_NAME', 'KodysFootClinikV3')
+    DATA_ROOT = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.path.expanduser('~'))), _appdata_name)
 
 if not os.path.exists(DATA_ROOT):
     try:
@@ -31,7 +44,7 @@ if not os.path.exists(DATA_ROOT):
 
 # ENHANCED LOGGING DIR (v2.2.49)
 if sys.platform == "win32":
-    PERMANENT_LOG_DIR = r"C:\Program Files (x86)\Kodys Foot Clinik V2\logs"
+    PERMANENT_LOG_DIR = r"C:\Program Files (x86)\Kodys Foot Clinik V3\logs"
     if not os.path.exists(PERMANENT_LOG_DIR):
         try:
             os.makedirs(PERMANENT_LOG_DIR)
@@ -84,6 +97,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'app_config.middleware.TracingMiddleware',  # New V3 Tracing
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -200,12 +214,18 @@ LOGGER_FILE_NAME = "app"
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+        'tracing': {
+             '()': 'app_config.settings.TracingFilter',
+        }
+    },
     'formatters': {
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
         'custom': {
-            'format': '%(asctime)s | NONE | NONE | %(levelname)s | %(filename)s:%(lineno)d | %(message)s'
+            'format': '%(asctime)s, %(traceid)s, %(spanid)s, %(levelname)s, %(filename)s:%(lineno)d | %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
@@ -222,7 +242,8 @@ LOGGING = {
             'filename': os.path.join(PERMANENT_LOG_DIR, 'app.log'),
             'when': 'W4',
             'interval': 1,
-            'backupCount': 7
+            'backupCount': 7,
+            'filters': ['tracing'],
         },
         'console':{
             'level':'DEBUG',

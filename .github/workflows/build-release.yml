@@ -548,7 +548,7 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     # Removed strict 'needs' to allow faster uploads as jobs finish
-    needs: [build-windows-installer] 
+    needs: [build-windows-installer, build-docker, build-mac-app, build-windows-portable] 
     permissions:
       contents: write
 

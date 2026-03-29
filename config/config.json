@@ -13,7 +13,7 @@
 		"project_dir_name" : "app\\appsource\\app_config",
         "assets_dir_name" : "app\\app_assets\\DATA",
         "assets_media_dir_name" : "app\\app_assets\\media",
-		"version" : "3.0.0",
+		"version" : "3.0.1",
 		"description": "Kodys Foot Clinik V3"
 	}
 }

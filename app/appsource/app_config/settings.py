@@ -18,21 +18,28 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
 # DEFINE WRITABLE DATA ROOT (AppData)
-DATA_ROOT = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.path.expanduser('~'))), 'KodysFootClinikV2')
+if sys.platform == "darwin":
+    DATA_ROOT = os.path.expanduser('~/Library/Application Support/KodysFootClinikV2')
+else:
+    DATA_ROOT = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.path.expanduser('~'))), 'KodysFootClinikV2')
+
 if not os.path.exists(DATA_ROOT):
     try:
         os.makedirs(DATA_ROOT)
     except:
         pass
 
-# ENHANCED LOGGING DIR (v2.2.47)
-PERMANENT_LOG_DIR = r"C:\Program Files (x86)\Kodys Foot Clinik V2\logs"
+# ENHANCED LOGGING DIR (v2.2.48)
 if sys.platform == "win32":
+    PERMANENT_LOG_DIR = r"C:\Program Files (x86)\Kodys Foot Clinik V2\logs"
     if not os.path.exists(PERMANENT_LOG_DIR):
         try:
             os.makedirs(PERMANENT_LOG_DIR)
         except:
             PERMANENT_LOG_DIR = os.path.join(DATA_ROOT, 'logs')
+elif sys.platform == "darwin":
+    # On Mac, we keep logs in the standard app data directory
+    PERMANENT_LOG_DIR = os.path.join(DATA_ROOT, 'logs')
 else:
     PERMANENT_LOG_DIR = os.path.join(DATA_ROOT, 'logs')
 

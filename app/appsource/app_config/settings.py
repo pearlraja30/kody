@@ -25,7 +25,7 @@ if not os.path.exists(DATA_ROOT):
     except:
         pass
 
-# ENHANCED LOGGING DIR (v2.2.46)
+# ENHANCED LOGGING DIR (v2.2.47)
 PERMANENT_LOG_DIR = r"C:\Program Files (x86)\Kodys Foot Clinik V2\logs"
 if sys.platform == "win32":
     if not os.path.exists(PERMANENT_LOG_DIR):

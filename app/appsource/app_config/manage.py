@@ -53,7 +53,7 @@ if __name__ == "__main__":
         except Exception as e:
             sys.stderr.write("DLL Pre-flight Error: %s\n" % str(e))
 
-    # --- DATA CORRECTION (v2.2.46) ---
+    # --- DATA CORRECTION (v2.2.47) ---
     if 'runserver' in sys.argv or 'kodys_app' in sys.argv or len(sys.argv) <= 1:
         try:
             import django

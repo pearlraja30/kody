@@ -33,8 +33,16 @@ GSTATIC_PATH = _source_gstatic if os.path.exists(_source_gstatic) else _dist_gst
 
 def flexible_serve(request, path, document_root=None, fallback_root=None, **kwargs):
     """Attempt to serve from primary document_root, fall back to fallback_root."""
-    from kodys.utils import log_boot # Use the same log as run.py if possible
-    
+    def local_log(msg):
+        try:
+            import datetime
+            local_app_data = os.environ.get('LOCALAPPDATA', os.environ.get('APPDATA', os.getcwd()))
+            l_path = os.path.join(local_app_data, "KodysFootClinikV2", "logs", "application_trace.log")
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            with open(l_path, 'a') as f:
+                f.write("%s | [ERROR] | ASSET_404 | %s\n" % (timestamp, msg))
+        except: pass
+
     # 1. Try Primary (Writable AppData)
     primary_file = os.path.join(document_root, path)
     if os.path.exists(primary_file):
@@ -46,11 +54,7 @@ def flexible_serve(request, path, document_root=None, fallback_root=None, **kwar
         return django_static_view.serve(request, path, document_root=fallback_root, **kwargs)
     
     # 3. Final Fallback with Logging
-    try:
-        from kodys.views import log_boot
-        log_boot("404 Asset: %s (Tried: %s and %s)" % (path, primary_file, fallback_file), "ERROR")
-    except:
-        pass
+    local_log("404 Asset: %s (Tried: %s and %s)" % (path, primary_file, fallback_file))
         
     return django_static_view.serve(request, path, document_root=document_root, **kwargs)
 

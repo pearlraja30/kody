@@ -25,8 +25,23 @@ if not os.path.exists(DATA_ROOT):
     except:
         pass
 
-# Ensure subdirs for logging/media exist to avoid ValueError in dictConfig
-for sub in ["logs", "app_assets", "app_assets/media", "app_assets/DATA"]:
+# ENHANCED LOGGING DIR (v2.2.46)
+PERMANENT_LOG_DIR = r"C:\Program Files (x86)\Kodys Foot Clinik V2\logs"
+if sys.platform == "win32":
+    if not os.path.exists(PERMANENT_LOG_DIR):
+        try:
+            os.makedirs(PERMANENT_LOG_DIR)
+        except:
+            PERMANENT_LOG_DIR = os.path.join(DATA_ROOT, 'logs')
+else:
+    PERMANENT_LOG_DIR = os.path.join(DATA_ROOT, 'logs')
+
+if not os.path.exists(PERMANENT_LOG_DIR):
+    try: os.makedirs(PERMANENT_LOG_DIR)
+    except: pass
+
+# Ensure subdirs for media/data exist
+for sub in ["app_assets", "app_assets/media", "app_assets/DATA"]:
     sub_path = os.path.join(DATA_ROOT, sub)
     if not os.path.exists(sub_path):
         try:
@@ -183,7 +198,7 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
         'custom': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
+            'format': '%(asctime)s | NONE | NONE | %(levelname)s | %(filename)s:%(lineno)d | %(message)s'
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
@@ -197,7 +212,7 @@ LOGGING = {
             'level':'DEBUG',
             'class':'logging.handlers.TimedRotatingFileHandler',
             'formatter': 'custom',
-            'filename': os.path.join(DATA_ROOT, 'logs', 'app.log'),
+            'filename': os.path.join(PERMANENT_LOG_DIR, 'app.log'),
             'when': 'W4',
             'interval': 1,
             'backupCount': 7

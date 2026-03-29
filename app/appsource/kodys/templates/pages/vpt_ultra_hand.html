@@ -1254,8 +1254,8 @@ function reconnect()
         }
         else
         {
-             $(".overflow-hidden").append(`<div id="device_alert" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please Enter Device Key in Device Configuration.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="device_alert_close();">OK</button>
-                        </div></div></div></div>`);
+             $(".overflow-hidden").append('<div id="device_alert" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please Enter Device Key in Device Configuration.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="device_alert_close();">OK</button>
+                        </div></div></div></div>');
              $("#device_alert").show();
         }
     }
@@ -1468,7 +1468,7 @@ function biothezihand_savetest(){
     $("#test_type").val(test_type);
     $("#test_code").val(code);
     var biothezihanddata = $("#biothezihand_form").serialize();
-     $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+     $(".overflow-hidden").append('<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>');
         $("#wait_process").show(); 
     console.log(biothezihanddata);
       $.ajax({
@@ -1511,63 +1511,63 @@ function biothezihand_savetest(){
     var first_idvalue = $(empty_id)[0];
     console.log(first_idvalue);
             if(first_idvalue == first_rightfield){
-               $(".overflow-hidden").append(`<div id="req_first_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter right hand 1st field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_right_field1();">OK</button>
-                         </div></div></div></div>`);
+               $(".overflow-hidden").append('<div id="req_first_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter right hand 1st field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_right_field1();">OK</button>
+                         </div></div></div></div>');
                     $("#req_first_field").show();  
             } 
             if(first_idvalue == second_rightfield){
-               $(".overflow-hidden").append(`<div id="req_second_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter right hand 2nd field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_right_field2();">OK</button>
-                         </div></div></div></div>`);
+               $(".overflow-hidden").append('<div id="req_second_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter right hand 2nd field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_right_field2();">OK</button>
+                         </div></div></div></div>');
                     $("#req_second_field").show();  
             }
             if(first_idvalue == third_rightfield){
-               $(".overflow-hidden").append(`<div id="req_third_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter right hand 3rd field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_right_field3();">OK</button>
-                         </div></div></div></div>`);
+               $(".overflow-hidden").append('<div id="req_third_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter right hand 3rd field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_right_field3();">OK</button>
+                         </div></div></div></div>');
                     $("#req_third_field").show();  
             }
             if(first_idvalue == fourth_rightfield){
-               $(".overflow-hidden").append(`<div id="req_fourth_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter right hand 4th field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_right_field4();">OK</button>
-                         </div></div></div></div>`);
+               $(".overflow-hidden").append('<div id="req_fourth_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter right hand 4th field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_right_field4();">OK</button>
+                         </div></div></div></div>');
                     $("#req_fourth_field").show();  
             }
             if(first_idvalue == fifth_rightfield){
-               $(".overflow-hidden").append(`<div id="req_fifth_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter right hand 5th field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_right_field5();">OK</button>
-                         </div></div></div></div>`);
+               $(".overflow-hidden").append('<div id="req_fifth_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter right hand 5th field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_right_field5();">OK</button>
+                         </div></div></div></div>');
                     $("#req_fifth_field").show();  
             }
             if(first_idvalue == six_rightfield){
-               $(".overflow-hidden").append(`<div id="req_six_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter right hand 6th field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_right_field6();">OK</button>
-                         </div></div></div></div>`);
+               $(".overflow-hidden").append('<div id="req_six_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter right hand 6th field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_right_field6();">OK</button>
+                         </div></div></div></div>');
                     $("#req_six_field").show();  
             }
             if(first_idvalue == first_leftfield){
-               $(".overflow-hidden").append(`<div id="req_first_field_left" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter left hand 1st field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_left_field1();">OK</button>
-                         </div></div></div></div>`);
+               $(".overflow-hidden").append('<div id="req_first_field_left" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter left hand 1st field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_left_field1();">OK</button>
+                         </div></div></div></div>');
                     $("#req_first_field_left").show();  
             } 
             if(first_idvalue == second_leftfield){
-               $(".overflow-hidden").append(`<div id="req_second_field_left" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter left hand 2nd field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_left_field2();">OK</button>
-                         </div></div></div></div>`);
+               $(".overflow-hidden").append('<div id="req_second_field_left" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter left hand 2nd field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_left_field2();">OK</button>
+                         </div></div></div></div>');
                     $("#req_second_field_left").show();  
             }
             if(first_idvalue == third_leftfield){
-               $(".overflow-hidden").append(`<div id="req_third_field_left" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter left hand 3rd field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_left_field3();">OK</button>
-                         </div></div></div></div>`);
+               $(".overflow-hidden").append('<div id="req_third_field_left" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter left hand 3rd field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_left_field3();">OK</button>
+                         </div></div></div></div>');
                     $("#req_third_field_left").show();  
             }
             if(first_idvalue == fourth_leftfield){
-               $(".overflow-hidden").append(`<div id="req_fourth_field_left" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter left hand 4th field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_left_field4();">OK</button>
-                         </div></div></div></div>`);
+               $(".overflow-hidden").append('<div id="req_fourth_field_left" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter left hand 4th field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_left_field4();">OK</button>
+                         </div></div></div></div>');
                     $("#req_fourth_field_left").show();  
             }
             if(first_idvalue == fifth_leftfield){
-               $(".overflow-hidden").append(`<div id="req_fifth_field_left" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter left hand 5th field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_left_field5();">OK</button>
-                         </div></div></div></div>`);
+               $(".overflow-hidden").append('<div id="req_fifth_field_left" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter left hand 5th field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_left_field5();">OK</button>
+                         </div></div></div></div>');
                     $("#req_fifth_field_left").show();  
             }
             if(first_idvalue == six_leftfield){
-               $(".overflow-hidden").append(`<div id="req_six_field_left" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter left hand 6th field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_left_field6();">OK</button>
-                         </div></div></div></div>`);
+               $(".overflow-hidden").append('<div id="req_six_field_left" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter left hand 6th field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_left_field6();">OK</button>
+                         </div></div></div></div>');
                     $("#req_six_field_left").show();  
             }
          }

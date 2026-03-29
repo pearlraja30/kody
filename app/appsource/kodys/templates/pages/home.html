@@ -160,8 +160,7 @@
 {% block js_script %}
 <script>
   function  licensekey(){
-             $(".overflow-hidden").append(`<div id="licensekey_alert" class="w3-modal  bgclr18" "><div class="w3-modal-content  mt11p" style="width:445px;"><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please upload license key file in app configuration .</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="licensekey_alert_close();">OK</button>
-                         </div></div></div></div>`);
+             $(".overflow-hidden").append('<div id="licensekey_alert" class="w3-modal  bgclr18"><div class="w3-modal-content  mt11p" style="width:445px;"><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please upload license key file in app configuration .</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="licensekey_alert_close();">OK</button></div></div></div></div>');
                  $("#licensekey_alert").show();  
           }
   function licensekey_alert_close(){
@@ -202,7 +201,7 @@ $(document).ready(function(){
                     var value = jsonObj[i];
                     if($("#search_"+i).length == 0){
                     $(".patient_name_search_list").show();
-                    $(".patient_name_search_list").append(`<li class='suggestion_list' id=search_`+i+` onclick='search_name("`+value.NAME+`","`+value.UID+`","`+value.GENDER+`","`+value.AGE+`","`+value.FRIENDLY_UID+`")'>`+value.NAME+`</li>`);
+                    $(".patient_name_search_list").append("<li class='suggestion_list' id=search_"+i+" onclick='search_name(\""+value.NAME+"\",\""+value.UID+"\",\""+value.GENDER+"\",\""+value.AGE+"\",\""+value.FRIENDLY_UID+"\")'>"+value.NAME+"</li>");
                     $(".error_search").hide();
                     }
                   }
@@ -213,7 +212,7 @@ $(document).ready(function(){
                     console.log($(".error_search").length)
                     if($(".error_search").length == 0){
                     $(".patient_name_search_list").show();
-                   $(".patient_name_search_list").append(`<li class='error_search'>Patient Name Not Found</li>`);
+                   $(".patient_name_search_list").append("<li class='error_search'>Patient Name Not Found</li>");
                    $(".suggestion_list").hide();
                     }
                   }

@@ -494,7 +494,7 @@ function email_pdf(email_file)
 function pdf_file_name(file_name)
 {
 	$("#request_process").hide();
-	$(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+	$(".overflow-hidden").append('<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>');
     $("#wait_process").show(); 
 	email = $("#email").val();
 	patient_id = $("#patient_id").val();
@@ -521,7 +521,7 @@ function pdf_file_name(file_name)
             }
             else{
                $("#wait_process").hide();
-               $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Sometime went Wrong</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+               $(".overflow-hidden").append('<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Sometime went Wrong</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
                $("#close_process").show();
             }   
     }
@@ -529,7 +529,7 @@ function pdf_file_name(file_name)
 }
 function pdf_file_error()
 {
-	$(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Sometime went Wrong</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+	$(".overflow-hidden").append('<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Sometime went Wrong</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
     $("#close_process").show();
 }
 function emailsend(){
@@ -566,7 +566,7 @@ function request_process_email(){
 		{% if app %}
 			external.email_pdf(email_pdf);
 		{% else %}
-		$(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Feature only for application.</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+		$(".overflow-hidden").append('<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Feature only for application.</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
                $("#close_process").show();
 		{% endif %}
 	}

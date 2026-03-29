@@ -806,8 +806,8 @@
             $("#close_app_popup").hide();
         });
         {% if medical_test.TEST_STATUS == "INCOMPLETE" %}
-              $(".overflow-hidden").append(`<div id="upload_pdf_report" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Saved successfully.</h3><span>Please upload a PDF file to generate report.</span><div class="ta" style="margin-top:15px"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr8 brclr3" id="alert_pdf_confirm" onclick="openfile()">OK</button>
-                        </div></div></div></div>`);
+              $(".overflow-hidden").append('<div id="upload_pdf_report" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Saved successfully.</h3><span>Please upload a PDF file to generate report.</span><div class="ta" style="margin-top:15px"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr8 brclr3" id="alert_pdf_confirm" onclick="openfile()">OK</button>
+                        </div></div></div></div>');
                 $("#upload_pdf_report").show();
                 $("#upload_pdf_report").click(function(){
                        $("#upload_pdf_report").hide();
@@ -896,8 +896,8 @@
                $("#upload_file").submit();
              }
              else{
-                $(".overflow-hidden").append(`<div id="alert_correct_file" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please upload a pdf file format .</h3><div class="ta" style="margin-top:15px"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr8 brclr3" id="alert_pdf_confirm" onclick="alert_correct_file_close()">OK</button>
-                        </div></div></div></div>`);
+                $(".overflow-hidden").append('<div id="alert_correct_file" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please upload a pdf file format .</h3><div class="ta" style="margin-top:15px"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr8 brclr3" id="alert_pdf_confirm" onclick="alert_correct_file_close()">OK</button>
+                        </div></div></div></div>');
                 $("#alert_correct_file").show();
              }
             }
@@ -971,20 +971,20 @@
              }
             }
             function first_field_right(){
-                $(".overflow-hidden").append(`<div id="req_first_right_brachial_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter Brachial right  field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_first_right_brachial_field_1();">OK</button>
-                         </div></div></div></div>`);
+                $(".overflow-hidden").append('<div id="req_first_right_brachial_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter Brachial right  field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_first_right_brachial_field_1();">OK</button>
+                         </div></div></div></div>');
                 $("#req_first_right_brachial_field").show();
             }
             function first_field_left(){
-            $(".overflow-hidden").append(`<div id="req_first_left_brachial_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter Brachial left  field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_first_left_brachial_field_1();">OK</button>
-                         </div></div></div></div>`);
+            $(".overflow-hidden").append('<div id="req_first_left_brachial_field" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter Brachial left  field.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="req_first_left_brachial_field_1();">OK</button>
+                         </div></div></div></div>');
                        $("#req_first_left_brachial_field").show();
             }
            function save_test(){
               var code = $("#test_code").val();
                 var test_type = $("#test_type").val();
                 var doppler_field_data = $("#doppler_data_form").serialize();
-                $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+                $(".overflow-hidden").append('<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>');
                 $("#wait_process").show();
            $.ajax({
             data: doppler_field_data,

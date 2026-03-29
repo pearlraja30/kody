@@ -53,20 +53,25 @@ if __name__ == "__main__":
         except Exception as e:
             sys.stderr.write("DLL Pre-flight Error: %s\n" % str(e))
 
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
-    try:
-        from django.core.management import execute_from_command_line
-    except ImportError:
-        # The above import may fail for some other reason. Ensure that the
-        # issue is really that Django is missing to avoid masking other
-        # exceptions on Python 2.
+    # --- DATA CORRECTION (v2.2.46) ---
+    if 'runserver' in sys.argv or 'kodys_app' in sys.argv or len(sys.argv) <= 1:
         try:
             import django
-        except ImportError:
-            raise ImportError(
-                "Couldn't import Django. Are you sure it's installed and "
-                "available on your PYTHONPATH environment variable? Did you "
-                "forget to activate a virtual environment?"
-            )
-        raise
+            django.setup()
+            from kodys.models import MA_MEDICALAPPS, MA_APPLICATION
+            
+            # 1. Fix Medical Apps Icons
+            for app in MA_MEDICALAPPS.objects.filter(ICON_PATH__startswith='/site_media/'):
+                app.ICON_PATH = app.ICON_PATH.replace('/site_media/', '', 1)
+                app.save()
+            
+            # 2. Fix Application Logo
+            for app_meta in MA_APPLICATION.objects.filter(LOGO__startswith='/site_media/'):
+                app_meta.LOGO = app_meta.LOGO.replace('/site_media/', '', 1)
+                app_meta.save()
+                
+            sys.stdout.write("Data Correction: Redundant /site_media/ prefixes stripped.\n")
+        except Exception as e:
+            sys.stderr.write("Data Correction Error: %s\n" % str(e))
+
     execute_from_command_line(sys.argv)

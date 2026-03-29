@@ -1005,7 +1005,7 @@
     {
         if($("#wait_process").length == 0)
         {
-            $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+            $(".overflow-hidden").append('<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>');
             $("#wait_process").show();
         }
     }
@@ -1779,7 +1779,7 @@
           var code = $("#ecg_5_test").attr("data-id");
           $("#test_code").val(code);
           var canyscope_sym_data = $("#can_sympathetic1_form").serialize();
-              $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+              $(".overflow-hidden").append('<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>');
                 $("#wait_process").show(); 
                   $.ajax({
                     data: canyscope_sym_data,
@@ -1994,8 +1994,8 @@ function request_process(){
              else
             {
                 pleasewait_loader_end();
-                $(".overflow-hidden").append(`<div id="device_alert" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please Enter Device Key in Device Configuration.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="device_alert_close();">OK</button>
-                        </div></div></div></div>`);
+                $(".overflow-hidden").append('<div id="device_alert" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please Enter Device Key in Device Configuration.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="device_alert_close();">OK</button>
+                        </div></div></div></div>');
                 $("#device_alert").show();
             }
         }
@@ -2056,8 +2056,8 @@ function device_config() {
         }
         else{
             $("#settingsdev").hide();
-            $(".overflow-hidden").append(`<div id="mac_address_validate" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter a valid Mac Address ID.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" id="alert_pdf_confirm" onclick="opensettingdev()">OK</button>
-                            </div></div></div></div>`);
+            $(".overflow-hidden").append('<div id="mac_address_validate" class="w3-modal  bgclr18" "><div class="w3-modal-content w376 mt11p" ><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please enter a valid Mac Address ID.</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" id="alert_pdf_confirm" onclick="opensettingdev()">OK</button>
+                            </div></div></div></div>');
             $("#mac_address_validate").show();
             }
         }

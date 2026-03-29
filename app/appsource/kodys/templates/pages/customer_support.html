@@ -233,13 +233,13 @@ function validEmail(Email) {
 $(document).ready(function(){
   console.log('{{msg}}');
   if('{{msg}}' == "Send" ){
-    $(".overflow-hidden").append(`<div id="finish_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Your Request have been Submitted</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+    $(".overflow-hidden").append('<div id="finish_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Your Request have been Submitted</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
     $("#finish_process").show(); 
 
   }
   else if('{{result}}' == "False") {
           $("#wait_process").hide();
-          $(".overflow-hidden").append(`<div id="finish_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><div class=" brclr1 ta pb32 pt20"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 " style='position: relative;top: 24px;'>{{msg}} <br><span style="color:red;">Your Request have been Failed</span></h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+          $(".overflow-hidden").append('<div id="finish_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><div class=" brclr1 ta pb32 pt20"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 " style=\'position: relative;top: 24px;\'>{{msg}} <br><span style="color:red;">Your Request have been Failed</span></h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
           $("#finish_process").show(); 
   }
   $("#file-upload-filename").css("color","rgba(112, 112, 112, 1)");
@@ -313,7 +313,7 @@ $(document).ready(function(){
      }
      if(flag == 3){
       if($("#file-upload-filename").text() != "Please Select correct file type"){
-      $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+      $(".overflow-hidden").append('<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>');
       $("#wait_process").show(); 
       $("#customr_support").submit();
          // cus_data = $("#customr_support").serialize();
@@ -329,12 +329,12 @@ $(document).ready(function(){
          //              console.log(jsonstr)
          //              if(jsonstr.result == true){
          //                $("#wait_process").hide();
-         //              $(".overflow-hidden").append(`<div id="finish_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Your Request have been Submitted</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+         //              $(".overflow-hidden").append('<div id="finish_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Your Request have been Submitted</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
          //                $("#finish_process").show(); 
          //              }
          //              else{
                         //  $("#wait_process").hide();
-                        // $(".overflow-hidden").append(`<div id="finish_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><div class=" brclr1 ta pb32 pt20"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 " style='position: relative;top: 24px;'>Your Request have been Failed</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+                        // $(".overflow-hidden").append('<div id="finish_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><div class=" brclr1 ta pb32 pt20"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 " style=\'position: relative;top: 24px;\'>Your Request have been Failed</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
                         // $("#finish_process").show(); 
          //              }
 

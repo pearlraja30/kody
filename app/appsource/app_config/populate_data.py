@@ -51,13 +51,13 @@ def populate():
 
     # 4. Create Medical Apps
     apps_data = [
-        ('DOPPLER', 'Kodys Doppler', '/site_media/img/png/doppler_icon.png'),
-        ('BIOTHEZIVPT', 'Biothezi VPT', '/site_media/img/png/vpt_icon.png'),
-        ('BIOTHEZIVPTULTRA', 'Biothezi VPT Ultra', '/site_media/img/png/vpt_ultra_icon.png'),
-        ('PODOIMAT', 'Podo I Mat', '/site_media/img/png/podo_imat_icon.png'),
-        ('PODOTMAP', 'Podo T Map', '/site_media/img/png/podo_tmap_icon.png'),
-        ('KODYSHCPELITE', 'Kodys HCP Elite', '/site_media/img/png/hcp_elite_icon.png'),
-        ('CAN', 'Kodys CAN', '/site_media/img/png/kodyscan_icon.png'),
+        ('DOPPLER', 'Kodys Doppler', 'img/png/doppler_icon.png'),
+        ('BIOTHEZIVPT', 'Biothezi VPT', 'img/png/vpt_icon.png'),
+        ('BIOTHEZIVPTULTRA', 'Biothezi VPT Ultra', 'img/png/vpt_ultra_icon.png'),
+        ('PODOIMAT', 'Podo I Mat', 'img/png/podo_imat_icon.png'),
+        ('PODOTMAP', 'Podo T Map', 'img/png/podo_tmap_icon.png'),
+        ('KODYSHCPELITE', 'Kodys HCP Elite', 'img/png/hcp_elite_icon.png'),
+        ('CAN', 'Kodys CAN', 'img/png/kodyscan_icon.png'),
     ]
 
     for code, name, icon in apps_data:

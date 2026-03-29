@@ -266,8 +266,8 @@
 {% block js_script %}
 <script>
   function  licensekey(){
-             $(".overflow-hidden").append(`<div id="licensekey_alert" class="w3-modal  bgclr18" "><div class="w3-modal-content  mt11p" style="width:445px;"><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please upload license key file in app configuration .</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="licensekey_alert_close();">OK</button>
-                         </div></div></div></div>`);
+             $(".overflow-hidden").append('<div id="licensekey_alert" class="w3-modal  bgclr18" "><div class="w3-modal-content  mt11p" style="width:445px;"><div class=" brclr1 ta pb32 pt20" style="background-color: rgb(229, 239, 241) !important;"><div class="i_icon">i</div><h3 class="w3-center f-16 ff-r ft-b fclr pt36 pb1 ">Please upload license key file in app configuration .</h3><div class="ta"><button class=" tdecor f-15 ff-r w3-text-white w80 h30 bgclr9 brclr6" onclick="licensekey_alert_close();">OK</button>
+                         </div></div></div></div>');
                  $("#licensekey_alert").show();  
           }
   function licensekey_alert_close(){
@@ -449,7 +449,7 @@ $("#mailconfig_edit_click").click(function(){
   }
 });
 function backup(){
-  $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait Back up on process</h3></div></div></div>`);
+  $(".overflow-hidden").append('<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait Back up on process</h3></div></div></div>');
    $("#wait_process").show(); 
   $.ajax({
           data: "",
@@ -461,17 +461,17 @@ function backup(){
             console.log(xhr.responseText);
               if(xhr.responseText == "True"){
                 $("#wait_process").hide();
-                $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Database Backup Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+                $(".overflow-hidden").append('<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Database Backup Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
                 $("#close_process").show();
               }
               else if(xhr.responseText == "Error"){
                 $("#wait_process").hide();
-                $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Database Backup Saved successfully and sending Database Backup as Mail is Failed</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+                $(".overflow-hidden").append('<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Database Backup Saved successfully and sending Database Backup as Mail is Failed</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
                 $("#close_process").show();
               }    
               else{
                  $("#wait_process").hide();
-                $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Database Backup Operation Failed</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+                $(".overflow-hidden").append('<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Database Backup Operation Failed</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
                 $("#close_process").show();
               }     
            } 
@@ -482,7 +482,7 @@ function cancel_restore(){
 }
 
 function restore(){
-  $(".overflow-hidden").append(`<form method="POST" action="/restore/database/" enctype="multipart/form-data" id="restore_data_form">{% csrf_token %}<div id="restore_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Do you want to restore ?</h3><h6 class="f-12">Backup your files immediately to prevent information loss .</h6><div class="ta" ><label for="restore_data" class="f-15 w3-text-white pr w80 bgclr8 brclr3 h30" style="padding: 5px 28px !important;text-decoration: none;">OK</label><input type="file" id="restore_data" accept=".json" style="display: none;position:absolute;margin-left:102px;margin-top:-27px;" name="backup_db_file"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3  ml16"  style="padding: 3px 15px !important;height:31px;" onclick="javascript:window.location.reload();" type="button">Cancel</button></div></div></div></div><input type="hidden" id="json_file" name="backup_db_file"</form>`);
+  $(".overflow-hidden").append('<form method="POST" action="/restore/database/" enctype="multipart/form-data" id="restore_data_form">{% csrf_token %}<div id="restore_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Do you want to restore ?</h3><h6 class="f-12">Backup your files immediately to prevent information loss .</h6><div class="ta" ><label for="restore_data" class="f-15 w3-text-white pr w80 bgclr8 brclr3 h30" style="padding: 5px 28px !important;text-decoration: none;">OK</label><input type="file" id="restore_data" accept=".json" style="display: none;position:absolute;margin-left:102px;margin-top:-27px;" name="backup_db_file"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3  ml16"  style="padding: 3px 15px !important;height:31px;" onclick="javascript:window.location.reload();" type="button">Cancel</button></div></div></div></div><input type="hidden" id="json_file" name="backup_db_file"</form>');
    $("#restore_process").show(); 
     $('input[type="file"]').change(function() {
         var datarestore_file = this.files[0];
@@ -493,7 +493,7 @@ function restore(){
         var data_restore = $("#json_file").val();
         console.log(data_restore)
         $("#restore_process").hide(); 
-        $(".overflow-hidden").append(`<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>`);
+        $(".overflow-hidden").append('<div id="wait_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class=" brclr1 ta pb32" style="background-color: rgb(229, 239, 241) !important;"><img src="{{MEDIA_URL}}img/1amw.gif" class="mb18 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Please Wait</h3></div></div></div>');
         $("#wait_process").show(); 
         if($("#json_file").val() != ""){
           $("#restore_data_form").submit();
@@ -526,7 +526,7 @@ function savedata1(){
          complete : function(xhr, flag) 
            {
               if(xhr.responseText == "True"){
-            $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+            $(".overflow-hidden").append('<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
               $("#close_process").show(); 
               }         
            } 
@@ -599,7 +599,7 @@ function savedata2(){
          complete : function(xhr, flag) 
            {
               if(xhr.responseText == "True"){
-             $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+             $(".overflow-hidden").append('<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
               $("#close_process").show();  
               }          
            } 
@@ -716,7 +716,7 @@ function savedata3(){
          complete : function(xhr, flag) 
            {
               if(xhr.responseText == "True"){
-            $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+            $(".overflow-hidden").append('<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
               $("#close_process").show();
               }        
            } 
@@ -752,7 +752,7 @@ function header_request(){
            {
             console.log(xhr.responseText);
               if(xhr.responseText == "True"){
-            $(".overflow-hidden").append(`<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>`);
+            $(".overflow-hidden").append('<div id="close_process" class="w3-modal  bgclr18"><div class="w3-modal-content w376 mt11p"><div class="bgclr3 brclr1 ta"><img src="{{MEDIA_URL}}img/png/completed_status.png" class="pb4 succes_saved" ><h3 class="w3-center f-16 ff-r ft-b fclr pt8 pb1 ">Saved successfully</h3></div><div class="w3-row pt8  pb16 bgclr3"><div class="ta"><button class="f-15 w3-text-white ff-r w80 bgclr8 brclr3 h30" onclick="saved_Data()">Ok</button></div></div></div></div>');
               $("#close_process").show();
               }        
            } 

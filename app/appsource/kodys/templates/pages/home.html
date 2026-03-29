@@ -1,11 +1,11 @@
 {% extends "page_layout.html" %}
 {% block content_body %}
-		<div class="background1" style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 20px 0;">
-			<div class="apps-wrapper" style="flex: 1; width: 100%; display: flex; flex-direction: column; align-items: center;">
-				<div class="apps-container" style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 30px; max-width: 1100px; width: 90%; margin: 0 auto; padding-bottom: 40px;">
+		<div class="background1" style="display: flex; flex-direction: column; height: calc(100vh - 100px); overflow: hidden;">
+			<div class="apps-wrapper" style="flex: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow-y: auto;">
+				<div class="apps-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1100px; width: 90%; margin: 0 auto; padding: 20px 0;">
 					{% for apps in kodys_apps %}
 					<div class="app-card pr bgclr19 w3-round cp" 
-						 style="width: 230px; height: 220px; transition: transform 0.3s ease, box-shadow 0.3s ease;"
+						 style="width: 230px; height: 220px; transition: transform 0.3s ease, box-shadow 0.3s ease; flex-shrink: 0;"
 						 onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 10px 20px rgba(0,0,0,0.2)';"
 						 onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none';"
 						 {% if COMMON_INFO.HOSPITAL_NAME %} 
@@ -26,8 +26,8 @@
 					{% endfor %}
 				</div>
 			</div>
-			<div class="w3-container fclr11 ff-r f-20 ft-b w100 pt12 pb12 brclr5" style="margin-top: auto; border-top: 1px solid rgba(0,0,0,0.1); text-align: center; background: rgba(255,255,255,0.05);">
-				Kodys Foot Clinik Software Version 2.2.5
+			<div class="w3-container fclr11 ff-r f-16 ft-b w100 pt8 pb8 brclr5" style="border-top: 1px solid rgba(0,0,0,0.1); text-align: center; background: rgba(0,0,0,0.05);">
+				Kodys Foot Clinik Software Version 2.2.46
 			</div>
 		</div>
     <!-- m1 -->

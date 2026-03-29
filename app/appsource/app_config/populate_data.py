@@ -49,17 +49,30 @@ def populate():
         )
         print("Created TX_ACCOUNT")
 
-    # 4. Create Medical App
-    med_app, created = MA_MEDICALAPPS.objects.get_or_create(
-        CODE='CAN',
-        defaults={
-            'APP_NAME': 'Kodys CAN',
-            'ICON_PATH': '/site_media/img/png/kodyscan_icon.png',
-            'DATAMODE': 'A'
-        }
-    )
+    # 4. Create Medical Apps
+    apps_data = [
+        ('DOPPLER', 'Kodys Doppler', '/site_media/img/png/doppler_icon.png'),
+        ('BIOTHEZIVPT', 'Biothezi VPT', '/site_media/img/png/vpt_icon.png'),
+        ('BIOTHEZIVPTULTRA', 'Biothezi VPT Ultra', '/site_media/img/png/vpt_ultra_icon.png'),
+        ('PODOIMAT', 'Podo I Mat', '/site_media/img/png/podo_imat_icon.png'),
+        ('PODOTMAP', 'Podo T Map', '/site_media/img/png/podo_tmap_icon.png'),
+        ('KODYSHCPELITE', 'Kodys HCP Elite', '/site_media/img/png/hcp_elite_icon.png'),
+        ('CAN', 'Kodys CAN', '/site_media/img/png/kodyscan_icon.png'),
+    ]
 
-    # 5. Create Test Master
+    for code, name, icon in apps_data:
+        MA_MEDICALAPPS.objects.get_or_create(
+            CODE=code,
+            defaults={
+                'APP_NAME': name,
+                'ICON_PATH': icon,
+                'DATAMODE': 'A'
+            }
+        )
+    print("Seeded all medical applications.")
+
+    # 5. Create Test Master (Example for CAN)
+    med_app = MA_MEDICALAPPS.objects.get(CODE='CAN')
     test_master, created = MA_MEDICALTESTMASTER.objects.get_or_create(
         CODE='CAN',
         defaults={

@@ -1,25 +1,54 @@
-import os, sys, math, datetime, time, socket
+import os
+import sys
+import math
+import datetime
+import time
+import socket
+import random
+import string
+
 os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+
+# v2.2.45: ENTERPRISE TRACING GLOBALS
+TRACE_ID = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+SPAN_ID = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(4))
 
 def log_boot(msg, level="INFO"):
     """
-    Enhanced Diagnostic Logger (v2.2.39):
-    Writes to a persistent startup_trace.log in the user's writable AppData.
+    Enterprise-Grade Logger (v2.2.45):
+    Writes to a persistent log in %LOCALAPPDATA% with tracing metadata.
     """
     try:
-        # Determine writable log path early
-        base = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.path.expanduser('~'))), "KodysFootClinikV2")
+        # 1. Use LocalAppData for persistence (Temp is volatile)
+        local_app_data = os.environ.get('LOCALAPPDATA', os.environ.get('APPDATA', os.getcwd()))
+        base = os.path.join(local_app_data, "KodysFootClinikV2")
         log_dir = os.path.join(base, "logs")
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
-        log_path = os.path.join(log_dir, 'startup_trace.log')
+        log_path = os.path.join(log_dir, 'application_trace.log')
         
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # 2. Precision Metadata
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+        f_info = ""
+        try:
+            # Simple stack insight for line numbers
+            import inspect
+            frame = inspect.currentframe().f_back
+            f_info = "[%s:%d]" % (os.path.basename(frame.f_code.co_filename), frame.f_lineno)
+        except: pass
+        
+        log_entry = "%s | [%s] | Trace:%s | Span:%s | %s | %s\n" % (
+            timestamp, level.ljust(5), TRACE_ID, SPAN_ID, f_info.ljust(20), msg
+        )
+        
         with open(log_path, 'a') as f:
-            f.write('[%s] %s: %s\n' % (timestamp, level, msg))
+            f.write(log_entry)
+            
+        # Optional: Force sync if critical
+        if level in ["ERROR", "FATAL"]:
+            print(log_entry.strip())
     except:
-        # Fallback to stdout if file logging fails
-        print("[%s] %s" % (level, msg))
+        print("[%s] ERROR IN LOGGER: %s" % (level, msg))
 
 def AuditEnvironment():
     """Logs a complete snapshot of the runtime environment."""
@@ -222,7 +251,9 @@ def LogAssetAudit(base_dir):
         log_boot("Asset: %s -> %s" % (rel, "FOUND" if exists else "MISSING"), "AUDIT" if exists else "ERROR")
     log_boot("--- END ASSET AUDIT ---")
 def GetWritableAppDataPath(folder=None):
-    base = os.path.join(os.environ.get('TEMP', os.environ.get('TMP', os.path.expanduser('~'))), "KodysFootClinikV2")
+    # v2.2.45: Permanent LocalAppData Path
+    local_app_data = os.environ.get('LOCALAPPDATA', os.environ.get('APPDATA', os.getcwd()))
+    base = os.path.join(local_app_data, "KodysFootClinikV2")
     if not os.path.exists(base):
         os.makedirs(base)
     for sub in ["logs", "cache", "app_assets", "app_assets/media", "app_assets/DATA"]:
@@ -2468,7 +2499,7 @@ def start_application():
 
     # Command line switches set programmatically
     switches = {
-        "remote-debugging-port": "5424",
+        "remote-debugging-port": str(random.randint(50000, 60000)), # Fix port conflicts
         "no-proxy-server": "",
         "disable-gpu": "",
         "disable-gpu-compositing": "",
@@ -2521,16 +2552,20 @@ def start_application():
 
 if __name__ == '__main__':
     # --- PHASE 1: ENVIRONMENT & SELF-HEALING ---
-    # Call enrichment utilities after all functions are defined
     EnrichRuntimeEnvironment()
     AuditEnvironment()
     AuditBinaries()
 
-    # v2.2.44: ROBUST ASSET RECOVERY
-    # Realpath calculation to ensure we hit INSTALL_DIR/app_assets/media
-    _py_dist = os.path.dirname(os.path.abspath(__file__))
-    _install_dir = os.path.dirname(_py_dist)
-    _media_root = os.path.join(_install_dir, "app_assets", "media")
+    # v2.2.46: ROBUST INSTALL_DIR DETECTION
+    # In packaged EXE, sys.executable is the launcher. 
+    # In development, it's the python interpreter.
+    if getattr(sys, 'frozen', False):
+        _install_dir = os.path.dirname(sys.executable)
+    else:
+        _py_dist = os.path.dirname(os.path.abspath(__file__))
+        _install_dir = os.path.dirname(_py_dist)
+    
+    _media_root = os.path.join(_install_dir, "app", "app_assets", "media")
 
     LogAssetAudit(_media_root)
     StripUtf8BomRecursively(_media_root)

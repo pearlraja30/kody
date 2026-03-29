@@ -14,6 +14,10 @@
 
 name: Kodys Build & Release Pipeline
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 on:
   push:
     branches: [main, "release/*", "release-*"]

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
+from django.core.management import execute_from_command_line
 
 if __name__ == "__main__":
     # --- ROBUST DLL PRE-FLIGHT (v2.2.36) ---
@@ -53,7 +54,7 @@ if __name__ == "__main__":
         except Exception as e:
             sys.stderr.write("DLL Pre-flight Error: %s\n" % str(e))
 
-    # --- DATA CORRECTION (v2.2.48) ---
+    # --- DATA CORRECTION (v2.2.49) ---
     if 'runserver' in sys.argv or 'kodys_app' in sys.argv or len(sys.argv) <= 1:
         try:
             import django
